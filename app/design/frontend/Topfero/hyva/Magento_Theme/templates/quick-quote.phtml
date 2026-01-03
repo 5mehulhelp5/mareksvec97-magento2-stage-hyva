@@ -1,0 +1,84 @@
+<?php
+/** @var \Magento\Framework\View\Element\Template $block */
+/** @var \Hyva\Theme\Model\ViewModelRegistry $viewModels */
+$viewModels = $viewModels ?? $block->getData('viewModels');
+
+/** @var \Hyva\Theme\ViewModel\Modal $modalViewModel */
+$modalViewModel = $viewModels->require(\Hyva\Theme\ViewModel\Modal::class);
+/** @var \Hyva\Theme\ViewModel\HeroiconsOutline $icons */
+$icons = $viewModels->require(\Hyva\Theme\ViewModel\HeroiconsOutline::class);
+/** @var \Hyva\Theme\ViewModel\StoreConfig $storeConfig */
+$storeConfig = $viewModels->require(\Hyva\Theme\ViewModel\StoreConfig::class);
+
+// ---- čítanie z adminu cez StoreConfig (NÁHRADA za getStoreConfigFlag) ----
+$enabled    = (string) $storeConfig->getStoreConfig('metalio/quick_quote/enabled') === '1';
+if (!$enabled) {
+    return; // ak je vypnuté, nerenderuj nič
+}
+
+$formId     = (int) ($storeConfig->getStoreConfig('metalio/quick_quote/form_id') ?: 3);
+$cta = (string) ($storeConfig->getStoreConfig('metalio/quick_quote/button_label') ?: __('Rýchla cenová ponuka'));
+
+
+$modal = $modalViewModel->createModal()
+    ->withContent(
+        '<button type="button" @click="hide" aria-label="' . $escaper->escapeHtmlAttr(__('Close')) . '" ' .
+        'class="absolute right-3 top-3 p-2 rounded-full hover:bg-gray-100 focus:outline-none">' .
+            $icons->renderHtml('x') .
+        '</button>' .
+        $this->helper("Amasty\Customform\Helper\Data")->renderForm($formId)
+    )
+    ->positionCenter()
+    ->withAriaLabelledby('the-label')
+    ->addOverlayClass('z-[70]')
+    ->addDialogClass('relative z-[80] max-w-[92vw] sm:w-full sm:max-w-2xl');
+?>
+
+<div x-data="hyva.modal()">
+  <!-- DESKTOP/TABLET: vertikálne tlačidlo zľava -->
+  <div class="hidden md:block fixed left-0 top-1/2 -translate-y-1/2 z-[40]">
+    <button
+      type="button"
+      @click="show"
+      class="[writing-mode:vertical-rl] rotate-180
+             bg-[#F3C17A] text-[#1C1C1C] hover:bg-[#E9A84F]
+             border border-[#E9A84F]/40 shadow-lg
+             rounded-l-[15px] rounded-r-none
+             px-2 py-3 whitespace-nowrap flex items-center gap-2
+             focus:outline-none focus:ring-2 focus:ring-[#F8D9AA]"
+      aria-haspopup="dialog"
+      title="<?= $escaper->escapeHtmlAttr($cta) ?>"
+    >
+      <span class="-rotate-90 inline-flex">
+        <?= $icons->lightningBoltHtml('h-5 w-5', 20, 20, ['aria-hidden' => 'true']) ?>
+      </span>
+      <span class="text-sm font-semibold">
+        <?= $escaper->escapeHtml($cta) ?>
+      </span>
+    </button>
+  </div>
+
+  <!-- MOBILE: malé „FAB“ vpravo dole (nezasahuje do obsahu) -->
+  <div class="md:hidden fixed bottom-4 right-4 z-[20]">
+    <button
+      type="button"
+      @click="show"
+      class="
+             bg-[#F3C17A] text-[#1C1C1C] hover:bg-[#E9A84F]
+             border border-[#E9A84F]/40 shadow
+             rounded-[15px]
+             px-2 py-3 whitespace-nowrap flex items-center gap-2
+             focus:outline-none focus:ring-2 focus:ring-[#F8D9AA]"
+      aria-label="<?= $escaper->escapeHtml($cta) ?>"
+    >
+    <span class="-rotate-90 inline-flex">
+      <?= $icons->lightningBoltHtml('h-6 w-6', 24, 24, ['aria-hidden' => 'true']) ?>
+      </span>
+      <span class="text-sm font-semibold">
+        <?= $escaper->escapeHtml($cta) ?>
+      </span>
+    </button>
+  </div>
+
+  <?= /* @noEscape */ $modal ?>
+</div>

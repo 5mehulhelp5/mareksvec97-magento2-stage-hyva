@@ -1,0 +1,84 @@
+<?php
+/** @var \Magento\Checkout\Block\Onepage\Success $block */
+declare(strict_types=1);
+
+use Hyva\Theme\ViewModel\HeroiconsSolid;
+
+// Hyvä view model pre ikony
+$viewModels = $viewModels ?? $block->getData('viewModels');
+$hiSolid    = $viewModels->require(HeroiconsSolid::class);
+
+// Dáta z bloku
+$orderId      = $block->getOrderId();
+$canViewOrder = (bool) $block->getCanViewOrder();
+$viewOrderUrl = $canViewOrder ? $block->getViewOrderUrl() : null;
+$continueUrl  = $block->getContinueUrl();
+$printUrl     = method_exists($block, 'getPrintUrl') ? $block->getPrintUrl() : null;
+
+// Multi-shipping fallback
+$orderIds = method_exists($block, 'getOrderIds') ? (array) $block->getOrderIds() : [];
+if (!$orderIds && $orderId) { $orderIds = [$orderId]; }
+?>
+
+<div class="mx-auto max-w-lg px-6 sm:px-8 lg:px-10 my-10">
+  <section class="overflow-hidden text-center">
+    <div class="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-green-100 ring-1 ring-green-200">
+      <?= /* @noEscape */ $hiSolid->checkHtml('h-7 w-7 text-green-600') ?>
+    </div>
+
+    <h1 class="mt-4 text-2xl sm:text-3xl font-extrabold text-slate-900">
+      <?= $block->escapeHtml(__('Thank you for your purchase!')) ?>
+    </h1>
+
+    <p class="mt-2 text-slate-600">
+      <?= $block->escapeHtml(__('Your order was successfully created. We’ll email you a confirmation with details.')) ?>
+
+    </p>
+
+    <?php if (!empty($orderIds)): ?>
+      <div class="mt-5 text-sm">
+        <div class="text-slate-500"><?= $block->escapeHtml(__('Order number')) ?></div>
+        <div class="mt-1">
+          <?php if ($canViewOrder && $viewOrderUrl): ?>
+            <a href="<?= $block->escapeUrl($viewOrderUrl) ?>"
+               class="font-semibold text-slate-900 underline decoration-slate-300 underline-offset-2 hover:text-primary">
+              <?= $block->escapeHtml(implode(', ', $orderIds)) ?>
+            </a>
+          <?php else: ?>
+            <span class="font-semibold text-slate-900"><?= $block->escapeHtml(implode(', ', $orderIds)) ?></span>
+          <?php endif; ?>
+        </div>
+      </div>
+    <?php endif; ?>
+
+    <div class="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3">
+      <a href="<?= $block->escapeUrl($continueUrl) ?>"
+         class="inline-flex items-center justify-center rounded-md bg-primary px-5 py-3 text-sm font-semibold text-white hover:bg-primary/90">
+        <?= $block->escapeHtml(__('Continue Shopping')) ?>
+      </a>
+
+      <?php if ($canViewOrder && $viewOrderUrl): ?>
+        <a href="<?= $block->escapeUrl($viewOrderUrl) ?>"
+           class="inline-flex items-center justify-center rounded-md border border-slate-300 px-5 py-3 text-sm font-semibold text-slate-800 hover:bg-white">
+          <?= $block->escapeHtml(__('View Order')) ?>
+        </a>
+      <?php endif; ?>
+
+   
+    </div>
+  </section>
+</div>
+
+<!-- Voliteľná toast správa cez messages.phtml (preložiteľná) -->
+<script>
+  (function () {
+    const msg = {
+      type: 'success',
+      text: <?= json_encode((string) __('You created the order.')) ?>
+    };
+    window.mageMessages = (window.mageMessages || []).concat([msg]);
+    requestAnimationFrame(() => {
+      window.dispatchEvent(new CustomEvent('messages-loaded', { detail: { messages: [msg] }}));
+    });
+  })();
+</script>

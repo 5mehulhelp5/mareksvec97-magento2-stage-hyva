@@ -1,0 +1,192 @@
+<?php
+/**
+ * Hyvä cart item card (no table)
+ * Pekná responzívna karta pre položku košíka bez použitia <table>.
+ */
+
+declare(strict_types=1);
+
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\ProductStockItem;
+use Magento\Checkout\Block\Cart\Item\Renderer;
+use Magento\Framework\Escaper;
+
+/** @var Renderer $block */
+/** @var Escaper $escaper */
+/** @var ViewModelRegistry $viewModels */
+
+$item    = $block->getItem();
+$product = $item->getProduct();
+
+$viewModels          = $viewModels ?? $block->getData('viewModels');
+$stockItemViewModel  = $viewModels->require(ProductStockItem::class);
+$qty = $stockItemViewModel->isQtyDecimal($product) ? $block->getQty() : (int) $block->getQty();
+
+/** data-* atribúty z layoutu */
+$dataAttrs = '';
+foreach (($block->getData('cart_item_data_attributes') ?? []) as $attribute => $include) {
+    if ($include) {
+        $dataAttrs .= ' data-' . $escaper->escapeHtmlAttr($attribute) . '="' . $escaper->escapeHtmlAttr($item->getData($attribute)) . '"';
+    }
+}
+?>
+
+<!-- KARTA POLOŽKY -->
+<div class="cart-item-card border-b border-slate-200 bg-white p-4 sm:p-5 mb-4 last:mb-0"<?= /* @noEscape */ $dataAttrs ?>>
+  <div class="grid grid-cols-[auto,1fr] lg:grid-cols-[auto,1fr,18rem] gap-4 sm:gap-6">
+
+    <!-- Obrázok -->
+    <div class="shrink-0">
+      <?php if ($block->hasProductUrl()): ?>
+        <a href="<?= $escaper->escapeUrl($block->getProductUrl()) ?>"
+           title="<?= $escaper->escapeHtmlAttr($block->getProductName()) ?>"
+           class="block">
+      <?php else: ?>
+        <span class="block">
+      <?php endif; ?>
+
+      <?= $block->getImage($block->getProductForThumbnail(), 'cart_page_product_thumbnail')
+          ->setTemplate('Magento_Catalog::product/image.phtml')
+          ->toHtml() ?>
+
+      <?php if ($block->hasProductUrl()): ?>
+        </a>
+      <?php else: ?>
+        </span>
+      <?php endif; ?>
+    </div>
+
+    <!-- Detaily (názov, varianty, správy, mobilná mriežka) -->
+    <div class="min-w-0">
+      <!-- Názov -->
+      <strong class="product-item-name block text-slate-900">
+        <?php if ($block->hasProductUrl()): ?>
+          <a href="<?= $escaper->escapeUrl($block->getProductUrl()) ?>" class="hover:underline">
+            <?= $escaper->escapeHtml($block->getProductName()) ?>
+          </a>
+        <?php else: ?>
+          <?= $escaper->escapeHtml($block->getProductName()) ?>
+        <?php endif; ?>
+      </strong>
+
+      <!-- Varianty / options -->
+      <?php if ($options = $block->getOptionList()): ?>
+        <dl class="item-options mt-3 text-sm text-slate-700 clearfix">
+          <?php foreach ($options as $option): ?>
+            <?php $formatedOptionValue = $block->getFormatedOptionValue($option) ?>
+            <dt class="font-semibold float-left clear-left mr-2 mb-2">
+              <?= $escaper->escapeHtml($option['label']) ?>:
+            </dt>
+            <dd class="float-left mb-2">
+              <?php if (isset($formatedOptionValue['full_view'])): ?>
+                <?= $escaper->escapeHtml($formatedOptionValue['full_view']) ?>
+              <?php else: ?>
+                <?= $escaper->escapeHtml($formatedOptionValue['value'], ['span', 'a']) ?>
+              <?php endif; ?>
+            </dd>
+          <?php endforeach; ?>
+        </dl>
+      <?php endif; ?>
+
+      <!-- Systémové správy k položke -->
+      <?php if ($messages = $block->getMessages()): ?>
+        <div class="mt-2 space-y-1">
+          <?php foreach ($messages as $message): ?>
+            <div class="text-sm <?= $escaper->escapeHtmlAttr($message['type']) ?>">
+              <div><?= $escaper->escapeHtml($message['text']) ?></div>
+            </div>
+          <?php endforeach; ?>
+        </div>
+      <?php endif; ?>
+
+      <!-- EXTRA info bloky -->
+      <?php $addInfoBlock = $block->getProductAdditionalInformationBlock(); ?>
+      <?php if ($addInfoBlock): ?>
+        <div class="mt-2">
+          <?= $addInfoBlock->setItem($item)->toHtml() ?>
+        </div>
+      <?php endif; ?>
+
+      <!-- MOBIL: Cena • Qty • Medzisúčet -->
+      <div class="mt-4 grid grid-cols-3 gap-3 items-center lg:hidden">
+        <div class="text-sm">
+          <div class="text-slate-500"><?= $escaper->escapeHtml(__('Price')) ?></div>
+          <div class="font-medium text-slate-900">
+            <?= $block->getUnitPriceHtml($item) ?>
+          </div>
+        </div>
+
+        <div class="">
+          <label for="cart-<?= $escaper->escapeHtmlAttr($item->getId()) ?>-qty" class="sr-only">
+            <?= $escaper->escapeHtml(__('Qty')) ?>
+          </label>
+          <input
+            id="cart-<?= $escaper->escapeHtmlAttr($item->getId()) ?>-qty"
+            name="cart[<?= $escaper->escapeHtmlAttr($item->getId()) ?>][qty]"
+            value="<?= $escaper->escapeHtmlAttr($qty) ?>"
+            type="number"
+            step="any"
+            min="0"
+            title="<?= $escaper->escapeHtmlAttr(__('Qty')) ?>"
+            class="form-input w-20 text-center px-2 py-2"
+            required
+            data-role="cart-item-qty"
+          />
+        </div>
+
+        <div class="text-right text-sm">
+          <div class="text-slate-500"><?= $escaper->escapeHtml(__('Subtotal')) ?></div>
+          <div class="font-semibold text-slate-900">
+            <?= $block->getRowTotalHtml($item) ?>
+          </div>
+        </div>
+      </div>
+
+      <!-- Akcie (remove/edit) – mobil pod mriežkou, desktop vpravo dole) -->
+      <div class="mt-3 flex items-center gap-2 lg:hidden">
+        <?= /* @noEscape */ $block->getActions($item) ?>
+      </div>
+    </div>
+
+    <!-- DESKTOP pravý stĺpec: Cena • Qty • Medzisúčet -->
+    <div class="hidden lg:flex lg:flex-col lg:items-end lg:justify-between">
+      <div class="w-full grid grid-cols-3 gap-4 items-start text-right">
+        <div class="text-sm">
+          <div class="text-slate-500"><?= $escaper->escapeHtml(__('Price')) ?></div>
+          <div class="font-medium text-slate-900">
+            <?= $block->getUnitPriceHtml($item) ?>
+          </div>
+        </div>
+
+        <div class="justify-self-center">
+          <label for="cart-<?= $escaper->escapeHtmlAttr($item->getId()) ?>-qty" class="sr-only">
+            <?= $escaper->escapeHtml(__('Qty')) ?>
+          </label>
+          <input
+            id="cart-<?= $escaper->escapeHtmlAttr($item->getId()) ?>-qty"
+            name="cart[<?= $escaper->escapeHtmlAttr($item->getId()) ?>][qty]"
+            value="<?= $escaper->escapeHtmlAttr($qty) ?>"
+            type="number"
+            step="any"
+            min="0"
+            title="<?= $escaper->escapeHtmlAttr(__('Qty')) ?>"
+            class="form-input w-20 text-center px-2 py-2"
+            required
+            data-role="cart-item-qty"
+          />
+        </div>
+
+        <div class="text-sm">
+          <div class="text-slate-500"><?= $escaper->escapeHtml(__('Subtotal')) ?></div>
+          <div class="font-semibold text-slate-900">
+            <?= $block->getRowTotalHtml($item) ?>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-4 flex items-center justify-end gap-2">
+        <?= /* @noEscape */ $block->getActions($item) ?>
+      </div>
+    </div>
+  </div>
+</div>

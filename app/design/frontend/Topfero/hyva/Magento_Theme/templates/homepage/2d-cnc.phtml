@@ -1,0 +1,66 @@
+<?php
+/** @var \Magento\Framework\View\Element\Template $block */
+
+use Magento\Store\Model\ScopeInterface;
+
+$om  = \Magento\Framework\App\ObjectManager::getInstance();
+/** @var \Magento\Framework\App\Config\ScopeConfigInterface $cfg */
+$cfg = $om->get(\Magento\Framework\App\Config\ScopeConfigInterface::class);
+
+$basePath = 'metalio_homepage/textbanner/';
+$enabled  = (bool) $cfg->getValue($basePath.'enabled', ScopeInterface::SCOPE_STORE);
+if (!$enabled) return;
+
+// Konfigurácia z adminu
+$title    = (string) ($cfg->getValue($basePath.'title',     ScopeInterface::SCOPE_STORE) ?: __('Plechy pálime na moderných strojoch'));
+$textHtml = (string)  $cfg->getValue($basePath.'text_html', ScopeInterface::SCOPE_STORE);
+$ctaLabel = (string) ($cfg->getValue($basePath.'cta_label', ScopeInterface::SCOPE_STORE) ?: __('Čítať viac'));
+$ctaUrl   = (string)  $cfg->getValue($basePath.'cta_url',   ScopeInterface::SCOPE_STORE);
+
+// OBRÁZOK NATVRDO z témy: Magento_Theme/web/images/cnc-bodor-2d.png
+$imgUrl = $block->getViewFileUrl('Magento_Theme::images/cnc-bodor-2d.png');
+$imgAlt = 'Laserové rezanie plechov v MetaloPro';
+?>
+<section class="bg-primary text-white rounded-2xl lg:p-10 p-6 sm:p-8 mb-12">
+  <div class="mx-auto">
+    <div class="grid grid-cols-1 items-center gap-8 lg:grid-cols-2 lg:gap-12">
+      
+      <!-- Text -->
+      <div>
+        <h2 class="text-3xl sm:text-3xl font-extrabold leading-tight">
+          <?= $block->escapeHtml($title) ?>
+        </h2>
+
+        <?php if ($textHtml): ?>
+          <div class="mt-4 max-w-prose opacity-90">
+            <?= /* @noEscape */ $textHtml ?>
+          </div>
+        <?php endif; ?>
+
+        <?php if (!empty($ctaUrl)): ?>
+          <a href="<?= $block->escapeUrl($ctaUrl) ?>"
+             class="inline-flex items-center gap-2 mt-6 rounded-md bg-white px-5 py-3 font-semibold text-primary shadow-sm
+                    hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-white/30 active:opacity-100 transition group">
+            <?= $block->escapeHtml($ctaLabel) ?>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                 stroke-width="2" stroke="currentColor"
+                 class="w-5 h-5 transition-transform group-hover:translate-x-1">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+            </svg>
+          </a>
+        <?php endif; ?>
+      </div>
+
+      <!-- Obrázok NATVRDO z témy -->
+      <div class="relative">
+        <img
+          src="<?= $block->escapeUrl($imgUrl) ?>"
+          alt="<?= $block->escapeHtmlAttr($imgAlt) ?>"
+          class="w-full rounded-2xl object-cover"
+          loading="lazy" decoding="async"
+        />
+      </div>
+    </div>
+  </div>
+</section>

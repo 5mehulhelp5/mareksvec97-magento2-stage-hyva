@@ -1,0 +1,181 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2020-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+declare(strict_types=1);
+
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\HeroiconsOutline;
+use Hyva\Theme\ViewModel\HyvaCsp;
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Element\Template;
+use Magento\Search\Helper\Data as SearchHelper;
+use Magento\Search\ViewModel\ConfigProvider as SearchConfig;
+
+// phpcs:disable Magento2.Templates.ThisInTemplate.FoundThis
+// phpcs:disable Magento2.Templates.ThisInTemplate.FoundHelper
+
+/** @var Escaper $escaper */
+/** @var Template $block */
+/** @var HyvaCsp $hyvaCsp */
+/** @var ViewModelRegistry $viewModels */
+
+/** @var HeroiconsOutline $heroicons */
+$heroicons = $viewModels->require(HeroiconsOutline::class);
+
+/** @var SearchHelper $helper */
+$helper = $this->helper(SearchHelper::class);
+
+/** @var SearchConfig $searchConfig */
+$searchConfig = $viewModels->require(SearchConfig::class);
+?>
+
+<script>
+    function initMiniSearch() {
+        return {
+            minSearchLength: <?= (int) $helper->getMinQueryLength() ?>,
+            <?php if ($searchConfig->isSuggestionsAllowed()): ?>
+            suggestions: [],
+            suggest() {
+                const search = this.$refs.searchInput;
+                if (search.value.length >= this.minSearchLength) {
+                    search.setCustomValidity('');
+                    search.reportValidity();
+                    this.fetchSuggestions(search.value);
+                } else {
+                    this.suggestions = [];
+                }
+            },
+            fetchSuggestions(term) {
+                fetch(
+                    window.BASE_URL + 'search/ajax/suggest?' + new URLSearchParams({q: term}),
+                    {
+                        headers: { 'X-Requested-With': 'XMLHttpRequest' }
+                    }
+                )
+                .then(response => response.json())
+                .then(result => this.suggestions = result);
+            },
+            <?php endif ?>
+            search(term) {
+                const search = this.$refs.searchInput;
+                term = term && typeof term == 'string' ? term : search.value;
+                if (term.length < this.minSearchLength) {
+                    search.setCustomValidity('<?= $escaper->escapeJs(__('Minimum Search query length is %1', $helper->getMinQueryLength())) ?>');
+                    search.reportValidity();
+                } else {
+                    search.setCustomValidity('');
+                    search.value = term;
+                    this.$refs.form.submit();
+                }
+            },
+            searchSuggestion() {
+                this.search(this.suggestion.title)
+            },
+            focusElement(element) {
+                if (element instanceof Event) {
+                    element = this.$root.querySelector('[tabindex]');
+                }
+                if (element && element.nodeName === "DIV") {
+                    element.focus();
+                    return true;
+                } else {
+                    return false;
+                }
+            },
+            focusArrowUp() {
+                focusElement(this.$event.target.previousElementSibling) || this.$refs.searchInput.focus()
+            },
+            focusArrowDown() {
+                focusElement(this.$event.target.nextElementSibling)
+            },
+            focusAfterOpen() {
+                // nech sa správa prirodzene ako input
+                this.$refs.searchInput.focus()
+                this.$refs.searchInput.select()
+            }
+        }
+    }
+
+    window.addEventListener('alpine:init', () => Alpine.data('initMiniSearch', initMiniSearch), {once: true})
+</script>
+<?php $hyvaCsp->registerInlineScript() ?>
+
+<!-- POZOR: odstránený vnútorný container, aby to ladilo v header gride -->
+<div class="relative w-full lg:px-0 px-3" x-data="initMiniSearch">
+    <search title="<?= $escaper->escapeHtmlAttr(__('Store')) ?>" role="search">
+        <form
+            id="search_mini_form"
+            class="relative w-full"
+            action="<?= $escaper->escapeUrl($helper->getResultUrl()) ?>"
+            method="get"
+            @submit.prevent="search"
+            x-ref="form"
+        >
+            <label class="sr-only" for="search">
+                <?= $escaper->escapeHtml(__('Search')) ?>
+            </label>
+
+            <input
+                id="search"
+                x-ref="searchInput"
+                type="search"
+                autocomplete="off"
+                name="<?= $escaper->escapeHtmlAttr($helper->getQueryParamName()) ?>"
+                value="<?= /** @noEscape */ $helper->getEscapedQueryText() ?>"
+                placeholder="<?= $escaper->escapeHtmlAttr(__('Search entire store here...')) ?>"
+                maxlength="<?= $escaper->escapeHtmlAttr($helper->getMaxQueryLength()) ?>"
+
+                class="w-full pl-4 pr-12 lg:bg-gray-100 rounded-full border-0 ring-1 ring-transparent
+                       focus:ring-2 focus:ring-primary/60 text-[13px] text-slate-800 placeholder-slate-500 placeholder:text-[13px] md:h-[48px]"
+                @search-open.window.debounce.10="focusAfterOpen"
+                <?php if ($searchConfig->isSuggestionsAllowed()): ?>
+                @focus.once="suggest"
+                @input.debounce.300="suggest"
+                @keydown.arrow-down.prevent="focusElement"
+                <?php endif ?>
+            >
+
+            <button
+                type="submit"
+                class="absolute right-2 top-1/2 -translate-y-1/2 inline-flex items-center justify-center
+                       h-9 w-9 rounded-full bg-white/60 hover:bg-white text-slate-600 hover:text-slate-800 transition"
+                title="<?= $escaper->escapeHtmlAttr(__('Search')) ?>"
+                aria-label="<?= $escaper->escapeHtmlAttr(__('Search')) ?>"
+            >
+                <?= $heroicons->searchHtml('', 22, 22, ['aria-hidden' => 'true']); ?>
+            </button>
+        </form>
+    </search>
+
+    <?php if ($searchConfig->isSuggestionsAllowed()): ?>
+    <template x-if="suggestions.length">
+        <nav
+            aria-label="<?= $escaper->escapeHtmlAttr(__('Search Suggestions')) ?>"
+            class="z-30 absolute top-full left-0 right-0 mt-2 w-max max-w-[90vw] min-w-full overflow-auto
+                   rounded-2xl shadow-lg bg-white border border-slate-200 p-1"
+        >
+            <div class="py-1 flex flex-col" role="listbox">
+                <template x-for="suggestion in suggestions">
+                    <button
+                        type="button"
+                        class="flex justify-between items-center gap-3 rounded-xl px-3 py-2 text-[13px] text-slate-800
+                               hover:bg-gray-100 transition-colors text-left"
+                        @click="searchSuggestion"
+                        @keydown.enter="searchSuggestion"
+                        @keydown.arrow-up.prevent="focusArrowUp"
+                        @keydown.arrow-down.prevent="focusArrowDown"
+                    >
+                        <span class="font-semibold truncate" x-text="suggestion.title"></span>
+                        <span class="tabular-nums text-[12px] text-slate-500 shrink-0" x-text="suggestion.num_results"></span>
+                    </button>
+                </template>
+            </div>
+        </nav>
+    </template>
+    <?php endif ?>
+</div>

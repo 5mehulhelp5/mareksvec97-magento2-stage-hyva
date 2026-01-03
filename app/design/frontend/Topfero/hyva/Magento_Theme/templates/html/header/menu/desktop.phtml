@@ -1,0 +1,254 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes
+ */
+
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\HeroiconsSolid;
+use Hyva\Theme\ViewModel\Navigation;
+use Magento\Framework\View\Element\Template;
+use Magento\Framework\Escaper;
+use Magento\Framework\App\ObjectManager;
+use Magento\Catalog\Api\CategoryRepositoryInterface;
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\UrlRewrite\Model\ResourceModel\UrlRewriteCollectionFactory;
+
+/** @var Template $block */
+/** @var Escaper $escaper */
+/** @var ViewModelRegistry $viewModels */
+
+/** @var Navigation $viewModelNavigation */
+$viewModelNavigation = $viewModels->require(Navigation::class, $block);
+
+/** @var HeroiconsSolid $heroiconsSolid */
+$heroiconsSolid = $viewModels->require(HeroiconsSolid::class);
+
+$uniqueId = '_' . uniqid();
+
+// --- priprav data a cache tagy
+$menuItems = $viewModelNavigation->getNavigation(4);
+$block->setData('cache_tags', $viewModelNavigation->getIdentities());
+
+// --- služby
+$om = ObjectManager::getInstance();
+/** @var CategoryRepositoryInterface $catRepo */
+$catRepo = $om->get(CategoryRepositoryInterface::class);
+/** @var StoreManagerInterface $storeManager */
+$storeManager = $om->get(StoreManagerInterface::class);
+$storeId   = (int) $storeManager->getStore()->getId();
+$mediaBaseFull = rtrim($storeManager->getStore()->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_MEDIA), '/');
+
+$__toUrl = static function ($val) use ($mediaBaseFull): ?string {
+    if (empty($val)) return null;
+
+    if (is_array($val)) {
+        if (isset($val[0]['url']) && $val[0]['url']) $val = (string) $val[0]['url'];
+        elseif (isset($val['url']) && $val['url'])   $val = (string) $val['url'];
+        elseif (isset($val[0]['name']) && $val[0]['name']) $val = (string) $val[0]['name'];
+        elseif (isset($val['name']) && $val['name'])       $val = (string) $val['name'];
+        else return null;
+    }
+
+    if (!is_string($val) || ($val = trim($val)) === '') return null;
+
+    if (preg_match('#^https?://#i', $val)) return $val;
+
+    if (stripos($val, $mediaBaseFull) === 0) {
+        $val = substr($val, strlen($mediaBaseFull));
+    }
+
+    $val = ltrim($val, '/');
+    $val = preg_replace('#^(media/)?(catalog/)?category/#i', '', $val);
+
+    return $mediaBaseFull . '/catalog/category/' . ltrim($val, '/');
+};
+
+$__categoryIconUrl = function (int $categoryId) use ($catRepo, $storeId, $__toUrl): ?string {
+    static $cache = [];
+    if (isset($cache[$categoryId])) return $cache[$categoryId];
+
+    try {
+        $cat = $catRepo->get($categoryId, $storeId);
+
+        $url = $__toUrl($cat->getData('thumbnail'));
+        if ($url) return $cache[$categoryId] = $url;
+
+        $url = $__toUrl($cat->getData('image'));
+        return $cache[$categoryId] = $url ?: null;
+    } catch (\Throwable $e) {
+        return $cache[$categoryId] = null;
+    }
+};
+
+$__resolveCategoryId = function (array $item) use ($storeManager, $om): int {
+    foreach (['entity_id', 'category_id', 'id'] as $k) {
+        if (isset($item[$k])) {
+            $v = $item[$k];
+            if (is_numeric($v)) return (int) $v;
+            if (is_string($v) && preg_match('/\d+/', $v, $m)) return (int) $m[0];
+        }
+    }
+
+    if (!empty($item['path']) && preg_match('/(\d+)(?!.*\d)/', (string) $item['path'], $m)) {
+        return (int) $m[1];
+    }
+
+    if (!empty($item['url'])) {
+        try {
+            $base = $storeManager->getStore()->getBaseUrl();
+            $req  = ltrim(str_replace($base, '', (string) $item['url']), '/');
+            $req  = strtok($req, '?');
+
+            /** @var UrlRewriteCollectionFactory $urlColFactory */
+            $urlColFactory = $om->get(UrlRewriteCollectionFactory::class);
+
+            $col = $urlColFactory->create()
+                ->addFieldToFilter('request_path', $req)
+                ->addFieldToFilter('store_id', (int) $storeManager->getStore()->getId());
+
+            $rewrite = $col->getFirstItem();
+            $target  = (string) $rewrite->getTargetPath();
+
+            if ($target && preg_match('/catalog\/category\/view\/id\/(\d+)/', $target, $mm)) {
+                return (int) $mm[1];
+            }
+        } catch (\Throwable $e) {
+            // ignore
+        }
+    }
+
+    return 0;
+};
+?>
+
+<div
+    x-data="initMenuDesktop<?= $escaper->escapeHtml($uniqueId) ?>()"
+    class="z-20 order-2 sm:order-1 lg:order-2 navigation hidden lg:flex w-full"
+>
+    <div x-ref="nav-desktop" @load.window="setActiveMenu($root)" class="hidden lg:block w-full">
+        <div class="container lg:px-0">
+            <nav class="relative" aria-label="<?= $escaper->escapeHtmlAttr(__('Main menu')) ?>">
+                <ul class="flex justify-start flex-wrap gap-x-7 py-3 lg:py-4">
+                    <?php foreach ($menuItems as $index => $menuItem): ?>
+                        <?php
+                        $cid0 = $__resolveCategoryId($menuItem);
+                        $iconUrl0 = $cid0 ? $__categoryIconUrl($cid0) : null;
+                        ?>
+                        <li class="relative level-0"
+                            @mouseenter="hoverPanelActiveId = '<?= (string) $index ?>'"
+                            @mouseleave="hoverPanelActiveId = 0"
+                            @keyup.escape="hoverPanelActiveId = 0"
+                        >
+                            <span class="flex items-center text-md">
+                                <a
+                                    class="block font-semibold text-[16px] text-slate-800 level-0 py-2 px-0.5 flex items-center gap-2
+                                           transition-colors hover:text-primary"
+                                    href="<?= $escaper->escapeUrl($menuItem['url']) ?>"
+                                    title="<?= $escaper->escapeHtmlAttr($menuItem['name']) ?>"
+                                    @focus="hoverPanelActiveId = 0"
+                                >
+                                    <?php if ($iconUrl0): ?>
+                                        <img
+                                            src="<?= $escaper->escapeUrl($iconUrl0) ?>"
+                                            alt=""
+                                            width="20" height="20"
+                                            class="w-5 h-5 object-contain rounded-sm shrink-0"
+                                            loading="lazy"
+                                            decoding="async"
+                                        />
+                                    <?php endif; ?>
+                                    <span><?= $escaper->escapeHtml($menuItem['name']) ?></span>
+                                </a>
+
+                                <?php if (!empty($menuItem['childData'])): ?>
+                                    <button type="button"
+                                            data-sr-button-id="<?= $escaper->escapeHtmlAttr($index) ?>"
+                                            :aria-expanded="hoverPanelActiveId === '<?= (string) $index ?>' ? 'true' : 'false'"
+                                            @click="openMenuOnClick('<?= (string) $index ?>')"
+                                            class="rounded p-1 text-slate-500 hover:text-primary transition-colors">
+                                        <?= $heroiconsSolid->chevronDownHtml("flex self-center", 20, 20, ['aria-hidden' => 'true']) ?>
+                                        <span class="sr-only"><?= $escaper->escapeHtml(__('Show submenu for %1 category', $menuItem['name'])) ?></span>
+                                    </button>
+                                <?php endif; ?>
+                            </span>
+
+                            <?php if (!empty($menuItem['childData'])): ?>
+                                <div
+                                    x-cloak
+                                    class="absolute left-0 top-full z-30 pt-2"
+                                    :class="{
+                                        'hidden' : hoverPanelActiveId !== '<?= (string) $index ?>',
+                                        'block'  : hoverPanelActiveId === '<?= (string) $index ?>'
+                                    }"
+                                    @mouseenter="hoverPanelActiveId = '<?= (string) $index ?>'"
+                                    @mouseleave="hoverPanelActiveId = 0"
+                                >
+                                    <nav
+                                        aria-label="<?= $escaper->escapeHtmlAttr(__('Submenu for %1', $menuItem['name'])) ?>"
+                                        class="w-max max-w-[90vw] min-w-[14rem] overflow-auto
+                                               rounded-2xl shadow-lg bg-white border border-slate-200 p-1"
+                                    >
+                                        <div class="py-1" role="menu" aria-orientation="vertical">
+                                            <?php foreach ($menuItem['childData'] as $subMenuItem): ?>
+                                                <?php
+                                                $cid = $__resolveCategoryId($subMenuItem);
+                                                $iconUrl = $cid ? $__categoryIconUrl($cid) : null;
+                                                ?>
+                                                <a
+                                                    href="<?= $escaper->escapeUrl($subMenuItem['url']) ?>"
+                                                    title="<?= $escaper->escapeHtmlAttr($subMenuItem['name']) ?>"
+                                                    class="group block w-full min-h-[44px] flex items-center gap-2 rounded-xl px-3 py-2
+                                                           text-sm text-slate-800 transition-colors
+                                                           hover:bg-primary/5 hover:text-primary"
+                                                    role="menuitem"
+                                                    @keyup.escape="$nextTick(() => document.querySelector('[data-sr-button-id=<?= $escaper->escapeJs($index) ?>]').focus())"
+                                                >
+                                                    <?php if ($iconUrl): ?>
+                                                        <img
+                                                            src="<?= $escaper->escapeUrl($iconUrl) ?>"
+                                                            alt=""
+                                                            class="h-5 w-5 rounded-sm object-contain shrink-0"
+                                                            width="20" height="20"
+                                                            loading="lazy" decoding="async"
+                                                        >
+                                                    <?php endif; ?>
+
+                                                    <span class="font-semibold whitespace-nowrap">
+                                                        <?= $escaper->escapeHtml($subMenuItem['name']) ?>
+                                                    </span>
+                                                </a>
+                                            <?php endforeach; ?>
+                                        </div>
+                                    </nav>
+                                </div>
+                            <?php endif; ?>
+
+                        </li>
+                    <?php endforeach; ?>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+<script>
+'use strict';
+const initMenuDesktop<?= $escaper->escapeHtml($uniqueId) ?> = () => {
+    return {
+        hoverPanelActiveId: null,
+        setActiveMenu(menuNode) {
+            Array.from(menuNode.querySelectorAll('a'))
+                .filter(link => link.href === window.location.href.split('?')[0])
+                .map(link => {
+                    link.setAttribute('aria-current', 'page');
+                    link.classList.add('text-primary');
+                    link.closest('li.level-0')?.setAttribute('data-active', 'true');
+                });
+        },
+        openMenuOnClick(menuNode) {
+            this.hoverPanelActiveId = (menuNode === this.hoverPanelActiveId) ? 0 : menuNode;
+        }
+    }
+}
+</script>

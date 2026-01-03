@@ -1,0 +1,385 @@
+<?php
+declare(strict_types=1);
+
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\HeroiconsOutline;
+use Hyva\Theme\ViewModel\HyvaCsp;
+use Hyva\Theme\ViewModel\Navigation;
+use Magento\Framework\View\Element\Template;
+use Magento\Framework\Escaper;
+
+use Magento\Framework\App\ObjectManager;
+use Magento\Catalog\Api\CategoryRepositoryInterface;
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\UrlRewrite\Model\ResourceModel\UrlRewriteCollectionFactory;
+
+/** @var Template $block */
+/** @var Escaper $escaper */
+/** @var HyvaCsp $hyvaCsp */
+/** @var ViewModelRegistry $viewModels */
+
+$heroicons = $viewModels->require(HeroiconsOutline::class);
+$viewModelNavigation = $viewModels->require(Navigation::class, $block);
+
+$menuItems = $viewModelNavigation->getNavigation(4);
+$block->setData('cache_tags', $viewModelNavigation->getIdentities());
+
+// ikonky kategórií
+$om = ObjectManager::getInstance();
+/** @var CategoryRepositoryInterface $catRepo */
+$catRepo = $om->get(CategoryRepositoryInterface::class);
+/** @var StoreManagerInterface $storeManager */
+$storeManager = $om->get(StoreManagerInterface::class);
+
+$storeId   = (int) $storeManager->getStore()->getId();
+$mediaBaseFull = rtrim($storeManager->getStore()->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_MEDIA), '/');
+
+$__toUrl = static function ($val) use ($mediaBaseFull): ?string {
+    if (empty($val)) return null;
+
+    if (is_array($val)) {
+        if (isset($val[0]['url']) && $val[0]['url']) $val = (string) $val[0]['url'];
+        elseif (isset($val['url']) && $val['url'])   $val = (string) $val['url'];
+        elseif (isset($val[0]['name']) && $val[0]['name']) $val = (string) $val[0]['name'];
+        elseif (isset($val['name']) && $val['name'])       $val = (string) $val['name'];
+        else return null;
+    }
+
+    if (!is_string($val) || ($val = trim($val)) === '') return null;
+    if (preg_match('#^https?://#i', $val)) return $val;
+
+    if (stripos($val, $mediaBaseFull) === 0) {
+        $val = substr($val, strlen($mediaBaseFull));
+    }
+
+    $val = ltrim($val, '/');
+    $val = preg_replace('#^(media/)?(catalog/)?category/#i', '', $val);
+
+    return $mediaBaseFull . '/catalog/category/' . ltrim($val, '/');
+};
+
+$__categoryIconUrl = function (int $categoryId) use ($catRepo, $storeId, $__toUrl): ?string {
+    static $cache = [];
+    if (isset($cache[$categoryId])) return $cache[$categoryId];
+
+    try {
+        $cat = $catRepo->get($categoryId, $storeId);
+
+        $url = $__toUrl($cat->getData('thumbnail'));
+        if ($url) return $cache[$categoryId] = $url;
+
+        $url = $__toUrl($cat->getData('image'));
+        return $cache[$categoryId] = $url ?: null;
+    } catch (\Throwable $e) {
+        return $cache[$categoryId] = null;
+    }
+};
+
+$__resolveCategoryId = function (array $item) use ($storeManager, $om): int {
+    foreach (['entity_id', 'category_id', 'id'] as $k) {
+        if (isset($item[$k])) {
+            $v = $item[$k];
+            if (is_numeric($v)) return (int) $v;
+            if (is_string($v) && preg_match('/\d+/', $v, $m)) return (int) $m[0];
+        }
+    }
+
+    if (!empty($item['path']) && preg_match('/(\d+)(?!.*\d)/', (string) $item['path'], $m)) {
+        return (int) $m[1];
+    }
+
+    if (!empty($item['url'])) {
+        try {
+            $base = $storeManager->getStore()->getBaseUrl();
+            $req  = ltrim(str_replace($base, '', (string) $item['url']), '/');
+            $req  = strtok($req, '?');
+
+            /** @var UrlRewriteCollectionFactory $urlColFactory */
+            $urlColFactory = $om->get(UrlRewriteCollectionFactory::class);
+
+            $col = $urlColFactory->create()
+                ->addFieldToFilter('request_path', $req)
+                ->addFieldToFilter('store_id', (int) $storeManager->getStore()->getId());
+
+            $rewrite = $col->getFirstItem();
+            $target  = (string) $rewrite->getTargetPath();
+
+            if ($target && preg_match('/catalog\/category\/view\/id\/(\d+)/', $target, $mm)) {
+                return (int) $mm[1];
+            }
+        } catch (\Throwable $e) {}
+    }
+
+    return 0;
+};
+
+$dialogId = 'mobile-menu-drawer';
+?>
+
+<nav
+    x-data="initMenuMobileDrawer()"
+    @keydown.window.escape="closeMenu()"
+    class="navigation lg:hidden"
+    aria-label="<?= $escaper->escapeHtmlAttr(__('Site navigation')) ?>"
+    role="navigation"
+>
+    <!-- Trigger (nelepí sa na kraj) -->
+    <button
+        x-ref="mobileMenuTrigger"
+        @click="openMenu()"
+        type="button"
+        class="inline-flex items-center justify-center min-h-[48px] min-w-[48px]
+               rounded-full bg-gray-100 hover:bg-gray-200 transition-colors
+               ml-3 md:ml-0"
+        aria-label="<?= $escaper->escapeHtmlAttr(__('Open menu')) ?>"
+        aria-haspopup="dialog"
+        :aria-expanded="open ? 'true' : 'false'"
+        :hidden="open"
+    >
+        <?= $heroicons->menuHtml('p-3', 48, 48, ["aria-hidden" => "true"]) ?>
+    </button>
+
+    <!-- DRAWER (ako minicart, zľava doprava) -->
+    <dialog
+        id="<?= $escaper->escapeHtmlAttr($dialogId) ?>"
+        x-ref="dialog"
+        x-cloak
+        x-show="open"
+        x-htmldialog.noscroll="closeMenu()"
+        @click="onBackdropClick($event)"
+        class="open:flex flex-col
+               h-full max-h-full w-[85vw] max-w-[85vw]
+               mr-auto ml-0 p-0
+               shadow-2xl bg-white text-slate-800
+               border-r border-slate-200
+               backdrop:bg-black/25 backdrop:backdrop-blur-sm"
+        aria-label="<?= $escaper->escapeHtmlAttr(__('Site navigation')) ?>"
+        x-transition:enter="transition ease-in-out duration-500"
+        x-transition:enter-start="-translate-x-full"
+        x-transition:enter-end="translate-x-0"
+        x-transition:leave="transition ease-in-out duration-300"
+        x-transition:leave-start="translate-x-0"
+        x-transition:leave-end="-translate-x-full"
+    >
+        <!-- Header -->
+        <div
+          x-show="mobilePanelActiveId === null"
+          class="sticky top-0 z-20 bg-white border-b border-slate-200 px-4 py-4 flex items-center justify-between mb-2"
+        >
+
+            <div class="text-base font-semibold text-slate-800">
+                <?= $escaper->escapeHtml(__('Menu')) ?>
+            </div>
+
+            <!-- Close chip (rovnaký štýl ako language switcher) -->
+            <button
+                type="button"
+                @click="closeMenu()"
+                class="inline-flex items-center justify-center min-w-[48px] min-h-[48px] h-[48px]
+                       bg-gray-100 px-3 rounded-full hover:bg-gray-200 transition-colors
+                       text-slate-800"
+                aria-label="<?= $escaper->escapeHtmlAttr(__('Close menu')) ?>"
+            >
+                <?= $heroicons->xHtml('h-5 w-5', 20, 20, ["aria-hidden" => "true"]) ?>
+            </button>
+        </div>
+
+        <!-- Body (relative = fix pre level2 “hore”) -->
+        <div class="relative flex-1 overflow-y-auto overflow-x-hidden px-2 pb-2">
+            <!-- MAIN LIST -->
+            <ul
+                class="flex flex-col gap-1 transition-transform duration-200 ease-in-out"
+                :class="mobilePanelActiveId !== null ? '-translate-x-full' : 'translate-x-0'"
+                aria-label="<?= $escaper->escapeHtmlAttr(__('Site navigation links')) ?>"
+            >
+                <?php foreach ($menuItems as $index => $menuItem): ?>
+                    <?php
+                    $cid0 = $__resolveCategoryId($menuItem);
+                    $iconUrl0 = $cid0 ? $__categoryIconUrl($cid0) : null;
+                    ?>
+                    <li class="level-0">
+                        <div class="relative flex items-center">
+                            <a
+                                href="<?= $escaper->escapeUrl($menuItem['url']) ?>"
+                                title="<?= $escaper->escapeHtmlAttr($menuItem['name']) ?>"
+                                @click="closeMenu()"
+                                class="flex items-center gap-3 w-full rounded-2xl px-4 py-3
+                                       text-[15px] font-semibold text-slate-800
+                                       hover:bg-gray-100 transition-colors"
+                            >
+                                <?php if ($iconUrl0): ?>
+                                    <img
+                                        src="<?= $escaper->escapeUrl($iconUrl0) ?>"
+                                        alt=""
+                                        width="20" height="20"
+                                        class="h-5 w-5 rounded-sm object-contain shrink-0"
+                                        loading="lazy" decoding="async"
+                                    />
+                                <?php else: ?>
+                                    <span class="h-5 w-5 shrink-0"></span>
+                                <?php endif; ?>
+
+                                <span class="truncate"><?= $escaper->escapeHtml($menuItem['name']) ?></span>
+                            </a>
+
+                            <?php if (!empty($menuItem['childData'])): ?>
+                                <button
+                                    type="button"
+                                    @click="openSubcategory('<?= $escaper->escapeJs((string) $index) ?>')"
+                                    class="absolute right-2 inline-flex items-center justify-center h-10 w-10
+                                           rounded-full bg-gray-100 hover:bg-gray-200 transition-colors"
+                                    aria-label="<?= $escaper->escapeHtmlAttr(__('Open %1 subcategories', $menuItem['name'])) ?>"
+                                >
+                                    <?= $heroicons->chevronRightHtml('h-5 w-5', 20, 20, ["aria-hidden" => "true"]) ?>
+                                </button>
+                            <?php endif; ?>
+                        </div>
+                    </li>
+                <?php endforeach; ?>
+            </ul>
+
+            <!-- SUB PANELS (overlay v rámci body) -->
+            <?php foreach ($menuItems as $index => $menuItem): ?>
+                <?php if (empty($menuItem['childData'])) continue; ?>
+
+                <div
+                    x-cloak
+                    class="absolute inset-0 z-30 bg-white flex flex-col"
+                      x-show="mobilePanelActiveId === '<?= $escaper->escapeJs((string) $index) ?>'"
+                    x-transition:enter="transition ease-in-out duration-200"
+                    x-transition:enter-start="translate-x-full"
+                    x-transition:enter-end="translate-x-0"
+                    x-transition:leave="transition ease-in-out duration-150"
+                    x-transition:leave-start="translate-x-0"
+                    x-transition:leave-end="translate-x-full"
+                >
+                    <!-- Sub header -->
+                    <div class="sticky top-0 z-40 bg-white border-b border-slate-200 px-4 py-4 flex items-center gap-2">
+                        <button
+                            type="button"
+                            @click="backToMainCategories()"
+                            class="inline-flex items-center justify-center min-w-[48px] min-h-[48px] h-[48px]
+                                   bg-gray-100 px-3 rounded-full hover:bg-gray-200 transition-colors
+                                   text-slate-800"
+                            aria-label="<?= $escaper->escapeHtmlAttr(__('Back to main categories')) ?>"
+                        >
+                            <?= $heroicons->chevronLeftHtml('h-5 w-5', 20, 20, ["aria-hidden" => "true"]); ?>
+                        </button>
+
+                        <div class="font-semibold text-slate-800 truncate">
+                            <?= $escaper->escapeHtml($menuItem['name']) ?>
+                        </div>
+                    </div>
+
+                    <ul class="flex-1 overflow-y-auto mt-2 flex flex-col gap-1 px-2 pb-2">
+                        <li class="mb-1">
+                            <a
+                                href="<?= $escaper->escapeUrl($menuItem['url']) ?>"
+                                @click="closeMenu()"
+                                class="flex items-center w-full rounded-2xl px-4 py-3 text-[15px] font-semibold
+                                       text-slate-800 hover:bg-gray-100 transition-colors"
+                            >
+                                <?= $escaper->escapeHtml(__('Zobraziť všetko')) ?>
+                            </a>
+                        </li>
+
+                        <?php foreach ($menuItem['childData'] as $subMenuItem): ?>
+                            <?php
+                            $cid = $__resolveCategoryId($subMenuItem);
+                            $iconUrl = $cid ? $__categoryIconUrl($cid) : null;
+                            ?>
+                            <li>
+                                <a
+                                    href="<?= $escaper->escapeUrl($subMenuItem['url']) ?>"
+                                    @click="closeMenu()"
+                                    title="<?= $escaper->escapeHtmlAttr($subMenuItem['name']) ?>"
+                                    class="flex items-center gap-3 w-full rounded-2xl px-4 py-3
+                                           text-[15px] font-semibold text-slate-800
+                                           hover:bg-gray-100 transition-colors"
+                                >
+                                    <?php if ($iconUrl): ?>
+                                        <img
+                                            src="<?= $escaper->escapeUrl($iconUrl) ?>"
+                                            alt=""
+                                            width="20" height="20"
+                                            class="h-5 w-5 rounded-sm object-contain shrink-0"
+                                            loading="lazy" decoding="async"
+                                        />
+                                    <?php else: ?>
+                                        <span class="h-5 w-5 shrink-0"></span>
+                                    <?php endif; ?>
+
+                                    <span class="truncate"><?= $escaper->escapeHtml($subMenuItem['name']) ?></span>
+                                </a>
+                            </li>
+                        <?php endforeach; ?>
+                    </ul>
+                </div>
+            <?php endforeach; ?>
+        </div>
+    </dialog>
+</nav>
+
+<script>
+'use strict';
+
+const initMenuMobileDrawer = () => {
+    return {
+        open: false,
+        mobilePanelActiveId: null,
+        closeTimer: null,
+
+        openMenu() {
+            this.open = true;
+            this.mobilePanelActiveId = null;
+
+            this.$nextTick(() => {
+                try { this.$refs.dialog?.showModal?.(); } catch (e) {}
+                if (typeof hyva !== 'undefined' && hyva.trapFocus) {
+                    hyva.trapFocus(this.$refs.dialog);
+                }
+            });
+        },
+
+        closeMenu() {
+            // nech prebehne x-transition (ako minicart)
+            this.open = false;
+            this.mobilePanelActiveId = null;
+
+            clearTimeout(this.closeTimer);
+            this.closeTimer = setTimeout(() => {
+                try { this.$refs.dialog?.close?.(); } catch (e) {}
+                this.$refs.mobileMenuTrigger?.focus?.();
+                if (typeof hyva !== 'undefined' && hyva.releaseFocus) {
+                    hyva.releaseFocus();
+                }
+            }, 300); // match x-transition:leave duration
+        },
+
+        onBackdropClick(e) {
+            if (e.target === this.$refs.dialog) {
+                this.closeMenu();
+            }
+        },
+
+        openSubcategory(index) {
+            this.mobilePanelActiveId = index;
+
+            this.$nextTick(() => {
+              const active = this.$refs.dialog?.querySelector('.absolute.inset-0.z-30');
+              const list = active?.querySelector('ul');
+              if (list) list.scrollTop = 0;
+            });
+        },
+
+
+        backToMainCategories() {
+            this.mobilePanelActiveId = null;
+        },
+    }
+}
+
+window.addEventListener('alpine:init', () => Alpine.data('initMenuMobileDrawer', initMenuMobileDrawer), {once: true})
+</script>
+
+<?php $hyvaCsp->registerInlineScript() ?>

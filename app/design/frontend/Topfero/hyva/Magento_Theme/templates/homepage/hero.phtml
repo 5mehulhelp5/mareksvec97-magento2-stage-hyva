@@ -1,0 +1,94 @@
+<?php
+/** @var \Magento\Framework\View\Element\Template $block */
+/** @var \Hyva\Theme\Model\ViewModelRegistry $viewModels */
+
+use Magento\Store\Model\ScopeInterface;
+use Magento\Framework\UrlInterface;
+use Hyva\Theme\ViewModel\HeroiconsOutline;
+
+// Zober služby (bez vlastného Blocku)
+$om           = \Magento\Framework\App\ObjectManager::getInstance();
+/** @var \Magento\Framework\App\Config\ScopeConfigInterface $cfg */
+$cfg          = $om->get(\Magento\Framework\App\Config\ScopeConfigInterface::class);
+/** @var \Magento\Store\Model\StoreManagerInterface $storeManager */
+$storeManager = $om->get(\Magento\Store\Model\StoreManagerInterface::class);
+
+$path = 'metalio_homepage/hero/';
+
+$enabled  = (bool) $cfg->getValue($path . 'enabled', ScopeInterface::SCOPE_STORE);
+if (!$enabled) return;
+
+$title    = (string) $cfg->getValue($path . 'title',     ScopeInterface::SCOPE_STORE) ?: __('Popisné čísla na mieru');
+$subtitle = (string) $cfg->getValue($path . 'subtitle',  ScopeInterface::SCOPE_STORE);
+$textHtml = (string) $cfg->getValue($path . 'text_html', ScopeInterface::SCOPE_STORE);
+$ctaLabel = (string) $cfg->getValue($path . 'cta_label', ScopeInterface::SCOPE_STORE) ?: __('Nakupovať');
+$ctaUrl   = (string) $cfg->getValue($path . 'cta_url',   ScopeInterface::SCOPE_STORE) ?: '#';
+
+// Relatívna cesta z upload poľa (napr. "metalio/hero/default/hero.webp" alebo niekedy len "default/hero.webp")
+$imgPath  = (string) $cfg->getValue($path . 'hero_image', ScopeInterface::SCOPE_STORE);
+$imgAlt   = (string) $cfg->getValue($path . 'image_alt',  ScopeInterface::SCOPE_STORE) ?: __('Hero image');
+
+// Media base URL
+$mediaBase  = $storeManager->getStore()->getBaseUrl(UrlInterface::URL_TYPE_MEDIA);
+$uploadBase = 'metalio/hero';
+
+// Absolútna URL vs relatívna
+$isAbsolute = (bool) preg_match('#^https?://#i', $imgPath);
+if ($imgPath && !$isAbsolute) {
+    $rel = ltrim($imgPath, '/');
+    // Poistka: ak chýba prefix "metalio/hero", doplň ho (staršie uložené hodnoty mohli mať len "default/…")
+    if (strpos($rel, $uploadBase . '/') !== 0) {
+        $rel = $uploadBase . '/' . $rel;
+    }
+    $imgUrl = rtrim($mediaBase, '/') . '/' . $rel;
+} else {
+    $imgUrl = $imgPath ?: '';
+}
+
+// Hyvä ikony (ak dostupné)
+$heroIcons = isset($viewModels) ? $viewModels->require(HeroiconsOutline::class) : null;
+?>
+<section class="rounded-2xl bg-slate-100 p-6 sm:p-8 lg:p-10">
+  <div class="grid gap-8 lg:gap-12 lg:grid-cols-2 items-center">
+
+    <?php if ($imgUrl): ?>
+      <div class="flex justify-center lg:justify-end order-1 lg:order-2">
+        <img
+          src="<?= $block->escapeUrl($imgUrl) ?>"
+          alt="<?= $block->escapeHtmlAttr($imgAlt) ?>"
+          loading="lazy" decoding="async"
+          class="max-w-full h-auto max-h-80 sm:max-h-96 lg:max-h-[500px] rounded-xl"
+        />
+      </div>
+    <?php endif; ?>
+
+    <div class="<?= $imgUrl ? 'order-2 lg:order-1' : '' ?>">
+      <?php if ($subtitle): ?>
+        <div class="text-sm font-semibold uppercase tracking-wide text-primary mb-2">
+          <?= $block->escapeHtml($subtitle) ?>
+        </div>
+      <?php endif; ?>
+
+      <h2 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-900">
+        <?= $block->escapeHtml($title) ?>
+      </h2>
+
+      <?php if ($textHtml): ?>
+        <div class="prose prose-slate mt-4 max-w-prose text-slate-600">
+          <?= /* @noEscape */ $textHtml ?>
+        </div>
+      <?php endif; ?>
+
+      <?php if ($ctaUrl && $ctaUrl !== '#'): ?>
+        <a href="<?= $block->escapeUrl($ctaUrl) ?>"
+           class="inline-flex items-center gap-2 mt-6 btn btn-primary bg-primary px-5 py-3 transition group rounded-xl text-white">
+          <?= $block->escapeHtml($ctaLabel) ?>
+          <?php if ($heroIcons): ?>
+            <?= /* @noEscape */ $heroIcons->arrowNarrowRightHtml('w-5 h-5 transition-transform group-hover:translate-x-1') ?>
+          <?php endif; ?>
+        </a>
+      <?php endif; ?>
+    </div>
+
+  </div>
+</section>
