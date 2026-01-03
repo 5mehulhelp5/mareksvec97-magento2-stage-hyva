@@ -19,6 +19,10 @@
         @apply border-2 border-brand text-brand hover:bg-brand hover:text-white;
     }
 
+    .btn-secondary {
+        @apply border-2 border-brand text-brand hover:bg-brand hover:text-white;
+    }
+
     .btn-size-lg {
         @apply px-8 py-6 text-base;
     }
