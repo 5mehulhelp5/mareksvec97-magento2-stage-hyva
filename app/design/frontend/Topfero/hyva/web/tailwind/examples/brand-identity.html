@@ -1,0 +1,143 @@
+<section class="section-spacing bg-surface-light">
+    <div class="container max-w-7xl mx-auto px-4 space-y-10">
+        <div>
+            <span class="badge-section">Topfero</span>
+            <h2 class="mt-4">Buttons</h2>
+            <p class="text-secondary">Primárne CTA sú zelené, sekundárne sú outline.</p>
+            <div class="mt-6 flex flex-wrap gap-4">
+                <button class="btn btn-primary btn-size-lg" type="button">
+                    Primary large
+                </button>
+                <button class="btn btn-primary btn-size-md" type="button">
+                    Primary medium
+                </button>
+                <button class="btn btn-outline btn-size-lg" type="button">
+                    Outline large
+                </button>
+            </div>
+        </div>
+
+        <div>
+            <h2>Product cards</h2>
+            <div class="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8">
+                <article class="card-product">
+                    <div class="flex items-start justify-between">
+                        <span class="badge-product badge-bestseller">Bestseller</span>
+                        <span class="badge-product badge-sale">-15%</span>
+                    </div>
+                    <h3 class="mt-6">Stolové nohy Nordic</h3>
+                    <p class="text-secondary mt-2">Masívne drevo, ručná výroba.</p>
+                    <div class="mt-6 flex items-center justify-between">
+                        <span class="text-lg font-bold">129 €</span>
+                        <button class="btn btn-primary btn-size-sm" type="button">Do košíka</button>
+                    </div>
+                </article>
+            </div>
+        </div>
+
+        <div>
+            <h2>Badges</h2>
+            <div class="mt-6 flex flex-wrap gap-4">
+                <span class="badge-section">Section badge</span>
+                <span class="badge-product badge-bestseller">Bestseller</span>
+                <span class="badge-product badge-sale">Zľava</span>
+            </div>
+        </div>
+
+        <div>
+            <h2>Icons in circles</h2>
+            <div class="mt-6 flex flex-wrap gap-6">
+                <div class="icon-circle icon-circle-on-white">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M5 12h14"></path>
+                        <path d="M12 5v14"></path>
+                    </svg>
+                </div>
+                <div class="icon-circle icon-circle-on-brand bg-brand">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M4 12l6 6L20 6"></path>
+                    </svg>
+                </div>
+            </div>
+        </div>
+
+        <div>
+            <h2>Trust banner</h2>
+            <div class="trust-banner mt-6">
+                <div class="trust-banner-grid">
+                    <div class="trust-banner-item">
+                        <div class="icon-circle icon-circle-on-brand">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M3 12l2-2 4 4 8-8 4 4"></path>
+                            </svg>
+                        </div>
+                        <span>Rýchle doručenie</span>
+                    </div>
+                    <div class="trust-banner-item">
+                        <div class="icon-circle icon-circle-on-brand">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M12 2l7 4v6c0 5-3.5 9.5-7 10-3.5-.5-7-5-7-10V6l7-4z"></path>
+                            </svg>
+                        </div>
+                        <span>Bezpečné platby</span>
+                    </div>
+                    <div class="trust-banner-item">
+                        <div class="icon-circle icon-circle-on-brand">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M3 7h18"></path>
+                                <path d="M5 7l1 12h12l1-12"></path>
+                                <path d="M9 7V5a3 3 0 0 1 6 0v2"></path>
+                            </svg>
+                        </div>
+                        <span>Kvalitné materiály</span>
+                    </div>
+                    <div class="trust-banner-item">
+                        <div class="icon-circle icon-circle-on-brand">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M12 2l4 4-4 4-4-4 4-4z"></path>
+                                <path d="M2 12l4 4-4 4-4-4 4-4z"></path>
+                                <path d="M12 14l4 4-4 4-4-4 4-4z"></path>
+                                <path d="M22 12l4 4-4 4-4-4 4-4z"></path>
+                            </svg>
+                        </div>
+                        <span>Slovenská výroba</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div>
+            <h2>Form inputs + quantity selector (Alpine.js)</h2>
+            <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+                <label class="space-y-2">
+                    <span class="text-sm font-bold text-secondary">Email</span>
+                    <input class="form-input w-full" type="email" placeholder="name@example.com" />
+                </label>
+
+                <div class="space-y-2" x-data="{ qty: 1, min: 1, max: 99 }">
+                    <span class="text-sm font-bold text-secondary">Množstvo</span>
+                    <div class="quantity-selector">
+                        <button type="button" aria-label="Znížiť" x-on:click="qty = Math.max(min, qty - 1)">-</button>
+                        <input type="text" x-model.number="qty" />
+                        <button type="button" aria-label="Zvýšiť" x-on:click="qty = Math.min(max, qty + 1)">+</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div>
+            <h2>Alpine-friendly button state</h2>
+            <div class="mt-6" x-data="{ loading: false }">
+                <button
+                    class="btn btn-primary btn-size-md"
+                    type="button"
+                    x-on:click="loading = true; setTimeout(() => loading = false, 1200)"
+                    x-bind:disabled="loading"
+                >
+                    <span x-show="!loading">Pridať do košíka</span>
+                    <span x-show="loading">Pridávam...</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</section>
