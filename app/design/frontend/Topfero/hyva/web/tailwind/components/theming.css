@@ -1,0 +1,18 @@
+body {
+    @apply bg-container;
+    background: #FFFFFF;
+}
+
+[x-cloak] {
+    display: none !important;
+}
+
+.card {
+    @apply p-4 rounded-sm bg-container-lighter shadow;
+}
+
+.card-interactive {
+    &:hover {
+        @apply bg-container;
+    }
+}

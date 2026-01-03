@@ -1,0 +1,58 @@
+.page-product-bundle {
+    .price-final_price {
+        .price-from,
+        .price-to {
+            .price-container {
+                @apply text-gray-700 block mb-4;
+
+                .price-label {
+                    @apply block text-lg font-medium;
+                }
+
+                .price {
+                    @apply font-semibold text-2xl text-gray-800 leading-tight;
+                }
+            }
+
+            .price-including-tax + .price-excluding-tax {
+                @apply mt-1;
+
+                .price {
+                    @apply text-base;
+                }
+            }
+
+            .old-price {
+                .price-container {
+                    .price,
+                    .price-label {
+                        @apply text-gray-500 font-normal inline text-base;
+                    }
+                }
+            }
+        }
+    }
+}
+/* Zobraz max. 3 riadky, zvyšok skry */
+.read-more-clamp{
+  display:-webkit-box;
+  -webkit-line-clamp:3;          /* zmeň na 2/4/5 podľa potreby */
+  -webkit-box-orient:vertical;
+  overflow:hidden;
+  position:relative;
+}
+
+/* Jemný fade dole, nech to nepôsobí „odseknuté“ */
+.read-more-fade:after{
+  content:"";
+  position:absolute;
+  left:0; right:0; bottom:0;
+  height:2.25rem;                 /* výška prechodu */
+  pointer-events:none;
+  background:linear-gradient(to bottom, rgba(255,255,255,0), var(--bg, #fff));
+}
+.catalog-product-view {
+  .page-main {
+    margin-top: 0rem;
+  }
+}
