@@ -172,7 +172,7 @@ $showLanguage = $block->getShowLanguage() !== null ? (bool) $block->getShowLangu
     @private-content-loaded.window="getData"
     @resize.window.debounce="checkHeaderSize"
 >
-    <div class="container px-4 py-3 md:py-4 grid grid-cols-[auto_auto] md:grid-cols-[auto_minmax(0px,1fr)_auto] gap-3 md:gap-6 items-center">
+    <div class="container max-w-7xl px-4 py-3 md:py-4 grid grid-cols-[auto_auto] md:grid-cols-[auto_minmax(0px,1fr)_auto] gap-3 md:gap-6 items-center">
         <div class="flex items-center gap-3">
             <?= $block->getChildHtml('mobilemenu') ?>
             <?= $block->getChildHtml('logo'); ?>
@@ -240,13 +240,13 @@ $showLanguage = $block->getShowLanguage() !== null ? (bool) $block->getShowLangu
             <?php endif ?>
         </div>
 
-        <div class="col-span-full mt-2 md:mt-0 md:col-span-1 md:col-start-2 md:row-start-1">
+        <div class="col-span-full mt-3 pt-3 border-t border-gray-100 md:mt-0 md:pt-0 md:border-0 md:col-span-1 md:col-start-2 md:row-start-1">
             <?= $block->getChildHtml('header-search'); ?>
         </div>
     </div>
 
     <div class="border-t border-gray-200 bg-gray-50 hidden md:block">
-        <div class="container">
+        <div class="container max-w-7xl">
             <div class="flex items-center justify-between gap-6 py-3">
                 <div class="min-w-0">
                     <?= $block->getChildHtml('topmenu') ?>
