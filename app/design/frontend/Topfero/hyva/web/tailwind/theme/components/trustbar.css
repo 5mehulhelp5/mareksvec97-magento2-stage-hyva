@@ -16,7 +16,7 @@
   }
 
   .trustbar__title {
-    @apply mt-1 text-[22px] sm:text-2xl font-extrabold text-primary-darker;
+    @apply mt-1 text-[22px] sm:text-2xl font-extrabold text-white;
   }
 
   .trustbar__stars {
@@ -24,7 +24,7 @@
   }
 
   .trustbar__meta {
-    @apply mt-1 text-sm font-semibold text-secondary-darker;
+    @apply mt-1 text-sm font-semibold text-white/80;
   }
 
   .trustbar__overlay {
