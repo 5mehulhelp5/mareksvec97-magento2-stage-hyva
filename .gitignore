@@ -56,3 +56,7 @@ Thumbs.db
 .sass-cache/
 .cache/
 /.git-credentials
+
+# Node / Tailwind
+node_modules/
+**/node_modules/
