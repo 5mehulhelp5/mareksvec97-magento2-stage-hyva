@@ -1,6 +1,5 @@
 body {
-    @apply bg-container;
-    background: #FFFFFF;
+    @apply bg-white;
 }
 
 [x-cloak] {
@@ -8,11 +7,11 @@ body {
 }
 
 .card {
-    @apply p-4 rounded-sm bg-container-lighter shadow;
+    @apply p-4 rounded-sm bg-surface-light shadow;
 }
 
 .card-interactive {
     &:hover {
-        @apply bg-container;
+        @apply bg-white;
     }
 }
