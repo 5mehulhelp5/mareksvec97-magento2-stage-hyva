@@ -9,10 +9,6 @@
     .font-setup {
         font-family: "Setup Grotesk", ui-sans-serif, system-ui, sans-serif;
     }
-
-    .text-secondary {
-        color: theme("colors.text.secondary");
-    }
 }
 
 @layer base {
@@ -43,22 +39,6 @@
     html {
         font-family: "Setup Grotesk", ui-sans-serif, system-ui, sans-serif;
     }
-
-    h1 {
-        @apply text-3xl md:text-4xl font-bold text-black;
-    }
-
-    h2 {
-        @apply text-2xl md:text-3xl font-bold text-black;
-    }
-
-    h3 {
-        @apply text-xl font-bold text-black;
-    }
-
-    p {
-        @apply text-base leading-relaxed text-black;
-    }
 }
 
 html {
@@ -66,5 +46,6 @@ html {
 }
 
 body {
-    @apply text-black text-base leading-relaxed tracking-normal;
+    @apply text-black leading-normal text-base tracking-normal;
+    font-size: 15px;
 }

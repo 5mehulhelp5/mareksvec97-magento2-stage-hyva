@@ -1,9 +1,9 @@
 .order-items > div:nth-child(even) {
-    @apply bg-gray-100;
+    @apply bg-container-darker;
 }
 
 .order-links {
-    @apply block items-center bg-white;
+    @apply block items-center bg-container;
 }
 
 .order-links li {
