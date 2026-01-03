@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © MageWorx. All rights reserved.
+ * See LICENSE.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
+    <!-- Add own additional properties from review_details table to collection-->
+    <event name="eav_collection_abstract_load_before">
+        <observer name="mageworx_xreviewbase_extend_product_review_collection" instance="MageWorx\XReviewBase\Observer\AddFieldsToProductReviewCollectionObserver" />
+    </event>
+    <event name="review_review_collection_load_before">
+        <observer name="mageworx_xreviewbase_extend_review_collection" instance="MageWorx\XReviewBase\Observer\AddFieldsToReviewCollectionObserver" />
+    </event>
+    <!-- Remove all media with files on review removing -->
+    <event name="review_delete_before">
+        <observer name="mageworx_xreviewbase_review_remove_media" instance="MageWorx\XReviewBase\Observer\RemoveMediaOnReviewRemovingObserver" />
+    </event>
+
+    <event name="review_save_after">
+        <observer name="mageworx_xreviewbase_review_save_properties" instance="MageWorx\XReviewBase\Observer\SaveReviewPropertiesObserver" />
+        <observer name="mageworx_xreviewbase_review_save_customer_images" instance="MageWorx\XReviewBase\Observer\SaveReviewMediaObserver" />
+    </event>
+</config>

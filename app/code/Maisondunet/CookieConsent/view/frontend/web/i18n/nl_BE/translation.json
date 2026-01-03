@@ -1,0 +1,53 @@
+{
+  "modal_trigger_title": "Cookie-instellingen",
+
+  "consent_modal_title": "We gebruiken cookies!",
+  "consent_modal_description": "Deze website gebruikt essentiële cookies om zijn juiste werking te garanderen en tracking cookies om te begrijpen hoe u ermee interacteert. De laatste worden alleen ingesteld na toestemming.",
+  "consent_modal_primary_btn": "Ik ga akkoord",
+  "consent_modal_secondary_btn_settings": "Aanpassen",
+  "consent_modal_secondary_btn_accept_necessary": "Noodzakelijke accepteren",
+
+  "settings_modal_title": "Cookie-instellingen",
+  "settings_modal_save_settings_btn": "Instellingen opslaan",
+  "settings_modal_accept_all_btn": "Alles accepteren",
+  "settings_modal_reject_all_btn": "Noodzakelijke accepteren",
+  "settings_modal_close_btn_label": "Sluiten",
+
+  "settings_modal_before_consent_title": "Gebruik van cookies",
+  "settings_modal_before_consent_description": "We gebruiken cookies om de basisfunctionaliteiten van de website te garanderen en uw online ervaring te verbeteren. U kunt voor elke categorie kiezen om deze te accepteren of af te wijzen wanneer u maar wilt.",
+
+  "settings_modal_after_consent_title": "Meer informatie",
+  "settings_modal_after_consent_description": "Voor vragen met betrekking tot mijn beleid over cookies en uw keuzes, neem alstublieft contact met ons op.",
+
+  "functionality_storage_title": "Functionaliteitscookies",
+  "functionality_storage_description": "Deze cookies zijn noodzakelijk voor de goede werking van onze website. Zonder deze cookies werkt de website mogelijk niet naar behoren.",
+
+  "personalization_storage_title": "Personalisatiecookies",
+  "personalization_storage_description": "Personalisatiecookies kunnen cookies van derden gebruiken om hen te helpen de inhoud te personaliseren en gebruikers over verschillende websites en apparaten te volgen.",
+
+  "security_storage_title": "Beveiligingscookies",
+  "security_storage_description": "Beveiligingscookies stellen ons in staat om informatie met betrekking tot beveiliging op te slaan, zoals authenticatie, fraudepreventie en andere middelen om de gebruiker te beschermen.",
+
+  "ad_storage_title": "Advertentiecookies",
+  "ad_storage_description": "Advertentiecookies worden door ons of onze partners gebruikt om u relevante inhoud of advertenties te tonen, zowel op onze site als op sites van derden. Dit stelt ons in staat om profielen te maken op basis van uw interesses, zogenaamde gepseudonimiseerde profielen. Op basis van deze informatie is het over het algemeen niet mogelijk om u direct als persoon te identificeren, aangezien alleen gepseudonimiseerde gegevens worden gebruikt. Tenzij u uw toestemming uitdrukt, ontvangt u geen inhoud en advertenties die op uw interesses zijn afgestemd.",
+
+  "analytics_storage_title": "Analytische cookies",
+  "analytics_storage_description": "Analytische cookies stellen ons in staat om de prestaties van onze website en onze reclamecampagnes te meten. We gebruiken ze om het aantal bezoeken en de bronnen van bezoeken op onze website te bepalen. We verwerken de via deze cookies verkregen gegevens op een geaggregeerde manier, zonder identificatoren te gebruiken die wijzen op specifieke gebruikers van onze website. Als u het gebruik van analytische cookies uitschakelt in verband met uw bezoek, verliezen we de mogelijkheid om de prestaties te analyseren en onze acties te optimaliseren.",
+
+  "cookie_table_col_name": "Naam",
+  "cookie_table_col_purpose": "Beschrijving",
+  "cookie_table_col_processing_time": "Verloop",
+  "cookie_table_col_provider": "Aanbieder",
+  "cookie_table_col_type": "Type",
+  "cookie_table_col_link": "Link",
+  "cookie_table_col_link_find_out_more": "Meer ontdekken",
+  "cookie_table_col_category": "Categorie",
+
+  "processing_time_session": "Sessie",
+  "processing_time_persistent": "Persistent",
+
+  "cookie_type_1st_party": "Eerste partij",
+  "cookie_type_3rd_party": "Derde partij",
+
+  "find_out_more": "Meer ontdekken"
+}

@@ -1,0 +1,32 @@
+/* styles for paypal cards */
+@layer components {
+    .pp-card-cvv {
+        input {
+            @apply w-[10ch];
+        }
+    }
+
+    .pp-number-input {
+        &::-webkit-outer-spin-button,
+        &::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+    }
+}
+
+.pp-stored-cards {
+    .pp-card-view {
+        @apply cursor-pointer transition hover:shadow-lg active:opacity-70;
+    }
+    input[type='radio'] {
+        @apply hidden cursor-pointer;
+        &:checked {
+            & + .pp-card-view {
+                @apply shadow-pp_card_shadow cursor-default;
+            }
+        }
+    }
+}
+
+

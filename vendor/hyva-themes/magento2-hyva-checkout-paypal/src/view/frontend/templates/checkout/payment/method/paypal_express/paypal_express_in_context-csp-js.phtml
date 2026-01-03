@@ -1,0 +1,104 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2020-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+declare(strict_types=1);
+
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\HyvaCsp;
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Element\Template;
+use Hyva\CheckoutPayPal\ViewModel\Payment\Method\PaypalExpress as ViewModel;
+
+/** @var Template $block */
+/** @var Escaper $escaper */
+/** @var ViewModelRegistry $viewModels */
+/** @var HyvaCsp $hyvaCsp */
+
+?>
+    <script>
+        function PaypalExpressInContext() {
+            const buttonContainer = document.getElementById('paypal-button-container');
+
+            const dataset = this.$el.dataset,
+                checkoutConfig = JSON.parse(dataset.inContextConfig),
+                fundingSource = dataset.fundingSource;
+
+            function createScriptLoadPromise(url) {
+                return new Promise((resolve, reject) => {
+                    const script = document.createElement('script');
+                    script.src = url;
+
+                    script.addEventListener('load', function() {
+                        resolve(window.paypal);
+                    }, false);
+
+                    script.addEventListener('error', function() {
+                        reject(script);
+                    }, false);
+
+                    document.body.appendChild(script);
+                })
+            }
+
+            return {
+                async init() {
+                    createScriptLoadPromise(checkoutConfig.sdkUrl)
+                        .then((paypal) => {
+                            paypal.Buttons({
+                                style: checkoutConfig['styles'],
+                                funding: checkoutConfig['funding'],
+
+                                createOrder() {
+                                    const params = 'quote_id=' + checkoutConfig['quote_id'] +
+                                        '&customer_id=' + (checkoutConfig['customer_id'] || '') +
+                                        '&form_key=' + (hyva.getFormKey() || '') +
+                                        '&button=' + checkoutConfig['button'];
+
+                                    return window.fetch(checkoutConfig['token_url'], {
+                                            'headers': {
+                                                'content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
+                                            },
+                                            'body': params,
+                                            'method': 'POST',
+                                            'mode': 'cors',
+                                            'credentials': 'include'
+                                        }
+                                    ).then(result => result.json())
+                                        .then(data => data.token)
+                                        .catch((error) => console.log(error))
+                                },
+                                onApprove(data, actions) {
+                                    const buttonComponent = Magewire.find('checkout.payment.method.paypal-express')
+                                    buttonComponent.authorize(data['orderID'], data['payerID'], data['paymentSource'])
+                                },
+                                onClick(data) {
+                                    this.funding = data.fundingSource || fundingSource;
+                                },
+                                onCancel(data, actions) {
+                                    hyvaCheckout.payment.dispatchExceptionMessage(
+                                        `<?= $escaper->escapeJs(__('Your payment was cancelled')) ?>`
+                                    )
+                                },
+                                onError(message) {
+                                    if (typeof message === 'string') {
+                                        return hyvaCheckout.payment.dispatchExceptionMessage(message)
+                                    }
+
+                                    message = message.message || 'Something went wrong'
+                                    hyvaCheckout.message.console(message)
+                                    window.dispatchEvent(new CustomEvent('reload-customer-section-data'))
+                                }
+                            }).render(buttonContainer)
+                        })
+                }
+            }
+        }
+
+        window.addEventListener('alpine:init', () => Alpine.data('PaypalExpressInContext', PaypalExpressInContext), {once: true});
+    </script>
+<?php $hyvaCsp->registerInlineScript() ?>

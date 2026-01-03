@@ -1,0 +1,199 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2020-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+declare(strict_types=1);
+
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\HyvaCsp;
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Element\Template;
+
+/** @var Template $block */
+/** @var Escaper $escaper */
+/** @var ViewModelRegistry $viewModels */
+/** @var HyvaCsp $hyvaCsp */
+?>
+
+<script>
+    function PaypalCreditCardForm() {
+    return {
+      init(){
+          const {
+              methodCode,
+              availableTypes,
+              creditCardConfig
+          } = this.$el.dataset;
+
+          const cardTypes = JSON.parse(creditCardConfig);
+
+          const cardForm = document.getElementById(`card-form-${methodCode}`),
+              formCardInput = document.getElementById(`${methodCode}_cc_number`),
+              formCardExpMonth = document.getElementById(`${methodCode}_expiration`),
+              formCardExpYear = document.getElementById(`${methodCode}_expiration_yr`),
+              formCardCvv = document.getElementById(`${methodCode}_cc_cid`);
+
+          formCardInput.addEventListener('input', (event) => {
+              setCardValue('card', event.target.value);
+          });
+
+          formCardExpMonth.addEventListener('change', (event) => {
+              setCardValue('expMonth', event.target.value);
+          });
+
+          formCardExpYear.addEventListener('change', (event) => {
+              setCardValue('expYear', event.target.value);
+          });
+
+          if (formCardCvv) {
+              formCardCvv.addEventListener('input', (event) => {
+                  setCardValue('cvv', event.target.value);
+              });
+          }
+
+          function setCardValue(key, value) {
+              const cardKey = methodCode + 'Card';
+
+              if (!window[cardKey]) {
+                  window[cardKey] = {};
+              }
+
+              window[cardKey][key] = value;
+              validateCardForm();
+          }
+
+          function getCardTypes(cardNumber) {
+              let i, cardType,
+                  result = [];
+
+              for (i = 0; i < cardTypes.length; i++) {
+                  cardType = cardTypes[i];
+
+                  if (new RegExp(cardType.pattern).test(cardNumber)) {
+                      result.push({...cardType});
+                  }
+              }
+
+              return result;
+          }
+
+          function luhn10Validator(a, b, c, d, e) {
+              for (d = +a[b = a.length - 1], e = 0; b--;) {
+                  c = +a[b];
+                  d += ++e % 2 ? 2 * c % 10 + (c > 4) : c;
+              }
+
+              return !(d % 10);
+          }
+
+          function validateCardNumber(cardNumber, inputEl) {
+              let potentialTypes,
+                  cardType,
+                  isValid,
+                  i;
+
+              cardNumber = cardNumber.replace(/\s+/g, '');
+
+              if (!/^\d*$/.test(cardNumber)) {
+                  setValidity(inputEl, false);
+                  return {isValid: false};
+              }
+
+              potentialTypes = getCardTypes(cardNumber);
+              if (potentialTypes.length === 0) {
+                  setValidity(inputEl, false);
+                  return {isValid: false};
+              }
+
+              cardType = potentialTypes[0];
+              isValid = cardType.type === 'unionpay' ? true : luhn10Validator(cardNumber);
+
+              for (i = 0; i < cardType.lengths.length; i++) {
+                  if (parseInt(cardType.lengths[i]) === cardNumber.length) {
+                      setValidity(inputEl, true);
+                      return {card: cardType, isValid: isValid};
+                  }
+              }
+              return {isValid: false};
+          }
+
+          function setValidity(inputEl, flag) {
+              if (flag) {
+                  inputEl.setCustomValidity('');
+                  inputEl.reportValidity();
+              } else {
+                  inputEl.setCustomValidity(
+                      '<?= $escaper->escapeHtml(__('Please enter a valid credit card number')) ?>'
+                  );
+                  inputEl.reportValidity();
+              }
+          }
+
+          function validateCardForm() {
+              let cardData = {
+                  last4: formCardInput.value.substr(-4),
+                  expMonth: formCardExpMonth.value,
+                  expYear: formCardExpYear.value,
+                  validationResult: validateCardNumber(formCardInput.value, formCardInput)
+              };
+
+              let hasCvv = null;
+
+              if (formCardCvv) {
+                  hasCvv = (formCardCvv.value.length > 2);
+              }
+
+              cardData.hasCvv = hasCvv;
+
+              cardForm.dispatchEvent(
+                  new CustomEvent
+                  (
+                      `${methodCode}-card-updated`,
+                      { detail: Object.assign({}, { cardData: cardData }) }
+                  )
+              );
+          }
+      }
+    }
+}
+
+window.addEventListener('alpine:init', () => Alpine.data('PaypalCreditCardForm', PaypalCreditCardForm), {once: true});
+</script>
+<?php $hyvaCsp->registerInlineScript() ?>
+
+<script>
+    function PayPalCheckoutPaymentCreditCardFormToolTip() {
+        return {
+            showTooltip: false,
+            isHoverableDevice: window.matchMedia('(hover: hover) and (pointer: fine)'),
+            trigger: {
+                ['x-on:mouseenter.self']() {
+                    if (!this.isHoverableDevice.matches) return;
+                    this.showTooltip = true;
+                },
+                ['x-on:mouseleave.self']() {
+                    if (!this.isHoverableDevice.matches) return;
+                    this.showTooltip = false;
+                },
+                ['x-on:click']() {
+                    if (this.isHoverableDevice.matches) return;
+                    this.toggleVisible();
+                },
+                ['x-on:keydown.enter']() {
+                    this.toggleVisible();
+                }
+            },
+            toggleVisible() {
+                this.showTooltip = !this.showTooltip;
+            },
+        }
+    }
+
+window.addEventListener('alpine:init', () => Alpine.data('PayPalCheckoutPaymentCreditCardFormToolTip', PayPalCheckoutPaymentCreditCardFormToolTip), {once: true});
+</script>
+<?php $hyvaCsp->registerInlineScript() ?>
+

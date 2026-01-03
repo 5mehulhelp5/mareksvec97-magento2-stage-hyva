@@ -1,0 +1,128 @@
+Pros,Pros
+Cons,Cons
+"Vendor's Answer","Vendor's Answer"
+"Additional Fields","Additional Fields"
+"Country Code","Country Code"
+Region,Region
+"Is Recommend","Is Recommend"
+"Is Verified","Is Verified"
+"Media Gallery","Media Gallery"
+"Images (.jpg, .gif, .png)","Images (.jpg, .gif, .png)"
+"Add New Images","Add New Images"
+"%1 points","%1 points"
+"Something went wrong, please try again later.","Something went wrong, please try again later."
+"You already voted","You already voted"
+"Thank you!","Thank you!"
+"There was an error loading vote data.","There was an error loading vote data."
+All,All
+"Your Country","Your Country"
+"With images","With images"
+"Verified customers","Verified customers"
+"Sort Ascending","Sort Ascending"
+"Sort Descending","Sort Descending"
+Date,Date
+Rating,Rating
+Answer,Answer
+No,No
+Yes,Yes
+"Browse to find or drag image here","Browse to find or drag image here"
+"Delete image","Delete image"
+Hidden,Hidden
+"Alt Text","Alt Text"
+"Image Size","Image Size"
+{size},{size}
+"Image Resolution","Image Resolution"
+"{width}^{height} px","{width}^{height} px"
+"Hide from Review","Hide from Review"
+"Average Customer Rating:","Average Customer Rating:"
+"Your Review","Your Review"
+"Review helpful?","Review helpful?"
+"Brand reply","Brand reply"
+"Submitted on %1","Submitted on %1"
+"Back to My Reviews","Back to My Reviews"
+"Write Your Own Review","Write Your Own Review"
+"* Required Fields","* Required Fields"
+"You're reviewing:","You're reviewing:"
+"Your Rating","Your Rating"
+"%1 %2","%1 %2"
+Nickname,Nickname
+Summary,Summary
+Review,Review
+"Recommend this product","Recommend this product"
+Images,Images
+"Upload photo","Upload photo"
+"Submit Review","Submit Review"
+"Only registered users can write reviews. Please <a href=""%1"">Sign in</a> or <a href=""%2"">create an account</a>","Only registered users can write reviews. Please <a href=""%1"">Sign in</a> or <a href=""%2"">create an account</a>"
+"Customer Reviews","Customer Reviews"
+"Write a Review","Write a Review"
+"Based on %count reviews","Based on %count reviews"
+"Verified Buyer","Verified Buyer"
+Recommend,Recommend
+"Show less","Show less"
+"Show more","Show more"
+"Customer Photos","Customer Photos"
+"Filter reviews by:","Filter reviews by:"
+"Discard filter by verified buyers","Discard filter by verified buyers"
+"Set filter by verified buyers","Set filter by verified buyers"
+"Verified buyers (%1)","Verified buyers (%1)"
+"Discard filter by your country","Discard filter by your country"
+"Set filter by your country","Set filter by your country"
+"Your Country (%1)","Your Country (%1)"
+"Discard Filter By Images","Discard Filter By Images"
+"Set Filter By Images","Set Filter By Images"
+"With Images (%1)","With Images (%1)"
+"Sort By","Sort By"
+"Set Ascending Direction","Set Ascending Direction"
+"Set Descending Direction","Set Descending Direction"
+review,review
+reviews,reviews
+"Review by","Review by"
+"See all reviews","See all reviews"
+"Extended Review","Extended Review"
+"Review Settings","Review Settings"
+"Display Images","Display Images"
+"Allow Images Uploading","Allow Images Uploading"
+"Image Size, px","Image Size, px"
+"Display Location","Display Location"
+"Location Template","Location Template"
+"Enable ""Helpful""","Enable ""Helpful"""
+"Enable Recommend Option","Enable Recommend Option"
+"Enable Pros & Cons","Enable Pros & Cons"
+"Enable ""Verified customer""","Enable ""Verified customer"""
+"Add privacy check-box","Add privacy check-box"
+Message,Message
+"Add points message","Add points message"
+"Reward Message","Reward Message"
+"Characters limit in reviews","Characters limit in reviews"
+"Characters limit in reviews widget","Characters limit in reviews widget"
+"Toolbar Settings","Toolbar Settings"
+"Filter Options","Filter Options"
+"Default Sort By","Default Sort By"
+"Sorting Options","Sorting Options"
+"Default Sort Direction","Default Sort Direction"
+"Reviews per Page","Reviews per Page"
+"MageWorx Reviews","MageWorx Reviews"
+"List of Reviews","List of Reviews"
+Title,Title
+"Number of Reviews to Display","Number of Reviews to Display"
+"Review attributes to show","Review attributes to show"
+"Product Title","Product Title"
+"Product Image","Product Image"
+"GeoIP Location","GeoIP Location"
+"Review Date","Review Date"
+"'I recommend' Label","'I recommend' Label"
+Template,Template
+"Horizontal Reviews Template","Horizontal Reviews Template"
+"Vertical Reviews Template","Vertical Reviews Template"
+"Cache Lifetime (Seconds)","Cache Lifetime (Seconds)"
+"
+                    Time in seconds between the widget updates.
+                    <br/>If not set, equals to 86400 seconds (24 hours). To update widget instantly, go to Cache Management and clear Blocks HTML Output cache.
+                    <br/>Widget will not show products that begin to match the specified conditions until cache is refreshed.
+                ","
+                    Time in seconds between the widget updates.
+                    <br/>If not set, equals to 86400 seconds (24 hours). To update widget instantly, go to Cache Management and clear Blocks HTML Output cache.
+                    <br/>Widget will not show products that begin to match the specified conditions until cache is refreshed.
+                "
+"From the same category","From the same category"
+Conditions,Conditions

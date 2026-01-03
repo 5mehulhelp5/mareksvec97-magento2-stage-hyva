@@ -1,0 +1,87 @@
+.bigconnect-configurator-main {
+	.price-slider-title {
+		
+		font-weight: 700;
+		&:after {
+			    content: '*';
+			    color: #e02b27;
+			    font-size: 1.2rem;
+			    margin: 0 0 0 5px;
+		}
+	}
+.price-configurator-group {
+	margin-top: 10px;
+	padding: 10px 30px 30px 30px;
+	background: #efeeec;
+
+		.field.range-slider {
+			margin-top: 25px !important;
+			&:first-child {
+				
+			}
+			&:last-child {
+				padding-bottom: 0px;
+			}
+			.control {
+				display: flex;
+				align-items: center;
+				position: relative;
+				width: 100%;
+				.product-price-slider {
+					cursor: pointer;
+					width: 100%;
+					background: #fff;
+					&.noUi-horizontal {
+						height: 16px;
+						border: none;
+					}
+					.noUi-connects {
+						border: 3px solid #fff;
+						border-radius: 20px;
+					}
+					.noUi-origin  {
+						.noUi-handle {
+						    top: -6px;
+						    height: 26px;
+						    width: 26px;
+						    border: 5px solid #ffffff;
+						    background: #ffa500;
+						    border-radius: 100%;
+						    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+						    cursor: pointer;
+						    &:before, &:after {
+						    	display: none;
+						    }
+						    }
+						  
+					}
+					.ui-slider-range {
+						position: absolute;
+						top: 0px;
+						height: 100%;
+						background: #ffa500;
+						border-radius: 10px;
+					}
+					.noUi-connect {
+						background: #ffa500;
+					}
+				}
+				input {
+					width: 60px;
+					margin-left: 25px;
+					height: 35px;
+					order: 2;
+					text-align: center;
+				}
+			}
+			.mage-error {
+				position: absolute;
+				    top: 25px;
+				    right: 80px;
+				    background: #fff;
+				    padding: 5px 10px;
+				    border-radius: 10px;
+			} 
+		}
+	
+}}

@@ -1,0 +1,51 @@
+<?php
+/**
+ * @author Amasty Team
+ * @package Blog Pro for Magento 2
+ */
+/**
+ * @var $block Amasty\Blog\Block\Content\Post\Related
+ * @var $escaper Magento\Framework\Escaper
+ */
+
+$collection = $block->getCollection();
+?>
+
+<?php if ($collection && $collection->getSize()): ?>
+    <?php $postsCount = $collection->getSize(); ?>
+    <div class="widget amblog-post-list amblog-element-block">
+        <div class="amblog-title">
+            <?= $escaper->escapeHtml(__('Related posts')); ?>
+        </div>
+        <div class="amblog-list">
+            <div class="post-items" 
+                 data-content-type="slider" data-mage-init='{"Magento_PageBuilder/js/content-type/slider/appearance/default/widget":{"arrows": true, "dots": false}}'>
+                 <div class="slick-list" style="gap:15px">
+                <?php foreach ($collection as $post): ?>
+                    <div class="post-item <?= $post->getListThumbnailSrc() ? '' : '-post-no-image' ?>">
+                        <?php if ($post->getListThumbnailSrc()): ?>
+                            <a href="<?= $escaper->escapeUrl($post->getUrl()) ?>"
+                               title="<?= $escaper->escapeHtmlAttr($post->getTitle()) ?>"
+                               aria-label="<?= $escaper->escapeHtmlAttr($post->getTitle()) ?>"
+                               class="post-image">
+                                <img src="<?= /* @noEscape */ $post->getListThumbnailSrc(); ?>"
+                                     alt="<?= $escaper->escapeHtmlAttr($post->getThumbnailAlt()); ?>">
+                            </a>
+                        <?php endif; ?>
+                        <div class="post-item-details">
+                            <a class="post-title amblog-headline"
+                               href="<?= $escaper->escapeUrl($post->getUrl()); ?>"
+                               title="<?= $escaper->escapeHtmlAttr($post->getTitle()) ?>"
+                               aria-label="<?= $escaper->escapeHtmlAttr($post->getTitle()) ?>">
+                                <?= $escaper->escapeHtml($post->getTitle()); ?>
+                            </a>
+                           
+                            </div>
+                       
+                    </div>
+                <?php endforeach; ?>
+                 </div>
+            </div>
+        </div>
+    </div>
+<?php endif; ?>

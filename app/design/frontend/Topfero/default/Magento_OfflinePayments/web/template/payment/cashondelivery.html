@@ -1,0 +1,67 @@
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<div class="payment-method" data-bind="css: {'_active': (getCode() == isChecked())}">
+    <div class="payment-method-title field choice flex-wrap">
+        
+        <label data-bind="attr: {'for': getCode()}" class="label amcheckout-label w-100">
+            <div class="top-shipping d-flex w-100 items-center">
+            <input type="radio"
+                   name="payment[method]"
+                   class="radio"
+                   data-bind="attr: {'id': getCode()}, value: getCode(), checked: isChecked, click: selectPaymentMethod, visible: isRadioButtonVisible()"/>
+            <div class="shipping-block__wrapp d-flex justify-between w-100">
+            <div class="shipping-price-title d-flex gap-3">
+            <span class="carrier method" data-bind="text: getTitle()"></span>
+            </div>
+            <div class="shipping-logo">
+                    <div class="shipping-block__icon d-flex gap-1 items-center">
+                        <img data-bind="attr: { src: require.toUrl('Magento_OfflinePayments/images/cash-on-delivery.png') }" alt="cash on delivery"/>
+                     
+                    </div>
+            </div>
+             </div>
+         </div>
+        
+    </label>
+    <div class="bottom-shipping w-100">
+        <span data-bind="i18n: 'Pay for the order only when you take it over.'"></span>
+    </div>
+    </div>
+
+    <div class="payment-method-content no-display">
+        <!-- ko foreach: getRegion('messages') -->
+        <!-- ko template: getTemplate() --><!-- /ko -->
+        <!--/ko-->
+        <div class="payment-method-billing-address">
+            <!-- ko foreach: $parent.getRegion(getBillingAddressFormName()) -->
+            <!-- ko template: getTemplate() --><!-- /ko -->
+            <!--/ko-->
+        </div>
+        <p data-bind="html: getInstructions()"></p>
+        <div class="checkout-agreements-block">
+            <!-- ko foreach: $parent.getRegion('before-place-order') -->
+                <!-- ko template: getTemplate() --><!-- /ko -->
+            <!--/ko-->
+        </div>
+        <div class="actions-toolbar">
+            <div class="primary">
+                <button class="action primary checkout"
+                        type="submit"
+                        data-bind="
+                        click: placeOrder,
+                        attr: {title: $t('Place Order')},
+                        enable: (getCode() == isChecked()),
+                        css: {disabled: !isPlaceOrderActionAllowed()}
+                        "
+                        disabled>
+                    <span data-bind="i18n: 'Place Order'"></span>
+                </button>
+            </div>
+        </div>
+
+    </div>
+</div>

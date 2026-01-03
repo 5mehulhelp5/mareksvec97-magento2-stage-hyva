@@ -1,0 +1,68 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+      
+      <referenceBlock name="breeze.scrollReveal">
+          <arguments>
+              <argument name="enabled" xsi:type="boolean">true</argument>
+          </arguments>
+      </referenceBlock>
+
+        
+        <move element="navigation.wrapper" destination="header-wrapper" after="logo"/>
+        <referenceContainer name="footer" remove="true"/>
+
+        <referenceContainer name="footer-middle">
+        	               <block class="Magento\Framework\View\Element\Template" name="cart.benefits" before="-">
+                               <arguments>
+                                   <argument name="template" xsi:type="string">Magento_Checkout::cart/cart-benefits.phtml</argument>
+                               </arguments>
+               </block>
+            <block class="Magento\Cms\Block\Block" name="footer_content" before="-">
+                <arguments>
+                    <argument name="block_id" xsi:type="string">footer_topfero</argument>
+                </arguments>
+            </block>
+        </referenceContainer>
+
+        <referenceBlock name="header.panel">
+        	<block class="Magento\Framework\View\Element\Template" name="slovakia.badge" after="top.benefits">
+                <arguments>
+                    <argument name="template" xsi:type="string">Magento_Theme::slovakia-badge.phtml</argument>
+                </arguments>
+            </block>
+          <container name="top.left.links" htmlTag="div" htmlClass="header-panel-left md-down-hide" before="-">
+          	<block class="Magento\Framework\View\Element\Template" name="custom_js_block" template="Magento_Theme::custom-js.phtml" />		
+              <block class="Magento\Cms\Block\Block" name="top.benefits">
+
+                <arguments>
+                    <argument name="block_id" xsi:type="string">header_panel_benefits</argument>
+                </arguments>
+            </block>
+            <block class="Magento\Framework\View\Element\Template" name="production.link" after="top.benefits">
+                <arguments>
+                    <argument name="template" xsi:type="string">Magento_Theme::our-production-link.phtml</argument>
+                </arguments>
+            </block>
+            
+          </container>
+          <container name="top.mobile.block" htmlTag="div" htmlClass="top-mobile-bar md-hide justify-center d-flex w-100" after="top.left.links">
+              <block class="Magento\Cms\Block\Block" name="top.mobile">
+                <arguments>
+                    <argument name="block_id" xsi:type="string">header.mobile.bar</argument>
+                </arguments>
+            </block>
+          </container>
+        </referenceBlock>
+        <referenceContainer name="header-wrapper">
+                    <block class="Magento\Framework\View\Element\Template" name="custom.header.badge" after="logo">
+                        <arguments>
+                            <argument name="template" xsi:type="string">Magento_Theme::header-badge.phtml</argument>
+                        </arguments>
+                    </block>
+                </referenceContainer>
+        <referenceBlock name="skip_to_content" remove="true"/>
+        
+    </body>
+</page>

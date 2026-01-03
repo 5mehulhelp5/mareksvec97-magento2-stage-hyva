@@ -1,0 +1,10 @@
+{
+    "Magecomp_Quickcontact": {
+        "column": {
+            "customerphone": true
+        },
+        "index": {
+            "MAGECOMP_QUICKCONTACT_CUSTOMERPHONE": true
+        }
+    }
+}

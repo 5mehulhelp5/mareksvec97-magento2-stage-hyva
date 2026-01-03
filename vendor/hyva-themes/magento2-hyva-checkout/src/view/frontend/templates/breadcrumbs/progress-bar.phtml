@@ -1,0 +1,151 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2022-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+declare(strict_types=1);
+
+use Hyva\Checkout\ViewModel\Breadcrumbs;
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\HeroiconsOutline;
+use Hyva\Theme\ViewModel\HeroiconsSolid;
+use Magento\Framework\View\Element\Template;
+use Magento\Framework\Escaper;
+
+/** @var Template $block */
+/** @var ViewModelRegistry $viewModels */
+/** @var Escaper $escaper */
+
+/** @var HeroiconsOutline $heroicons */
+$heroicons = $viewModels->require(HeroiconsOutline::class);
+
+/** @var HeroiconsSolid $heroiconsSolid */
+$heroiconsSolid = $viewModels->require(HeroiconsSolid::class);
+
+/** @var Breadcrumbs $Breadcrumbs */
+$breadcrumbs = $viewModels->require(Breadcrumbs::class);
+
+$navigator = $breadcrumbs->getNavigator();
+$currentStep = $navigator->getActiveStep();
+$checkout = $navigator->getActiveCheckout();
+$settingShowWaypoints = $breadcrumbs->getSystemConfig()->showBreadcrumbsWaypoints();
+$settingShowBreadcrumbsCart = $breadcrumbs->getSystemConfig()->showBreadcrumbsCart();
+$stepCount = $checkout->countSteps();
+
+$lineHtml = '<span class="progress-bar-line hidden lg:block absolute bottom-[calc(theme(spacing.5)_/_2_-_2px)] -z-10 w-full h-[4px] text-slate-300"></span>';
+?>
+
+<style>
+    .progress-bar-line {
+        background-image: linear-gradient(
+            to right,
+            var(--line-before-start, var(--line-before, currentcolor)),
+            var(--line-before-end, var(--line-before, currentcolor)) 50%,
+            var(--line-after-start, var(--line-after, currentcolor)) 50%,
+            var(--line-after-end, var(--line-after, currentcolor))
+        );
+    }
+</style>
+
+<ul class="progress-bar flex" x-data="hyvaCheckoutBreadcrumbsNavigation">
+    <?php if ($settingShowBreadcrumbsCart): ?>
+        <?php $isComplete = $currentStep->getPosition() > 0; ?>
+        <?php $isPrevious = $currentStep->getPosition() === 1 ?>
+        <li class="relative lg:flex-1 lg:flex lg:flex-col lg:items-center [--line-before:#0000]
+            <?= $isPrevious ? '' : 'hidden' ?>
+            <?= ($isComplete) ? '[--line-after:theme(colors.primary.DEFAULT)]' : '' ?>
+        ">
+            <a
+                href="<?= $escaper->escapeUrl($block->getUrl('checkout/cart', ['_secure' => true])) ?>"
+                class="group inline-flex flex-col gap-2 items-center outline-offset-2"
+            >
+                <span class="flex items-center gap-2 text-primary">
+                    <?php if ($isPrevious): ?>
+                        <?= $heroiconsSolid->chevronLeftHtml(
+                            'group-hover:-translate-x-0.5 transition rtl:rotate-180 lg:hidden',
+                            16,
+                            16,
+                            ['aria-hidden' => 'true']
+                        ); ?>
+                    <?php endif ?>
+                    <?= $escaper->escapeHtml(__('Cart')) ?>
+                </span>
+                <?= /* @noEscape */ $lineHtml; ?>
+                <div class="hidden lg:flex items-center justify-center w-5 h-5 rounded-full bg-primary text-white">
+                    <?= $heroiconsSolid->checkHtml('', 14, 14, ['aria-hidden' => 'true']) ?>
+                </div>
+            </a>
+        </li>
+    <?php endif ?>
+    <?php foreach ($checkout->getAvailableSteps() as $step): ?>
+        <?php $isCurrent = ($step->getPosition() === $currentStep->getPosition()) ?>
+        <?php $isComplete = ($step->getPosition() < $currentStep->getPosition()); ?>
+        <?php $isPrevious = ($step->getPosition() === ($currentStep->getPosition() - 1)) ?>
+
+        <li class="relative lg:flex-1 lg:flex lg:flex-col items-center first:[--line-before:#0000] last:[--line-after:#0000]
+            <?= ($isPrevious) ? '' : 'hidden' ?>
+            <?= ($isCurrent) ? '[--line-before:theme(colors.primary.DEFAULT)]' : '' ?>
+            <?= ($isComplete) ? '[--line-before:theme(colors.primary.DEFAULT)] [--line-after:theme(colors.primary.DEFAULT)]' : '' ?>
+        ">
+            <?php if ($checkout->isStepBackwards($step, $currentStep) || $checkout->isComparison($step, $currentStep)): ?>
+                <button
+                    type="button"
+                    class="group inline-flex flex-col gap-2 items-center outline-offset-2 aria-[current=step]:font-bold"
+                    <?php if ($isCurrent): ?>
+                        aria-current="step"
+                    <?php endif; ?>
+                    data-route="<?= $escaper->escapeHtmlAttr($step->getRoute()) ?>"
+                    x-on:click="navigateToStep"
+                >
+                    <div class="flex items-center gap-2 <?= ($isComplete || $isCurrent) ? 'text-primary' : 'text-slate-600' ?>">
+                        <?php if ($isPrevious): ?>
+                            <?= $heroiconsSolid->chevronLeftHtml(
+                                'group-hover:-translate-x-0.5 transition rtl:rotate-180 lg:hidden',
+                                16,
+                                16,
+                                ['aria-hidden' => 'true']
+                            ); ?>
+                        <?php endif; ?>
+                        <?= $escaper->escapeHtml(__($step->getLabel())) ?>
+                    </div>
+                    <div class="hidden lg:flex items-center justify-center w-5 h-5" aria-hidden="true">
+                        <?= /* @noEscape */ $lineHtml; ?>
+                        <?php if ($isCurrent): ?>
+                            <div class="border-4 border-primary w-[1.125rem] h-[1.125rem] rounded-full bg-white"></div>
+                        <?php elseif ($isComplete): ?>
+                            <div class="flex items-center justify-center w-5 h-5 rounded-full bg-primary text-white">
+                                <?= $heroiconsSolid->checkHtml('', 14, 14, ['aria-hidden' => 'true']) ?>
+                            </div>
+                        <?php else: ?>
+                            <div class="border-2 border-slate-400 w-3.5 h-3.5 rounded-full bg-white"></div>
+                        <?php endif; ?>
+                    </div>
+                </button>
+            <?php else: ?>
+                <div class="flex flex-col items-center gap-2">
+                    <div class="flex items-center gap-2 text-slate-600">
+                        <?= $escaper->escapeHtml(__($step->getLabel())) ?>
+                    </div>
+                    <div class="hidden lg:flex items-center justify-center w-5 h-5" aria-hidden="true">
+                        <?= /* @noEscape */ $lineHtml; ?>
+                        <div class="border-2 border-slate-400 w-3.5 h-3.5 rounded-full bg-white"></div>
+                    </div>
+                </div>
+            <?php endif ?>
+        </li>
+    <?php endforeach ?>
+    <li class="relative hidden lg:flex-1 lg:flex lg:flex-col items-center first:[--line-before:#0000] last:[--line-after:#0000]">
+        <div class="inline-flex flex-col gap-2 items-center">
+            <div class="flex items-center gap-2 text-slate-600">
+                <?= $escaper->escapeHtml(__('Confirmation')) ?>
+            </div>
+            <div class="hidden lg:flex items-center justify-center w-5 h-5" aria-hidden="true">
+                <?= /* @noEscape */ $lineHtml; ?>
+                <div class="border-2 border-slate-400 w-3.5 h-3.5 rounded-full bg-white"></div>
+            </div>
+        </div>
+    </li>
+</ul>

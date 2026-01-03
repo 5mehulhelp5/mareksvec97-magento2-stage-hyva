@@ -1,0 +1,177 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2022-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd"
+>
+    <!-- PREFERENCES -->
+    <preference for="Hyva\Checkout\Model\Magewire\Payment\PlaceOrderServiceInterface"
+                type="Hyva\Checkout\Model\Magewire\Payment\DefaultPlaceOrderService"/>
+    <preference for="Hyva\Checkout\Model\Form\EntityFieldInterface"
+                type="Hyva\Checkout\Model\Form\EntityField\Input"/>
+    <preference for="Hyva\Checkout\Model\Form\EntityFieldConfigInterface"
+                type="Hyva\Checkout\Model\Form\EntityField\EntityFieldConfig"/>
+    <preference for="Magento\Config\Model\Config\Structure"
+                type="Hyva\Checkout\Model\Config\Structure"/>
+    <preference for="Hyva\Checkout\Model\Form\EntityFormElement\Renderer\AbstractRenderer"
+                type="Hyva\Checkout\Model\Form\EntityFormElement\Renderer\Element"/>
+    <preference for="Hyva\Checkout\Model\Magewire\UpdateAdapterInterface"
+                type="Hyva\Checkout\Model\Magewire\UpdateAdapter\CheckoutNavigate"/>
+    <preference for="Hyva\Checkout\Model\Form\EntityFormProviderInterface"
+                type="Hyva\Checkout\Model\Form\EntityFormProvider"/>
+    <preference for="Hyva\Checkout\Model\Form\EntityField\EavAttributeMappingConfigInterface"
+                type="Hyva\Checkout\Model\Form\EntityField\Config\EavAttributeMappingConfig"/>
+
+    <!-- @deprecated -->
+    <preference for="Hyva\Checkout\Model\Form\EntityFormElement\RendererInterface"
+                type="Hyva\Checkout\Model\Form\EntityFormElement\Renderer\Element"/>
+
+    <!-- PLUGINS -->
+    <!-- Define if order status history item came from the customer during checkout -->
+    <type name="Magento\Sales\Api\OrderStatusHistoryRepositoryInterface">
+        <plugin name="Hyva_Checkout_Plugin_Magento_Sales_Api_OrderStatusHistoryRepository"
+                type="Hyva\Checkout\Plugin\Magento\Sales\Api\OrderStatusHistoryRepository"/>
+    </type>
+
+    <!-- Set extension attribute's relating to tax values -->
+    <type name="\Magento\Quote\Model\Cart\TotalsConverter">
+        <plugin name="Hyva_Checkout_Plugin_Magento_Quote_Model_Cart_TotalsConverter"
+                type="Hyva\Checkout\Plugin\Magento\Quote\Model\Cart\TotalsConverter"/>
+    </type>
+
+    <!-- Apply comment prefix -->
+    <type name="Magento\Sales\Api\Data\OrderStatusHistoryInterface">
+        <plugin name="Hyva_Checkout_Plugin_Magento_Sales_Api_Data_OrderStatusHistoryInterface"
+                type="Hyva\Checkout\Plugin\Magento\Sales\Api\Data\OrderStatusHistoryInterface"/>
+    </type>
+
+    <!-- VIRTUAL TYPES -->
+    <virtualType name="Hyva\Checkout\Model\Session\Storage" type="Magento\Framework\Session\Storage">
+        <!-- Apply a custom session storage namespace -->
+        <arguments>
+            <argument name="namespace" xsi:type="string">hyva_checkout</argument>
+        </arguments>
+    </virtualType>
+
+    <!-- NON-SHARE-ABLES -->
+    <type name="Hyva\Checkout\Model\Magewire\Component\Evaluation\Batch" shared="false"/>
+    <type name="Hyva\Checkout\Model\Checkout\StepConditions" shared="false"/>
+    <type name="Hyva\Checkout\Model\Checkout\StepLayout" shared="false">
+        <arguments>
+            <!-- Dynamic layout handle update processor mapping -->
+            <argument name="updateHandleProcessors" xsi:type="array">
+                <item name="default" xsi:type="object">Hyva\Checkout\Model\Layout\DefaultUpdateHandleProcessor</item>
+                <item name="custom" xsi:type="object">Hyva\Checkout\Model\Layout\CustomUpdateHandleProcessor</item>
+                <item name="layout" xsi:type="object">Hyva\Checkout\Model\Layout\LayoutUpdateHandleProcessor</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <!-- DI -->
+    <type name="Hyva\Checkout\Model\Config">
+        <arguments>
+            <argument name="cache" xsi:type="object">Hyva\Checkout\Model\Cache\Type\HyvaCheckout</argument>
+        </arguments>
+    </type>
+
+    <type name="Hyva\Checkout\Model\Config\Reader">
+        <arguments>
+            <argument name="fileName" xsi:type="string">hyva_checkout.xml</argument>
+            <argument name="converter" xsi:type="object">Hyva\Checkout\Model\Config\Converter</argument>
+            <argument name="schemaLocator" xsi:type="object">Hyva\Checkout\Model\Config\SchemaLocator</argument>
+            <argument name="fileResolver" xsi:type="object">Hyva\Checkout\Model\Config\FileResolver</argument>
+        </arguments>
+    </type>
+
+    <type name="Magewirephp\Magewire\Model\ComponentManager">
+        <arguments>
+            <!-- Magewire checkout component evaluation feature -->
+            <argument name="hydrationPool" xsi:type="array">
+                <item name="CheckoutEvaluation" xsi:type="array">
+                    <item name="class" xsi:type="object">Hyva\Checkout\Model\Magewire\Hydrator\Evaluation</item>
+                    <item name="order" xsi:type="number">510</item>
+                </item>
+                <item name="CheckoutNavigation" xsi:type="array">
+                    <item name="class" xsi:type="object">Hyva\Checkout\Model\Magewire\Hydrator\Navigation</item>
+                    <item name="order" xsi:type="number">520</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="Hyva\Checkout\Model\CheckoutInformationProvider">
+        <arguments>
+            <!-- Checkout registration (can eventually be overwritten by a Hyvä Checkout if the same namespace is used) -->
+            <argument name="checkoutPool" xsi:type="array">
+                <!-- Luma compatibility -->
+                <item name="magento_luma" xsi:type="object">Hyva\Checkout\Model\CheckoutInformation\Luma</item>
+                <!-- One Step Checkout compatibility -->
+                <item name="onestepcheckout_iosc" xsi:type="object">Hyva\Checkout\Model\CheckoutInformation\OneStepCheckout</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="Hyva\Checkout\Model\Session">
+        <arguments>
+            <argument name="storage" xsi:type="object">Hyva\Checkout\Model\Session\Storage</argument>
+        </arguments>
+    </type>
+
+    <type name="Hyva\Checkout\Plugin\Magento\Sales\Api\Data\OrderStatusHistoryInterface">
+        <arguments>
+            <argument name="commentPrefixOnCustomerComment" xsi:type="string">Customer</argument>
+        </arguments>
+    </type>
+
+    <type name="Hyva\Checkout\Model\Component\AddressTypeManagement">
+        <arguments>
+            <argument name="addressTypeShipping" xsi:type="object">Hyva\Checkout\Model\Component\AddressTypeShipping</argument>
+            <argument name="addressTypeBilling" xsi:type="object">Hyva\Checkout\Model\Component\AddressTypeBilling</argument>
+        </arguments>
+    </type>
+
+    <type name="Hyva\Checkout\Model\Form\EntityField\FormFieldDependencies">
+        <arguments>
+            <!-- Inject custom renderer for entity form fields -->
+            <argument name="renderer" xsi:type="object">Hyva\Checkout\Model\Form\EntityField\EntityFieldRenderer</argument>
+        </arguments>
+    </type>
+
+    <type name="Hyva\Checkout\Model\Quote\Cart\TotalSegment\ExtensionAttribute\TaxDetailsPool">
+        <arguments>
+            <!-- Populate total segment items with custom tax details. -->
+            <!-- Ensure that each tax details item name corresponds to the cart total segment name. -->
+            <argument name="taxDetailsItems" xsi:type="array">
+                <item name="shipping" xsi:type="object">Hyva\Checkout\Model\Quote\Cart\TotalSegment\ExtensionAttribute\ShippingTaxDetailsExtensionAttribute</item>
+                <item name="subtotal" xsi:type="object">Hyva\Checkout\Model\Quote\Cart\TotalSegment\ExtensionAttribute\SubTotalTaxDetailsExtensionAttribute</item>
+                <item name="grand_total" xsi:type="object">Hyva\Checkout\Model\Quote\Cart\TotalSegment\ExtensionAttribute\GrandTotalTaxDetailsExtensionAttribute</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="Hyva\Checkout\Model\Magento\View\Layout">
+        <arguments>
+            <argument name="generatorPool" xsi:type="object">Hyva\Checkout\Model\Magento\View\Layout\GeneratorPool</argument>
+        </arguments>
+    </type>
+
+    <type name="Hyva\Checkout\Model\Navigation\NavigatorEvaluator">
+        <arguments>
+            <argument name="layout" xsi:type="object">Hyva\Checkout\Model\Magento\View\Layout</argument>
+        </arguments>
+    </type>
+
+    <type name="Magento\Payment\Model\Checks\SpecificationFactory">
+        <arguments>
+            <argument name="mapping" xsi:type="array">
+                <item name="zero_total" xsi:type="object">Hyva\Checkout\Model\Payment\Checks\ZeroTotal</item>
+            </argument>
+        </arguments>
+    </type>
+</config>

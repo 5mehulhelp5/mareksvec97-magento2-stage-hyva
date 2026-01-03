@@ -1,0 +1,59 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2022-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+declare(strict_types=1);
+
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Element\Template;
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\CheckoutPayPal\Magewire\Payment\Method\Payflowpro;
+use Hyva\CheckoutPayPal\ViewModel\Payment\Method\Payflowpro as ViewModel;
+
+/** @var Escaper $escaper */
+/** @var Template $block */
+/** @var ViewModelRegistry $viewModels */
+/** @var Payflowpro $magewire */
+/** @var ViewModel $viewModel */
+
+$magewire = $block->getParentBlock()->getData('magewire');
+$viewModel = $viewModels->require(ViewModel::class);
+
+$methodCode = $magewire->getMethodCode();
+?>
+<div>
+    <iframe id="<?= /* @noEscape */ $methodCode ?>-transparent-iframe"
+            data-container="<?= /* @noEscape */ $methodCode ?>-transparent-iframe"
+            allowtransparency="true"
+            name="iframeTransparent"
+            width="0"
+            height="0"
+            src="<?= $escaper->escapeUrl($block->getViewFileUrl('blank.html')) ?>"></iframe>
+
+    <form target="iframeTransparent"
+          action="<?= $escaper->escapeUrl($viewModel->getCgiUrl($methodCode)) ?>"
+          method="POST"
+          id="hidden-form-<?= $escaper->escapeHtmlAttr($methodCode) ?>"
+          hidden
+          enctype="application/x-www-form-urlencoded"
+          class="no-display hidden">
+        <input value="" name="acct" type="hidden">
+        <input value="" name="csc" type="hidden">
+        <input value="" name="expdate" type="hidden">
+        <input value="" wire:model="tokenMessage" name="respmsg" type="hidden">
+        <input value="" wire:model="tokenResult" name="result" type="hidden">
+        <input value="" wire:model="tokenResultCode" name="result_code" type="hidden">
+        <input value="" wire:model="secureToken" name="securetoken" type="hidden">
+        <input value="" wire:model="secureTokenId" name="securetokenid" type="hidden">
+    </form>
+
+    <div x-data="PayflowproIframeHiddenForm"
+         data-method-code="<?= $escaper->escapeHtmlAttr($methodCode) ?>"
+         data-block-name="<?= $escaper->escapeHtmlAttr($block->getParentBlock()->getNameInLayout()) ?>"
+    >
+    </div>
+</div>

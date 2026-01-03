@@ -1,0 +1,267 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2022-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+declare(strict_types=1);
+
+use Hyva\Checkout\Model\Magewire\Component\Evaluation\Batch as EvaluationBatchResult;
+use Hyva\Checkout\Model\Magewire\Component\Evaluation\ErrorMessage as EvaluationErrorMessage;
+use Hyva\Checkout\Model\Magewire\Component\Evaluation\Event as EvaluationEvent;
+use Hyva\Checkout\Model\Magewire\Component\Evaluation\Executable as EvaluationExecutableResult;
+use Hyva\Checkout\Model\Magewire\Component\Evaluation\Redirect as EvaluationRedirectResult;
+use Hyva\Checkout\Model\Magewire\Component\Evaluation\Validation as EvaluationValidationResult;
+use Hyva\Checkout\Model\Magewire\Component\Evaluation\MessageDialog as EvaluationMessageDialogResult;
+use Hyva\Checkout\Model\Magewire\Component\Evaluation\BrowserConsoleLog as EvaluationBrowserConsoleLogResult;
+use Hyva\Theme\ViewModel\HyvaCsp;
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Element\Template;
+
+/** @var Template $block */
+/** @var Escaper $escaper */
+/** @var HyvaCsp $hyvaCsp */
+
+/**
+ * @Internal Prefer utilizing the "after" container for injecting additional code.
+ */
+?>
+<script>
+    (() => {
+        const waitingEvaluations = {}
+
+        const canEvaluate = component => {
+            return 'evaluation' in component.serverMemo && component.id in component.serverMemo.evaluation;
+        }
+
+        document.addEventListener('magewire:available', () => {
+            Magewire.hook('component.initialized', (component) => {
+                if (! canEvaluate(component)) return;
+
+                if (hyvaCheckout.main.isApiActive()) {
+                    hyvaCheckout.evaluation.process(component.el, component);
+                } else {
+                    waitingEvaluations[component.id] = component;
+                }
+            });
+        })
+
+        window.addEventListener('checkout:init:after', () => {
+            <?php /* Try to process the components who were registered during a page load. */ ?>
+            Object.values(waitingEvaluations || {}).forEach(component => {
+                try {
+                    hyvaCheckout.evaluation.process(component.el, component, component.serverMemo.evaluation[component.id]);
+                } catch (error) {
+                    console.error(`Component could not be evaluated.`, error);
+                }
+            });
+
+            Magewire.hook('message.processed', (message, component) => {
+                <?php /* Iterates through evaluation results when a component has been processed and holds evaluation results. */ ?>
+                if (! canEvaluate(component)) return;
+
+                try {
+                    Object.values(message.response.serverMemo.evaluation).forEach(result => {
+                        const wireComponent = Magewire.find(result.id);
+
+                        if (wireComponent) {
+                            hyvaCheckout.evaluation.process(wireComponent.__instance.el, wireComponent, result);
+                        }
+                    });
+                } catch (error) {
+                    console.error('Component could not be evaluated.', error);
+                }
+            });
+        })
+    })()
+
+    window.addEventListener('checkout:init:evaluation', () => {
+        <?php /* @api */ ?>
+        <?php /* @see EvaluationBatchResult */ ?>
+        hyvaCheckout.evaluation.registerProcessor(
+            '<?= $escaper->escapeJs(EvaluationBatchResult::TYPE) ?>',
+            (component, el, result) => {
+                result.arguments.forEach(batch => {
+                    hyvaCheckout.evaluation.process(el, component, batch)
+                })
+            }
+        )
+
+        <?php /* @api */ ?>
+        <?php /* @see EvaluationRedirectResult */ ?>
+        hyvaCheckout.evaluation.registerProcessor(
+            '<?= $escaper->escapeJs(EvaluationRedirectResult::TYPE) ?>',
+            (component, el, result) => {
+                const redirect = () => {
+                    setTimeout(() => window.location.href = result.arguments.url, result.arguments.timeout || 0)
+                }
+
+                if (result.arguments.details) {
+                    const actions = result.arguments.details.actions || {}
+
+                    window.dispatchEvent(
+                        new CustomEvent('evaluation:redirect:dialog', { detail: { redirect: result.arguments || {} } })
+                    )
+
+                    if (Object.values(actions).length) {
+                        return new Promise((resolve, reject) => {
+                            window.addEventListener('evaluation:redirect:action', event => {
+                                return event.detail.action === 'confirm' ? resolve(event.detail) : reject(event.detail)
+                            })
+                        })
+                            .then(details => redirect())
+                            .catch(details => {})
+                    }
+                }
+
+                redirect()
+            }
+        )
+
+        <?php /* @api */ ?>
+        <?php /* @see EvaluationEvent */ ?>
+        hyvaCheckout.evaluation.registerProcessor(
+            '<?= $escaper->escapeJs(EvaluationEvent::TYPE) ?>',
+            (component, el, result) => {
+                const dispatch = () => {
+                    window.dispatchEvent(
+                        new CustomEvent(result.arguments.event, { detail: result.arguments.detail || {} } )
+                    )
+
+                    return result.result || false
+                }
+
+                if (result.dispatch) {
+                    dispatch()
+                }
+
+                Magewire.hook('message.received', (message, component) => {
+                    const id = result.id
+                    const hash = result.hash
+
+                    if (component.id === id && result.result === false) {
+                        hyvaCheckout.validation.remove(hash)
+                    }
+                })
+
+                hyvaCheckout.validation.register(result.hash, () => dispatch(), el, result.group)
+            }
+        )
+
+        <?php /* @api */ ?>
+        <?php /* @see EvaluationErrorMessage */ ?>
+        hyvaCheckout.evaluation.registerProcessor(
+            '<?= $escaper->escapeJs(EvaluationErrorMessage::TYPE) ?>',
+            (component, el, result) => hyvaCheckout.evaluation.processors.message(component, el, result)
+        )
+
+        <?php /* @api */ ?>
+        <?php /* @see EvaluationValidationResult */ ?>
+        hyvaCheckout.evaluation.registerProcessor(
+            '<?= $escaper->escapeJs(EvaluationValidationResult::TYPE) ?>',
+            (component, el, result) => {
+                let validator = hyvaCheckout.evaluation.validators[result.arguments.name]
+
+                if (! validator) {
+                    hyvaCheckout.message.console(
+                        `Attempted to apply validator "${ result.arguments.name }", but it could not be found.`
+                    )
+
+                    return
+                }
+
+                <?php /* Includes supports adding a custom evaluation result. */ ?>
+                if (result.arguments.results.failure) {
+                    const originalValidator = validator
+
+                    validator = async (component, el, result) => {
+                        try {
+                            let validationResult = !! await originalValidator(el, component)
+
+                            if (validationResult) {
+                                return true
+                            }
+                        } catch (exception) {
+                            <?php /* Suppress console errors from validator failures. */ ?>
+                        }
+
+                        <?php /* Process failure result on false, reject or exception. */ ?>
+                        await hyvaCheckout.evaluation.process(el, component, result)
+
+                        return false
+                    }
+                }
+
+                Magewire.hook('message.received', (message, component) => {
+                    const id = result.id
+                    const hash = result.hash
+
+                    if (component.id === id && result.result === false) {
+                        hyvaCheckout.validation.remove(hash)
+                    }
+                })
+
+                hyvaCheckout.validation.register(
+                    result.hash,
+                    () => validator(component, el, result.arguments.results.failure || result),
+                    el,
+                    result.group,
+                    {
+                        stackPosition: result.arguments.stack.position || 500,
+                        executeAfter: (result.arguments['execution_sequence'] || 'before') === 'after'
+                    }
+                )
+            }
+        );
+
+        <?php /* @api */ ?>
+        <?php /* @see EvaluationExecutableResult */ ?>
+        hyvaCheckout.evaluation.registerProcessor(
+            '<?= $escaper->escapeJs(EvaluationExecutableResult::TYPE) ?>',
+            (component, el, result) => {
+                let executable = hyvaCheckout.evaluation.executables[result.arguments.name]
+
+                if (! executable) {
+                    hyvaCheckout.message.console(
+                        `Attempted to apply executable "${ result.arguments.name }", but it could not be found.`
+                    )
+
+                    return
+                }
+
+                return executable(result, el, component)
+            }
+        );
+
+        <?php /* @api */ ?>
+        <?php /* @see EvaluationMessageDialogResult */ ?>
+        hyvaCheckout.evaluation.registerProcessor(
+            '<?= $escaper->escapeJs(EvaluationMessageDialogResult::TYPE) ?>',
+            (component, el, result) => {
+                let callback = null
+
+                if (result.arguments.callback) {
+                    callback = () => hyvaCheckout.evaluation.process(el, component, result.arguments.callback)
+                }
+
+                hyvaCheckout.message.dialog(
+                    result.arguments.text,
+                    result.arguments.title,
+                    result.arguments.type,
+
+                    callback,
+
+                    {
+                        cancelable: result.arguments.cancelable
+                    }
+                )
+            }
+        );
+    })
+</script>
+<?php $hyvaCsp->registerInlineScript() ?>
+
+<?= $block->getChildHtml('executables') ?>
+<?= $block->getChildHtml('after') ?>

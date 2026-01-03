@@ -1,0 +1,99 @@
+<?php
+/**
+ * @category  Apptrian
+ * @package   Apptrian_Subcategories
+ */
+
+/** @var $block \Apptrian\Subcategories\Block\GridList */
+$data       = $block->getSubcategoriesData();
+$categories = $data['categories'] ?? [];
+$options    = $data['options'] ?? [];
+$elements   = $options['sort_order'] ?? ['image','name'];
+$singleLink = (bool)($options['single_link'] ?? true);
+
+$imageAttributes = '';
+if (!empty($options['image_width']))  $imageAttributes .= ' width="'  . (int)$options['image_width']  . '"';
+if (!empty($options['image_height'])) $imageAttributes .= ' height="' . (int)$options['image_height'] . '"';
+?>
+
+<?php if (!empty($options['enabled']) && !empty($categories)): ?>
+  <div class="mb-6 lg:mb-10">
+    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2 sm:gap-3">
+      <?php foreach ($categories as $c): ?>
+        <?php
+          $isCurrent   = (($data['current'] ?? null) == ($c['id'] ?? null));
+          $image       = $c['image'] ?? '';
+          $name        = $c['name'] ?? '';
+          $description = $c['description'] ?? '';
+          $url         = $c['url'] ?? '#';
+
+          // “chip” štýl (ako language switcher / dropdown položky)
+          $baseClasses = 'w-full inline-flex items-center gap-2 rounded-2xl border px-3 py-2 transition-colors text-left';
+          $stateClasses = $isCurrent
+            ? 'border-primary/30 bg-primary/10 text-primary ring-1 ring-primary/25'
+            : 'border-slate-200 bg-gray-50 text-slate-800 hover:bg-gray-100 hover:border-slate-300';
+
+          // ikona menšia a konzistentná
+          $imgClass = 'h-7 w-7 rounded-sm object-contain shrink-0';
+
+          // text menší, bez podčiarknutia, ľahší “chip” feeling
+          $textClass = 'text-sm font-semibold leading-snug';
+        ?>
+
+        <?php if ($singleLink): ?>
+          <a
+            href="<?= $block->escapeUrl($url) ?>"
+            class="<?= $baseClasses . ' ' . $stateClasses ?>"
+            title="<?= $block->escapeHtmlAttr($name) ?>"
+          >
+            <?php if (in_array('image', $elements, true) && $image): ?>
+              <img
+                src="<?= $block->escapeUrl($image) ?>"
+                alt="<?= $block->escapeHtmlAttr($name) ?>"
+                loading="lazy"
+                class="<?= $imgClass ?>"
+                <?= /* @noEscape */ $imageAttributes ?>
+              />
+            <?php endif; ?>
+
+            <?php if (in_array('name', $elements, true) && $name): ?>
+              <span class="<?= $textClass ?> whitespace-nowrap truncate">
+                <?= $block->escapeHtml($name) ?>
+              </span>
+            <?php endif; ?>
+
+            <?php if (in_array('description', $elements, true) && $description): ?>
+              <span class="sr-only"><?= $block->escapeHtml($description) ?></span>
+            <?php endif; ?>
+          </a>
+
+        <?php else: ?>
+          <div class="<?= $baseClasses . ' ' . $stateClasses ?>">
+            <?php if (in_array('name', $elements, true) && $name): ?>
+              <a
+                href="<?= $block->escapeUrl($url) ?>"
+                class="w-full inline-flex items-center gap-2"
+                title="<?= $block->escapeHtmlAttr($name) ?>"
+              >
+                <?php if (in_array('image', $elements, true) && $image): ?>
+                  <img
+                    src="<?= $block->escapeUrl($image) ?>"
+                    alt="<?= $block->escapeHtmlAttr($name) ?>"
+                    loading="lazy"
+                    class="<?= $imgClass ?>"
+                    <?= /* @noEscape */ $imageAttributes ?>
+                  />
+                <?php endif; ?>
+
+                <span class="<?= $textClass ?> whitespace-nowrap truncate">
+                  <?= $block->escapeHtml($name) ?>
+                </span>
+              </a>
+            <?php endif; ?>
+          </div>
+        <?php endif; ?>
+
+      <?php endforeach; ?>
+    </div>
+  </div>
+<?php endif; ?>

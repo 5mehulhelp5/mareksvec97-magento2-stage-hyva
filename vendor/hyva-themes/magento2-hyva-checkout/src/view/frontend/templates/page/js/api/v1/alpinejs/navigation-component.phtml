@@ -1,0 +1,39 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2022-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+declare(strict_types=1);
+
+use Hyva\Theme\ViewModel\HyvaCsp;
+use Magento\Framework\View\Element\Template;
+
+/** @var Template $block */
+/** @var HyvaCsp $hyvaCsp */
+
+/**
+ * @Internal Prefer utilizing the "after" container for injecting additional code.
+ */
+?>
+<script>
+    function initNavigation () {
+        return Object.assign(
+            window.initCheckoutNavigation.apply(this),
+            {
+                initialize() {
+                    // WIP.
+                }
+            }
+        )
+    }
+
+    window.addEventListener('alpine:init', () => {
+        Alpine.data('initNavigation', initNavigation)
+    }, { once: true })
+</script>
+<?php $hyvaCsp->registerInlineScript() ?>
+
+<?= $block->getChildHtml('after') ?>

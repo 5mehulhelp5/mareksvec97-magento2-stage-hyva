@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+    <menu>
+    	<add id="Magecomp_Quickcontact::quickcontact" title="Quick Contact" module="Magecomp_Quickcontact" sortOrder="10" resource="Magecomp_Quickcontact::quickcontact"/>
+    	<add id="Magecomp_Quickcontact::manager" title="Quick Contact Manager" module="Magecomp_Quickcontact" sortOrder="20" parent="Magecomp_Quickcontact::quickcontact" action="quickcontact/quickcontact/index" resource="Magecomp_Quickcontact::manager"/>
+        <add id="Magecomp_Quickcontact::config" title="Configuration" module="Magecomp_Quickcontact" sortOrder="40" parent="Magecomp_Quickcontact::quickcontact" action="adminhtml/system_config/edit/section/banner" resource="Magecomp_Quickcontact::config"/>
+    </menu>
+</config>

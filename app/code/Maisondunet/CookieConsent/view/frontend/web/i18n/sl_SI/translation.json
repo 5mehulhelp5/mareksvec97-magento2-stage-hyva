@@ -1,0 +1,53 @@
+{
+  "modal_trigger_title": "Nastavitve piškotkov",
+
+  "consent_modal_title": "Uporabljamo piškotke!",
+  "consent_modal_description": "Ta spletna stran uporablja nujno potrebne piškotke za zagotovitev pravilnega delovanja in sledilne piškotke za razumevanje, kako interagirate z njo. Slednji bodo nastavljeni samo po soglasju.",
+  "consent_modal_primary_btn": "Strinjam se",
+  "consent_modal_secondary_btn_settings": "Prilagodi",
+  "consent_modal_secondary_btn_accept_necessary": "Sprejmi nujne",
+
+  "settings_modal_title": "Nastavitve piškotkov",
+  "settings_modal_save_settings_btn": "Shrani nastavitve",
+  "settings_modal_accept_all_btn": "Sprejmi vse",
+  "settings_modal_reject_all_btn": "Sprejmi nujne",
+  "settings_modal_close_btn_label": "Zapri",
+
+  "settings_modal_before_consent_title": "Uporaba piškotkov",
+  "settings_modal_before_consent_description": "Uporabljamo piškotke za zagotavljanje osnovnih funkcionalnosti spletnega mesta in za izboljšanje vaše izkušnje na spletu. Za vsako kategorijo lahko izberete, ali jo želite vključiti/izključiti, kadarkoli želite.",
+
+  "settings_modal_after_consent_title": "Več informacij",
+  "settings_modal_after_consent_description": "Za vsa vprašanja v zvezi z mojo politiko o piškotkih in vašimi izbirami nas prosimo kontaktirajte.",
+
+  "functionality_storage_title": "Funkcionalni piškotki",
+  "functionality_storage_description": "Ti piškotki so potrebni za pravilno delovanje naše spletne strani. Brez teh piškotkov spletna stran morda ne bo delovala pravilno.",
+
+  "personalization_storage_title": "Piškotki za personalizacijo",
+  "personalization_storage_description": "Piškotki za personalizacijo lahko uporabljajo piškotke tretjih oseb, da vam pomagajo personalizirati vsebino in slediti uporabnikom na različnih spletnih mestih in napravah.",
+
+  "security_storage_title": "Varnostni piškotki",
+  "security_storage_description": "Varnostni piškotki omogočajo shranjevanje informacij, povezanih z varnostjo, kot so avtentikacija, zaščita pred goljufijami in drugi načini zaščite uporabnika.",
+
+  "ad_storage_title": "Oglasni piškotki",
+  "ad_storage_description": "Oglasni piškotki se uporabljajo od nas ali naših partnerjev, da vam prikažejo ustrezne vsebine ali oglase tako na našem mestu kot na straneh tretjih oseb. To nam omogoča, da ustvarjamo profile na podlagi vaših interesov, t.i. pseudonimizirane profile. Na podlagi teh informacij običajno ni mogoče neposredno identificirati vas kot osebo, saj se uporabljajo samo pseudonimizirani podatki. Če ne izrazite svojega soglasja, ne boste prejeli vsebin in oglasov, prilagojenih vašim interesom.",
+
+  "analytics_storage_title": "Analitični piškotki",
+  "analytics_storage_description": "Analitični piškotki nam omogočajo, da merimo uspešnost naše spletne strani in naših oglaševalskih kampanj. Uporabljamo jih za določanje števila obiskov in virov obiskov na naši spletni strani. Podatke, pridobljene s temi piškotki, obdelujemo v agregatni obliki, brez uporabe identifikatorjev, ki kažejo na posamezne uporabnike naše spletne strani. Če onemogočite uporabo analitičnih piškotkov v zvezi z vašim obiskom, izgubimo možnost analiziranja uspešnosti in optimizacije naših ukrepov.",
+
+  "cookie_table_col_name": "Ime",
+  "cookie_table_col_purpose": "Opis",
+  "cookie_table_col_processing_time": "Potek",
+  "cookie_table_col_provider": "Ponudnik",
+  "cookie_table_col_type": "Tip",
+  "cookie_table_col_link": "Povezava",
+  "cookie_table_col_link_find_out_more": "Izvedi več",
+  "cookie_table_col_category": "Kategorija",
+
+  "processing_time_session": "Seja",
+  "processing_time_persistent": "Trajno",
+
+  "cookie_type_1st_party": "Prve stranke",
+  "cookie_type_3rd_party": "Tretje stranke",
+
+  "find_out_more": "Izvedi več"
+}

@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2022-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd"
+>
+    <body>
+        <referenceContainer name="hyva.checkout.container">
+            <block name="hyva.checkout.columns" template="Hyva_Checkout::layout/2columns.phtml">
+                <container name="column.main" label="Column Main"/>
+                <container name="column.right" label="Column Right"/>
+            </block>
+        </referenceContainer>
+
+        <!-- Add the navigation declared inside hyva_checkout_index_index -->
+        <move element="hyva.checkout.navigation" destination="column.main"/>
+        <!-- Quoty summary should be always visible -->
+        <move element="checkout.quote-summary.section" destination="column.right"/>
+    </body>
+</page>

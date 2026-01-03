@@ -1,0 +1,18 @@
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+	
+    <type name="Magento\Quote\Model\Cart\ShippingMethodConverter">
+        <plugin name="N1siteCheckoutShippingMethodConverter" type="N1site\Checkout\Plugin\ShippingMethodConverter"/>
+    </type>
+
+    <!-- <type name="Magento\Checkout\Model\ShippingInformationManagement"> -->
+        <!-- <plugin name="N1siteCheckoutSaveToQuote" type="N1site\Checkout\Plugin\SaveToQuote" sortOrder="99999" /> -->
+    <!-- </type> -->
+	
+    <!-- <type name="Magento\Checkout\Model\GuestPaymentInformationManagement"> -->
+        <!-- <plugin name="N1siteCheckoutGuestPaymentInformationManagement" type="N1site\Checkout\Plugin\GuestPaymentInformationManagement"/> -->
+    <!-- </type> -->
+    <!-- <type name="Magento\Checkout\Model\PaymentInformationManagement"> -->
+        <!-- <plugin name="N1siteCheckoutPaymentInformationManagement" type="N1site\Checkout\Plugin\PaymentInformationManagement"/> -->
+    <!-- </type> -->
+	
+</config>

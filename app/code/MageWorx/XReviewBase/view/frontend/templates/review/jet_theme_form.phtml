@@ -1,0 +1,250 @@
+<?php
+/**
+ * Copyright © MageWorx. All rights reserved.
+ * See LICENSE.txt for license details.
+ */
+?>
+<?php
+//@formatter:off
+/** @var \MageWorx\XReviewBase\Block\Review\Form $block */
+
+$reviewFormTrigger = 'review-form-open';
+?>
+
+<div class="review-add amtheme-popup-block amtheme-reviewform-block"
+     tabindex="0"
+     data-mage-init='{"amPopup":{"trigger": "<?= $block->escapeHtml($reviewFormTrigger); ?>"}}'>
+    <div class="popup-inner">
+        <button class="amtheme-button-close"
+                tabindex="0"
+                title="<?= $block->escapeHtmlAttr(__('Close')); ?>"
+                aria-label="<?= $block->escapeHtmlAttr(__('Close')); ?>"
+                data-amtheme-js="popup-close">
+            <svg class="amtheme-icon -icon-close">
+                <use xlink:href="#icon-close" />
+            </svg>
+        </button>
+        <div class="form-heading">
+            <h4 class="form-title">
+                <?= $block->escapeHtml(__('Write your review')) ?>
+            </h4>
+            <span class="product-name">
+                <?= $block->escapeHtml(__('About the ') . $block->getProductInfo()->getName()); ?>
+            </span>
+        </div>
+        <div class="block-content">
+        <?php if ($block->getAllowWriteReviewFlag()): ?>
+            <form action="<?= $block->escapeUrl($block->getAction()) ?>"
+                  class="review-form"
+                  method="post"
+                  id="review-form"
+                  data-role="product-review-form"
+                  data-bind="scope: 'review-form'"
+                  enctype="multipart/form-data">
+                <?= $block->getBlockHtml('formkey') ?>
+                <?= $block->getChildHtml('form_fields_before') ?>
+                <fieldset class="fieldset review-fieldset"
+                          data-hasrequired="<?= $block->escapeHtml(__('* Required Fields')) ?>"
+                >
+                    <legend class="legend review-legend">
+                        <?= $block->escapeHtml(__("You're reviewing:")) ?>
+                        <?= $block->escapeHtml($block->getProductInfo()->getName()) ?>
+                    </legend>
+                    <?php if ($block->getRatings() && $block->getRatings()->getSize()): ?>
+                        <span id="input-message-box"></span>
+                        <fieldset class="field required review-field-ratings">
+                            <legend class="label">
+                                <?= $block->escapeHtml(__('Your Rating')) ?>
+                            </legend>
+                            <div class="nested product-review-table" id="product-review-table">
+                                <?php foreach ($block->getRatings() as $_rating): ?>
+                                    <div class="choice review-field-rating">
+                                        <label class="label"
+                                               id="<?= $block->escapeHtml($_rating->getRatingCode()) ?>_rating_label">
+                                            <?= $block->escapeHtml($_rating->getRatingCode()) ?>
+                                        </label>
+                                        <div class="rating-stars-block">
+                                            <?php $options = $_rating->getOptions();?>
+                                            <?php $iterator = count($options); foreach (array_reverse($options) as $_option): ?>
+                                                <input
+                                                        type="radio"
+                                                        name="ratings[<?= $block->escapeHtml($_rating->getId()) ?>]"
+                                                        id="<?= $block->escapeHtml($_rating->getRatingCode()) ?>_<?= $block->escapeHtml($_option->getValue()) ?>"
+                                                        value="<?= $block->escapeHtml($_option->getId()) ?>"
+                                                        class="radio"
+                                                        data-validate="{'rating-required':true}"
+                                                        aria-labelledby="<?= $block->escapeHtml($_rating->getRatingCode()) ?>_rating_label
+                                        <?= $block->escapeHtml($_rating->getRatingCode()) ?>_<?= $block->escapeHtml($_option->getValue()) ?>_label"
+                                                />
+                                                <label
+                                                        class="rating-star rating-<?= $block->escapeHtml($iterator) ?>"
+                                                        for="<?= $block->escapeHtml($_rating->getRatingCode()) ?>_<?= $block->escapeHtml($_option->getValue()) ?>"
+                                                        title="<?= $block->escapeHtml(__('%1 %2', $iterator, $iterator > 1 ? __('stars') : __('star'))) ?>"
+                                                        id="<?= $block->escapeHtml($_rating->getRatingCode()) ?>_<?= $block->escapeHtml($_option->getValue()) ?>_label">
+                                                </label>
+                                                <?php $iterator--; ?>
+                                            <?php endforeach; ?>
+                                        </div>
+                                    </div>
+                                <?php endforeach; ?>
+                            </div>
+                            <input type="hidden" name="validate_rating" class="validate-rating" value="" />
+                        </fieldset>
+                    <?php endif ?>
+                    <div class="field review-field-nickname required">
+                        <label for="nickname_field" class="label">
+                            <?= $block->escapeHtml(__('Nickname')) ?>
+                        </label>
+                        <div class="control">
+                            <input type="text"
+                                   name="nickname"
+                                   id="nickname_field"
+                                   class="input-text"
+                                   data-validate="{required:true}"
+                                   data-bind="value: nickname()"
+                            />
+                        </div>
+                    </div>
+                    <div class="field review-field-summary required">
+                        <label for="summary_field" class="label">
+                            <?= $block->escapeHtml(__('Summary')) ?>
+                        </label>
+                        <div class="control">
+                            <input type="text"
+                                   name="title"
+                                   id="summary_field"
+                                   class="input-text"
+                                   data-validate="{required:true}"
+                                   data-bind="value: review().title"
+                            />
+                        </div>
+                    </div>
+                    <div class="field review-field-text required">
+                        <label for="review_field" class="label">
+                            <?= $block->escapeHtml(__('Review')) ?>
+                        </label>
+                        <div class="control">
+                            <textarea name="detail"
+                                      id="review_field"
+                                      cols="5"
+                                      rows="3"
+                                      data-validate="{required:true}"
+                                      data-bind="value: review().detail"></textarea>
+                        </div>
+                    </div>
+                    <?php if ($block->isAllowProsAndCons()): ?>
+                        <div class="field">
+                            <div class="mw-input">
+                                <label class="mw-input__label mw-input__label--has-icon">
+                                <span class="mw-input__label-icon">
+                                    <svg width="18" height="18" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M9 0a9 9 0 1 1 0 18A9 9 0 0 1 9 0zm0 2a7 7 0 1 0 0 14A7 7 0 0 0 9 2zm0 2a1 1 0 0 1 .993.883L10 5v3h3a1 1 0 0 1 .117 1.993L13 10h-3v3a1 1 0 0 1-1.993.117L8 13v-3H5a1 1 0 0 1-.117-1.993L5 8h3V5a1 1 0 0 1 1-1z"
+                                              fill="#54B644"
+                                        />
+                                    </svg>
+                                </span>
+                                    <?= $block->escapeHtml(__('Pros')) ?>
+                                </label>
+                                <div class="mw-input__control">
+                                    <textarea name="pros" id="pros_field" rows="5" data-bind="value: review().pros"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <div class="mw-input">
+                                <label class="mw-input__label mw-input__label--has-icon">
+                                <span class="mw-input__label-icon">
+                                    <svg width="18" height="18" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M9 0a9 9 0 1 1 0 18A9 9 0 0 1 9 0zm0 2a7 7 0 1 0 0 14A7 7 0 0 0 9 2zm4 6a1 1 0 0 1 .117 1.993L13 10H5a1 1 0 0 1-.117-1.993L5 8h8z"
+                                              fill="#E22D2D"/>
+                                    </svg>
+                                </span>
+                                    <?= $block->escapeHtml(__('Cons')) ?>
+                                </label>
+                                <div class="mw-input__control">
+                                    <textarea name="cons" id="cons_field" rows="5" data-bind="value: review().cons"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    <?php endif; ?>
+                    <?php if ($block->isAllowRecommend()): ?>
+                        <div class="field">
+                            <div class="mw-checkbox mw-checkbox--bordered">
+                                <input class="mw-checkbox__control" type="checkbox" name="is_recommend" id="recommend_field" value="1"/>
+                                <label class="mw-checkbox__label" for="recommend_field">
+                                    <?= $block->escapeHtml(__('Recommend this product')) ?>
+                                </label>
+                            </div>
+                        </div>
+                    <?php endif; ?>
+                    <?php if ($block->isAllowImagesUploading()): ?>
+                        <script type="text/x-magento-init">
+                        {
+                            "*": {
+                                "xReviewGallery": {}
+                            }
+                        }
+                        </script>
+                        <div class="field review-field-images">
+                            <div class="mw-text--variation-bold"><?= $block->escapeHtml(__('Images')) ?></div>
+                            <div class="mw-upload">
+                                <div class="mw-upload__item">
+                                    <label class="mw-upload__zone">
+                                        <div class="mw-upload__zone-icon">
+                                            <svg width="35" height="28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M28.636 6.222H28c-.636 0-1.114-.31-1.432-.933L24.66 1.71C24.182.622 23.07 0 21.796 0h-8.75c-1.114 0-2.228.622-2.864 1.711L8.432 5.29c-.318.622-.796.933-1.432.933h-.636c-3.5 0-6.364 2.8-6.364 6.222v9.334C0 25.2 2.864 28 6.364 28h22.272c3.5 0 6.364-2.8 6.364-6.222v-9.334c0-3.422-2.864-6.222-6.364-6.222zM17.5 21.778c-3.5 0-6.364-2.8-6.364-6.222 0-3.423 2.864-6.223 6.364-6.223s6.364 2.8 6.364 6.223c0 3.422-2.864 6.222-6.364 6.222z"
+                                                      fill="#909090">
+                                                </path>
+                                            </svg>
+                                        </div>
+                                        <div class="mw-upload__zone-label">
+                                            <?= $block->escapeHtml(__('Upload photo')) ?>
+                                        </div>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    <?php endif; ?>
+                    <?php if ($block->isAllowPolicyField()): ?>
+                        <div class="field required">
+                            <div class="mw-checkbox policy-wrapper">
+                                <input type="checkbox" class="mw-checkbox__control" name="policy" id="policy_field" cols="5"
+                                       rows="3" data-validate="{required:true}" data-bind="value: review().policy"/>
+                                <label for="policy_field" class="mw-text">
+                                    <span><?= $block->escapeHtml($block->getPolicyMessage(), ['a']) ?></span>
+                                </label>
+                            </div>
+                        </div>
+                    <?php endif; ?>
+                </fieldset>
+                <div class="review-form-actions">
+                    <button type="submit"
+                            class="action submit"
+                            title="<?= $block->escapeHtml(__('Send Review')) ?>"
+                            aria-label="<?= $block->escapeHtml(__('Send Review')) ?>"
+                    >
+                        <?= $block->escapeHtml(__('Send Review')) ?>
+                    </button>
+                </div>
+            </form>
+            <script type="text/x-magento-init">
+                {
+                    "[data-role=product-review-form]": {
+                        "Magento_Ui/js/core/app": <?= /* @noEscape */ $block->getJsLayout() ?>
+                    },
+                    "#review-form": {
+                        "MageWorx_XReviewBase/js/jet-theme/error-placement": {},
+                        "Magento_Review/js/validate-review": {}
+                    }
+                }
+            </script>
+        <?php else: ?>
+            <div class="message info notlogged" id="review-form">
+                <div>
+                    <?= $block->escapeHtml(__('Only registered users can write reviews. Please <a href="%1">Sign in</a> or <a href="%2">create an account</a>', $block->getLoginLink(), $block->getRegisterUrl()), ['a']) ?>
+                </div>
+            </div>
+        <?php endif ?>
+        </div>
+    </div>
+</div>

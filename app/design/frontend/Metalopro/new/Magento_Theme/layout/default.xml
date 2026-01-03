@@ -1,0 +1,78 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <!-- Remove the footer links -->
+        <referenceBlock name="footer_links" remove="true"/>
+
+        <!-- Header Wrapper -->
+        <referenceBlock name="header-wrapper">
+            <!-- Customer Support Container -->
+
+            <container name="customer.support" after="top.search">
+
+                <block class="Magento\Cms\Block\Block" name="customer-support">
+                    <arguments>
+                        <argument name="block_id" xsi:type="string">customer_support_header</argument>
+                    </arguments>
+                </block>
+                <block class="Magento\Cms\Block\Block" name="header.badge">
+            	    <arguments>
+            	        <argument name="block_id" xsi:type="string">header-badge</argument>
+            	    </arguments>
+            	</block>
+                <block class="Magento\Customer\Block\Account\Link" name="login.register" template="Magento_Customer::login-register.phtml"/>
+                <block class="Magento\Framework\View\Element\Template" name="mobile.logo" template="Magento_Theme::mobile-logo.phtml"/>
+            </container>
+
+               
+                
+               
+       
+        </referenceBlock>
+
+
+
+        <!-- Footer Container with dark background -->
+        <referenceContainer name="footer-container" htmlClass="bg-dark">
+            <block class="Magento\Cms\Block\Block" name="footer.top.block" before="-">
+                <arguments>
+                    <argument name="block_id" xsi:type="string">footer_top_block</argument>
+                </arguments>
+            </block>
+            <block class="Magento\Store\Block\Switcher" name="footer.language.switcher" template="Magento_Store::switch/languages-footer.phtml" after="-">
+                <arguments>
+                    <argument name="view_model" xsi:type="object">Magento\Store\ViewModel\SwitcherUrlProvider</argument>
+                </arguments>
+            </block>
+        </referenceContainer>
+
+        <!-- Main Footer Container -->
+        <referenceContainer name="footer" htmlClass="footer content row justify-content-between">
+            <block class="Magento\Cms\Block\Block" name="page.footer">
+                <arguments>
+                    <argument name="block_id" xsi:type="string">footer</argument>
+                </arguments>
+            </block>
+        </referenceContainer>
+
+       <move element="top.search" destination="header-wrapper" after="logo" />
+   	
+       <move element="customer.support" destination="header-wrapper" after="top.search" /> 	
+       <move element="header.badge" destination="header-wrapper" before="top.search" />  
+       <move element="mobile.logo" destination="header-wrapper" before="header.badge" /> 
+
+       <referenceContainer name="header.panel" remove="true"/>
+       <!-- Odstráni login odkaz -->
+       <referenceBlock name="authorization-link" remove="true"/>
+        
+        <!-- Odstráni register odkaz -->
+        <referenceBlock name="register-link" remove="true"/>
+        <referenceBlock name="login.register" remove="true"/>
+    </body>
+</page>

@@ -1,0 +1,343 @@
+<?php
+/**
+ * @var Geissweb\Euvat\Block\Vatfield $block
+ * @var \Magento\Framework\Escaper $escaper
+ */
+use Geissweb\Euvat\Api\Data\ValidationInterface;
+
+$hasResult = false;
+$config = $block->getHyvaFieldConfig();
+$result = $block->getValidationResult();
+if($result instanceof ValidationInterface) {
+    $hasResult = true;
+}
+?>
+
+<div class="field field-reserved vat_id" x-data="initVatField()" x-init="construct();">
+    <div x-show="isVisible">
+        <label class="label" for="vat_id">
+            <span><?= /* @noEscape */ $block->getLabel() ?></span>
+        </label>
+        <div class="control flex items-center">
+            <input type="text" name="vat_id" id="vat_id"
+                   title="<?= /* @noEscape */ $block->getLabel() ?>"
+                   class="form-input"
+                   x-model="vatNumber"
+                   x-ref="vat_id"
+                   x-on:change.debounce="onUpdate()"
+                   x-bind:placeholder="$store.gwEuVat.getConfig().placeholder"
+                   x-bind:required="isRequired"
+                   x-bind:data-validate="JSON.stringify($store.gwEuVat.getConfig().validation)"
+                   />
+            <?= $block->getChildHtml('loading') ?>
+        </div>
+
+        <button class="action btn text-sm mt-2"
+                x-on:click.prevent="validate()"
+                x-show="$store.gwEuVat.getResult().warning === true">
+            <?= /* @noEscape */ __('Retry') ?>
+        </button>
+    </div>
+</div>
+
+<script>
+    'use strict';
+    document.addEventListener('alpine:init', () => {
+        Alpine.store('gwEuVat', {
+            init() {
+                this.config = <?= $config ?>;
+                this.validationResult = {
+                    request_message: '<?php echo $hasResult && !$result->getVatIsValid() ? $escaper->escapeJs($result->getRequestMessage()): '' ?>',
+                    vat_is_valid: <?php echo $hasResult && $result->getVatIsValid() ? 'true':'false' ?>,
+                    vat_request_success: <?php echo $hasResult && $result->getVatRequestSuccess() ? 'true':'false' ?>,
+                    vat_request_country_code: '<?php echo $hasResult ? $escaper->escapeJs($block->getCountryCode()) : '' ?>',
+                };
+            },
+            getConfig() {
+                return this.config;
+            },
+            setResult(result) {
+                this.validationResult = result;
+            },
+            getResult() {
+                return this.validationResult;
+            }
+        })
+    });
+
+    function initVatField() {
+        return {
+            vatNumber: '<?= $escaper->escapeJs($block->getValue()) ?>',
+            vatNumberCountryCode: '<?= $escaper->escapeJs($block->getCountryCodeValue())?>',
+            timeoutId: null,
+            isLoading: false,
+            isVisible: false,
+            isRequired: false,
+            isPassedRegex: false,
+
+            construct() {
+                let self = this;
+                let validationKey = Object.keys(Alpine.store('gwEuVat').getConfig().validation)[0];
+                if(validationKey === 'required-entry' || validationKey === 'valid-vat-required') {
+                    this.isRequired = true;
+                }
+                // toggle visibility by country select
+                if(typeof this.$refs.country_id === 'object') {
+                    this.$refs.country_id.addEventListener('change', function (event) {
+                        self.setVisibility(event.target.value);
+                    }, false);
+                }
+                // Initial visibility
+                this.setVisibility(this.getAddressCountryCode());
+            },
+
+            setVisibility(countryCode) {
+                if (Alpine.store('gwEuVat').getConfig().vatFrontendVisibility === true
+                    && Alpine.store('gwEuVat').getConfig().fieldVisibleCountries.includes(countryCode)
+                ) {
+                    this.isVisible = true;
+                } else {
+                    this.isVisible = false;
+                    this.resetStatus();
+                    this.vatNumber = '';
+                }
+            },
+
+            resetStatus() {
+                Alpine.store('gwEuVat').setResult({
+                    request_message: '',
+                    vat_is_valid: false,
+                    vat_request_success: null,
+                    vat_request_country_code: '',
+                });
+                if (this.timeoutId !== null) {
+                    clearTimeout(this.timeoutId);
+                }
+            },
+
+            onUpdate() {
+                this.resetStatus();
+                this.vatNumber = this.vatNumber.replace(/[\W_]/g, "").toUpperCase().trim();
+
+                if (this.vatNumber.length === 0) {
+                    return;
+                }
+
+                if (this.vatNumber.match(new RegExp('^[A-Z][A-Z]'))) {
+                    // check syntax
+                    if (typeof(this.patterns[this.getVatNumberCountryCode()]) === 'string') {
+                        this.isPassedRegex = this.vatNumber.match(new RegExp(this.patterns[this.getVatNumberCountryCode()]));
+                    }
+                    if(!this.isPassedRegex) {
+                        this.dispatchMessage(
+                            'warning',
+                            '<?= $escaper->escapeJs(__('The format of the VAT number is invalid for this country.')) ?>'
+                        );
+                        return;
+                    }
+
+                } else {
+                    // add country code
+                    if (Alpine.store('gwEuVat').getConfig().euCountries.includes(this.getAddressCountryCode())) {
+                        if(this.getAddressCountryCode() === 'GR') {
+                            this.vatNumber = 'EL'+this.vatNumber;
+                        } else {
+                            this.vatNumber = this.getAddressCountryCode()+this.vatNumber;
+                        }
+                    }
+                    if(this.getVatNumberCountryCode() === '') {
+                        this.dispatchMessage(
+                            'error',
+                            '<?= $escaper->escapeJs(__('Please provide the country code prefix of the VAT number.')) ?>'
+                        );
+                        return;
+                    }
+                }
+
+                // actual validation
+                if(!Alpine.store('gwEuVat').getConfig().noValidateCountries.includes(this.getVatNumberCountryCode(true))) {
+                    let self = this;
+                    this.timeoutId = setTimeout(function () {
+                        self.validate().then(function() {
+                            self.askForCountryCorrection();
+                        });
+                    }, Alpine.store('gwEuVat').getConfig().delay);
+                }
+            },
+
+            /**
+             * Validates the number online
+             * @returns {Promise<unknown>}
+             */
+            validate() {
+                let self = this;
+                return new Promise(function(resolve, reject) {
+                    self.isLoading = true;
+                    let params = new URLSearchParams({
+                        form_key: hyva.getFormKey(),
+                        vat_number: self.vatNumber,
+                        handle: 'hyva_front'
+                    });
+                    fetch(Alpine.store('gwEuVat').getConfig().validationUrl + '?' + params, {
+                        headers: {'X-Requested-With': 'XMLHttpRequest'},
+                        method: 'GET',
+                        mode: 'cors',
+                        credentials: 'include'
+                    })
+                    .then((response) => {
+                        if (response.ok) {
+                            return response.json();
+                        } else {
+                            this.dispatchMessage(
+                                'error',
+                                '<?= __('There was a technical error while validating your VAT number.')?>'
+                            );
+                            reject(response);
+                        }
+                    })
+                    .then((jsonData) => {
+                        if (!jsonData) {
+                            resolve();
+                        }
+                        let msgType = 'error';
+                        if(jsonData.warning) {
+                            msgType = 'warning';
+                        }
+                        if(jsonData.vat_is_valid) {
+                            msgType = 'success';
+                        }
+                        self.dispatchMessage(
+                            msgType,
+                            jsonData.request_message
+                        );
+                        Alpine.store('gwEuVat').setResult(jsonData);
+                        resolve(jsonData);
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                        reject(error);
+                    })
+                    .finally(() => {
+                        self.isLoading = false;
+                    })
+                });
+
+            },
+
+            /**
+             * Check if country code from number matches selected country
+             */
+            askForCountryCorrection() {
+                if(Alpine.store('gwEuVat').getConfig().askCustomerCountryCorrection === false) {
+                    return;
+                }
+                const selectedCountry = this.$refs.country_id.value;
+                if (this.getVatNumberCountryCode() !== selectedCountry) {
+                    if (confirm("The country code from the VAT number does not match the selected country. Would you like to update the selected country to match the VAT number?")) {
+                        this.$refs.country_id.value = this.getVatNumberCountryCode();
+                    }
+                }
+            },
+
+            /**
+             * Get the country code from the VAT number
+             * @param reverse bool
+             * @returns {string}
+             */
+            getVatNumberCountryCode(reverse = false) {
+                if (this.vatNumber.match(new RegExp('^[A-Z][A-Z]'))) {
+                    const countryCode = this.vatNumber.substr(0,2).toUpperCase();
+                    if (reverse && countryCode === 'EL') {
+                        return 'GR';
+                    }
+                    return countryCode;
+                }
+                return '';
+            },
+
+            /**
+             * Get the country code from the country select
+             * @returns {*}
+             */
+            getAddressCountryCode() {
+                if(typeof(this.$refs.country_id.value) === 'string') {
+                    return this.$refs.country_id.value;
+                }
+                return '';
+            },
+
+            /**
+             * Shows message
+             * @param type string
+             * @param text string
+             * @param duration int
+             */
+            dispatchMessage(type, text, duration=6500) {
+                window.dispatchMessages && window.dispatchMessages([{type: type, text: text}], duration);
+            },
+
+            patterns: {
+                'AT' : '(AT)U[0-9]{8}$',
+                'BE' : '(BE)[0-9]{10}$',
+                'BG' : '(BG)[0-9]{9,10}$',
+                'CY' : '(CY)[0-9]{8}[A-Z]$',
+                'CZ' : '(CZ)[0-9]{8,10}$',
+                'DE' : '(DE)[0-9]{9}$',
+                'DK' : '(DK)[0-9]{8}$',
+                'EE' : '(EE)[0-9]{9}$',
+                'GR' : '(EL|GR)[0-9]{9}$',
+                'EL' : '(EL|GR)[0-9]{9}$',
+                'ES' : '(ES)[0-9A-Z][0-9]{7}[0-9A-Z]$',
+                'FI' : '(FI)[0-9]{8}$',
+                'FR' : '(FR)[0-9A-Z]{2}[0-9]{9}$',
+                'GB' : '(GB)([0-9]{9}([0-9]{3})?|[A-Z]{2}[0-9]{3})$',
+                'XI' : '(XI)[0-9]{3}[0-9]{4}[0-9]{2}$',
+                'HR' : '(HR)[0-9]{11}$',
+                'HU' : '(HU)[0-9]{8}$',
+                'IE' : '(IE)(([0-9]{7}WI|[0-9][0-9A-Z\*\+][0-9]{5}[A-Z]{1,2}))$',
+                'IT' : '(IT)[0-9]{11}$',
+                'LT' : '(LT)([0-9]{9}|[0-9]{12})$',
+                'LU' : '(LU)[0-9]{8}$',
+                'LV' : '(LV)[0-9]{11}$',
+                'MT' : '(MT)[0-9]{8}$',
+                'NL' : '(NL)[0-9]{9}B([0-9]{2}|O[0-9]{1})$',
+                'PL' : '(PL)[0-9]{10}$',
+                'PT' : '(PT)[0-9]{9}$',
+                'RO' : '(RO)[0-9]{2,10}$',
+                'SE' : '(SE)[0-9]{12}$',
+                'SI' : '(SI)[0-9]{8}$',
+                'SK' : '(SK)[0-9]{10}$'
+            },
+        };
+    };
+
+
+    window.addEventListener('DOMContentLoaded', () => {
+
+        hyva.formValidation.addRule('valid-vat-if-specified', (value) => {
+            const config = Alpine.store('gwEuVat').getConfig();
+            const result = Alpine.store('gwEuVat').getResult();
+            if(value.length === 0
+                || config.noValidateCountries.includes(result.vat_request_country_code)
+            ) {
+                return true;
+            }
+            if(result.vat_is_valid) {
+                return true;
+            }
+            return '<?= $escaper->escapeJs(__('Please type a valid VAT number in this field, or leave it empty.')) ?>';
+        });
+
+        hyva.formValidation.addRule('valid-vat-required', () => {
+            const config = Alpine.store('gwEuVat').getConfig();
+            const result = Alpine.store('gwEuVat').getResult();
+            if(result.vat_is_valid
+                || config.noValidateCountries.includes(result.vat_request_country_code)
+            ) {
+                return true;
+            }
+            return '<?= $escaper->escapeJs(__('Please type a valid VAT number in this field.')) ?>';
+        });
+
+    });
+</script>

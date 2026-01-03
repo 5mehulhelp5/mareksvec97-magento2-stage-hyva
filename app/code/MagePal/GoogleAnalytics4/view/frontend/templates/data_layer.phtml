@@ -1,0 +1,25 @@
+<?php
+/**
+ *
+ * Copyright © MagePal LLC. All rights reserved.
+ * See COPYING.txt for license details.
+ * https://www.magepal.com | support@magepal.com
+ */
+
+/** @var $block MagePal\GoogleAnalytics4\Block\DataLayer **/
+?>
+<?php if ($block->hasImpressionList()) : ?>
+<!-- Start Google Analytics 4 for Google Tag Manager by MagePal -->
+<script type="text/x-magento-init">
+    {
+        "*": {
+            "ga4DataLayer": {
+                "dataLayerName": "<?= /* @noEscape */ $block->getDataLayerName() ?>",
+                "data": <?= /* @noEscape */ $block->getDataLayerJson(); ?>,
+                "productLists": <?= /* @noEscape */ $block->getImpressionListJson() ?>
+            }
+        }
+    }
+</script>
+<!-- End Google Analytics 4 for Google Tag Manager by MagePal -->
+<?php endif; ?>

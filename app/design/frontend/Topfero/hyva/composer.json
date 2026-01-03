@@ -1,0 +1,6 @@
+{
+  "name": "topfero/theme-hyva",
+  "description": "TopFero Hyvä child theme (parent: Metalio Hyvä)",
+  "type": "magento2-theme",
+  "version": "1.0.0"
+}

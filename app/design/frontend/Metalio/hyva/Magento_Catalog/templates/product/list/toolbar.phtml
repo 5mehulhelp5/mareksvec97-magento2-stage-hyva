@@ -1,0 +1,263 @@
+<?php
+declare(strict_types=1);
+
+use Magento\Catalog\Block\Product\ProductList\Toolbar;
+use Magento\Framework\Escaper;
+use Hyva\Theme\ViewModel\HyvaCsp;
+
+/** @var Escaper $escaper */
+/** @var Toolbar $block */
+/** @var HyvaCsp $hyvaCsp */
+
+$widgetOptionsJson = (string) $block->getWidgetOptionsJson(['page' => 'p']); // JSON string
+
+$orders = (array) $block->getAvailableOrders();
+$currentOrderCode = (string) ($block->getCurrentOrder() ?: $block->getDefaultOrder());
+
+$uniqueId = '_' . uniqid();
+$dialogId = 'sort_drawer' . $uniqueId;
+
+$rangeText = sprintf(
+    'Zobrazuje sa %d–%d z %d',
+    (int) $block->getFirstNum(),
+    (int) $block->getLastNum(),
+    (int) $block->getTotalNum()
+);
+?>
+<script>
+  function initToolbar<?= $escaper->escapeHtml($uniqueId) ?>() {
+    return {
+      options: {},
+      open: false,
+
+      get isDesktop() {
+        return window.matchMedia('(min-width: 768px)').matches;
+      },
+
+      init() {
+        this.options = this.setAdditionalOptions(this.$root.dataset.options);
+      },
+
+      toggle() {
+        this.open = !this.open;
+        if (this.open) {
+          this.$nextTick(() => {
+            try { this.$refs.dialog?.showModal?.(); } catch(e) {}
+          });
+        } else {
+          this.close();
+        }
+      },
+
+      close() {
+        this.open = false;
+
+        // nechaj prebehnúť x-transition (duration-300)
+        window.setTimeout(() => {
+          try { this.$refs.dialog?.close?.(); } catch(e) {}
+          this.$refs.mobileTrigger?.focus?.();
+        }, 320);
+      },
+      openDrawer() {
+        this.open = true;
+        this.$nextTick(() => {
+          try { this.$refs.dialog?.showModal?.(); } catch(e) {}
+        });
+      },
+      onBackdropClick(event) {
+        if (event.target === this.$refs.dialog) {
+          this.close();
+        }
+      },
+
+      setAdditionalOptions(json) {
+        if (!json) return {};
+        try {
+          const options = JSON.parse(json);
+          if (typeof options.productListToolbarForm === 'object') {
+            return options.productListToolbarForm;
+          }
+        } catch(e) {}
+        return {};
+      },
+
+      getUrlParams() {
+        const d = decodeURIComponent;
+        const url = this.options.url || location.href;
+        const parts = url.split('?');
+        const params = (parts[1] ? parts[1].split('&') : []).reduce((acc, kv) => {
+          const p = kv.split('=');
+          acc[d(p[0])] = p[1] !== undefined ? d(p[1].replace(/\+/g, '%20')) : '';
+          return acc;
+        }, {});
+        return params;
+      },
+
+      changeUrl(paramName, paramValue, defaultValue) {
+        const url = this.options.url || location.href;
+        const parts = url.split('?');
+        const base  = parts[0];
+        let   data  = this.getUrlParams();
+
+        data[paramName] = paramValue;
+
+        if (this.options.post && typeof hyva !== 'undefined' && hyva.postForm) {
+          hyva.postForm({action: base, data, skipUenc: true});
+        } else {
+          if (String(paramValue) === String(defaultValue)) delete data[paramName];
+          const query = Object.keys(data).length ? ('?' + new URLSearchParams(data)) : '';
+          location.href = base + query;
+        }
+      },
+
+      // kompatibilné s viewmode template tlačidlami (data-value)
+      changeListMode(e) {
+        const target = e?.currentTarget || e?.target;
+        const mode = target?.dataset?.value || target?.dataset?.listMode || target?.dataset?.listModeValue;
+        if (!mode) return;
+
+        const paramName = this.options.mode || 'product_list_mode';
+        const defaultVal = this.options.modeDefault || '';
+        this.changeUrl(paramName, mode, defaultVal);
+      }
+    }
+  }
+
+  window.addEventListener(
+    'alpine:init',
+    () => Alpine.data('initToolbar<?= $escaper->escapeHtml($uniqueId) ?>', initToolbar<?= $escaper->escapeHtml($uniqueId) ?>),
+    { once: true }
+  );
+</script>
+<?php $hyvaCsp->registerInlineScript(); ?>
+
+<?php if ($block->getCollection()->getSize()): ?>
+  <?php if ($block->getIsBottom()): ?>
+    <div x-data="initToolbar<?= $escaper->escapeHtml($uniqueId) ?>()"
+         data-options="<?= $escaper->escapeHtmlAttr($widgetOptionsJson) ?>"
+         class="toolbar toolbar-products mt-8">
+      <?= /* @noEscape */ $block->getPagerHtml() ?>
+    </div>
+  <?php else: ?>
+
+    <div x-data="initToolbar<?= $escaper->escapeHtml($uniqueId) ?>()"
+         data-options="<?= $escaper->escapeHtmlAttr($widgetOptionsJson) ?>"
+         class="toolbar toolbar-products border-b border-slate-200 pt-0 pb-0 mb-4">
+
+      <!-- DESKTOP -->
+      <div class="hidden md:flex items-center justify-between gap-4">
+        <div class="flex-1 min-w-0">
+          <?= /* @noEscape */ $block->fetchView($block->getTemplateFile('Magento_Catalog::product/list/toolbar/sorter.phtml')) ?>
+        </div>
+        <div class="shrink-0">
+          <?= /* @noEscape */ $block->fetchView($block->getTemplateFile('Magento_Catalog::product/list/toolbar/viewmode.phtml')) ?>
+        </div>
+      </div>
+
+      <!-- MOBILE: trigger -->
+      <div class="md:hidden">
+        <button
+          x-ref="mobileTrigger"
+          type="button"
+          @click.prevent="open = true; $nextTick(() => { try { $refs.dialog.showModal(); } catch(e) {} })"
+          @keydown.window.escape="close()"
+          class="w-full inline-flex mb-6 items-center justify-center min-h-[48px]
+                 bg-gray-100 px-3 rounded-full hover:bg-gray-200 transition-colors
+                 relative text-slate-800 text-[15px] font-semibold"
+          aria-haspopup="true"
+          :aria-expanded="open ? 'true' : 'false'"
+          aria-controls="<?= $escaper->escapeHtmlAttr($dialogId) ?>"
+        >
+          <?= $escaper->escapeHtml(__('Zoradiť podľa')) ?>
+        </button>
+
+        <!-- MOBILE DRAWER (ako languages) -->
+        <dialog
+          id="<?= $escaper->escapeHtmlAttr($dialogId) ?>"
+          x-ref="dialog"
+          x-cloak
+          x-show="open"
+          x-htmldialog.noscroll="close()"
+          @click="onBackdropClick($event)"
+          @keydown.escape.window="close()"
+          class="
+            open:flex flex-col
+              h-full max-h-full max-w-full
+              mr-0 ml-auto
+              w-[85vw]
+              p-0
+              shadow-2xl bg-white text-slate-800
+              border-l border-slate-200
+              backdrop:bg-black/25 backdrop:backdrop-blur-sm
+          "
+          aria-label="<?= $escaper->escapeHtmlAttr(__('Zoradiť podľa')) ?>"
+          x-transition:enter="transition ease-in-out duration-500"
+          x-transition:enter-start="translate-x-full"
+          x-transition:enter-end="translate-x-0"
+          x-transition:leave="transition ease-in-out duration-300"
+          x-transition:leave-start="translate-x-0"
+          x-transition:leave-end="translate-x-full"
+        >
+          <!-- Sticky header (ako drawer) -->
+          <div class="sticky top-0 z-10 bg-white border-b border-slate-200 px-4 py-4 flex items-center justify-between">
+            <div class="text-base font-semibold text-slate-800">
+              <?= $escaper->escapeHtml(__('Zoradiť podľa')) ?>
+            </div>
+
+            <button
+              type="button"
+              @click="close()"
+              class="inline-flex items-center justify-center min-w-[48px] min-h-[48px] h-[48px]
+                     bg-gray-100 px-3 rounded-full hover:bg-gray-200 transition-colors
+                     relative text-slate-800"
+              aria-label="<?= $escaper->escapeHtmlAttr(__('Close')) ?>"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
+                   class="h-5 w-5" aria-hidden="true">
+                <path fill-rule="evenodd"
+                      d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                      clip-rule="evenodd"/>
+              </svg>
+            </button>
+          </div>
+
+          <!-- List -->
+          <div class="flex-1 overflow-y-auto overscroll-y-contain px-4 py-3">
+            
+
+            <div class="flex flex-col">
+              <?php foreach ($orders as $code => $label): ?>
+                <?php
+                  $code = (string) $code;
+                  $isActive = ($currentOrderCode === $code);
+                  $url = $block->getPagerUrl(['product_list_order' => $code]);
+                ?>
+                <a
+                  href="<?= $escaper->escapeUrl($url) ?>"
+                  class="flex items-center justify-between rounded-2xl px-4 py-3 text-[15px] font-semibold
+                         transition-colors
+                         <?= $isActive ? 'bg-white border border-slate-200 text-slate-900' : 'text-slate-800 hover:bg-gray-100' ?>"
+                  @click="close()"
+                >
+                  <span class="truncate">
+                    <?= $escaper->escapeHtml(__($label)) ?>
+                  </span>
+
+                  <?php if ($isActive): ?>
+                    <span class="text-primary font-semibold">✓</span>
+                  <?php endif; ?>
+                </a>
+              <?php endforeach; ?>
+            </div>
+
+            
+
+              
+          </div>
+        </dialog>
+      </div>
+
+    </div>
+
+  <?php endif; ?>
+<?php endif; ?>

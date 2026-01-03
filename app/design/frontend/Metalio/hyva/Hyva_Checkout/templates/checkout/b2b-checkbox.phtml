@@ -1,0 +1,198 @@
+<script>
+(function() {
+  // Konfigurácia: ktoré polia majú byť required pri business
+  const REQUIRED_FIELDS = {
+    company:  true,   // #shipping-company
+    vat:      true,   // #shipping-vat_id
+    companyId:false,  // #shipping-company_id
+    taxId:    false   // #shipping-tax_id
+  };
+
+  const SELECTORS = {
+    form: '#shipping',
+    grid: '#shipping .grid.grid-cols-12',
+    companyInput:   '#shipping-company',
+    vatInput:       '#shipping-vat_id',
+    companyIdInput: '#shipping-company_id',
+    taxIdInput:     '#shipping-tax_id',
+    vatStatusBox:   '#shipping-vat-request-status'
+  };
+
+  function $(sel, root = document) { return root.querySelector(sel); }
+
+  function findFieldWrapperByInput(inputEl) {
+    return inputEl ? inputEl.closest('.field-wrapper') : null;
+  }
+
+  function buildToggleRow() {
+    const wrap = document.createElement('div');
+    wrap.className = 'col-span-12 mb-2 flex items-center gap-3';
+    wrap.setAttribute('data-company-toggle', '1');
+
+    const input = document.createElement('input');
+    input.type = 'checkbox';
+    input.id = 'purchase-as-company';
+    input.className = 'form-checkbox h-4 w-4';
+
+    const label = document.createElement('label');
+    label.htmlFor = 'purchase-as-company';
+    label.className = 'mb-0 font-medium text-slate-700 hover:cursor-pointer';
+    label.textContent = 'Chcem nakúpiť tovar na firmu';
+
+    wrap.appendChild(input);
+    wrap.appendChild(label);
+    return { wrap, input };
+  }
+
+  function parseValidateAttr(el) {
+    try { return JSON.parse(el.getAttribute('data-validate') || '{}') || {}; }
+    catch(e) { return {}; }
+  }
+  function setValidateAttr(el, obj) {
+    try { el.setAttribute('data-validate', JSON.stringify(obj)); } catch(e) {}
+  }
+
+  function setRequired(el, shouldBeRequired) {
+    if (!el) return;
+    if (shouldBeRequired) el.setAttribute('required', 'required');
+    else el.removeAttribute('required');
+    // pokus o zosúladenie s data-validate, ak existuje
+    const v = parseValidateAttr(el);
+    if (shouldBeRequired) v.required = true; else delete v.required;
+    setValidateAttr(el, v);
+  }
+
+  function updateRequired(state, isBusiness) {
+    const {
+      companyEl, vatEl, companyIdEl, taxIdEl
+    } = state;
+
+    setRequired(companyEl,   isBusiness && REQUIRED_FIELDS.company);
+    setRequired(vatEl,       isBusiness && REQUIRED_FIELDS.vat);
+    setRequired(companyIdEl, isBusiness && REQUIRED_FIELDS.companyId);
+    setRequired(taxIdEl,     isBusiness && REQUIRED_FIELDS.taxId);
+
+    if (vatEl) {
+      // pomocný flag pre tvoju existujúcu VAT logiku
+      vatEl.setAttribute('data-vat-id-visible', isBusiness ? 'true' : 'false');
+    }
+  }
+
+  function clearValues(state) {
+    const { companyEl, vatEl, companyIdEl, taxIdEl, vatStatusBox } = state;
+
+    [companyEl, vatEl, companyIdEl, taxIdEl].forEach(el => {
+      if (!el) return;
+      el.value = '';
+      el.classList.remove('mage-error');
+    });
+
+    if (vatStatusBox) {
+      vatStatusBox.querySelectorAll('[x-show]').forEach(el => { el.style.display = 'none'; });
+    }
+  }
+
+  function showHide(state, isBusiness) {
+    const display = isBusiness ? '' : 'none';
+    const { companyWrap, vatWrap, companyIdWrap, taxIdWrap } = state;
+    [companyWrap, vatWrap, companyIdWrap, taxIdWrap].forEach(wrap => {
+      if (!wrap) return;
+      wrap.style.display = display;
+    });
+  }
+
+  function getInitialState(state) {
+    const vals = [state.companyEl, state.vatEl, state.companyIdEl, state.taxIdEl]
+      .filter(Boolean)
+      .map(el => (el.value || '').trim());
+    return vals.some(v => v.length > 0);
+  }
+
+  function earliestWrapper(wrappers) {
+    const existing = wrappers.filter(Boolean);
+    if (existing.length === 0) return null;
+    // vyber wrapper, ktorý je najskôr v DOM poradí
+    return existing.reduce((earliest, curr) => {
+      return (earliest.compareDocumentPosition(curr) & Node.DOCUMENT_POSITION_FOLLOWING) ? earliest : curr;
+    });
+  }
+
+  function mount() {
+    const form = $(SELECTORS.form);
+    if (!form) return;
+    const grid = $(SELECTORS.grid) || form;
+
+    if (grid.querySelector('[data-company-toggle="1"]')) return;
+
+    const companyEl   = $(SELECTORS.companyInput);
+    const vatEl       = $(SELECTORS.vatInput);
+    const companyIdEl = $(SELECTORS.companyIdInput);
+    const taxIdEl     = $(SELECTORS.taxIdInput);
+
+    const companyWrap   = findFieldWrapperByInput(companyEl);
+    const vatWrap       = findFieldWrapperByInput(vatEl);
+    const companyIdWrap = findFieldWrapperByInput(companyIdEl);
+    const taxIdWrap     = findFieldWrapperByInput(taxIdEl);
+
+    // Ak neexistuje ani jedno firemné pole, nemáme čo prepínať
+    if (!companyWrap && !vatWrap && !companyIdWrap && !taxIdWrap) return;
+
+    const beforeEl = earliestWrapper([companyWrap, vatWrap, companyIdWrap, taxIdWrap]) || grid.firstElementChild;
+    const { wrap, input } = buildToggleRow();
+    if (beforeEl && beforeEl.parentNode) {
+      beforeEl.parentNode.insertBefore(wrap, beforeEl);
+    } else {
+      grid.prepend(wrap);
+    }
+
+    const vatStatusBox = $(SELECTORS.vatStatusBox);
+
+    const state = {
+      companyEl, vatEl, companyIdEl, taxIdEl,
+      companyWrap, vatWrap, companyIdWrap, taxIdWrap,
+      vatStatusBox
+    };
+
+    const initial = getInitialState(state);
+    input.checked = initial;
+
+    showHide(state, input.checked);
+    updateRequired(state, input.checked);
+
+    input.addEventListener('change', () => {
+      const isBusiness = input.checked;
+      showHide(state, isBusiness);
+      updateRequired(state, isBusiness);
+      if (!isBusiness) {
+        clearValues(state); // vymaž hodnoty pri vypnutí (ak nechceš, zmaž tento riadok)
+      }
+    });
+  }
+
+  function ready(fn) {
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', fn);
+    else fn();
+  }
+
+  // Podpora re-renderov (Magewire/Livewire) + fallback observer
+  ['magewire:load', 'livewire:load'].forEach(evt =>
+    document.addEventListener(evt, () => setTimeout(mount, 0))
+  );
+
+  function observeForm() {
+    const form = document.querySelector(SELECTORS.form);
+    if (!form) return;
+    const mo = new MutationObserver(() => {
+      if (!document.querySelector('[data-company-toggle="1"]')) {
+        mount();
+      }
+    });
+    mo.observe(form, { childList: true, subtree: true });
+  }
+
+  ready(() => {
+    mount();
+    observeForm();
+  });
+})();
+</script>

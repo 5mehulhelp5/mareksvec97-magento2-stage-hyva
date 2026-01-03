@@ -1,0 +1,26 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2022-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+declare(strict_types=1);
+
+use Hyva\Checkout\ViewModel\Checkout\TermsConditions;
+use Hyva\Theme\Model\ViewModelRegistry;
+use Magento\Framework\View\Element\Template;
+
+/** @var ViewModelRegistry $viewModels */
+/** @var Template $block */
+/** @var TermsConditions $termConditions */
+
+$termConditions = $viewModels->require(TermsConditions::class)
+?>
+
+<?php if ($termConditions->hasAgreements()): ?>
+    <?= $block->getChildHtml('checkout.terms-conditions.title') ?>
+    <?= $block->getChildHtml('messenger'); ?>
+    <?= $block->getChildHtml('checkout.terms-conditions') ?>
+<?php endif ?>

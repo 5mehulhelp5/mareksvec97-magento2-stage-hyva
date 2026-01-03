@@ -1,0 +1,11 @@
+{
+    "name": "mageworx/module-xreview",
+    "version": "1.2.10",
+    "type": "metapackage",
+    "require": {
+        "mageworx/module-info": ">=1.0.0",
+        "mageworx/module-xreviewbase": "1.2.5",
+        "mageworx/module-reviewreminderbase": "1.1.8",
+        "mageworx/module-geoip": ">=2.2.1"
+    }
+}

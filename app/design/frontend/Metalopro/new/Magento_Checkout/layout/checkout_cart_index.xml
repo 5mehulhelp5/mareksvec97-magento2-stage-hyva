@@ -1,0 +1,72 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<page layout="1column" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+    	<referenceBlock name="header.container" remove="true" />
+    	<referenceBlock name="amasty.store.menu" remove="true" />
+        <referenceContainer name="checkout.cart.container">
+            <container name="cart.discount" label="Cart Discount Container" htmlTag="div" htmlClass="cart-discount" after="-">
+            	
+            </container>
+            <container name="cart.right.group" label="Cart right group" htmlTag="div" htmlClass="cart-right-group" after="-" >
+            	<block class="Magento\Cms\Block\Block" name="payment.icons" after="-">
+            	    <arguments>
+            	        <argument name="block_id" xsi:type="string">payment-icon</argument>
+            	    </arguments>
+            	</block>
+            </container>
+        </referenceContainer>
+        <referenceContainer name="page.wrapper">
+            <container name="checkout.header" before="-" htmlTag="div" htmlClass="header content">
+                <container name="checkout.header.left" before="-" htmlTag="div" htmlClass="checkout-header-left">
+                <container name="logo.checkout.box" htmlTag="div" htmlClass="logo_checkout_box d-flex align-items-center" before="-">
+                    <block class="Magento\Theme\Block\Html\Header\Logo" name="logo-checkout">
+                        <arguments>
+                            <argument name="logo_img_width" xsi:type="number">189</argument>
+                            <argument name="logo_img_height" xsi:type="number">64</argument>
+                            <argument name="logoPathResolver" xsi:type="object">Magento\Theme\ViewModel\Block\Html\Header\LogoPathResolver</argument>
+                            <argument name="logo_size_resolver" xsi:type="object">Magento\Theme\ViewModel\Block\Html\Header\LogoSizeResolver</argument>
+                        </arguments>
+                    </block>
+                    <block class="Magento\Framework\View\Element\Template" name="mobile.logo.checkout" template="Magento_Theme::mobile-logo.phtml"/>
+                        <block class="Magento\Cms\Block\Block" name="header.checkout.badge">
+                    	    <arguments>
+                    	        <argument name="block_id" xsi:type="string">header-badge</argument>
+                    	    </arguments>
+                    	</block>
+                </container>
+             	
+             </container>
+             <block class="Magento\Framework\View\Element\Template" name="back.button"
+             template="Magento_Checkout::checkout-header/button-back.phtml" after="checkout.header.left"></block>
+            </container>
+
+        </referenceContainer>
+
+        <referenceContainer name="main.content">
+            <block class="Trustedshops\EasyIntegration\Block\ProductPageExtension"
+                   name="trustedshops.rating.product_name"
+                   template="Trustedshops_EasyIntegration::ts_extension_assembler.phtml"
+                   after="-">
+            </block>
+            <block class="Trustedshops\EasyIntegration\Block\Widget" name="trustedshops.product.title"
+                   template="Trustedshops_EasyIntegration::ts_assembler.phtml" after="trustedshops.rating.product_name">
+                <action method="setLocation">
+                    <argument name="location" xsi:type="string">wdg-loc-pn</argument>
+                </action>
+            </block>
+        </referenceContainer>
+        
+
+        <move element="checkout.cart.crosssell" destination="checkout.cart.container" after="-" />
+        <move element="checkout.cart.coupon" destination="cart.summary" after="checkout.cart.totals.container"/>
+        <move element="checkout.cart.shortcut.buttons" destination="checkout.cart.methods" after="checkout.cart.methods.onepage.bottom"/>
+        <move element="cart.summary" destination="cart.right.group" before="-"/>
+    </body>
+</page>

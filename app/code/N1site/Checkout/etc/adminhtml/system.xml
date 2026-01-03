@@ -1,0 +1,255 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+	
+        <section id="sales">
+            <group id="custom_discount" translate="label" type="text" sortOrder="200" showInDefault="1" showInWebsite="0" showInStore="0">
+                <label>Custom Discount</label>
+                <field id="discount_subtotal" translate="label" type="text" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Subtotal amount</label>
+                    <comment><![CDATA[Amount for maximum discount]]></comment>
+					<validate>required-number validate-number</validate>
+                </field>
+                <field id="discount_amount" translate="label" type="text" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Discount amount</label>
+                    <comment><![CDATA[Maximum discount amount in %]]></comment>
+					<validate>required-number validate-number</validate>
+                </field>
+            </group>
+            <group id="freeshipping" translate="label" type="text" sortOrder="200" showInDefault="1" showInWebsite="1" showInStore="0">
+                <label>Free Shipping</label>
+                <field id="amount" translate="label" type="text" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Free Shipping amount</label>
+                    <comment><![CDATA[Amount for free shipping]]></comment>
+					<validate>required-number validate-number</validate>
+                </field>
+            </group>
+		</section>
+		
+        <section id="carriers">
+            <group id="flatrate">
+                <field id="logo" translate="label" type="image" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Logo</label>
+                    <backend_model>Magento\Config\Model\Config\Backend\Image</backend_model>
+                    <upload_dir config="system/filesystem/media" scope_info="1">checkout/shipping_logo</upload_dir>
+                    <base_url type="media" scope_info="1">checkout/shipping_logo</base_url>
+                </field>
+                <field id="description" translate="label" type="textarea" sortOrder="150" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Description</label>
+                </field>
+            </group>
+            <group id="tablerate">
+                <field id="logo" translate="label" type="image" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Logo</label>
+                    <backend_model>Magento\Config\Model\Config\Backend\Image</backend_model>
+                    <upload_dir config="system/filesystem/media" scope_info="1">checkout/shipping_logo</upload_dir>
+                    <base_url type="media" scope_info="1">checkout/shipping_logo</base_url>
+                </field>
+                <field id="description" translate="label" type="textarea" sortOrder="150" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Description</label>
+                </field>
+            </group>
+            <group id="freeshipping">
+                <field id="logo" translate="label" type="image" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Logo</label>
+                    <backend_model>Magento\Config\Model\Config\Backend\Image</backend_model>
+                    <upload_dir config="system/filesystem/media" scope_info="1">checkout/shipping_logo</upload_dir>
+                    <base_url type="media" scope_info="1">checkout/shipping_logo</base_url>
+                </field>
+                <field id="description" translate="label" type="textarea" sortOrder="150" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Description</label>
+                </field>
+            </group>
+            <group id="dhl">
+                <field id="logo" translate="label" type="image" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Logo</label>
+                    <backend_model>Magento\Config\Model\Config\Backend\Image</backend_model>
+                    <upload_dir config="system/filesystem/media" scope_info="1">checkout/shipping_logo</upload_dir>
+                    <base_url type="media" scope_info="1">checkout/shipping_logo</base_url>
+                </field>
+                <field id="description" translate="label" type="textarea" sortOrder="150" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Description</label>
+                </field>
+            </group>
+            <group id="gls">
+                <field id="logo" translate="label" type="image" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Logo</label>
+                    <backend_model>Magento\Config\Model\Config\Backend\Image</backend_model>
+                    <upload_dir config="system/filesystem/media" scope_info="1">checkout/shipping_logo</upload_dir>
+                    <base_url type="media" scope_info="1">checkout/shipping_logo</base_url>
+                </field>
+                <field id="description" translate="label" type="textarea" sortOrder="150" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Description</label>
+                </field>
+            </group>
+            <group id="ups">
+                <field id="logo" translate="label" type="image" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Logo</label>
+                    <backend_model>Magento\Config\Model\Config\Backend\Image</backend_model>
+                    <upload_dir config="system/filesystem/media" scope_info="1">checkout/shipping_logo</upload_dir>
+                    <base_url type="media" scope_info="1">checkout/shipping_logo</base_url>
+                </field>
+                <field id="description" translate="label" type="textarea" sortOrder="150" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Description</label>
+                </field>
+            </group>
+            <group id="usps">
+                <field id="logo" translate="label" type="image" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Logo</label>
+                    <backend_model>Magento\Config\Model\Config\Backend\Image</backend_model>
+                    <upload_dir config="system/filesystem/media" scope_info="1">checkout/shipping_logo</upload_dir>
+                    <base_url type="media" scope_info="1">checkout/shipping_logo</base_url>
+                </field>
+                <field id="description" translate="label" type="textarea" sortOrder="150" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Description</label>
+                </field>
+            </group>
+            <group id="fedex">
+                <field id="logo" translate="label" type="image" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Logo</label>
+                    <backend_model>Magento\Config\Model\Config\Backend\Image</backend_model>
+                    <upload_dir config="system/filesystem/media" scope_info="1">checkout/shipping_logo</upload_dir>
+                    <base_url type="media" scope_info="1">checkout/shipping_logo</base_url>
+                </field>
+                <field id="description" translate="label" type="textarea" sortOrder="150" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Description</label>
+                </field>
+            </group>
+            <group id="slp">
+                <field id="logo" translate="label" type="image" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Logo</label>
+                    <backend_model>Magento\Config\Model\Config\Backend\Image</backend_model>
+                    <upload_dir config="system/filesystem/media" scope_info="1">checkout/shipping_logo</upload_dir>
+                    <base_url type="media" scope_info="1">checkout/shipping_logo</base_url>
+                </field>
+                <field id="description" translate="label" type="textarea" sortOrder="150" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Description</label>
+                </field>
+            </group>
+            <group id="slpo">
+                <field id="logo" translate="label" type="image" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Logo</label>
+                    <backend_model>Magento\Config\Model\Config\Backend\Image</backend_model>
+                    <upload_dir config="system/filesystem/media" scope_info="1">checkout/shipping_logo</upload_dir>
+                    <base_url type="media" scope_info="1">checkout/shipping_logo</base_url>
+                </field>
+                <field id="description" translate="label" type="textarea" sortOrder="150" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Description</label>
+                </field>
+            </group>
+
+            <group id="urgentcargus">
+                <field id="logo" translate="label" type="image" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Logo</label>
+                    <backend_model>Magento\Config\Model\Config\Backend\Image</backend_model>
+                    <upload_dir config="system/filesystem/media" scope_info="1">checkout/shipping_logo</upload_dir>
+                    <base_url type="media" scope_info="1">checkout/shipping_logo</base_url>
+                </field>
+                <field id="description" translate="label" type="textarea" sortOrder="150" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Description</label>
+                </field>
+            </group>
+            <group id="ppl">
+                <field id="logo" translate="label" type="image" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Logo</label>
+                    <backend_model>Magento\Config\Model\Config\Backend\Image</backend_model>
+                    <upload_dir config="system/filesystem/media" scope_info="1">checkout/shipping_logo</upload_dir>
+                    <base_url type="media" scope_info="1">checkout/shipping_logo</base_url>
+                </field>
+                <field id="description" translate="label" type="textarea" sortOrder="150" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Description</label>
+                </field>
+            </group>
+            <group id="sps">
+                <field id="logo" translate="label" type="image" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Logo</label>
+                    <backend_model>Magento\Config\Model\Config\Backend\Image</backend_model>
+                    <upload_dir config="system/filesystem/media" scope_info="1">checkout/shipping_logo</upload_dir>
+                    <base_url type="media" scope_info="1">checkout/shipping_logo</base_url>
+                </field>
+                <field id="description" translate="label" type="textarea" sortOrder="150" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Description</label>
+                </field>
+            </group>
+            <group id="dpdro">
+                <field id="logo" translate="label" type="image" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Logo</label>
+                    <backend_model>Magento\Config\Model\Config\Backend\Image</backend_model>
+                    <upload_dir config="system/filesystem/media" scope_info="1">checkout/shipping_logo</upload_dir>
+                    <base_url type="media" scope_info="1">checkout/shipping_logo</base_url>
+                </field>
+                <field id="description" translate="label" type="textarea" sortOrder="150" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Description</label>
+                </field>
+            </group>
+        </section>
+		
+        <section id="payment">
+            <group id="checkmo">
+                <field id="logo" translate="label" type="image" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Logo</label>
+                    <backend_model>Magento\Config\Model\Config\Backend\Image</backend_model>
+                    <upload_dir config="system/filesystem/media" scope_info="1">checkout/payment_logo</upload_dir>
+                    <base_url type="media" scope_info="1">checkout/payment_logo</base_url>
+                </field>
+                <field id="description" translate="label" type="textarea" sortOrder="150" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Description</label>
+                </field>
+            </group>
+            <group id="banktransfer">
+                <field id="logo" translate="label" type="image" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Logo</label>
+                    <backend_model>Magento\Config\Model\Config\Backend\Image</backend_model>
+                    <upload_dir config="system/filesystem/media" scope_info="1">checkout/payment_logo</upload_dir>
+                    <base_url type="media" scope_info="1">checkout/payment_logo</base_url>
+                </field>
+                <field id="description" translate="label" type="textarea" sortOrder="150" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Description</label>
+                </field>
+            </group>
+            <group id="maghos_gopay">
+                <field id="logo" translate="label" type="image" sortOrder="9" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Logo</label>
+                    <backend_model>Magento\Config\Model\Config\Backend\Image</backend_model>
+                    <upload_dir config="system/filesystem/media" scope_info="1">checkout/payment_logo</upload_dir>
+                    <base_url type="media" scope_info="1">checkout/payment_logo</base_url>
+                </field>
+                <field id="description" translate="label" type="textarea" sortOrder="9" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Description</label>
+                </field>
+                <field id="bank_logo" translate="label" type="image" sortOrder="9" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Bank Logo</label>
+                    <backend_model>Magento\Config\Model\Config\Backend\Image</backend_model>
+                    <upload_dir config="system/filesystem/media" scope_info="1">checkout/payment_logo</upload_dir>
+                    <base_url type="media" scope_info="1">checkout/payment_logo</base_url>
+                </field>
+                <field id="bank_description" translate="label" type="textarea" sortOrder="9" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Bank Description</label>
+                </field>
+            </group>
+            <group id="msp_cashondelivery">
+                <field id="logo" translate="label" type="image" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Logo</label>
+                    <backend_model>Magento\Config\Model\Config\Backend\Image</backend_model>
+                    <upload_dir config="system/filesystem/media" scope_info="1">checkout/payment_logo</upload_dir>
+                    <base_url type="media" scope_info="1">checkout/payment_logo</base_url>
+                </field>
+                <field id="description" translate="label" type="textarea" sortOrder="150" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Description</label>
+                </field>
+            </group>
+            <group id="cashondelivery">
+                <field id="logo" translate="label" type="image" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Logo</label>
+                    <backend_model>Magento\Config\Model\Config\Backend\Image</backend_model>
+                    <upload_dir config="system/filesystem/media" scope_info="1">checkout/payment_logo</upload_dir>
+                    <base_url type="media" scope_info="1">checkout/payment_logo</base_url>
+                </field>
+                <field id="description" translate="label" type="textarea" sortOrder="150" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Description</label>
+                </field>
+            </group>
+        </section>
+		
+    </system>
+</config>

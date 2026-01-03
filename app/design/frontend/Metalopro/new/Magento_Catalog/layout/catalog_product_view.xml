@@ -1,0 +1,71 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+      <referenceContainer name="content">
+       <container name="product.info.contact" htmlTag="div" htmlClass="custom-production-product" after="product.info.main">
+                   <block class="Magento\Cms\Block\Block" name="product-custom-production">
+                       <arguments>
+                           <argument name="block_id" xsi:type="string">custom_production_product</argument>
+                       </arguments>
+                   </block>
+                   
+        </container>
+       </referenceContainer>
+        <referenceContainer name="product.info.main">
+          
+            <block name="badges.container" class="BigConnect\Badges\Block\Product\ListProduct" template="Magento_Catalog::product/view/badges.phtml"/>
+          
+       </referenceContainer>
+
+       <referenceContainer name="content">
+          <block class="Magento\Catalog\Block\Product\View\Details" name="product.info.details" template="Magento_Catalog::product/view/details.phtml" after="product.info.media">
+              <block class="Magento\Catalog\Block\Product\View\Description" name="product.info.description" as="description" template="Magento_Catalog::product/view/description-special.phtml" group="detailed_info">
+                  <arguments>
+                      <argument name="at_call" xsi:type="string">getDescription</argument>
+                      <argument name="at_code" xsi:type="string">description</argument>
+                      <argument name="css_class" xsi:type="string">description</argument>
+                      <argument name="at_label" xsi:type="string">none</argument>
+                      <argument name="title" translate="true" xsi:type="string">Details</argument>
+                      <argument name="sort_order" xsi:type="string">10</argument>
+                  </arguments>
+              </block>
+             
+              <block class="Magento\Review\Block\Product\Review" name="reviews.tab" as="reviews" template="Magento_Review::review.phtml" group="detailed_info" ifconfig="catalog/review/active">
+                  <arguments>
+                      <argument name="sort_order" xsi:type="string">30</argument>
+                  </arguments>
+                  <block class="Magento\Review\Block\Form" name="product.review.form" as="review_form" ifconfig="catalog/review/active">
+                      <container name="product.review.form.fields.before" as="form_fields_before" label="Review Form Fields Before"/>
+                  </block>
+              </block>
+          </block>
+          <block class="Trustedshops\EasyIntegration\Block\ProductPageExtension"
+                   name="trustedshops.rating.product_name"
+                   template="Trustedshops_EasyIntegration::ts_extension_assembler.phtml"
+                   after="product.info.details">
+            </block>
+            <block class="Trustedshops\EasyIntegration\Block\Widget" name="trustedshops.product.title"
+                   template="Trustedshops_EasyIntegration::ts_assembler.phtml" after="trustedshops.rating.product_name">
+                <action method="setLocation">
+                    <argument name="location" xsi:type="string">wdg-loc-pn</argument>
+                </action>
+            </block>
+        </referenceContainer>
+
+       <move element="page.main.title" destination="product.info.main" before="-"/>
+       <move element="product.info.review" destination="product.info.main" after="page.main.title"/>
+       <move element="badges.container" destination="product.info.main" after="product.info.review"/>
+       
+       
+       <referenceBlock name="product.info.stock.sku" remove="true"/>
+       <referenceBlock name="product.info.sku" remove="true" />
+    
+
+    </body>
+</page>

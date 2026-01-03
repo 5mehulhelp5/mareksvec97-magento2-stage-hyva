@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © MageWorx. All rights reserved.
+ * See LICENSE.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Email:etc/email_templates.xsd">
+     <template id="mageworx_reviewreminder_email_template_review_reminder" label="We want to hear YOU!" file="review_reminder.html" type="html" module="MageWorx_ReviewReminderBase" area="frontend"/>
+</config>

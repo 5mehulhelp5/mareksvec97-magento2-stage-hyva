@@ -1,0 +1,98 @@
+// /**
+//  * Copyright © Magento, Inc. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Common
+//  _____________________________________________
+
+& when (@media-common = true) {
+    button.amcform-button.-default, button.amcform-submit.action.primary.submit {
+            padding: 14px 40px;
+            background-color: orange;
+            color: #fff;
+            font-size: 18px;
+            font-weight: 600;
+            line-height: 22px;
+            height: auto;
+            border-radius: 0px;
+            border: none !important;
+            &:hover {
+                background-color: #efa30d;
+            }
+            &:focus {
+                box-shadow: none !important;
+            }
+    }    
+    //  Using buttons mixins
+    button,
+    a.action.primary, .action-primary  {
+        .lib-css(border-radius, @button__border-radius);
+        &:active {
+            box-shadow: none !important;
+
+        }
+        
+    }
+
+
+    a.action.primary {
+        .lib-link-as-button();
+    }
+
+    .action.primary,
+    .action-primary,
+    .action-secondary {
+        .lib-button-primary();
+        padding: 14px 40px;
+    }
+     
+    a.pagebuilder-button-primary, button.pagebuilder-button-primary, div.pagebuilder-button-primary {
+       font-size: 18px !important;
+       font-weight: 600 !important; 
+       padding: 14px 40px !important;
+    
+    }
+    .paypal-express-checkout-button {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+        width: 100%;
+        background: #ffc439;
+        border: none;
+        font-weight: 400;
+        font-size: 15px;
+        height: 42px;
+        color:;
+        &:hover, &:focus, &:active {
+            background: #ffc439;
+            filter: brightness(0.95);
+            border: none;
+        }
+        img {
+            margin: 0px !important;
+            height: 20px;
+        }
+    }
+    button.update-cart-item {
+        border: none !important;
+
+        &:hover {
+            filter: brightness(0.95);
+        }
+
+    }
+
+    
+}
+//
+//  Mobile @screen__m
+//  _____________________________________________
+
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
+    a.pagebuilder-button-primary, button.pagebuilder-button-primary, div.pagebuilder-button-primary, .amcform-button.-default, .amcform-button.-error {
+       font-size: 16px !important;
+    }
+}

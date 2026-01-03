@@ -1,0 +1,50 @@
+//
+//  Desktop min 768px
+//  _____________________________________________
+
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
+	.headline {
+		span {
+			font-size: 60px !important;
+		}
+	}
+	.text-classic {
+		span, p {
+			font-size: 18px !important;
+		}
+	}
+}
+
+//
+//  Mobile @screen__m
+//  _____________________________________________
+
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
+	.headline {
+		span {
+			font-size: 30px !important;
+		}
+	}
+	.text-classic {
+		span, p {
+			font-size: 16px !important;
+		}
+	}
+}
+
+//
+//  Mobile @screen__l - Tablet
+//  _____________________________________________
+
+@media screen and (max-width:950px) and (min-width: 768px) {
+	.headline {
+		span {
+			font-size: 50px !important;
+		}
+	}
+	.text-classic {
+		span, p {
+			font-size: 17px !important;
+		}
+	}
+}

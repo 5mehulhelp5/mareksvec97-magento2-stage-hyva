@@ -1,0 +1,6 @@
+.checkout-default:where(:has(#hyva-checkout-main)) {
+    .columns,
+    .page.messages .messages {
+        @apply max-w-screen-lg;
+    }
+}

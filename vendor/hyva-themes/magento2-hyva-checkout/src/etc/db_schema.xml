@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2022-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+-->
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd"
+>
+    <table name="quote">
+        <column xsi:type="text" name="customer_comment" nullable="true" comment="Customer Comment"/>
+    </table>
+
+    <table name="sales_order_status_history">
+        <column xsi:type="boolean" name="is_customer_comment" nullable="false" default="false"/>
+    </table>
+</schema>

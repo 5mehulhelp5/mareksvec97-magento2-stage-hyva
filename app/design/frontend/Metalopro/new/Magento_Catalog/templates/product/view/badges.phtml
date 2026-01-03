@@ -1,0 +1,64 @@
+<?php
+$objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+$storeManager = $objectManager->get('Magento\Store\Model\StoreManagerInterface'); 
+$themeDirectory = $objectManager->get('\Magento\Framework\View\Asset\Repository');
+$imageSlovakia = $themeDirectory->getUrlWithParams('Magento_Theme::img/slovakia.svg', ['_secure' => $storeManager->getStore()->isCurrentlySecure()]);
+$imageEurope = $themeDirectory->getUrlWithParams('Magento_Theme::img/europe.svg', ['_secure' => $storeManager->getStore()->isCurrentlySecure()]);
+$locale = $objectManager->get('Magento\Framework\Locale\Resolver')->getLocale();
+
+if (($discount = $block->getDiscountPercent($block->getProduct())) || ($bestseller = $block->isProductBestseller($block->getProduct())) || ($inStock = $block->isInStock($block->getProduct())) || ($locale == 'sk_SK') || ($personalizeBadge = $block->getPersonalizeBadge($block->getProduct()))) {
+?>
+<div class="badges-product-container">
+<div class="badge-wrapper">
+    <?php if ($discounts = $block->getDiscountPercent($block->getProduct())) { ?>
+            <div class="single-badge">
+                <div class="discount-badge">-<?= $discounts ?></div>
+            </div>
+    <?php } ?>
+    <?php if ($inStock = $block->isInStock($block->getProduct())) { ?>
+            <div class="single-badge">
+                <div class="instock-badge"><?= $inStock ?></div>
+            </div>
+    <?php } ?>
+    <?php if ($warrantyBadge = $block->getWarrantyBadge($block->getProduct())): ?>
+        <?= $warrantyBadge ?>
+    <?php endif; ?>
+    <?php if ($bestsellers = $block->isProductBestseller($block->getProduct())) { ?>
+            <div class="single-badge">
+                <div class="bestseller-badge"><?= $bestsellers ?></div>
+            </div>
+
+    <?php } ?>
+    <?php
+    // Volanie funkcie a priradenie jej výstupu do premennej $personalizeBadge
+    $personalizeBadge = $block->getPersonalizeBadge($block->getProduct());
+    ?>
+
+    <!-- Výstup personalizačného odznaku (badge), ak je funkcia neprázdna -->
+    <?php if ($personalizeBadge): ?>
+        <?php echo $personalizeBadge; ?>
+    <?php endif; ?>
+
+    <?php
+    // Kontrola aktuálneho jazyka obchodu
+
+    
+    if ($locale == 'sk_SK') {  // Kontrola, či je aktuálny jazyk slovenčina
+    ?>
+        <div class="single-badge">
+            <div class="local-badge"><img src="<?= $imageSlovakia; ?>" alt="slovakia"> Slovenský výrobca</div>
+        </div>
+    <?php } else { ?>
+        <div class="single-badge">
+            <div class="local-badge"><img src="<?= $imageEurope; ?>" alt="europe"> Made in Europe</div>
+        </div>
+        
+    <?php } ?>
+    
+
+   
+
+
+</div>
+</div>
+ <?php } ?>

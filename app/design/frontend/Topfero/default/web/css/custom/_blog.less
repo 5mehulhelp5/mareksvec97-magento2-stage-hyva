@@ -1,0 +1,136 @@
+& when (@critical) {
+	.amblog-index-index {
+		
+		.amblog-container-list {
+				display: flex;
+				flex-wrap: wrap;
+				gap: 25px;
+			.amblog-post-container {
+				width: ~"calc(33% - 12.5px)";
+				img {
+					border-radius: 8px;
+					width: 100%;
+					max-height: 250px;
+					object-fit: cover;
+				}
+				h2 {
+					font-size: 20px;
+					margin-top: 18px;
+					line-height: normal;
+					display: flex;
+				}
+				p {
+					font-size: 14px;
+				}
+				
+			}
+		}
+		.amblog-pager-container {
+		    width: 100%;
+		    margin-top: 30px;
+		}
+	}
+	.amblog-index-post {
+		.page-main {
+			max-width: 850px;
+
+		}
+		.amblog-post-container {
+			.post-image-main {
+				margin-bottom: 45px;
+				width: 100%;
+				max-height: 400px;
+				object-fit: cover;
+				border-radius: 8px;
+			}
+			.amblog-dates {
+				margin-bottom: 25px;
+				.amblog-date {
+					font-size: 14px;
+					align-items: center;
+				}
+			}
+			a {
+					font-weight: 600;
+					text-decoration: underline;
+				}
+			strong {
+				font-weight: 700;
+			}
+		}
+		.amblog-post-list {
+			.amblog-title {
+				font-size: 1.875rem;
+				font-weight: 700;
+				line-height: 2.25rem;
+				text-align: center;
+				margin-top: 40px;
+				margin-bottom: 35px;
+			}
+			.post-items {
+				.post-item {
+					width: ~"calc(33% - 7.5px)";
+					img {
+						border-radius: 8px;
+					}
+					.post-image {
+						height: auto;
+						margin-bottom: 20px;
+					}
+					.post-title {
+						z-index: 1;
+						position: relative;
+						&:hover {
+							text-decoration: underline !important;
+						}
+					}
+				}
+			}
+		}
+	}
+	@media (min-width: 450px) and (max-width: 768px) {
+		.amblog-index-index {
+			 .amblog-container-list {
+			 	.amblog-post-container {
+			 		width: ~"calc(50% - 12.5px)";
+			 	}
+			 }
+			}
+		.amblog-index-post {
+			.amblog-post-list {
+			.amblog-title {
+	
+				margin-bottom: 30px;
+			}
+			.post-items {
+				.post-item {
+					width: ~"calc(50% - 7.5px)";
+					
+				
+				}
+			}
+		}
+		} 
+	}
+	@media (max-width: 450px) { 
+		.amblog-index-index {
+			 .amblog-container-list {
+			 	.amblog-post-container {
+			 		width: 100%;
+			 	}
+			 }
+			}
+			.amblog-index-post {
+			.amblog-post-list {
+			
+			.post-items {
+				.post-item {
+					width: 100%;
+					
+				
+				}
+			}
+		}
+		}  
+	}
+}

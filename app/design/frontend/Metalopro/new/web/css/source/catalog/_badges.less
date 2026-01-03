@@ -1,0 +1,124 @@
+//
+//  Common
+//  _____________________________________________
+
+& when (@media-common = true) {
+	.badge-wrapper {
+		display: flex;
+		gap: 4px;
+		flex-direction: column !important;
+		.single-badge {
+			font-weight: 700;
+			font-size: 12px;
+			letter-spacing: 1px;
+			> div {
+				padding: 4px 10px 4px 10px;
+				width: max-content;
+				border-radius: 60px;
+				color: @white-color;
+				display: flex;
+				align-items: center;
+				gap: 7px;
+				img {
+					height: 15px;
+				}
+			}
+		}
+		.discount-badge {
+		    background: @discount-color;    
+		}
+		.bestseller-badge {
+			background: @bestseller-color;
+		}
+		.instock-badge {
+			background: @instock-color;
+		}
+		.local-badge {
+			background: @slovakia-color;
+			letter-spacing: initial;
+		}
+		.warranty-badge {
+			background: #2E7D32;
+		}
+		.personalized-product {
+				background: @personalized-color;
+				height: 26px;
+				width: 35px !important;
+				padding: unset !important;
+				color: @white-color;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				position: relative;
+				cursor: pointer;
+			.icon-per {
+				height: 15px;
+				width: 15px;
+				svg {
+					height: 15px;
+					width: 15px;
+				}
+			}
+			.per-text {
+				display: none;
+				top: 20px;
+				position: absolute;
+				background: white;
+				left: 0;
+				border-radius: 8px;
+				width: 113px;
+				max-width: 150px;
+				height: auto;
+				text-align: left;
+				border: 1px solid #ddd;
+				color: #333;
+				font-size: 12px;
+				padding: 5px 8px;
+				margin-top: 10px;
+				opacity: 0.96;
+				letter-spacing: 0px;
+			}
+			&:hover {
+				.per-text {
+					display: block;
+				}
+			}
+		}
+	}
+	.product-info-main {
+		.badge-wrapper {
+			flex-direction: row !important;
+			margin-bottom: 30px;
+		}
+	}
+}
+
+//
+//  Mobile @screen__m
+//  _____________________________________________
+
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
+	.product-item {
+		.badge-wrapper {
+			gap: 2px;
+			.single-badge {
+				> div {
+					padding: 3px 5px;
+					font-size: 10px;
+				}
+			}
+		.personalized-product {
+			height: 21px;
+			width: 28px !important;
+			.icon-per {
+			    height: 14px;
+			    width: 14px;
+			    svg {
+			        height: 14px;
+			        width: 14px;
+			    }
+			}
+		}
+		}
+	}
+}

@@ -1,0 +1,27 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2022-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+declare(strict_types=1);
+
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Element\Template;
+use Hyva\CheckoutPayPal\Magewire\Payment\Method\PaypalExpress;
+
+/** @var Escaper $escaper */
+/** @var Template $block */
+/** @var PaypalExpress $magewire */
+
+$magewire = $block->getParentBlock()->getData('magewire');
+$methodCode = $magewire->getMethodCode();
+?>
+
+<div id="paypal-button-<?= $escaper->escapeHtmlAttr($methodCode) ?>" class="relative z-10">
+    <div class="payment-method-note">
+        <span><?= $escaper->escapeHtml(__('You will be redirected to the PayPal website.')) ?></span>
+    </div>
+</div>

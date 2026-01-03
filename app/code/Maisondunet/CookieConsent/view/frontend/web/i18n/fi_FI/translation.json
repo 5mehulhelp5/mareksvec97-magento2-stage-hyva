@@ -1,0 +1,53 @@
+{
+  "modal_trigger_title": "Evästeasetukset",
+
+  "consent_modal_title": "Käytämme evästeitä!",
+  "consent_modal_description": "Tämä verkkosivusto käyttää välttämättömiä evästeitä varmistaakseen sen asianmukaisen toiminnan ja seurantatiedostoja ymmärtääkseen, miten olet vuorovaikutuksessa sen kanssa. Jälkimmäiset asetetaan vain suostumuksen jälkeen.",
+  "consent_modal_primary_btn": "Hyväksyn",
+  "consent_modal_secondary_btn_settings": "Muokkaa",
+  "consent_modal_secondary_btn_accept_necessary": "Hyväksy välttämättömät",
+
+  "settings_modal_title": "Evästeasetukset",
+  "settings_modal_save_settings_btn": "Tallenna asetukset",
+  "settings_modal_accept_all_btn": "Hyväksy kaikki",
+  "settings_modal_reject_all_btn": "Hyväksy välttämättömät",
+  "settings_modal_close_btn_label": "Sulje",
+
+  "settings_modal_before_consent_title": "Evästeiden käyttö",
+  "settings_modal_before_consent_description": "Käytämme evästeitä varmistaaksemme verkkosivuston perustoiminnot ja parantaaksemme käyttökokemustasi. Voit valita jokaiselle kategoriassa opt-in/opt-out milloin tahansa.",
+
+  "settings_modal_after_consent_title": "Lisätietoja",
+  "settings_modal_after_consent_description": "Jos sinulla on kysyttävää evästekäytännöstämme ja valinnoistasi, ota meihin yhteyttä.",
+
+  "functionality_storage_title": "Toiminnalliset evästeet",
+  "functionality_storage_description": "Nämä evästeet ovat välttämättömiä verkkosivustomme asianmukaisen toiminnan varmistamiseksi. Ilman näitä evästeitä verkkosivusto ei välttämättä toimi oikein.",
+
+  "personalization_storage_title": "Personointievästeet",
+  "personalization_storage_description": "Personointievästeet voivat käyttää kolmannen osapuolen evästeitä sisällön personointiin ja käyttäjien seuraamiseen eri verkkosivustoilla ja laitteilla.",
+
+  "security_storage_title": "Turvallisuusevästeet",
+  "security_storage_description": "Turvallisuusevästeiden avulla tallennetaan turvallisuuteen liittyvää tietoa, kuten todennusta, petossuojaa ja muita keinoja käyttäjän suojaamiseksi.",
+
+  "ad_storage_title": "Mainosevästeet",
+  "ad_storage_description": "Mainosevästeitä käytetään meidän tai kumppaneidemme toimesta näyttämään sinulle oleellista sisältöä tai mainoksia sekä sivustollamme että kolmansien osapuolten sivustoilla. Tämä mahdollistaa kiinnostuksen kohteidesi perusteella niin sanottujen pseudonymisoitujen profiilien luomisen. Tämän tiedon perusteella ei yleensä ole mahdollista tunnistaa sinua suoraan henkilönä, sillä käytetään vain pseudonymisoitua dataa. Ellet anna suostumustasi, et saa kiinnostuksen kohteisiisi räätälöityä sisältöä ja mainoksia.",
+
+  "analytics_storage_title": "Analytiikkaevästeet",
+  "analytics_storage_description": "Analytiikkaevästeet antavat meille mahdollisuuden mitata verkkosivustomme ja mainoskampanjoidemme suorituskykyä. Käytämme niitä verkkosivustollamme käyntien ja lähteiden määrän selvittämiseen. Käsittelemme näiden evästeiden avulla saatuja tietoja kokonaisuutena, ilman että käytetään tunnisteita, jotka viittaavat verkkosivustomme tiettyihin käyttäjiin. Jos poistat analytiikkaevästeet käytöstä, menetämme mahdollisuuden analysoida suorituskykyä ja optimoida toimiamme.",
+
+  "cookie_table_col_name": "Nimi",
+  "cookie_table_col_purpose": "Kuvaus",
+  "cookie_table_col_processing_time": "Vanhentumisaika",
+  "cookie_table_col_provider": "Tarjoaja",
+  "cookie_table_col_type": "Tyyppi",
+  "cookie_table_col_link": "Linkki",
+  "cookie_table_col_link_find_out_more": "Linkki",
+  "cookie_table_col_category": "Kategoria",
+
+  "processing_time_session": "Istunto",
+  "processing_time_persistent": "Pysyvä",
+
+  "cookie_type_1st_party": "1. osapuolen",
+  "cookie_type_3rd_party": "3. osapuolen",
+
+  "find_out_more": "lisätietoja"
+}

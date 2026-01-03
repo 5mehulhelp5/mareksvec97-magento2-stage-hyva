@@ -1,0 +1,30 @@
+{
+  "name": "hyva-themes/magento2-payment-icons",
+  "license": "See LICENSE.md or https://hyva.io/license",
+  "type": "magento2-module",
+  "description": "Enables the usage of light-, dark- & mono- payment SVG icons",
+  "keywords": [
+    "magento2",
+    "magento2-module",
+    "magento2-hyva",
+    "paymenticons"
+  ],
+  "authors": [
+    {
+      "name": "Hyvä Themes BV",
+      "email": "info@hyva.io",
+      "homepage": "https://www.hyva.io/"
+    }
+  ],
+  "require": {
+    "hyva-themes/magento2-theme-module": ">=1.1.12"
+  },
+  "autoload": {
+    "files": [
+      "src/registration.php"
+    ],
+    "psr-4": {
+      "Hyva\\PaymentIcons\\": "src/"
+    }
+  }
+}

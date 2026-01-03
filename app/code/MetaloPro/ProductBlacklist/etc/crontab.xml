@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:App/etc/crontab.xsd">
+    <group id="default">
+        <job name="metalo_blacklist_check" instance="MetaloPro\ProductBlacklist\Cron\BlacklistCheck" method="execute">
+            <schedule>0 * * * *</schedule> <!-- Spúšťa sa každú hodinu -->
+        </job>
+    </group>
+</config>

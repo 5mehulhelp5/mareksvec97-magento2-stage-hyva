@@ -1,0 +1,51 @@
+<?php
+/** @var $block \MetaloPro\GateCategoryControl\Block\MaterialSwitcher */
+$options = $block->getMaterialOptions();
+$currentProduct = $block->getCurrentProduct();
+?>
+
+<?php if (!empty($options)): ?>
+    <div class="product-options-wrapper" id="product-options-wrapper" data-hasrequired="* Povinné políčka">
+        <div class="fieldset" tabindex="0">
+            <div class="swatch-opt" data-role="swatch-options" data-rendered="true">
+                <div class="swatch-attribute size" data-attribute-code="material" data-attribute-id="9999" data-option-selected="">
+                    <span id="option-label-material-9999" class="swatch-attribute-label">Materiál</span>
+                    <span class="swatch-attribute-selected-option">
+                        <?= $currentProduct->getAttributeText('material') ?>
+                    </span>
+
+                    <div class="swatch-attribute-options clearfix" role="listbox" aria-labelledby="option-label-material-9999">
+                        <?php foreach ($options as $index => $option): ?>
+                            <?php
+                                $optionId = '9999-item-' . $index;
+                                $isSelected = $option['active'];
+                            ?>
+                            <div class="swatch-option text<?= $isSelected ? ' selected' : '' ?>"
+                                 id="option-label-material-9999-<?= $optionId ?>"
+                                 index="<?= $index ?>"
+                                 aria-checked="<?= $isSelected ? 'true' : 'false' ?>"
+                                 aria-describedby="option-label-material-9999"
+                                 tabindex="0"
+                                 data-option-type="0"
+                                 data-option-id="<?= $index ?>"
+                                 data-option-label="<?= $option['label'] ?>"
+                                 aria-label="<?= $option['label'] ?>"
+                                 role="option"
+                                 onclick="window.location.href='<?= $option['url'] ?>'">
+                                <?= $option['label'] ?>
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
+
+                    <input class="swatch-input super-attribute-select"
+                           name="super_attribute[9999]"
+                           type="text"
+                           value=""
+                           data-selector="super_attribute[9999]"
+                           data-attr-name="material"
+                           style="display: none;">
+                </div>
+            </div>
+        </div>
+    </div>
+<?php endif; ?>

@@ -1,0 +1,111 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2020-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+declare(strict_types=1);
+
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\HyvaCsp;
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Element\Template;
+
+/** @var Template $block */
+/** @var Escaper $escaper */
+/** @var ViewModelRegistry $viewModels */
+/** @var HyvaCsp $hyvaCsp */
+
+?>
+<script>
+function PaypalPayflowproForm() {
+    return{
+        init(){
+            const {
+                recaptchaEnabled,
+                    methodCode,
+                    componentName
+            } = this.$el.dataset;
+
+            const authorizeButton = getAuthorizeButton();
+
+            const handleAuthorizeClick = () => {
+                const isRecaptchaEnabled = recaptchaEnabled === 'true';
+
+                if (!isRecaptchaEnabled) {
+                    authorizeButton.dispatchEvent(new CustomEvent('payflowpro-authorize-card'));
+                } else {
+                    window.dispatchEvent(new Event('magewire:loader:start'));
+                    window.dispatchEvent(new CustomEvent('payflowpro-validate-recaptcha'));
+                }
+            };
+
+            authorizeButton.addEventListener('click', handleAuthorizeClick);
+            authorizeButton.addEventListener('payflowpro-authorize-card', requestToken, { once: true });
+
+            getCardForm().addEventListener(`${methodCode}-card-updated`, (event) => {
+                let cardData = event.detail.cardData;
+                saveCardData(cardData);
+            });
+
+            function requestToken(event) {
+                let saveVaultCheckbox = getSaveVaultCheckbox();
+                let additionalData = event.detail ? event.detail : {};
+
+                let shouldSaveVault = !!(saveVaultCheckbox && saveVaultCheckbox.checked);
+                let cardData =  window.payflowCardDetails;
+
+                getComponent().requestToken(
+                    cardData.cardType,
+                    cardData.last4,
+                    cardData.expMonth,
+                    cardData.expYear,
+                    shouldSaveVault,
+                    additionalData
+                );
+            }
+
+            function saveCardData(cardData) {
+                let cardType = '';
+
+                if (cardData.validationResult.isValid) {
+                    cardType = cardData.validationResult.card.type;
+                }
+
+                if (cardData.last4 && cardData.expMonth && cardData.expYear && cardType && cardData.hasCvv !== false) {
+                    window.payflowCardDetails = Object.assign({cardType: cardType}, cardData);
+
+                    getAuthorizeButton().removeAttribute('disabled');
+                } else {
+                    window.payflowCardDetails = {};
+
+                    getAuthorizeButton().setAttribute('disabled', true);
+                }
+            }
+
+            function getComponent() {
+                return this.Magewire.find(
+                    `${componentName}`
+                );
+            }
+
+            function getCardForm() {
+                return document.getElementById(`card-form-${methodCode}`);
+            }
+
+            function getAuthorizeButton() {
+                return document.getElementById('payflowpro-authorize');
+            }
+
+            function getSaveVaultCheckbox() {
+                return document.getElementById('payflowpro-save-vault');
+            }
+        }
+    }
+}
+
+window.addEventListener('alpine:init', () => Alpine.data('PaypalPayflowproForm', PaypalPayflowproForm), {once: true});
+</script>
+<?php $hyvaCsp->registerInlineScript() ?>

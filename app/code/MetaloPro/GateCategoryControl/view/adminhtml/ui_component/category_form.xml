@@ -1,0 +1,22 @@
+<?xml version="1.0" ?>
+<form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd"
+      extends="true">
+    <fieldset name="display_settings">
+        <field name="material_filter_value">
+            <argument name="data" xsi:type="array">
+                <item name="options" xsi:type="object">MetaloPro\GateCategoryControl\Model\Category\Attribute\Source\MaterialOptions</item>
+                <item name="config" xsi:type="array">
+                    <item name="dataType" xsi:type="string">text</item>
+                    <item name="formElement" xsi:type="string">select</item>
+                    <item name="source" xsi:type="string">category</item>
+                    <item name="label" xsi:type="string" translate="true">Material Filter Value</item>
+                    <item name="sortOrder" xsi:type="number">99</item>
+                    <item name="dataScope" xsi:type="string">material_filter_value</item>
+                    <item name="component" xsi:type="string">Magento_Ui/js/form/element/select</item>
+                    <item name="visible" xsi:type="boolean">true</item>
+                </item>
+            </argument>
+        </field>
+    </fieldset>
+</form>

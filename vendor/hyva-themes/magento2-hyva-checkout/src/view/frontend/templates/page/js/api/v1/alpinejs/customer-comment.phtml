@@ -1,0 +1,56 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2022-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+declare(strict_types=1);
+
+use Hyva\Theme\ViewModel\HyvaCsp;
+
+/** @var HyvaCsp $hyvaCsp */
+
+?>
+<script>
+    function hyvaCheckoutCustomerComment() {
+        return {
+            content: '',
+            limit: this.$el.dataset.limit,
+
+            get remaining() {
+                return this.limit - this.content.length
+            },
+            initialize() {
+                this.content = this.$wire.comment ?? ''
+                this.$watch('limit')
+            },
+            setContent() {
+                this.content = this.$el.value
+            },
+            getRemainingText() {
+                return `${this.remaining}/${this.limit}`
+            },
+            showRemainingText() {
+                return this.remaining < 75 && this.remaining !== 0
+            },
+            getRemainingTextClasses() {
+                return {
+                    25: 'text-green-700',
+                    50: 'text-purple-700 font-medium',
+                    75: 'text-yellow-600 font-semibold',
+                    100: 'text-red-600 font-bold'
+                }[(100 - (Math.round(this.remaining / 25) * 25))]
+            },
+            showRemainingLimitReached() {
+                return this.remaining === 0
+            }
+        }
+    }
+
+    window.addEventListener('alpine:init', () => {
+        Alpine.data('hyvaCheckoutCustomerComment', hyvaCheckoutCustomerComment)
+    }, { once: true })
+</script>
+<?php $hyvaCsp->registerInlineScript() ?>

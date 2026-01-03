@@ -1,0 +1,34 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2022-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+declare(strict_types=1);
+
+use Magento\Framework\View\Element\Template;
+
+/** @var Template $block */
+
+$navHtmlLeft = $block->getChildHtml('hyva.checkout.navigation.left');
+$navHtmlRight = $block->getChildHtml('hyva.checkout.navigation.right');
+?>
+
+<nav
+    class="checkout-nav"
+    aria-label="<?= $escaper->escapeHtmlAttr(__('Checkout Main')) ?>"
+    x-data="initNavigation"
+    x-init="initialize"
+>
+    <?php if (! empty($navHtmlLeft)): ?>
+        <div class="checkout-nav-secondary">
+            <?= /* @noEscape */ $navHtmlLeft ?>
+        </div>
+    <?php endif ?>
+
+    <div class="checkout-nav-main">
+        <?= /* @noEscape */ $navHtmlRight ?>
+    </div>
+</nav>

@@ -1,0 +1,47 @@
+<?php
+/**
+ * Copyright © MageWorx. All rights reserved.
+ * See LICENSE.txt for license details.
+ */
+?>
+<?php
+/**
+ * Review list toolbar
+ *
+ * @var $block \MageWorx\XReviewBase\Block\Review\Product\ListView\Toolbar
+ */
+//@formatter:off
+?>
+<?php if ($block->getCollection()->getSize()) : ?>
+    <?php $topMediaItems = $block->getTopMediaItems(); ?>
+    <div class="mw-grid sorting">
+        <?php if ($topMediaItems): ?>
+            <div class="mw-grid__item mw-grid__item--secondary">
+                <div class="mw-text mw-text--size-l"><?= $block->escapeHtml(__('Customer Photos')) ?></div>
+            </div>
+            <div class="mw-grid__item">
+                <div class="mw-gallery">
+                    <?php foreach ($topMediaItems as $mediaItem): ?>
+                        <a class="mw-gallery__item" href="<?= $block->escapeUrl($mediaItem->getMediaUrl()) ?>"
+                           data-fslightbox="gallery"
+                           data-thumb="<?= $block->escapeUrl($mediaItem->getThumbnailMediaUrl()) ?>">
+                            <img src="<?= $block->escapeUrl($mediaItem->getThumbnailMediaUrl()) ?>"
+                                 alt="<?= $block->escapeHtmlAttr($mediaItem->getLabel()) ?>"/>
+                        </a>
+                    <?php endforeach; ?>
+                </div>
+            </div>
+        <?php endif; ?>
+    </div>
+
+    <div class="mw-sorting-controls"
+         data-mage-init='{"reviewListToolbarForm":<?= /* @noEscape */ $block->getWidgetOptionsJson() ?>}'>
+        <?php if ($block->isExpanded()) : ?>
+            <?= $block->getChildHtml('filters'); ?>
+        <?php endif; ?>
+        <?php //echo $block->getPagerHtml() ?>
+        <?php if ($block->isExpanded()) : ?>
+            <?= $block->getChildHtml('sorter'); ?>
+        <?php endif; ?>
+    </div>
+<?php endif; ?>

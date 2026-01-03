@@ -1,0 +1,20 @@
+<?php
+$imageUrl = $this->getViewFileUrl('Magento_Theme::images/404noroute.png');
+?>
+
+<div class="d-flex no-route-404 justify-between flex-wrap">
+	<div class="left-404 d-flex">
+		<div class="text-404">
+		<h1 class="page-heading">404 Error</h1>
+		<p><?= $block->escapeHtml(__('We are sorry, the page you requested cannot be found.')) ?></p>
+		</div>
+		<a href="/">
+		<button class="action primary">
+		<span><?= $block->escapeHtml(__('Back to homepage')) ?></span>
+		</button>
+		</a>
+	</div>
+	<div class="right-404">
+		<img src="<?php echo $imageUrl; ?>"  alt="404 Table leg">
+	</div>
+</div>

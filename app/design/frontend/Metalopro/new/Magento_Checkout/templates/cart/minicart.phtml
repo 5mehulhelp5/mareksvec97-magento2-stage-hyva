@@ -1,0 +1,98 @@
+	<?php
+	/**
+	 * Copyright © Magento, Inc. All rights reserved.
+	 * See COPYING.txt for license details.
+	 */
+
+	/** @var $block \Magento\Checkout\Block\Cart\Sidebar */
+	/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
+
+	$objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+	$tax = $objectManager->get('\Magento\Tax\Block\Item\Price\Renderer');
+	$storeManager = $objectManager->get('Magento\Store\Model\StoreManagerInterface'); 
+	$currencyCode = $storeManager->getStore()->getCurrentCurrencyCode(); 
+	$currency = $objectManager->create('Magento\Directory\Model\CurrencyFactory')->create()->load($currencyCode); 
+	$currencySymbol = $currency->getCurrencySymbol();
+	$themeDirectory = $objectManager->get('\Magento\Framework\View\Asset\Repository');
+	$imagePath = $themeDirectory->getUrlWithParams('Magento_Checkout::img/cart.svg', ['_secure' => $storeManager->getStore()->isCurrentlySecure()]);
+	?>
+
+	<div class="minicart-wrapper">
+	        <a class="action showcart" href="<?= $block->escapeUrl($block->getShoppingCartUrl()) ?>" data-bind="scope: 'minicart_content'">
+	           <div class="cart-image">
+	    			<img src="<?= $imagePath ?>" alt="Cart">  
+	    			<span class="counter qty empty" data-bind="css: { empty: !!getCartParam('summary_count') == false && !isLoading() }, blockLoader: isLoading">
+	    				<span class="counter-number" data-bind="text: (getCartParam('summary_count'))??0"></span>
+	    				<span class="counter-label" data-bind="text: (getCartParam('summary_count')==1)?'item':'items'"></span>
+	    			</span>
+	    		</div>
+	            <span class="text"><?= $block->escapeHtml(__('My Cart')) ?></span>
+	    		
+	            <span class="price-label" data-bind="html: (getCartParam('summary_count') > 0)?<?php if ($tax->displayPriceExclTax()) { ?>getCartParam('subtotal_excl_tax')<?php } else { ?>getCartParam('subtotal_incl_tax')<?php } ?>:'0,00 <?php echo $currencySymbol; ?>'"></span>
+	        </a>
+	    <?php if ($block->getIsNeedToDisplaySideBar()):?>
+	        <div class="block block-minicart-slide"
+	             data-role="dropdownDialog"
+	             data-mage-init='{"dropdownDialog":{
+	                "appendTo":"[data-block=minicart]",
+	                "triggerTarget":".showcart",
+	                "timeout": "2000",
+	                "closeOnMouseLeave": false,
+	                "closeOnEscape": true,
+	                "triggerClass":"active",
+	                "parentClass":"active",
+	                "buttons":[]}}'>
+	            <div id="minicart-content-wrapper" data-block="minicart" data-bind="scope: 'minicart_content'">
+	                <!-- ko template: getTemplate() --><!-- /ko -->
+	            </div>
+	            <?= $block->getChildHtml('minicart.addons') ?>
+	        </div>
+	    <?php else: ?>
+	        <?php $scriptString = <<<script
+	            require(['jquery'], function ($) {
+	                $('a.action.showcart').on('click', function() {
+	                    $(document.body).trigger('processStart');
+	                });
+	            });
+	script;
+	        ?>
+	        <?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false); ?>
+	    <?php endif ?>
+	    <?= /* @noEscape */ $secureRenderer->renderTag('script', [], 'window.checkout = ' .
+	     /* @noEscape */ $block->getSerializedConfig(), false); ?>
+	    <script type="text/x-magento-init">
+	    {
+	        "[data-block='minicart']": {
+	            "Magento_Ui/js/core/app": <?= /* @noEscape */ $block->getJsLayout() ?>
+	        },
+	        "*": {
+	            "Magento_Ui/js/block-loader": "<?= $block->escapeJs(
+	                $block->escapeUrl($block->getViewFileUrl('images/loader-1.gif'))
+	            ) ?>"
+	        }
+	    }
+	    </script>
+	    <script>
+	    require([
+	        'jquery',
+	        'Magento_Ui/js/modal/modal',
+	        'mage/translate',
+	        'domReady!'
+	    ], function ($, modal) {
+	        var options = {
+	            type: 'slide',
+	            responsive: true,
+	            innerScroll: true,
+	            modalClass: 'minicart-slide',
+	            buttons: [],
+	            
+	        };
+
+	        var popup = modal(options, $('#minicart-content-wrapper'));
+
+	        $('.showcart').on('click', function () {
+	            $('#minicart-content-wrapper').modal('openModal');
+	        });
+	    });
+	</script>
+	</div>

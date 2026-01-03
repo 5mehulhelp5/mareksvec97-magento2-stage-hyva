@@ -1,0 +1,28 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2022-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+declare(strict_types=1);
+
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Element\Template;
+use Magento\OfflinePayments\Model\Cashondelivery;
+
+/** @var Template $block */
+/** @var Cashondelivery $method */
+/** @var Escaper $escaper */
+
+$method = $block->getMethod();
+?>
+<?php /* The wire Payment Method directive is required to sit in the root DOM element. */ ?>
+<div>
+    <?php if (! empty($method->getInstructions())): ?>
+        <p class="p-4 bg-gray-100 rounded-lg">
+            <?= /* @noEscape */ nl2br($escaper->escapeHtml($method->getInstructions())) ?>
+        </p>
+    <?php endif ?>
+</div>

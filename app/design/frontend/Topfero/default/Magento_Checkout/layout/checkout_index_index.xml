@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="1column" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <update handle="checkout_cart_item_renderers"/>
+    <body>
+        
+        <referenceContainer name="page.wrapper">
+            <container name="checkout.page.header" before="-" htmlTag="header" htmlClass="page-header">
+            <container name="checkout.header" before="-" htmlTag="div" htmlClass="header content justify-between">
+                <container name="checkout.header.left" before="-" htmlTag="div" htmlClass="checkout-header-left">
+                <container name="logo.checkout.box" htmlTag="div" htmlClass="logo_checkout_box d-flex justify-content-center align-items-center" before="-">
+                    <block class="Magento\Theme\Block\Html\Header\Logo" name="logo-checkout">
+                        <arguments>
+                            <argument name="logo_img_width" xsi:type="number">189</argument>
+                            <argument name="logo_img_height" xsi:type="number">64</argument>
+                            <argument name="logoPathResolver" xsi:type="object">Magento\Theme\ViewModel\Block\Html\Header\LogoPathResolver</argument>
+                            <argument name="logo_size_resolver" xsi:type="object">Magento\Theme\ViewModel\Block\Html\Header\LogoSizeResolver</argument>
+                        </arguments>
+                    </block>
+                </container>
+<!--             <block class="Magento\Framework\View\Element\Template" name="customer-support"-->
+<!--             template="Magento_Theme::html/header/blocks/customer-support-header.phtml" after="logo.checkout.box"></block>-->
+             </container>
+             <block class="Magento\Framework\View\Element\Template" name="back.button"
+             template="Magento_Checkout::checkout-header/button-back.phtml" after="checkout.header.left"></block>
+            </container>
+             </container>
+        </referenceContainer>
+
+        
+		
+        
+		<referenceBlock name="header.panel.wrapper" remove="true" />
+		<referenceBlock name="header.container" remove="true" />
+        <referenceBlock name="mdn_cookie.consent" remove="true" />
+    </body>
+</page>

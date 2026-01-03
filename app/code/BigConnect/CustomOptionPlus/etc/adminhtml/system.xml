@@ -1,0 +1,189 @@
+<?xml version="1.0" ?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+<system>
+<tab id="BigConnect" translate="label" sortOrder="400">
+<label>BigConnect</label>
+</tab>
+<section id="customoptionplus" translate="label" type="text" sortOrder="300" showInDefault="1" showInWebsite="1" showInStore="1">
+    <class>separator-top</class>
+    <label>Product Colors</label>
+    <tab>BigConnect</tab>
+    <resource>BigConnect_CustomOptionPlus::config_customoptionplus</resource>
+    <group id="title_group" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+        <label>Option titles</label>
+        <field id="rektifikacia_title" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+        <label>Rektifikácia title</label>
+        </field>
+        <field id="color_title" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+        <label>Farba title</label>
+        </field>
+    </group>
+    <group id="black_color" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+        <label>Black Color</label>
+        <field id="search_text" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+        <label>Search Text</label>
+        </field>
+        <field id="ral_text" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+        <label>Ral Text</label>
+        </field>
+        <field id="image_url_text" translate="label" type="image" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1" >
+        <label>Image Upload</label>
+        <backend_model>Magento\Config\Model\Config\Backend\Image</backend_model>
+        <upload_dir config="system" scope_info="1">customoptionplus</upload_dir>
+        <base_url type="media" scope_info="1">customoptionplus</base_url>
+        </field>
+    </group>
+    <group id="white_color" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+        <label>White Color</label>
+        <field id="search_text" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+        <label>Search Text</label>
+        </field>
+        <field id="ral_text" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+        <label>Ral Text</label>
+        </field>
+        <field id="image_url_text" translate="label" type="image" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1" >
+        <label>Image Upload</label>
+        <backend_model>Magento\Config\Model\Config\Backend\Image</backend_model>
+        <upload_dir config="system" scope_info="1">customoptionplus</upload_dir>
+        <base_url type="media" scope_info="1">customoptionplus</base_url>
+        </field>
+    </group>
+    <group id="antracit_color" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+        <label>Antracit Color</label>
+        <field id="search_text" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+        <label>Search Text</label>
+        </field>
+        <field id="ral_text" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+        <label>Ral Text</label>
+        </field>
+        <field id="image_url_text" translate="label" type="image" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1" >
+        <label>Image Upload</label>
+        <backend_model>Magento\Config\Model\Config\Backend\Image</backend_model>
+        <upload_dir config="system" scope_info="1">customoptionplus</upload_dir>
+        <base_url type="media" scope_info="1">customoptionplus</base_url>
+        </field>
+    </group>
+    <group id="brown_color" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+        <label>Brown Color</label>
+        <field id="search_text" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+        <label>Search Text</label>
+        </field>
+        <field id="ral_text" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+        <label>Ral Text</label>
+        </field>
+        <field id="image_url_text" translate="label" type="image" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1" >
+        <label>Image Upload</label>
+        <backend_model>Magento\Config\Model\Config\Backend\Image</backend_model>
+        <upload_dir config="system" scope_info="1">customoptionplus</upload_dir>
+        <base_url type="media" scope_info="1">customoptionplus</base_url>
+        </field>
+    </group>
+    <group id="metalic_bronze_color" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+        <label>Matalic Bronze Color</label>
+        <field id="search_text" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+        <label>Search Text</label>
+        </field>
+        <field id="ral_text" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+        <label>Ral Text</label>
+        </field>
+        <field id="image_url_text" translate="label" type="image" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1" >
+        <label>Image Upload</label>
+        <backend_model>Magento\Config\Model\Config\Backend\Image</backend_model>
+        <upload_dir config="system" scope_info="1">customoptionplus</upload_dir>
+        <base_url type="media" scope_info="1">customoptionplus</base_url>
+        </field>
+    </group>
+    <group id="gold_color" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+        <label>Gold Color</label>
+        <field id="search_text" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+        <label>Search Text</label>
+        </field>
+        <field id="ral_text" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+        <label>Ral Text</label>
+        </field>
+        <field id="image_url_text" translate="label" type="image" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1" >
+        <label>Image Upload</label>
+        <backend_model>Magento\Config\Model\Config\Backend\Image</backend_model>
+        <upload_dir config="system" scope_info="1">customoptionplus</upload_dir>
+        <base_url type="media" scope_info="1">customoptionplus</base_url>
+        </field>
+    </group>
+    <group id="steel_color" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+        <label>Steel Color</label>
+        <field id="search_text" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+        <label>Search Text</label>
+        </field>
+        <field id="ral_text" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+        <label>Ral Text</label>
+        </field>
+        <field id="image_url_text" translate="label" type="image" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1" >
+        <label>Image Upload</label>
+        <backend_model>Magento\Config\Model\Config\Backend\Image</backend_model>
+        <upload_dir config="system" scope_info="1">customoptionplus</upload_dir>
+        <base_url type="media" scope_info="1">customoptionplus</base_url>
+        </field>
+    </group>
+    <group id="other_color" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+        <label>Other Color</label>
+        <field id="search_text" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+        <label>Search Text</label>
+        </field>
+        <field id="ral_text" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+        <label>Ral Text</label>
+        </field>
+        <field id="image_url_text" translate="label" type="image" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1" >
+        <label>Image Upload</label>
+        <backend_model>Magento\Config\Model\Config\Backend\Image</backend_model>
+        <upload_dir config="system" scope_info="1">customoptionplus</upload_dir>
+        <base_url type="media" scope_info="1">customoptionplus</base_url>
+        </field>
+    </group>
+    <group id="no_rectification" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+            <label>Bez rektifikácie</label>
+            <field id="search_text" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+            <label>Search Text</label>
+            </field>
+            <field id="ral_text" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+            <label>Information Text</label>
+            </field>
+            <field id="image_url_text" translate="label" type="image" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1" >
+            <label>Image Upload</label>
+            <backend_model>Magento\Config\Model\Config\Backend\Image</backend_model>
+            <upload_dir config="system" scope_info="1">customoptionplus</upload_dir>
+            <base_url type="media" scope_info="1">customoptionplus</base_url>
+            </field>
+        </group>
+    <group id="with_rectification" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+            <label>S priznanou rektifikáciou</label>
+            <field id="search_text" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+            <label>Search Text</label>
+            </field>
+            <field id="ral_text" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+            <label>Information Text</label>
+            </field>
+            <field id="image_url_text" translate="label" type="image" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1" >
+            <label>Image Upload</label>
+            <backend_model>Magento\Config\Model\Config\Backend\Image</backend_model>
+            <upload_dir config="system" scope_info="1">customoptionplus</upload_dir>
+            <base_url type="media" scope_info="1">customoptionplus</base_url>
+            </field>
+        </group>
+    <group id="with_hidden_rectification" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+            <label>So zapustenou rektifikáciou</label>
+            <field id="search_text" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+            <label>Search Text</label>
+            </field>
+            <field id="ral_text" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+            <label>Information Text</label>
+            </field>
+            <field id="image_url_text" translate="label" type="image" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1" >
+            <label>Image Upload</label>
+            <backend_model>Magento\Config\Model\Config\Backend\Image</backend_model>
+            <upload_dir config="system" scope_info="1">customoptionplus</upload_dir>
+            <base_url type="media" scope_info="1">customoptionplus</base_url>
+            </field>
+        </group>
+    <!-- You can add more groups here for different colors -->
+</section>
+</system>
+</config>

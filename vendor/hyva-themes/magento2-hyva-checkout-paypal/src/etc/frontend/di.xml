@@ -1,0 +1,301 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2022-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\Paypal\Controller\Express\AbstractExpress\Cancel">
+        <plugin name="redirect_to_checkout"
+                type="Hyva\CheckoutPayPal\Plugin\Paypal\Controller\Express\AbstractExpress\Cancel\RedirectToCheckout"
+                sortOrder="10"/>
+    </type>
+    <type name="Magento\Paypal\Controller\Express\AbstractExpress\Review">
+        <plugin name="redirect_to_checkout"
+                type="Hyva\CheckoutPayPal\Plugin\Paypal\Controller\Express\AbstractExpress\Review\RedirectToCheckout"
+                sortOrder="10"/>
+    </type>
+    <type name="Magento\Paypal\Controller\Express\AbstractExpress\ReturnAction">
+        <plugin name="redirect_to_checkout"
+                type="Hyva\CheckoutPayPal\Plugin\Paypal\Controller\Express\AbstractExpress\ReturnAction\RedirectToCheckout"
+                sortOrder="10"/>
+    </type>
+    <type name="Hyva\Checkout\ViewModel\Checkout\Payment\MethodList">
+        <plugin name="exclude_paypal_methods"
+                type="Hyva\CheckoutPayPal\Plugin\Hyva\Checkout\ViewModel\Checkout\Payment\MethodList\ExcludePaypalMethods"
+                sortOrder="10"/>
+    </type>
+    <type name="Magento\Paypal\Controller\Express\OnAuthorization">
+        <plugin name="authorize"
+                type="Hyva\CheckoutPayPal\Plugin\Paypal\Controller\Express\OnAuthorization\Authorize"
+                sortOrder="10"/>
+    </type>
+    <type name="Magento\Paypal\Model\Express\Checkout">
+        <plugin name="copy_customer_email_from_paypal_to_quote"
+                type="Hyva\CheckoutPayPal\Plugin\Paypal\Model\Express\Checkout\PopulateEmailFromPayPal"
+                sortOrder="10"/>
+    </type>
+
+    <type name="Hyva\CheckoutPayPal\ViewModel\Payment\CreditCardForm">
+        <arguments>
+            <argument name="creditCardTypesJsConfig" xsi:type="array">
+                <item name="visa" xsi:type="array">
+                    <item name="title" xsi:type="string">Visa</item>
+                    <item name="type" xsi:type="string">VI</item>
+                    <item name="pattern" xsi:type="string">^4\d*$</item>
+                    <item name="gaps" xsi:type="array">
+                        <item name="0" xsi:type="number">4</item>
+                        <item name="1" xsi:type="number">8</item>
+                        <item name="2" xsi:type="number">12</item>
+                    </item>
+                    <item name="lengths" xsi:type="array">
+                        <item name="0" xsi:type="number">16</item>
+                    </item>
+                    <item name="code" xsi:type="array">
+                        <item name="name" xsi:type="string">CVV</item>
+                        <item name="size" xsi:type="number">3</item>
+                    </item>
+                </item>
+                <item name="mastercard" xsi:type="array">
+                    <item name="title" xsi:type="string">MasterCard</item>
+                    <item name="type" xsi:type="string">MC</item>
+                    <item name="pattern" xsi:type="string">^(?:5[1-5][0-9]{2}|222[1-9]|22[3-9][0-9]|2[3-6][0-9]{2}|27[01][0-9]|2720)[0-9]{12}$</item>
+                    <item name="gaps" xsi:type="array">
+                        <item name="0" xsi:type="number">4</item>
+                        <item name="1" xsi:type="number">8</item>
+                        <item name="2" xsi:type="number">12</item>
+                    </item>
+                    <item name="lengths" xsi:type="array">
+                        <item name="0" xsi:type="number">16</item>
+                    </item>
+                    <item name="code" xsi:type="array">
+                        <item name="name" xsi:type="string">CVC</item>
+                        <item name="size" xsi:type="number">3</item>
+                    </item>
+                </item>
+                <item name="american_express" xsi:type="array">
+                    <item name="title" xsi:type="string">American Express</item>
+                    <item name="type" xsi:type="string">AE</item>
+                    <item name="pattern" xsi:type="string">^3([47]\d*)?$</item>
+                    <item name="gaps" xsi:type="array">
+                        <item name="0" xsi:type="number">4</item>
+                        <item name="1" xsi:type="number">10</item>
+                    </item>
+                    <item name="lengths" xsi:type="array">
+                        <item name="0" xsi:type="number">15</item>
+                    </item>
+                    <item name="code" xsi:type="array">
+                        <item name="name" xsi:type="string">CID</item>
+                        <item name="size" xsi:type="number">4</item>
+                    </item>
+                </item>
+                <item name="diners" xsi:type="array">
+                    <item name="title" xsi:type="string">Diners</item>
+                    <item name="type" xsi:type="string">DN</item>
+                    <item name="pattern" xsi:type="string">^(3(0[0-5]|095|6|[8-9]))\d*$</item>
+                    <item name="gaps" xsi:type="array">
+                        <item name="0" xsi:type="number">4</item>
+                        <item name="1" xsi:type="number">10</item>
+                    </item>
+                    <item name="lengths" xsi:type="array">
+                        <item name="0" xsi:type="number">14</item>
+                        <item name="1" xsi:type="number">16</item>
+                        <item name="2" xsi:type="number">17</item>
+                        <item name="3" xsi:type="number">18</item>
+                        <item name="4" xsi:type="number">19</item>
+                    </item>
+                    <item name="code" xsi:type="array">
+                        <item name="name" xsi:type="string">CVV</item>
+                        <item name="size" xsi:type="number">3</item>
+                    </item>
+                </item>
+                <item name="discover" xsi:type="array">
+                    <item name="title" xsi:type="string">Discover</item>
+                    <item name="type" xsi:type="string">DI</item>
+                    <item name="pattern" xsi:type="string">^(6011(0|[2-4]|74|7[7-9]|8[6-9]|9)|6(4[4-9]|5))\d*$</item>
+                    <item name="gaps" xsi:type="array">
+                        <item name="0" xsi:type="number">4</item>
+                        <item name="1" xsi:type="number">8</item>
+                        <item name="2" xsi:type="number">12</item>
+                    </item>
+                    <item name="lengths" xsi:type="array">
+                        <item name="0" xsi:type="number">16</item>
+                        <item name="1" xsi:type="number">17</item>
+                        <item name="2" xsi:type="number">18</item>
+                        <item name="3" xsi:type="number">19</item>
+                    </item>
+                    <item name="code" xsi:type="array">
+                        <item name="name" xsi:type="string">CID</item>
+                        <item name="size" xsi:type="number">3</item>
+                    </item>
+                </item>
+                <item name="jcb" xsi:type="array">
+                    <item name="title" xsi:type="string">JCB</item>
+                    <item name="type" xsi:type="string">JCB</item>
+                    <item name="pattern" xsi:type="string">^35(2[8-9]|[3-8])\d*$</item>
+                    <item name="gaps" xsi:type="array">
+                        <item name="0" xsi:type="number">4</item>
+                        <item name="1" xsi:type="number">8</item>
+                        <item name="2" xsi:type="number">12</item>
+                    </item>
+                    <item name="lengths" xsi:type="array">
+                        <item name="0" xsi:type="number">16</item>
+                        <item name="1" xsi:type="number">17</item>
+                        <item name="2" xsi:type="number">18</item>
+                        <item name="3" xsi:type="number">19</item>
+                    </item>
+                    <item name="code" xsi:type="array">
+                        <item name="name" xsi:type="string">CVV</item>
+                        <item name="size" xsi:type="number">3</item>
+                    </item>
+                </item>
+                <item name="union_pay" xsi:type="array">
+                    <item name="title" xsi:type="string">UnionPay</item>
+                    <item name="type" xsi:type="string">UN</item>
+                    <item name="pattern" xsi:type="string">^(622(1(2[6-9]|[3-9])|[3-8]|9([[0-1]|2[0-5]))|62[4-6]|628([2-8]))\d*?$</item>
+                    <item name="gaps" xsi:type="array">
+                        <item name="0" xsi:type="number">4</item>
+                        <item name="1" xsi:type="number">8</item>
+                        <item name="2" xsi:type="number">12</item>
+                    </item>
+                    <item name="lengths" xsi:type="array">
+                        <item name="0" xsi:type="number">16</item>
+                        <item name="1" xsi:type="number">17</item>
+                        <item name="2" xsi:type="number">18</item>
+                        <item name="3" xsi:type="number">19</item>
+                    </item>
+                    <item name="code" xsi:type="array">
+                        <item name="name" xsi:type="string">CVN</item>
+                        <item name="size" xsi:type="number">3</item>
+                    </item>
+                </item>
+                <item name="maestro_international" xsi:type="array">
+                    <item name="title" xsi:type="string">Maestro International</item>
+                    <item name="type" xsi:type="string">MI</item>
+                    <item name="pattern" xsi:type="string">^(5(0|[6-9])|63|67(?!59|6770|6774))\d*$</item>
+                    <item name="gaps" xsi:type="array">
+                        <item name="0" xsi:type="number">4</item>
+                        <item name="1" xsi:type="number">8</item>
+                        <item name="2" xsi:type="number">12</item>
+                    </item>
+                    <item name="lengths" xsi:type="array">
+                        <item name="0" xsi:type="number">12</item>
+                        <item name="1" xsi:type="number">13</item>
+                        <item name="2" xsi:type="number">14</item>
+                        <item name="3" xsi:type="number">15</item>
+                        <item name="4" xsi:type="number">16</item>
+                        <item name="5" xsi:type="number">17</item>
+                        <item name="6" xsi:type="number">18</item>
+                        <item name="7" xsi:type="number">19</item>
+                    </item>
+                    <item name="code" xsi:type="array">
+                        <item name="name" xsi:type="string">CVC</item>
+                        <item name="size" xsi:type="number">3</item>
+                    </item>
+                </item>
+                <item name="maestro_domastic" xsi:type="array">
+                    <item name="title" xsi:type="string">Maestro Domestic</item>
+                    <item name="type" xsi:type="string">MD</item>
+                    <item name="pattern" xsi:type="string">^6759(?!24|38|40|6[3-9]|70|76)|676770|676774\d*$</item>
+                    <item name="gaps" xsi:type="array">
+                        <item name="0" xsi:type="number">4</item>
+                        <item name="1" xsi:type="number">8</item>
+                        <item name="2" xsi:type="number">12</item>
+                    </item>
+                    <item name="lengths" xsi:type="array">
+                        <item name="0" xsi:type="number">12</item>
+                        <item name="1" xsi:type="number">13</item>
+                        <item name="2" xsi:type="number">14</item>
+                        <item name="3" xsi:type="number">15</item>
+                        <item name="4" xsi:type="number">16</item>
+                        <item name="5" xsi:type="number">17</item>
+                        <item name="6" xsi:type="number">18</item>
+                        <item name="7" xsi:type="number">19</item>
+                    </item>
+                    <item name="code" xsi:type="array">
+                        <item name="name" xsi:type="string">CVC</item>
+                        <item name="size" xsi:type="number">3</item>
+                    </item>
+                </item>
+                <item name="hipercard" xsi:type="array">
+                    <item name="title" xsi:type="string">Hipercard</item>
+                    <item name="type" xsi:type="string">HC</item>
+                    <item name="pattern" xsi:type="string">^((606282)|(637095)|(637568)|(637599)|(637609)|(637612))\d*$</item>
+                    <item name="gaps" xsi:type="array">
+                        <item name="0" xsi:type="number">4</item>
+                        <item name="1" xsi:type="number">8</item>
+                        <item name="2" xsi:type="number">12</item>
+                    </item>
+                    <item name="lengths" xsi:type="array">
+                        <item name="0" xsi:type="number">13</item>
+                        <item name="1" xsi:type="number">16</item>
+                    </item>
+                    <item name="code" xsi:type="array">
+                        <item name="name" xsi:type="string">CVC</item>
+                        <item name="size" xsi:type="number">3</item>
+                    </item>
+                </item>
+                <item name="elo" xsi:type="array">
+                    <item name="title" xsi:type="string">Elo</item>
+                    <item name="type" xsi:type="string">ELO</item>
+                    <item name="pattern" xsi:type="string">^((509091)|(636368)|(636297)|(504175)|(438935)|(40117[8-9])|(45763[1-2])|(457393)|(431274)|(50990[0-2])|(5099[7-9][0-9])|(50996[4-9])|(509[1-8][0-9][0-9])|(5090(0[0-2]|0[4-9]|1[2-9]|[24589][0-9]|3[1-9]|6[0-46-9]|7[0-24-9]))|(5067(0[0-24-8]|1[0-24-9]|2[014-9]|3[0-379]|4[0-9]|5[0-3]|6[0-5]|7[0-8]))|(6504(0[5-9]|1[0-9]|2[0-9]|3[0-9]))|(6504(8[5-9]|9[0-9])|6505(0[0-9]|1[0-9]|2[0-9]|3[0-8]))|(6505(4[1-9]|5[0-9]|6[0-9]|7[0-9]|8[0-9]|9[0-8]))|(6507(0[0-9]|1[0-8]))|(65072[0-7])|(6509(0[1-9]|1[0-9]|20))|(6516(5[2-9]|6[0-9]|7[0-9]))|(6550(0[0-9]|1[0-9]))|(6550(2[1-9]|3[0-9]|4[0-9]|5[0-8])))\d*$</item>
+                    <item name="gaps" xsi:type="array">
+                        <item name="0" xsi:type="number">4</item>
+                        <item name="1" xsi:type="number">8</item>
+                        <item name="2" xsi:type="number">12</item>
+                    </item>
+                    <item name="lengths" xsi:type="array">
+                        <item name="0" xsi:type="number">16</item>
+                    </item>
+                    <item name="code" xsi:type="array">
+                        <item name="name" xsi:type="string">CVC</item>
+                        <item name="size" xsi:type="number">3</item>
+                    </item>
+                </item>
+                <item name="aura" xsi:type="array">
+                    <item name="title" xsi:type="string">Aura</item>
+                    <item name="type" xsi:type="string">AU</item>
+                    <item name="pattern" xsi:type="string">^5078\d*$</item>
+                    <item name="gaps" xsi:type="array">
+                        <item name="0" xsi:type="number">4</item>
+                        <item name="1" xsi:type="number">8</item>
+                        <item name="2" xsi:type="number">12</item>
+                    </item>
+                    <item name="lengths" xsi:type="array">
+                        <item name="0" xsi:type="number">19</item>
+                    </item>
+                    <item name="code" xsi:type="array">
+                        <item name="name" xsi:type="string">CVC</item>
+                        <item name="size" xsi:type="number">3</item>
+                    </item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="Hyva\CheckoutPayPal\ViewModel\PaypalIcons">
+        <arguments>
+            <argument name="iconPathPrefix" xsi:type="string">Hyva_CheckoutPayPal::svg/paypalIcons</argument>
+        </arguments>
+    </type>
+
+    <type name="Hyva\Checkout\Model\Magewire\Payment\PlaceOrderServiceProvider">
+        <arguments>
+            <argument name="placeOrderServiceList" xsi:type="array">
+                <item name="paypal_express" xsi:type="object">Hyva\CheckoutPayPal\Model\Magewire\Payment\PaypalExpressPlaceOrderService</item>
+                <item name="payflow_express" xsi:type="object">Hyva\CheckoutPayPal\Model\Magewire\Payment\PayflowExpressPlaceOrderService</item>
+                <item name="payflow_express_bml" xsi:type="object">Hyva\CheckoutPayPal\Model\Magewire\Payment\PayflowExpressBmlPlaceOrderService</item>
+                <item name="payflow_advanced" xsi:type="object">Hyva\CheckoutPayPal\Model\Magewire\Payment\PayflowIframePlaceOrderService</item>
+                <item name="payflow_link" xsi:type="object">Hyva\CheckoutPayPal\Model\Magewire\Payment\PayflowIframePlaceOrderService</item>
+                <item name="hosted_pro" xsi:type="object">Hyva\CheckoutPayPal\Model\Magewire\Payment\PayflowIframePlaceOrderService</item>
+                <item name="payflowpro" xsi:type="object">Hyva\CheckoutPayPal\Model\Magewire\Payment\PaypalPlaceOrderService</item>
+                <item name="payflowpro_cc_vault" xsi:type="object">Hyva\CheckoutPayPal\Model\Magewire\Payment\PaypalPlaceOrderService</item>
+                <item name="paypal_billing_agreement" xsi:type="object">Hyva\CheckoutPayPal\Model\Magewire\Payment\PaypalPlaceOrderService</item>
+            </argument>
+        </arguments>
+    </type>
+</config>

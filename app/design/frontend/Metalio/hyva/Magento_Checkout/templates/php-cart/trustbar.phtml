@@ -1,0 +1,99 @@
+<?php 
+/** @var \Magento\Framework\View\Element\Template $block */
+declare(strict_types=1);
+
+use Magento\Store\Model\ScopeInterface;
+use Hyva\Theme\ViewModel\HeroiconsSolid;
+use Hyva\Theme\ViewModel\HeroiconsOutline;
+
+$viewModels = $viewModels ?? $block->getData('viewModels');
+$hiSolid    = $viewModels->require(HeroiconsSolid::class);
+$hiOutline  = $viewModels->require(HeroiconsOutline::class);
+
+$om  = \Magento\Framework\App\ObjectManager::getInstance();
+/** @var \Magento\Framework\App\Config\ScopeConfigInterface $cfg */
+$cfg = $om->get(\Magento\Framework\App\Config\ScopeConfigInterface::class);
+
+$avg           = (float) ($cfg->getValue('metalio/reviews/avg',   ScopeInterface::SCOPE_STORE) ?: 4.8);
+$label         = (string)($cfg->getValue('metalio/reviews/label', ScopeInterface::SCOPE_STORE) ?: __('Excellent'));
+$reviewsCount  = (int)   ($cfg->getValue('metalio/reviews/count', ScopeInterface::SCOPE_STORE) ?: 22504);
+$projectsCount = (int)   ($cfg->getValue('metalio/projects/count', ScopeInterface::SCOPE_STORE) ?: 1000);
+
+/** project previews – replace with your own */
+$thumbs = [
+  $block->getViewFileUrl('Magento_Checkout::images/5.jpg'),
+  $block->getViewFileUrl('Magento_Checkout::images/2.jpg'),
+  $block->getViewFileUrl('Magento_Checkout::images/3.jpg'),
+  $block->getViewFileUrl('Magento_Checkout::images/4.jpg'),
+];
+$fulls = $thumbs;
+?>
+<script>
+window.addEventListener('alpine:init', () => {
+  Alpine.data('projectsBadge', () => ({
+    ...hyva.modal(),
+    images: <?= /* @noEscape */ json_encode($fulls) ?>,
+    idx: 0,
+    openAt(i){ this.idx = i; this.show(); },
+    next(){ this.idx = (this.idx + 1) % this.images.length; },
+    prev(){ this.idx = (this.idx - 1 + this.images.length) % this.images.length; },
+  }));
+}, { once:true });
+</script>
+
+<div class="bg-gray-100 rounded-2xl mb-5 p-4 sm:p-5 text-center" x-data="projectsBadge">
+  <!-- project thumbnails -->
+  <div class="mx-auto mb-2 flex items-center justify-center -space-x-2">
+    <?php foreach ($thumbs as $i => $src): ?>
+      <button type="button" class="ring-2 ring-white rounded-full hover:ring-primary transition"
+              @click="openAt(<?= (int)$i ?>)">
+        <img src="<?= $src ?>" alt="" class="h-10 w-10 rounded-full object-cover"/>
+      </button>
+    <?php endforeach; ?>
+  </div>
+
+  <!-- Excellent + stars -->
+  <div class="mt-1 text-[22px] sm:text-2xl font-extrabold text-slate-900">
+    <?= $block->escapeHtml($label) ?>
+    <span class="align-middle inline-flex items-center ml-1">
+      <?php
+      // round to show 5 solid stars for 4.8 avg (clamped to 0..5)
+      $full = max(0, min(5, (int) round($avg)));
+      for ($i=1; $i<=5; $i++):
+        echo $i <= $full
+          ? $hiSolid->starHtml('h-5 w-5 text-amber-400', 20, 20, ['aria-hidden'=>'true'])
+          : $hiOutline->starHtml('h-5 w-5 text-slate-300', 20, 20, ['aria-hidden'=>'true']);
+      endfor;
+      ?>
+    </span>
+  </div>
+
+  <!-- (1000+ completed projects) -->
+  <div class="mt-1 text-sm font-semibold text-slate-800">
+    <?= $block->escapeHtml(number_format(max($projectsCount, 1), 0, ',', ' ')) ?>+ <?= $block->escapeHtml(__('completed projects')) ?>
+  </div>
+
+  <!-- MODAL with large preview -->
+  <div x-cloak x-spread="overlay" x-bind="overlay"
+       class="fixed inset-0 flex items-center justify-center bg-black/60 z-40">
+    <div x-ref="dialog" role="dialog" class="relative max-w-[90vw] max-h-[90vh]">
+      <img :src="images[idx]" class="max-w-[90vw] max-h-[90vh] object-contain rounded-xl shadow-2xl" alt=""/>
+      <button @click="hide" class="z-[9999] absolute top-3 right-3 rounded-full bg-white/90 hover:bg-white p-2 shadow ring-1 ring-slate-200">
+        <?= $hiSolid->xHtml('h-5 w-5 text-slate-700', 20, 20, ['aria-hidden'=>'true']) ?>
+        <span class="sr-only"><?= $block->escapeHtml(__('Close')) ?></span>
+      </button>
+      <div class="absolute inset-y-0 left-0 flex items-center p-3">
+        <button @click="prev" class="rounded-full bg-white/90 hover:bg-white p-2 shadow ring-1 ring-slate-200">
+          <?= $hiSolid->chevronLeftHtml('h-5 w-5 text-slate-700', 20, 20, ['aria-hidden'=>'true']) ?>
+          <span class="sr-only"><?= $block->escapeHtml(__('Previous')) ?></span>
+        </button>
+      </div>
+      <div class="absolute inset-y-0 right-0 flex items-center p-3">
+        <button @click="next" class="rounded-full bg-white/90 hover:bg-white p-2 shadow ring-1 ring-slate-200">
+          <?= $hiSolid->chevronRightHtml('h-5 w-5 text-slate-700', 20, 20, ['aria-hidden'=>'true']) ?>
+          <span class="sr-only"><?= $block->escapeHtml(__('Next')) ?></span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

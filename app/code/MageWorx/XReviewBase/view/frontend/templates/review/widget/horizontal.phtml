@@ -1,0 +1,116 @@
+<?php
+/**
+ * Copyright © MageWorx. All rights reserved.
+ * See LICENSE.txt for license details.
+ */
+?>
+
+<?php
+/** @var \MageWorx\XReviewBase\Block\Review\Widget\ReviewsList $block */
+?>
+<?php if ($block->getCollection() && $block->getCollection()->getSize()) : ?>
+    <?php
+    $reviews = $block->getCollection()->getItems();
+    $image   = 'product_page_image_small';
+    $format  = $block->getDateFormat() ?: \IntlDateFormatter::SHORT;
+    ?>
+    <div class="mw-grid widget">
+        <div class="mw-grid__item">
+            <div class="mw-slider">
+                <?php if ($block->getTitle()) : ?>
+                    <div class="mw-slider__heading block-title">
+                        <strong><?= $block->escapeHtml(__($block->getTitle())) ?></strong>
+                    </div>
+                <?php endif ?>
+                <div class="mw-slider__body">
+                    <div class="mw-splide" data-splide='{"perPage":3,"gap":30,"breakpoints":{"540":{"perPage":1},"720":{"perPage":2}}}'>
+                        <div class="mw-splide__track">
+                            <div class="mw-splide__list">
+                                <?php foreach ($reviews as $review) : ?>
+                                    <?php
+                                    $product       = $block->getProductByReview($review);
+                                    $reviewsCount  = $product->getReviewsCount();
+                                    $ratingSummary = $product->getRatingSummary();
+                                    ?>
+                                    <div class="mw-splide__slide">
+                                        <div class="mw-review-slide">
+                                            <?php if ($block->allowProductTitle()) : ?>
+                                                <a class="mw-text mw-text--size-md mw-text--variation-strong mw-review-slide__product-title"
+                                                   href="<?= $block->escapeUrl($product->getProductUrl()) ?>">
+                                                    <?= $block->escapeHtml($product->getName()) ?>
+                                                </a>
+                                            <?php endif; ?>
+                                            <?php if ($block->allowProductImage()) : ?>
+                                                <div class="mw-review-slide__image">
+                                                    <a href="<?= $block->escapeUrl($product->getProductUrl()) ?>">
+                                                        <img src="<?= $block->escapeUrl($block->getImage($product, $image)->getImageUrl()) ?>" alt="Image"/>
+                                                    </a>
+                                                </div>
+                                            <?php endif; ?>
+                                            <?php if ($reviewsCount && $ratingSummary) : ?>
+                                                <div class="mw-rating mw-review-slide__rating">
+                                                    <div class="mw-rating__result">
+                                                        <div class="mw-rating__stars" aria-hidden="true">
+                                                            <div class="mw-rating__stars-value"
+                                                                 style="width:<?= $block->escapeHtmlAttr($ratingSummary) ?>%">
+                                                            </div>
+                                                        </div>
+                                                        <div class="mw-text mw-text--variation-subdued mw-rating__count">
+                                                            (<?= $block->escapeHtml($reviewsCount) ?><span><?= $reviewsCount == 1 ? $block->escapeHtml(__('review')) : $block->escapeHtml(__('reviews')) ?></span>)
+                                                        </div>
+                                                        <div class="mw-rating__text"><?= $block->escapeHtml($ratingSummary) ?>%</div>
+                                                    </div>
+                                                </div>
+                                            <?php endif; ?>
+                                            <?php if ($block->allowReviewBy()) : ?>
+                                                <div class="mw-text mw-review-slide__user"><?= $block->escapeHtml(__('Review by')) ?> <span class="mw-text mw-text--variation-strong">
+                                                <?= $block->escapeHtml($review->getNickname()) ?>
+                                            </span>
+                                                </div>
+                                            <?php endif; ?>
+                                            <?php if ($block->allowGeoIpLocation($review)) : ?>
+                                                <div class="mw-country mw-review-slide__country">
+                                                    <div class="mw-country__location mw-text mw-text--variation-subdued">
+                                                        <?= /* @noEscape */ $review->getLocationText() ?>
+                                                    </div>
+                                                </div>
+                                            <?php endif; ?>
+
+                                            <div class="mw-text mw-review-slide__text">
+                                                <?= $block->escapeHtml($block->getReviewDetail($review)) ?>
+                                            </div>
+
+                                            <?php if ($block->allowReviewDate()) : ?>
+                                                <div class="mw-text mw-text--variation-subdued mw-review-slide__date">
+                                                    <?= $block->escapeHtml($block->formatDate($review->getCreatedAt(), $format)) ?>
+                                                </div>
+                                            <?php endif; ?>
+
+                                            <div class="mw-review-slide__meta">
+                                                <a class="mw-link mw-review-slide__see-all"
+                                                   href="<?= $block->escapeUrl($block->getReviewsUrl($product)) ?>">
+                                                    <?= $block->escapeHtml(__('See all reviews')) ?>
+                                                </a>
+                                                <?php if ($block->allowRecommendLabel($review)) : ?>
+                                                    <div class="mw-recommend mw-review-slide__badge"><?= $block->escapeHtml(__('Recommend')) ?></div>
+                                                <?php endif; ?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                <?php endforeach; ?>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/x-magento-init">
+    {
+        "*": {
+            "xReviewSlider": {}
+        }
+    }
+    </script>
+<?php endif; ?>

@@ -1,0 +1,330 @@
+& when (@critical) {
+	.block.widget.widget-recent.scroll-reveal.reveal-slide-in.reveal-ready.scroll-reveal-finished, .block.widget.widget-recent {
+		display: none !important;
+	}
+	.widget-recent {
+		display: none !important;
+	}
+	.catalog-product-view {
+		.product-info-price {
+			.price-box {
+				display: flex;
+				flex-wrap: wrap;
+				gap: 12px;
+				.old-price {
+					.price-for-pcs {
+						display: none;
+					}
+				}
+			}
+		}
+	}
+	.rating-result::before, .rating-result > span::before {
+		color: #f8cb00;
+	}
+	.reviews-actions a {
+		    font-weight: 500;
+	}
+
+	.product-social-links {
+		display: none !important;
+	}
+ .faq-container {
+ 	margin-top: 35px;
+    max-width: 800px;
+    h3 {
+    	font-size: 24px;
+    	font-weight: 700;
+    }
+    .accordion {
+    	padding: 20px 40px;
+    	background: #f7f7f7;
+    	border-radius: 8px;
+    	margin-top: 18px;
+
+    }
+    .faq-item {
+        padding: 10px 0;
+        cursor: pointer;
+        border-bottom: 1px solid #ebebeb;
+        .h4 {
+            color: #393939;
+        }
+
+        &:hover {
+            .h4 {
+                color: #000000;
+            }
+        }
+
+        &.active {
+            .faq-content {
+                max-height: 500px; // Adjust this value as necessary
+
+                .h4 {
+                    color: #000000;
+                }
+            }
+        }
+
+        .faq-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease-in-out, padding 0.4s ease-in-out;
+            padding: 0;
+            display: block;
+            margin-top: 10px;
+        }
+
+        .question {
+            cursor: pointer;
+            display: block;
+            
+        }
+        &:last-child {
+        	border: none;
+        }
+    }
+}
+
+	
+
+	
+
+
+	.product.info {
+		#product-review-container {
+			width: 100%;
+			#customer-reviews-container {
+				display: flex;
+			}
+			.mw-grid-left {
+				width: 45%;
+			}
+			.mw-grid-right {
+				width: 55%;
+				.mw-user__name {
+					display: flex;
+					align-items: center;
+					gap: 10px;
+				}
+				.stars-and-title {
+					margin-bottom: 15px;
+					margin-top: 15px;
+					display: flex;
+					align-items: center;
+					.mw-review__rating {
+						margin-bottom: 0px;
+						.mw-rating__result {
+							margin-bottom: 0px;
+						}
+					}
+					.mw-review__title {
+						margin-bottom: 0px;
+					}
+				}
+				.mw-gallery.mw-review__photos {
+					padding-top: 0px;
+					border-top: 0px;
+					border-bottom: 1px solid #c1c1c1;
+					padding-bottom: 25px;
+				}
+			}
+
+		}
+		.button-bottom-review {
+			position: relative;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			width: 100%;
+		}
+	}
+	.interior-photo {
+			margin-top: 20px;
+			margin-bottom: 15px;
+		    .image-interior {
+		    	
+		    	.image {
+		    		height: 400px;
+		    		background-size: cover !important;
+		    		background-position: bottom !important;
+		    		width: 100%;
+		    		border-radius: 15px;
+		    	}
+		    }
+		    .interior-text {
+		    	
+		    }
+
+	}
+	.box-tocart {
+		border: none;
+	}
+	.price-for-pcs {
+		text-transform: lowercase;
+		font-size: 14px;
+		color: @color_dark_gray;
+		display: none;
+	}
+	.catalog-product-view {
+		.price-for-pcs {
+			display: block;
+		}
+	}
+	.product-item-actions {
+		display: none;
+	}
+	.add-to-cart-payment {
+		margin-top: 0px;
+		margin-bottom: 10px !important;
+		flex-wrap: wrap;
+		img {
+			height: 28px;
+			border: 1px solid @color_light_gray;
+			border-radius: 3px;
+			width: auto;
+		}
+	}
+	.box-tocart {
+    .fieldset {
+        .actions .action.primary.tocart {
+            width: 100%;
+            height: 58px;
+        }
+        .field.qty .input-text.qty {
+            height: 58px;
+        }
+    }
+}
+
+	.contact_us_bar_widget {
+		border: 2px solid #f3f4f6;
+		border-radius: 8px;
+		padding: 20px;
+		width: max-content;
+		img {
+		width: 75px;
+		height: 75px;
+		border-radius: 100%;	
+		}
+		.cta-block {
+			margin-top: 10px;
+		}
+		.main_text {
+			margin-bottom: 5px;
+		}
+		.long_text {
+			font-size: 14px;
+		}
+		.contact-us-text {
+			padding-right: 10px;
+		}
+		.image-container {
+		    height: max-content;
+		    position: relative;
+		    &:after {
+		    	content: "";
+		    	    position: absolute;
+		    	    top: 0px;
+		    	    left: 10px;
+		    	    height: 15px;
+		    	    width: 15px;
+		    	    background: #24ff24;
+		    	    border-radius: 100%;
+		    	    border: 3px solid white;
+		    }
+		}
+	}
+// Mobile
+	 @media @media-md-down {
+	 	.contact_us_bar_widget {
+	 		margin-bottom: 20px;
+	 		width: 100%;
+	 		img {
+	 			width: 60px;
+	 			min-width: 60px;
+	 			min-height: 60px;
+	 			height: 60px;
+	 			&:after {
+	 				height: 12px;
+	 				width: 12px;
+	 				left: 6px;
+	 			}
+	 		}
+	 	}
+	 	.faq-container {
+	 		.accordion {
+	 			padding: 20px 20px;
+	 		}
+	 		.faq-item {
+	 			.h4 {
+	 				font-size: 16px;
+	 			}
+	 			p {
+	 				font-size: 14px;
+	 			}
+	 		}
+	 	}
+	 }
+	 .product.info.detailed {
+	 	border-bottom: 2px solid #f3f4f6 !important;
+	 	.data.item.title {
+	 		
+	 		border-top: 2px solid #f3f4f6;
+	 		&.last {
+	 			border-bottom-color: none;
+	 			&+.data.item.content {
+	 				padding-bottom: 20px;
+	 			}
+	 		}
+	 	}
+	 	
+	 }
+
+}	 
+
+
+// (max-width: 767.98px) @sm-max
+ @media @media-md-down { 
+ 	.catalog-product-view {
+ 		.store-review {
+ 			margin-top: 30px;
+ 			padding-bottom: 0px;
+ 		}
+ 		.widget-recent {
+ 			margin-top: 30px;
+ 			.block-title {
+ 				padding-top: 0px !important;
+ 			}
+ 		}
+ 	}
+ 	.product.info.detailed {
+	 	border-bottom: 2px solid #f3f4f6 !important;
+	 	.data.item.title {
+	 		border: none;
+	 		border-top: 2px solid #f3f4f6;
+	 		&.last {
+	 			border-bottom-color: none;
+	 			&+.data.item.content {
+	 				padding-bottom: 20px;
+	 			}
+	 		}
+	 	}
+	 	
+	 }
+ 	.catalog-product-view {
+ 			.page-title {
+ 				font-size: 26px;
+ 				display: flex;
+ 				line-height: normal;
+ 			}
+ 	}
+	.interior-photo {
+	 	.image-interior {
+	 		.image {
+	 			height: 260px;
+	 		}
+	 	} 
+	 }
+}

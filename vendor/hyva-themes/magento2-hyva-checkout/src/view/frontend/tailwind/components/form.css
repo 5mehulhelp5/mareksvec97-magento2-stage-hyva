@@ -1,0 +1,18 @@
+:where(#hyva-checkout-main) {
+    & .form-input,
+    & .form-email,
+    & .form-select,
+    & .form-multiselect,
+    & .form-textarea {
+        @apply hyva-checkout-border-slate-300 hyva-checkout-text-slate-700;
+    }
+
+    & .form-checkbox,
+    & .form-radio {
+        @apply w-5 h-5 flex-none cursor-pointer disabled:cursor-not-allowed disabled:opacity-60;
+    }
+
+    & .form-checkbox {
+        @apply rounded;
+    }
+}

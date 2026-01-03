@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
+    <!-- Add own columns to admin review grid -->
+    <event name="backend_block_widget_grid_prepare_grid_before">
+        <observer name="mageworx_xreviewbase_add_columns_to_grid" instance="MageWorx\XReviewBase\Observer\Adminhtml\AddColumnsToReviewGridObserver" />
+    </event>
+    <!-- Save media relations  -->
+    <event name="review_save_after">
+        <observer name="mageworx_xreviewbase_review_save_media" instance="MageWorx\XReviewBase\Observer\Adminhtml\SaveReviewMediaObserver" />
+    </event>
+    <!-- Add media data to review on review loading -->
+    <event name="review_load_after">
+        <observer name="mageworx_xreviewbase_review_add_media" instance="MageWorx\XReviewBase\Observer\Adminhtml\AddMediaOnReviewLoadingObserver" />
+    </event>
+</config>

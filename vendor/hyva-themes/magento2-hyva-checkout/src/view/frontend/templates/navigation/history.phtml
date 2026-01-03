@@ -1,0 +1,75 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2022-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+declare(strict_types=1);
+
+use Hyva\Checkout\Model\Navigation\Checkout;
+use Hyva\Checkout\ViewModel\Navigation;
+use Hyva\Theme\Model\ViewModelRegistry;
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Element\Template;
+
+/** @var Template $block */
+/** @var ViewModelRegistry $viewModels */
+/** @var Escaper $escaper */
+/** @var Checkout $checkout */
+
+/** @var Navigation $navigation */
+$navigation = $viewModels->require(Navigation::class);
+
+$navigator = $navigation->getNavigator();
+$checkout  = $navigator->getActiveCheckout();
+?>
+
+<?php if ($checkout->hasSteps() && $checkout->isMultiStepper()): ?>
+    <?php $previous = $checkout->getStepBefore($navigator->getActiveStep()) ?>
+    <?php $next = $checkout->getStepAfter($navigator->getActiveStep()) ?>
+
+    <?php if ($navigation->getSystemConfig()->showNavigationBackButton()): ?>
+        <?php if ($previous): ?>
+            <button
+                type="button"
+                rel="prev"
+                class="group btn btn-secondary justify-center relative"
+                data-route="<?= $escaper->escapeHtmlAttr($previous->getRoute()) ?>"
+                x-bind="buttonPrevious"
+            >
+                <span class="group-disabled:invisible">
+                    <?= $escaper->escapeHtml(__('Back to %1', __($previous->getLabel('previous step')))) ?>
+                </span>
+
+                <span class="hidden group-disabled:flex absolute inset-0 justify-center items-center p-2">
+                    <?= $block->getChildHtml('loader') ?>
+                </span>
+            </button>
+        <?php elseif ($navigation->getSystemConfig()->showNavigationBackToCartButton()): ?>
+            <a
+                href="<?= $escaper->escapeUrl($block->getUrl('checkout/cart')) ?>"
+                class="btn btn-secondary"
+            ><?= $escaper->escapeHtml(__('Back to Cart')) ?></a>
+        <?php endif ?>
+    <?php endif ?>
+
+    <?php if ($next): ?>
+        <button
+            type="button"
+            rel="next"
+            class="group btn btn-primary justify-center  relative"
+            data-route="<?= $escaper->escapeHtmlAttr($next->getRoute()) ?>"
+            x-bind="buttonNext"
+        >
+            <span class="group-disabled:invisible">
+                <?= $escaper->escapeHtml(__('Proceed to %1', __($next->getLabel('next step')))) ?>
+            </span>
+
+            <span class="hidden group-disabled:flex absolute inset-0 justify-center items-center p-2">
+                <?= $block->getChildHtml('loader') ?>
+            </span>
+        </button>
+    <?php endif ?>
+<?php endif ?>

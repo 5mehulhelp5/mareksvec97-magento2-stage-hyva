@@ -1,0 +1,48 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2022-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+declare(strict_types=1);
+
+use Hyva\Theme\ViewModel\HyvaCsp;
+
+/** @var HyvaCsp $hyvaCsp */
+?>
+<script>
+    function hyvaCheckoutTermsAndConditions() {
+        return hyva.createBooleanObject('visible', false, {
+            element: this.$el,
+            hasError: false,
+
+            updateErrorMessage() {
+                this.hasError = ('terms' in this.$event.detail) && this.$event.detail.terms.includes(this.element.dataset.agreementId)
+            },
+            acceptTerms() {
+                this.setVisibleFalse()
+                this.$wire.set('termAcceptance.' + this.element.dataset.agreementId, true)
+            },
+            denyTerms() {
+                this.setVisibleFalse()
+                this.$wire.set('termAcceptance.' + this.element.dataset.agreementId, false)
+            },
+            updateErrorIfNotAccepted() {
+                this.hasError = this.hasError && ! this.$event.target.checked
+            },
+            errorClasses() {
+                return {
+                    'text-red-600': this.hasError,
+                    'text-slate-700': !this.hasError
+                }
+            }
+        })
+    }
+
+    window.addEventListener('alpine:init', () => {
+        Alpine.data('hyvaCheckoutTermsAndConditions', hyvaCheckoutTermsAndConditions)
+    }, { once: true })
+</script>
+<?php $hyvaCsp->registerInlineScript() ?>

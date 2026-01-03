@@ -1,0 +1,102 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2022-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+declare(strict_types=1);
+
+use Hyva\Theme\ViewModel\HyvaCsp;
+use Magento\Framework\Escaper;
+
+/** @var Escaper $escaper */
+/** @var HyvaCsp $hyvaCsp */
+?>
+<div x-data="hyvaCheckoutMagewirePluginError"
+     x-on:checkout:navigation:out-of-sync.window="reloadPage"
+>
+    <div x-cloak
+         x-bind="overlay"
+         class="fixed inset-0 flex items-center justify-center text-left bg-black bg-opacity-50"
+    >
+        <div x-ref="dialog"
+             role="dialog"
+             aria-labelledby="checkout-navigation-out-of-sync-dialog-label"
+             class="inline-block max-w-2xl mx-4 max-h-screen overflow-auto bg-white shadow-xl rounded-lg p-6 text-gray-700"
+        >
+            <div class="border-b border-gray-400 pb-1 mb-6">
+                <h2 class="flex items-center text-gray-800 text-xl font-medium">
+                    <?= $escaper->escapeHtml(__('Information has been updated')) ?>
+                </h2>
+            </div>
+
+            <div class="text-center space-y-4">
+                <p class="px-4 py-2 md:text-xl">
+                    <?= $escaper->escapeHtml(
+                        __('Your checkout information has been updated in the background. Please refresh the page to continue the checkout process in this window.')
+                    ) ?>
+                </p>
+            </div>
+
+            <div class="flex flex-col-reverse justify-between md:flex-row
+                        gap-y-2 md:gap-x-2 mt-6
+                        w-full
+                        md:items-center"
+            >
+                <button type="button"
+                        x-on:click="cancel"
+                        class="btn"
+                >
+                    <?= $escaper->escapeHtml(__('Close')) ?>
+                </button>
+
+                <button type="button"
+                        x-on:click="ok"
+                        class="btn btn-primary"
+                        x-focus-first
+                >
+                    <?= $escaper->escapeHtml(__('Refresh page')) ?>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    window.addEventListener('checkout:init:navigation', () => {
+        let storage = localStorage.getItem('hyva_checkout')
+
+        if (storage === '{}' || storage === null) {
+            storage = localStorage.getItem('hyva_checkout') || {}
+        }
+        if (typeof storage === 'string') {
+            storage = JSON.parse(storage)
+        }
+
+        const setLocalStorageItem = function (key, value, merge = false) {
+            if (merge && storage[key] && typeof storage[key] === 'object') {
+                storage[key] = Object.assign(storage[key], value)
+            } else {
+                storage[key] = value
+            }
+
+            localStorage.setItem('hyva_checkout', JSON.stringify(storage))
+        }
+
+        window.addEventListener('checkout:navigation:success', event => {
+            setLocalStorageItem('navigation', event.detail)
+        })
+
+        window.addEventListener('storage', event => {
+            if (event.key === 'hyva_checkout') {
+                window.dispatchEvent(new Event('checkout:navigation:out-of-sync'))
+            }
+        })
+
+        window.addEventListener('order:place:success', event => {
+            localStorage.removeItem('hyva_checkout')
+        })
+    })
+</script>
+<?php $hyvaCsp->registerInlineScript() ?>

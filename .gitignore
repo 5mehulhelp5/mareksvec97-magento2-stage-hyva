@@ -1,0 +1,57 @@
+# ------------------------
+# Citlivé konfigy
+# ------------------------
+/app/etc/env.php
+/pub/errors/local.xml
+.env
+.env.*
+
+# ------------------------
+# Cache, logy, generované súbory
+# ------------------------
+/var/*
+!/var/.htaccess
+
+/generated/*
+/dev/*
+!/generated/.htaccess
+
+/pub/static/*
+!/pub/static/.htaccess
+
+# Ak nechceš mať media v Gite (odporúčam pri produkcii):
+/pub/media/*
+/pub/*
+/setup/*
+/lib/*
+!/pub/media/.htaccess
+
+# ------------------------
+# Vendor (Composer balíčky)
+/vendor/*
+!/vendor/hyva-themes/
+
+# ------------------------
+# IDE / editor
+# ------------------------
+.idea/
+.vscode/
+*.iml
+
+# ------------------------
+# Node / frontend
+# ------------------------
+node_modules/
+bower_components/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# ------------------------
+# Ostatné
+# ------------------------
+.DS_Store
+Thumbs.db
+*.log
+.sass-cache/
+.cache/

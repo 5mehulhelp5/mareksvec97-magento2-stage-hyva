@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <seofriendlyimages>
+            <general>
+                <enabled>1</enabled>
+                <append_category>0</append_category>
+                <custom_pattern>0</custom_pattern>
+                <filename_pattern>{{product.name}}</filename_pattern>
+                <use_symlink>0</use_symlink>
+                <overwrite_alt>{{product.name}}</overwrite_alt>
+                <alt_pattern>0</alt_pattern>
+            </general>
+        </seofriendlyimages>
+    </default>
+</config>

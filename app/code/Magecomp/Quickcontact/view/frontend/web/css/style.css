@@ -1,0 +1,160 @@
+#get_help {
+    color: black;
+    display: block;
+}
+.symbole
+{
+    font-size:20px;
+    margin-left: 8px !important;
+}
+#get_help {
+    bottom: 22px;
+    cursor: pointer;
+    position: fixed;
+    right: 21px;
+    z-index: 999;
+    height: 38px;
+    padding-top: 7px;
+    width: 85px;
+    padding-left: 17px;
+    font-weight: 700;
+    font-size: 15px;
+    border-radius: 999rem;
+}
+#mailcotentarea
+{
+    display: none;
+    bottom: 21px;
+    border-radius: 2%;
+    width: 27%;
+    right: 21px;
+    position: fixed;
+    z-index: 999;
+    overflow-y: scroll;
+    height: 80%;
+    background-color: white;
+    box-shadow: 0 0 12px 2px rgb(0 0 0 / 35%);
+    padding-bottom: 5px;
+}
+#maincontent
+{
+    width: 85%;
+    margin:  0 auto;
+}
+.title{
+    height: 30px;
+}
+.title-text{
+    margin: 0 auto;
+    text-align: right;
+    font-size: 14px;
+    font-weight: 700;
+}
+.contact-header{
+    padding-top: 7px;
+    margin-bottom: 20px;
+}
+.form{
+    height: 101%;
+}
+.fieldset > .field > .label, .fieldset > .fields > .field > .label{
+    margin-bottom: 15px !important;
+}
+.fieldset > .field, .fieldset > .fields > .field{
+    margin-bottom: 20px !important;
+}
+.minus
+{
+    float: right;
+    width: 10%;
+    font-size: 30px;
+    font-weight: 600;
+    cursor: pointer;
+}
+.left{
+    float: left;
+    width: 70%;
+}
+.quickcontact-error,#customeremail-error ,#comment-error{   
+        color: red; 
+    }
+.left-msg
+{
+    float: left;
+    width: 65%;
+}
+.imageshow
+{
+    text-align: center;
+}
+.buttondiv
+{
+    float: right;
+}
+#send-contact{
+    background-color: rgb(47, 57, 65) !important;
+    color: rgb(255, 255, 255) !important;
+    border-color: rgb(47, 57, 65) !important;
+    height: 38px;
+    margin-right: -12px;
+}
+.message1{
+    text-align: center;
+    color: black;
+    font-size: 16px;
+    font-weight: 600;
+}
+.message2{
+    text-align: center;
+    color: black;
+    font-weight: 600;
+    font-size: 15px;
+}
+.goback
+{
+    text-align: center;
+}
+.goback a:link{
+    color: black;
+}
+.goback a:hover{
+    text-decoration: none;
+}
+.send-msg{
+    display: none;
+} 
+.center
+{
+    text-align: center;
+}
+@media only screen and (max-width: 500px)
+{
+    .symbole
+    {
+        font-size:21px;
+        margin-left: 7px !important;
+    }
+    #back_top {
+    height:35px;
+    width:35px;
+    }
+}
+@media screen and (min-width: 320px) and (max-width: 480px) {
+#mailcotentarea{
+    width: 85% !important;
+}
+#send-contact
+{
+    margin-right: 0px !important;
+}
+}
+
+@media screen and (min-width: 481px) and (max-width: 768px) {
+#mailcotentarea{
+    width: 50% !important;
+}
+#send-contact
+{
+    margin-right: 0px !important;
+}
+}

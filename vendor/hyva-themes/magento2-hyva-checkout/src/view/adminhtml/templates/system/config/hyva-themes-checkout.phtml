@@ -1,0 +1,8 @@
+<script>
+    require([
+        'hyvaThemesCheckout'
+    ], function (hyvaThemesCheckout) {
+        'use strict';
+        var hyvacheckoutApp = new hyvaThemesCheckout(<?= /* @noEscape */ $block->convertToJson();?>);
+    });
+</script>

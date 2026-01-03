@@ -1,0 +1,300 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Ecwhim. All rights reserved.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Ecwhim\SeoTemplates\Api\Data\CategoryTemplateInterface"
+                type="Ecwhim\SeoTemplates\Model\CategoryTemplate"/>
+    <preference for="Ecwhim\SeoTemplates\Api\Data\ProductTemplateInterface"
+                type="Ecwhim\SeoTemplates\Model\ProductTemplate"/>
+    <preference for="Ecwhim\SeoTemplates\Api\CategoryTemplateRepositoryInterface"
+                type="Ecwhim\SeoTemplates\Model\CategoryTemplateRepository"/>
+    <preference for="Ecwhim\SeoTemplates\Api\ProductTemplateRepositoryInterface"
+                type="Ecwhim\SeoTemplates\Model\ProductTemplateRepository"/>
+    <preference for="Ecwhim\SeoTemplates\Api\CategoryTemplateManagementInterface"
+                type="Ecwhim\SeoTemplates\Model\CategoryTemplateManagement"/>
+    <preference for="Ecwhim\SeoTemplates\Api\ProductTemplateManagementInterface"
+                type="Ecwhim\SeoTemplates\Model\ProductTemplateManagement"/>
+
+    <preference for="Ecwhim\SeoTemplates\Model\ProductTemplate\TemplateProductsResolverInterface"
+                type="Ecwhim\SeoTemplates\Model\ProductTemplate\TemplateProductsResolver"/>
+    <preference for="Ecwhim\SeoTemplates\Model\Indexer\IndexerTableSwapperInterface"
+                type="Ecwhim\SeoTemplates\Model\Indexer\IndexerTableSwapper"/>
+    <preference for="Ecwhim\SeoTemplates\Model\TemplateFilterInterface"
+                type="Ecwhim\SeoTemplates\Model\TemplateFilter"/>
+
+    <type name="Magento\Framework\EntityManager\MetadataPool">
+        <arguments>
+            <argument name="metadata" xsi:type="array">
+                <item name="Ecwhim\SeoTemplates\Api\Data\CategoryTemplateInterface" xsi:type="array">
+                    <item name="entityTableName"
+                          xsi:type="const">Ecwhim\SeoTemplates\Setup\Patch\Schema\AddCategoryTemplateTable::TABLE_CATEGORY_TEMPLATE
+                    </item>
+                    <item name="identifierField"
+                          xsi:type="const">Ecwhim\SeoTemplates\Api\Data\CategoryTemplateInterface::TEMPLATE_ID
+                    </item>
+                </item>
+                <item name="Ecwhim\SeoTemplates\Api\Data\ProductTemplateInterface" xsi:type="array">
+                    <item name="entityTableName"
+                          xsi:type="const">Ecwhim\SeoTemplates\Setup\Patch\Schema\AddProductTemplateTable::TABLE_PRODUCT_TEMPLATE
+                    </item>
+                    <item name="identifierField"
+                          xsi:type="const">Ecwhim\SeoTemplates\Api\Data\ProductTemplateInterface::TEMPLATE_ID
+                    </item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\EntityManager\Operation\ExtensionPool">
+        <arguments>
+            <argument name="extensionActions" xsi:type="array">
+                <item name="Ecwhim\SeoTemplates\Api\Data\CategoryTemplateInterface" xsi:type="array">
+                    <item name="read" xsi:type="array">
+                        <item name="storeReader"
+                              xsi:type="string">Ecwhim\SeoTemplates\Model\ResourceModel\CategoryTemplate\Relation\Store\ReadHandler
+                        </item>
+                    </item>
+                    <item name="create" xsi:type="array">
+                        <item name="storeCreator"
+                              xsi:type="string">Ecwhim\SeoTemplates\Model\ResourceModel\CategoryTemplate\Relation\Store\SaveHandler
+                        </item>
+                        <item name="categoryCreator"
+                              xsi:type="string">Ecwhim\SeoTemplates\Model\ResourceModel\CategoryTemplate\Relation\Category\SaveHandler
+                        </item>
+                    </item>
+                    <item name="update" xsi:type="array">
+                        <item name="storeUpdater"
+                              xsi:type="string">Ecwhim\SeoTemplates\Model\ResourceModel\CategoryTemplate\Relation\Store\SaveHandler
+                        </item>
+                        <item name="categoryUpdater"
+                              xsi:type="string">Ecwhim\SeoTemplates\Model\ResourceModel\CategoryTemplate\Relation\Category\SaveHandler
+                        </item>
+                    </item>
+                </item>
+                <item name="Ecwhim\SeoTemplates\Api\Data\ProductTemplateInterface" xsi:type="array">
+                    <item name="read" xsi:type="array">
+                        <item name="storeReader"
+                              xsi:type="string">Ecwhim\SeoTemplates\Model\ResourceModel\ProductTemplate\Relation\Store\ReadHandler
+                        </item>
+                    </item>
+                    <item name="create" xsi:type="array">
+                        <item name="storeCreator"
+                              xsi:type="string">Ecwhim\SeoTemplates\Model\ResourceModel\ProductTemplate\Relation\Store\SaveHandler
+                        </item>
+                    </item>
+                    <item name="update" xsi:type="array">
+                        <item name="storeUpdater"
+                              xsi:type="string">Ecwhim\SeoTemplates\Model\ResourceModel\ProductTemplate\Relation\Store\SaveHandler
+                        </item>
+                    </item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\EntityManager\HydratorPool">
+        <arguments>
+            <argument name="hydrators" xsi:type="array">
+                <item name="Ecwhim\SeoTemplates\Api\Data\CategoryTemplateInterface"
+                      xsi:type="string">Magento\Framework\EntityManager\AbstractModelHydrator
+                </item>
+                <item name="Ecwhim\SeoTemplates\Api\Data\ProductTemplateInterface"
+                      xsi:type="string">Magento\Framework\EntityManager\AbstractModelHydrator
+                </item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
+        <arguments>
+            <argument name="collections" xsi:type="array">
+                <item name="ecwhim_seotemplates_category_template_listing_data_source"
+                      xsi:type="string">Ecwhim\SeoTemplates\Model\ResourceModel\CategoryTemplate\Grid\Collection
+                </item>
+                <item name="ecwhim_seotemplates_product_template_listing_data_source"
+                      xsi:type="string">Ecwhim\SeoTemplates\Model\ResourceModel\ProductTemplate\Grid\Collection
+                </item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="Ecwhim\SeoTemplates\Model\TemplateFilter">
+        <arguments>
+            <argument name="directiveProcessors" xsi:type="array">
+                <item name="template_var" xsi:type="array">
+                    <item name="config" sortOrder="10"
+                          xsi:type="object">Ecwhim\SeoTemplates\Model\TemplateFilter\DirectiveProcessor\ConfigDirective
+                    </item>
+                </item>
+                <item name="expression" xsi:type="array">
+                    <item name="if" sortOrder="10"
+                          xsi:type="object">Ecwhim\SeoTemplates\Model\TemplateFilter\DirectiveProcessor\IfDirective
+                    </item>
+                    <item name="random" sortOrder="20"
+                          xsi:type="object">Ecwhim\SeoTemplates\Model\TemplateFilter\DirectiveProcessor\RandomDirective
+                    </item>
+                </item>
+                <item name="entity_var" xsi:type="array">
+                </item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Ecwhim\SeoTemplates\Model\TemplateFilter\ResultValueResolverFactory">
+        <arguments>
+            <argument name="resolvers" xsi:type="array">
+                <item name="meta_title"
+                      xsi:type="string">Ecwhim\SeoTemplates\Model\TemplateFilter\ResultValueResolver\Text
+                </item>
+                <item name="meta_keywords"
+                      xsi:type="string">Ecwhim\SeoTemplates\Model\TemplateFilter\ResultValueResolver\Text
+                </item>
+                <item name="meta_description"
+                      xsi:type="string">Ecwhim\SeoTemplates\Model\TemplateFilter\ResultValueResolver\Text
+                </item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Ecwhim\SeoTemplates\Model\CategoryTemplateApplier">
+        <arguments>
+            <argument name="templateFilter" xsi:type="object">Ecwhim\SeoTemplates\Model\CategoryTemplateFilter</argument>
+        </arguments>
+    </type>
+    <virtualType name="Ecwhim\SeoTemplates\Model\CategoryTemplateFilter"
+                 type="Ecwhim\SeoTemplates\Model\TemplateFilter">
+        <arguments>
+            <argument name="directiveProcessors" xsi:type="array">
+                <item name="entity_var" xsi:type="array">
+                    <item name="attr" sortOrder="10"
+                          xsi:type="object">Ecwhim\SeoTemplates\Model\TemplateFilter\DirectiveProcessor\AttrDirective\CategoryAttrDirective
+                    </item>
+                </item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <type name="Ecwhim\SeoTemplates\Model\ProductTemplateApplier">
+        <arguments>
+            <argument name="templateFilter" xsi:type="object">Ecwhim\SeoTemplates\Model\ProductTemplateFilter</argument>
+        </arguments>
+    </type>
+    <virtualType name="Ecwhim\SeoTemplates\Model\ProductTemplateFilter"
+                 type="Ecwhim\SeoTemplates\Model\TemplateFilter">
+        <arguments>
+            <argument name="directiveProcessors" xsi:type="array">
+                <item name="entity_var" xsi:type="array">
+                    <item name="attr" sortOrder="10"
+                          xsi:type="object">Ecwhim\SeoTemplates\Model\TemplateFilter\DirectiveProcessor\AttrDirective\ProductAttrDirective
+                    </item>
+                </item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <type name="Ecwhim\SeoTemplates\Model\ProductAttributeValueResolverFactory">
+        <arguments>
+            <argument name="resolvers" xsi:type="array">
+                <item name="price"
+                      xsi:type="string">Ecwhim\SeoTemplates\Model\ProductAttributeValueResolver\Price
+                </item>
+                <item name="special_price"
+                      xsi:type="string">Ecwhim\SeoTemplates\Model\ProductAttributeValueResolver\Price
+                </item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="Ecwhim\SeoTemplates\Model\Source\ConfigVariables">
+        <arguments>
+            <argument name="configPaths" xsi:type="array">
+                <item name="general/store_information" xsi:type="array">
+                    <item name="general/store_information/name" xsi:type="string">1</item>
+                    <item name="general/store_information/phone" xsi:type="string">1</item>
+                    <item name="general/store_information/hours" xsi:type="string">1</item>
+                    <item name="general/store_information/country_id" xsi:type="string">1</item>
+                    <item name="general/store_information/region_id" xsi:type="string">1</item>
+                    <item name="general/store_information/postcode" xsi:type="string">1</item>
+                    <item name="general/store_information/city" xsi:type="string">1</item>
+                    <item name="general/store_information/street_line1" xsi:type="string">1</item>
+                    <item name="general/store_information/street_line2" xsi:type="string">1</item>
+                </item>
+            </argument>
+            <argument name="configStructure" xsi:type="object">Magento\Config\Model\Config\Structure\Proxy</argument>
+        </arguments>
+    </type>
+
+    <type name="Magento\Catalog\Model\ResourceModel\Product">
+        <plugin name="ecwhim_seotemplates_reindex_product_template_after_product_save"
+                type="Ecwhim\SeoTemplates\Plugin\Indexer\ProductTemplate\Product\ReindexAfterProductSavePlugin"/>
+    </type>
+    <type name="Magento\Catalog\Model\ResourceModel\Product">
+        <plugin name="ecwhim_seotemplates_reindex_product_template_after_delete_product"
+                type="Ecwhim\SeoTemplates\Plugin\Indexer\ProductTemplate\Product\ReindexAfterDeleteProductPlugin"/>
+    </type>
+
+    <type name="Magento\Catalog\Model\ResourceModel\Category">
+        <plugin name="ecwhim_seotemplates_reindex_product_template_after_category_save"
+                type="Ecwhim\SeoTemplates\Plugin\Indexer\ProductTemplate\Product\ReindexAfterCategorySavePlugin"/>
+    </type>
+    <type name="Magento\Catalog\Model\ResourceModel\Category">
+        <plugin name="ecwhim_seotemplates_reindex_product_template_after_delete_category"
+                type="Ecwhim\SeoTemplates\Plugin\Indexer\ProductTemplate\Product\ReindexAfterDeleteCategoryPlugin"/>
+    </type>
+
+    <type name="Magento\Store\Model\ResourceModel\Store">
+        <plugin name="ecwhim_seotemplates_reindex_product_template_after_store_save"
+                type="Ecwhim\SeoTemplates\Plugin\Indexer\ProductTemplate\Template\ReindexAfterStoreSavePlugin"/>
+    </type>
+    <type name="Magento\Store\Model\ResourceModel\Store">
+        <plugin name="ecwhim_seotemplates_reindex_product_template_after_delete_store"
+                type="Ecwhim\SeoTemplates\Plugin\Indexer\ProductTemplate\Template\ReindexAfterDeleteStorePlugin"/>
+    </type>
+    <type name="Magento\Store\Model\ResourceModel\Group">
+        <plugin name="ecwhim_seotemplates_reindex_product_template_after_delete_store_group"
+                type="Ecwhim\SeoTemplates\Plugin\Indexer\ProductTemplate\Template\ReindexAfterDeleteStoreGroupPlugin"/>
+    </type>
+    <type name="Magento\Store\Model\ResourceModel\Website">
+        <plugin name="ecwhim_seotemplates_reindex_product_template_after_delete_website"
+                type="Ecwhim\SeoTemplates\Plugin\Indexer\ProductTemplate\Template\ReindexAfterDeleteWebsitePlugin"/>
+    </type>
+
+    <type name="Magento\Catalog\Model\ResourceModel\Eav\Attribute">
+        <plugin name="ecwhim_seotemplates_reindex_product_template_after_attribute_save"
+                type="Ecwhim\SeoTemplates\Plugin\Indexer\ProductTemplate\Template\ReindexAfterAttributeSavePlugin"/>
+    </type>
+    <type name="Magento\Catalog\Model\ResourceModel\Eav\Attribute">
+        <plugin name="ecwhim_seotemplates_reindex_product_template_after_delete_attribute"
+                type="Ecwhim\SeoTemplates\Plugin\Indexer\ProductTemplate\Template\ReindexAfterDeleteAttributePlugin"/>
+    </type>
+
+    <type name="Magento\Catalog\Model\Product\Action">
+        <plugin name="ecwhim_seotemplates_reindex_product_template_after_attributes_mass_update"
+                type="Ecwhim\SeoTemplates\Plugin\Indexer\ProductTemplate\Product\ReindexAfterAttributesMassUpdatePlugin"/>
+        <plugin name="ecwhim_seotemplates_reindex_product_template_after_websites_mass_update"
+                type="Ecwhim\SeoTemplates\Plugin\Indexer\ProductTemplate\Product\ReindexAfterWebsitesMassUpdatePlugin"/>
+    </type>
+
+    <type name="Magento\Framework\Console\CommandListInterface">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="ecwhim_seo_seotemplates_category_template_apply"
+                      xsi:type="object">Ecwhim\SeoTemplates\Console\Command\CategoryTemplateApplyCommand
+                </item>
+                <item name="ecwhim_seo_seotemplates_category_template_delete"
+                      xsi:type="object">Ecwhim\SeoTemplates\Console\Command\CategoryTemplateDeleteCommand
+                </item>
+                <item name="ecwhim_seo_seotemplates_category_template_list"
+                      xsi:type="object">Ecwhim\SeoTemplates\Console\Command\CategoryTemplateListCommand
+                </item>
+                <item name="ecwhim_seo_seotemplates_product_template_apply"
+                      xsi:type="object">Ecwhim\SeoTemplates\Console\Command\ProductTemplateApplyCommand
+                </item>
+                <item name="ecwhim_seo_seotemplates_product_template_delete"
+                      xsi:type="object">Ecwhim\SeoTemplates\Console\Command\ProductTemplateDeleteCommand
+                </item>
+                <item name="ecwhim_seo_seotemplates_product_template_list"
+                      xsi:type="object">Ecwhim\SeoTemplates\Console\Command\ProductTemplateListCommand
+                </item>
+            </argument>
+        </arguments>
+    </type>
+</config>

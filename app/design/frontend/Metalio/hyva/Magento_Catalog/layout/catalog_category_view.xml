@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<page
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd"
+>
+    <body>
+    	<referenceBlock name="page.main.title">
+    	            <arguments>
+    	                <argument name="css_class" xsi:type="string">justify-start text-2xl md:text-3xl lg:text-4xl mb-8</argument>
+    	            </arguments>
+    	        </referenceBlock>
+        <referenceContainer name="category.view.container" htmlId="category-view-container-new" htmlClass="category-view container flex flex-col md:flex-row flex-wrap my-6 lg:mt-8 justify-start mb-8">
+            
+            <block class="Magento\Catalog\Block\Category\View" name="category.cms" template="Magento_Catalog::category/cms.phtml"/>
+        </referenceContainer>
+
+        <referenceBlock name="category.products.list">
+            <arguments>
+                <argument name="hide_rating_summary" xsi:type="boolean">false</argument>
+            </arguments>
+        </referenceBlock>
+        <referenceContainer name="footer">
+        	<container name="custom-production-form-benefits-wrapper" htmlTag="div" htmlClass="container" before="-">
+        	<block
+        	    name="custom.production.form"
+        	    template="Magento_Theme::elements/custom-production-form.phtml"   
+        	/>
+        </container>
+        </referenceContainer>
+
+
+        
+  		<referenceBlock name="category.image" remove="true"/>
+    </body>
+</page>

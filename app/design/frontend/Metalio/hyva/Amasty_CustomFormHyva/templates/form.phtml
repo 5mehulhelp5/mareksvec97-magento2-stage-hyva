@@ -1,0 +1,204 @@
+<?php
+/**
+ * @author Amasty Team
+ * @copyright Copyright (c) Amasty (https://www.amasty.com)
+ * @package Custom Form Compatibility with Hyva Theme
+ */
+/** @var Template $block */
+/** @var Escaper $escaper */
+/** @var StoreConfig $storeConfig */
+/** @var Hyva\Theme\ViewModel\Modal $modalViewModal */
+
+use Hyva\Theme\ViewModel\Modal;
+use Magento\Framework\View\Element\Template;
+use Amasty\Customform\Model\Config\GdprCustomform;
+use Magento\Framework\Escaper;
+use Hyva\Theme\ViewModel\StoreConfig;
+
+$wrapperBlock = $block->getWrapperBlock();
+$viewModels = $block->getViewModels();
+$viewModel = $block->getViewModel();
+$currentForm = $block->getCurrentForm();
+$formData = $block->getFormData();
+$formId = $block->getFormId();
+$isSurvey = $block->getIsSurvey();
+$formParamsJson = $viewModel->getFormParamsJson();
+$modalViewModal = $viewModels->require(Modal::class);
+$storeConfig = $viewModels->require(StoreConfig::class);
+$googleApiKey = $storeConfig->getStoreConfig('amasty_customform/advanced/google_key');
+
+$requiredGroupClass = 'group-required';
+$formContentSelector = 'data-element="form-content"';
+?>
+
+<form class="rendered-form amform-form <?= $escaper->escapeHtml($wrapperBlock->getAdditionalClasses()) ?><?= (int)$isSurvey ? ' hidden ': '' ?>"
+      id="amform-form-<?= (int)$formId ?>"
+      action="<?= $escaper->escapeUrl($viewModel->getFormAction()) ?>"
+      enctype="multipart/form-data" method="post">
+    <input name="form_key" type="hidden" value="<?= $escaper->escapeHtml($viewModel->getFormKey()) ?>" />
+    <input name="form_id" type="hidden" value="<?= (int)$formId ?>" />
+    <input name="is_survey" type="hidden" value="<?= (int)$isSurvey ?>" />
+    <div class="flex flex-col p-2 m-auto" <?= /* @noEscape */ $formContentSelector ?>
+        data-is-ajax="<?= $escaper->escapeHtmlAttr($currentForm->getSuccessUrl() === '/') ?>"
+        x-data="initFormEvents">
+        <?php if (count($formData) > 1): ?>
+            <div data-content-type="tabs" class="amcform-multi-page fieldset ui-tabs" data-tab-id="page-1">
+                <?= $block->getLayout()
+                    ->createBlock(Template::class)
+                    ->setTemplate("Amasty_CustomFormHyva::tabs-header.phtml")
+                    ->setData([
+                        'form_id' => $formId,
+                        'form_data' => $formData,
+                        'current_form' => $currentForm
+                    ])->toHtml(); ?>
+        <?php endif; ?>
+
+        <?php foreach ($formData as $key => $fieldset): ?>
+            <?php $currentTab = $key + 1 ?>
+            <div <?= count($formData) > 1 ? 'data-content-type="tab-item"' : '' ?>
+                class="grid gap-4 grid-cols-6 items-start"
+                id="page-<?= $escaper->escapeHtmlAttr($currentTab) ?>"
+                x-ref="page<?= /* @noEscape */ $currentTab . (int)$formId ?>"
+                data-tab-id="page-<?= $escaper->escapeHtmlAttr($currentTab) ?>"
+                x-show="showTab">
+
+                <?php foreach ($fieldset as $fieldKey => $field): ?>
+                    <?= $block->getLayout()
+                        ->createBlock(Template::class)
+                        ->setTemplate("Amasty_CustomFormHyva::fields.phtml")
+                        ->setData([
+                            'field' => $field,
+                            'form_id' => $formId,
+                            'field_key' => $fieldKey,
+                            'view_model' => $viewModel,
+                            'view_models' => $viewModels,
+                            'current_form' => $currentForm,
+                            'google_api_key' => $googleApiKey,
+                            'required_group_class' => $requiredGroupClass
+                        ])->toHtml(); ?>
+                <?php endforeach; ?>
+
+                <?php if (count($formData) > 1 && $key < (count($formData) - 1)): ?>
+                    <div class="col-span-6 amcform-toolbar flex align-center gap-x-2 justify-center mt-4">
+                        <?php if ($key > 0): ?>
+                            <span class="tab-header"
+                                  data-current-tab="<?= /* @noEscape */ $currentTab ?>"
+                                  data-form-id="<?= /* @noEscape */ (int)$formId ?>"
+                                  data-next="<?= $escaper->escapeHtmlAttr(false) ?>"
+                                  @click="toggleDisablingClass"
+                                  data-tab-id="page-<?= $escaper->escapeHtmlAttr($currentTab - 1) ?>"
+                                  @click.prevent="setActiveTab">
+                                <a href="#page-<?= $escaper->escapeHtmlAttr($currentTab - 1) ?>"
+                                   class="btn btn-primary justify-center"
+                                   data-tab-id="page-<?= $escaper->escapeHtmlAttr($currentTab - 1) ?>"
+                                   @click.prevent="setActiveTab">
+                                    <?= $escaper->escapeHtml('Previous') ?>
+                                </a>
+                            </span>
+                        <?php endif; ?>
+                        <span class="tab-header"
+                              data-current-tab="<?= /* @noEscape */ $currentTab + 1 ?>"
+                              data-form-id="<?= /* @noEscape */ (int)$formId ?>"
+                              data-next="<?= $escaper->escapeHtmlAttr(true) ?>"
+                              @click="toggleDisablingClass"
+                              data-tab-id="page-<?= $escaper->escapeHtmlAttr($currentTab + 1) ?>"
+                              @click.prevent="setActiveTab">
+                            <a href="#page-<?= $escaper->escapeHtmlAttr($currentTab + 1) ?>"
+                               class="btn btn-primary justify-center"
+                               data-current-tab="<?= /* @noEscape */ $currentTab ?>"
+                               data-form-id="<?= /* @noEscape */ (int)$formId ?>"
+                               @click="pageValidation"
+                               data-tab-id="page-<?= $escaper->escapeHtmlAttr($currentTab + 1) ?>"
+                               @click.prevent="setActiveTab">
+                                <?= $escaper->escapeHtml('Next') ?>
+                            </a>
+                        </span>
+                    </div>
+                <?php endif; ?>
+
+                <?php if (count($formData) === 1 || $key >= (count($formData) - 1)): ?>
+                    <?php if ($viewModel->isGDPREnabled()): ?>
+                            <div class="col-span-6 field required control" data-amcform-js="gdpr">
+                                <input class="amform-checkbox"
+                                       type="checkbox"
+                                       name="gdpr"
+                                       id="amcustom-form-gdpr-<?= (int)$formId ?>-form-<?= (int)$formId ?>"
+                                       title="<?= $escaper->escapeHtmlAttr(__('GDPR')); ?>"
+                                       value="1"
+                                       required />
+                                <label class="label inline-block">
+                                    <?= $escaper->escapeHtml($viewModel->getGDPRText(), ['a', 'span', 'b', 'br']) ?>
+                                </label>
+                                <span class="input-error-box block text-red-600 text-xs mt-1" style="display: none"></span>
+                            </div>
+                    <?php endif; ?>
+                    <?php $gdprCheckboxesHtml = $viewModel->getGdprCheckboxHtml($formId . GdprCustomform::CUSTOM_FORM); ?>
+                    <?php if (!empty($gdprCheckboxesHtml)): ?>
+                        <?= /** @noEscape */ $gdprCheckboxesHtml ?>
+                    <?php endif; ?>
+                    <div class="col-span-6 amcform-toolbar flex align-center gap-x-2 justify-center mt-4">
+                        <?php if (count($formData) > 1): ?>
+                            <span class="tab-header"
+                                  data-current-tab="<?= /* @noEscape */ $currentTab ?>"
+                                  data-form-id="<?= /* @noEscape */ (int)$formId ?>"
+                                  data-next="<?= $escaper->escapeHtmlAttr(false) ?>"
+                                  data-tab-id="page-<?= $escaper->escapeHtmlAttr($currentTab - 1) ?>"
+                                  @click.prevent="setActiveTab"
+                                  @click="toggleDisablingClass">
+                                <a href="#page-<?= $escaper->escapeHtmlAttr($currentTab - 1) ?>"
+                                   class="btn btn-primary justify-center"
+                                   data-tab-id="page-<?= $escaper->escapeHtmlAttr($currentTab - 1) ?>"
+                                   @click.prevent="setActiveTab">
+                                    <?= $escaper->escapeHtml(__('Previous')) ?>
+                                </a>
+                            </span>
+                        <?php endif; ?>
+
+                        <?php if ((int) $isSurvey): ?>
+                            <div>
+                                <?php $confirmation = $modalViewModal
+                                    ->confirm(__('This form can be submitted only once. Ready to proceed?'))
+                                    ->withTemplate('Amasty_CustomFormHyva::modal/confirmation.phtml')
+                                    ->withDialogRefName('am-custom-forms-survey-confirm-popup')
+                                    ->withOKLabel(__('Yes'))
+                                    ->withCancelLabel(__('No')) ?>
+                                <a href="" @click.prevent="submitSurveyForm"
+                                    data-current-tab="<?= /* @noEscape */ $currentTab ?>"
+                                    data-form-id="<?= /* @noEscape */ (int)$formId ?>"
+                                    type="button" class="btn btn-primary justify-center">
+                                    <span data-survey-trigger="confirmation-modal-trigger"
+                                          @click="getConfirmForm">
+                                    </span>
+                                    <?= $escaper->escapeHtml($viewModel->getButtonTitle()) ?>
+                                </a>
+                                <?=  /* @noEscape */ $confirmation ?>
+                            </div>
+                        <?php else: ?>
+                            <button type="submit"
+                                    data-current-tab="<?= /* @noEscape */ $currentTab ?>"
+                                    data-form-id="<?= /* @noEscape */ (int)$formId ?>"
+                                    class="btn btn-primary justify-center"
+                                    @click.prevent="processSubmit">
+                                <?= $escaper->escapeHtml($viewModel->getButtonTitle()) ?>
+                            </button>
+                        <?php endif; ?>
+                    </div>
+                <?php endif; ?>
+            </div>
+        <?php endforeach; ?>
+
+        <?php if (count($formData) > 1): ?>
+            </div>
+        <?php endif; ?>
+    </div>
+    <?= $block->getLayout()
+        ->createBlock(Template::class)
+        ->setTemplate("Amasty_CustomFormHyva::scripts.phtml")
+        ->setData([
+            'form_id' => (int)$formId,
+            'is_survey' => (int)$isSurvey,
+            'is_ajax' => $currentForm->getSuccessUrl() === '/',
+            'form_params_json' => $formParamsJson,
+            'google_api_key' => $googleApiKey
+        ])->toHtml(); ?>
+</form>

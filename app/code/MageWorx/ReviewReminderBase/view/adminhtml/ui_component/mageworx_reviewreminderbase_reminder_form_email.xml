@@ -1,0 +1,234 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © MageWorx. All rights reserved.
+ * See LICENSE.txt for license details.
+ */
+-->
+<form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <argument name="data" xsi:type="array">
+        <item name="js_config" xsi:type="array">
+            <item name="provider" xsi:type="string">mageworx_reviewreminderbase_reminder_form_email.reminder_form_data_source</item>
+        </item>
+        <item name="label" xsi:type="string" translate="true">Reminder Information</item>
+        <item name="template" xsi:type="string">templates/form/collapsible</item>
+    </argument>
+    <settings>
+        <buttons>
+            <button name="back" class="MageWorx\ReviewReminderBase\Block\Adminhtml\Reminder\Edit\Buttons\Back"/>
+            <button name="delete" class="MageWorx\ReviewReminderBase\Block\Adminhtml\Reminder\Edit\Buttons\Delete"/>
+            <button name="reset" class="MageWorx\ReviewReminderBase\Block\Adminhtml\Reminder\Edit\Buttons\Reset"/>
+            <button name="save" class="MageWorx\ReviewReminderBase\Block\Adminhtml\Reminder\Edit\Buttons\Save"/>
+            <button name="save_and_continue" class="MageWorx\ReviewReminderBase\Block\Adminhtml\Reminder\Edit\Buttons\SaveAndContinue"/>
+        </buttons>
+        <namespace>mageworx_reviewreminderbase_reminder_form_email</namespace>
+        <dataScope>data</dataScope>
+        <deps>
+            <dep>mageworx_reviewreminderbase_reminder_form_email.reminder_form_data_source</dep>
+        </deps>
+    </settings>
+    <dataSource name="reminder_form_data_source">
+        <argument name="data" xsi:type="array">
+            <item name="js_config" xsi:type="array">
+                <item name="component" xsi:type="string">Magento_Ui/js/form/provider</item>
+            </item>
+        </argument>
+        <settings>
+            <submitUrl path="mageworx_reviewreminderbase/reminder/save"/>
+        </settings>
+        <dataProvider class="MageWorx\ReviewReminderBase\Model\Reminder\DataProvider" name="reminder_form_data_source">
+            <settings>
+                <requestFieldName>reminder_id</requestFieldName>
+                <primaryFieldName>reminder_id</primaryFieldName>
+            </settings>
+        </dataProvider>
+    </dataSource>
+    <fieldset name="general">
+        <settings>
+            <label translate="true">Reminder Information</label>
+        </settings>
+        <field name="reminder_id" formElement="input" sortOrder="0">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">reminder</item>
+                </item>
+            </argument>
+            <settings>
+                <dataType>text</dataType>
+                <visible>false</visible>
+                <dataScope>reminder_id</dataScope>
+            </settings>
+        </field>
+        <field name="type" formElement="select" sortOrder="10">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">reminder</item>
+                    <item name="default" xsi:type="string">email</item>
+                </item>
+            </argument>
+            <settings>
+                <dataType>text</dataType>
+                <label translate="true">Type</label>
+                <dataScope>type</dataScope>
+                <visible>false</visible>
+                <validation>
+                    <rule name="required-entry" xsi:type="boolean">true</rule>
+                </validation>
+            </settings>
+            <formElements>
+                <select>
+                    <settings>
+                        <options class="MageWorx\ReviewReminderBase\Model\Reminder\Source\Type"/>
+                    </settings>
+                </select>
+            </formElements>
+        </field>
+        <field name="name" sortOrder="20" formElement="input">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">reminder</item>
+                    <item name="notice" xsi:type="string" translate="true">
+                        Internal name of the reminder. Visible in the back-end only.
+                    </item>
+                </item>
+            </argument>
+            <settings>
+                <validation>
+                    <rule name="required-entry" xsi:type="boolean">true</rule>
+                </validation>
+                <dataType>text</dataType>
+                <label translate="true">Name</label>
+                <dataScope>name</dataScope>
+                <validation>
+                    <rule name="required-entry" xsi:type="boolean">true</rule>
+                </validation>
+            </settings>
+        </field>
+        <field name="store_ids" formElement="multiselect" sortOrder="30">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">reminder</item>
+                    <item name="default" xsi:type="number">0</item>
+                    <item name="notice" xsi:type="string" translate="true">
+                        This setting defines the store views, for which the reviews reminder should be sent.
+                    </item>
+                </item>
+            </argument>
+            <settings>
+                <validation>
+                    <rule name="required-entry" xsi:type="boolean">true</rule>
+                </validation>
+                <dataType>int</dataType>
+                <label translate="true">Store Views</label>
+                <dataScope>store_ids</dataScope>
+            </settings>
+            <formElements>
+                <multiselect>
+                    <settings>
+                        <options class="Magento\Cms\Ui\Component\Listing\Column\Cms\Options"/>
+                    </settings>
+                </multiselect>
+            </formElements>
+        </field>
+        <field name="customer_group_ids" formElement="multiselect" sortOrder="40">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">reminder</item>
+                    <item name="default" xsi:type="null"/>
+                    <item name="notice" xsi:type="string" translate="true">
+                        This setting defines the customer groups, for which the reviews reminder should be sent.
+                    </item>
+                </item>
+            </argument>
+            <settings>
+                <validation>
+                    <rule name="required-entry" xsi:type="boolean">true</rule>
+                </validation>
+                <dataType>int</dataType>
+                <label translate="true">Customer Groups</label>
+                <dataScope>customer_group_ids</dataScope>
+            </settings>
+            <formElements>
+                <multiselect>
+                    <settings>
+                        <options class="MageWorx\ReviewReminderBase\Model\Reminder\Source\CustomerGroup"/>
+                    </settings>
+                </multiselect>
+            </formElements>
+        </field>
+        <field name="period" formElement="input" sortOrder="50">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">reminder</item>
+                </item>
+            </argument>
+            <settings>
+                <dataType>text</dataType>
+                <label translate="true">Sent In, days</label>
+                <dataScope>period</dataScope>
+                <validation>
+                    <rule name="required-entry" xsi:type="boolean">true</rule>
+                </validation>
+            </settings>
+        </field>
+        <field name="email_template_id" formElement="select" sortOrder="60">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">reminder</item>
+                    <item name="notice" xsi:type="string" translate="true">
+                        This email template will be used for the review reminder email.
+                    </item>
+                </item>
+            </argument>
+            <settings>
+                <dataType>text</dataType>
+                <label translate="true">Personal Email Template</label>
+                <dataScope>email_template_id</dataScope>
+            </settings>
+            <formElements>
+                <select>
+                    <settings>
+                        <options class="MageWorx\ReviewReminderBase\Source\EmailTemplates"/>
+                    </settings>
+                </select>
+            </formElements>
+        </field>
+        <field name="priority" formElement="input" sortOrder="70">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">reminder</item>
+                    <item name="notice" xsi:type="string" translate="true">
+                        The reminder with higher priority will be executed if several reminders match at least one same condition (reminder type, customer groups, store views, period).
+                    </item>
+                </item>
+            </argument>
+            <settings>
+                <dataType>text</dataType>
+                <label translate="true">Priority</label>
+                <dataScope>priority</dataScope>
+                <validation>
+                    <rule name="required-entry" xsi:type="boolean">true</rule>
+                </validation>
+            </settings>
+        </field>
+        <field name="status" formElement="select" sortOrder="80">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">reminder</item>
+                </item>
+            </argument>
+            <settings>
+                <dataType>text</dataType>
+                <label translate="true">Status</label>
+                <dataScope>status</dataScope>
+            </settings>
+            <formElements>
+                <select>
+                    <settings>
+                        <options class="MageWorx\ReviewReminderBase\Model\Reminder\Source\Status"/>
+                    </settings>
+                </select>
+            </formElements>
+        </field>
+    </fieldset>
+</form>

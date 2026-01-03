@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <!-- Root configuration attribute -->
+  <xs:element name="config" type="configType"/>
+
+  <!-- Step: layout update handles -->
+  <xs:complexType name="updateType" mixed="true">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute type="xs:string" name="handle" use="required"/>
+        <xs:attribute type="xs:boolean" name="remove"/>
+        <xs:attribute type="xs:string" name="if"/>
+        <xs:attribute type="xs:string" name="processor"/>
+        <xs:attribute type="xs:string" name="method"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+
+  <!-- Step: visibility conditions -->
+  <xs:complexType name="conditionType">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute type="xs:string" name="name" use="required"/>
+        <xs:attribute type="xs:string" name="if"/>
+        <xs:attribute type="xs:string" name="before"/>
+        <xs:attribute type="xs:string" name="after"/>
+        <xs:attribute type="xs:string" name="method"/>
+        <xs:attribute type="xs:boolean" name="remove" default="false"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+
+  <!-- Checkout: step -->
+  <xs:complexType name="stepType" mixed="true">
+    <xs:sequence minOccurs="0" maxOccurs="unbounded">
+      <xs:element type="updateType" name="update" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation xml:lang="en">Layout update handles</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+
+      <xs:element type="conditionType" name="condition" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation xml:lang="en">Visibility condition rules</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+
+    <!-- Step: available attributes -->
+    <xs:attribute type="xs:string" name="name" use="required"/>
+    <xs:attribute type="xs:string" name="label"/>
+    <xs:attribute type="xs:string" name="route"/>
+    <xs:attribute type="xs:string" name="before"/>
+    <xs:attribute type="xs:string" name="after"/>
+    <xs:attribute type="xs:boolean" name="remove" default="false"/>
+    <xs:attribute type="xs:string" name="ifconfig"/>
+    <xs:attribute type="xs:string" name="layout"/>
+    <xs:attribute type="xs:string" name="clone"/>
+  </xs:complexType>
+
+  <!-- Config: checkout -->
+  <xs:complexType name="checkoutType">
+    <xs:sequence minOccurs="0" maxOccurs="unbounded">
+      <!-- Checkout steps -->
+      <xs:element type="stepType" name="step" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation xml:lang="en">Checkout step</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+
+    <xs:attribute name="name" type="xs:string" use="required"/>
+    <xs:attribute name="label" type="xs:string"/>
+    <xs:attribute name="parent" type="xs:string"/>
+    <xs:attribute name="layout" type="xs:string"/>
+    <xs:attribute name="visible" type="xs:boolean" default="true"/>
+  </xs:complexType>
+
+  <!-- Root: configuration -->
+  <xs:complexType name="configType">
+    <xs:sequence>
+      <xs:element type="checkoutType" name="checkout" maxOccurs="unbounded" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>Checkout type</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>

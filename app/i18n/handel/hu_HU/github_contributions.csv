@@ -1,0 +1,97 @@
+"All the times are in minutes. Use ""0"" if you want to skip automatic clearance.","Teljes idő percben megadva. Használd a ""0"" ha átugranád az automatikus lenullázódást.",module,Magento_MysqlMq
+"Retry Messages In Progress After","Üzenetek újraküldése",module,Magento_MysqlMq
+"Successful Messages Lifetime","Összes sikeres üzenet",module,Magento_MysqlMq
+"Failed Messages Lifetime","Összes sikertelen üzenet",module,Magento_MysqlMq
+"New Messages Lifetime","Összes új üzenet",module,Magento_MysqlMq
+"Catalog Total Price (Excl. Tax)","Katalógus teljes ár (Nettó)",module,Magento_NegotiableQuote
+"Catalog Total Price (Incl. Tax)","Katalógus teljes ár (Bruttó)",module,Magento_NegotiableQuote
+"Catalog Total Price","Katalógus teljes ár",module,Magento_NegotiableQuote
+"Negotiated Discount","Kialkudott kedvezmény",module,Magento_NegotiableQuote
+"Back","Vissza",module,Magento_NegotiableQuote
+"Print","Nyomtat",module,Magento_NegotiableQuote
+"Save as Draft","Mentés vázlatként",module,Magento_NegotiableQuote
+"Decline","Elutasít",module,Magento_NegotiableQuote
+"Send","Küldés",module,Magento_NegotiableQuote
+"This action cannot be performed because you have products requiring attention. You must resolve these issues before you can continue.","Ez a művelet nem hajtható végre mert függőben lévő termékei vannak. Folytatás előtt ezeket fel kell oldania.",module,Magento_NegotiableQuote
+"Cannot Perform the Requested Action","A kért művelet nem teljesíthető",module,Magento_NegotiableQuote
+"%creator (for %customer)","%creator (for %customer)",module,Magento_NegotiableQuote
+"Items Quoted","Items Quoted",module,Magento_NegotiableQuote
+"Subtotal (Incl. Tax)","Részösszeg (Bruttó)",module,Magento_NegotiableQuote
+"Subtotal (Excl. Tax)","Részösszeg (Nettó)",module,Magento_NegotiableQuote
+"Add to Quote by SKU","Ajánlathoz ad SKU használatával",module,Magento_NegotiableQuote
+"Add to Quote","Ajánlathoz ad",module,Magento_NegotiableQuote
+"Cancel","Töröl",module,Magento_NegotiableQuote
+"Total Cost","Teljes összeg",module,Magento_NegotiableQuote
+"Negotiated Price","Kialkudott ár",module,Magento_NegotiableQuote
+"Shipping & Handling","Csomagolás és szállítás",module,Magento_NegotiableQuote
+"Quote Subtotal (Incl. Tax)","Quote Subtotal (Incl. Tax)",module,Magento_NegotiableQuote
+"Percentage Discount","Kedvezmény mértéke",module,Magento_NegotiableQuote
+"Amount Discount","Kedvezmény összege",module,Magento_NegotiableQuote
+"Proposed Price","Ajánlott ár",module,Magento_NegotiableQuote
+"Quote Subtotal","Quote Subtotal",module,Magento_NegotiableQuote
+"My Orders","Rendeléseim",module,Magento_NegotiableQuote
+"My Quotes","Ajánlataim",module,Magento_NegotiableQuote
+"created quote","ajánlat létrehozva",module,Magento_NegotiableQuote
+"closed quote","ajánlat lezárva",module,Magento_NegotiableQuote
+"updated quote","ajánlat frissítve",module,Magento_NegotiableQuote
+"Percentage Discount - %1%","Percentage Discount - %1%",module,Magento_NegotiableQuote
+"Amount Discount - %1","Kedvezmény összege - %1",module,Magento_NegotiableQuote
+"Proposed Price - %1","Ajánlott ár - %1",module,Magento_NegotiableQuote
+"None","Nincs",module,Magento_NegotiableQuote
+"Qty:","Mennyiség:",module,Magento_NegotiableQuote
+"Qty:","Mennyiség:",module,Magento_NegotiableQuote
+"- deleted from catalog","- törölve a katalógusból",module,Magento_NegotiableQuote
+"(Removed)","(Törölve)",module,Magento_NegotiableQuote
+"deleted","törölve",module,Magento_NegotiableQuote
+"Renderer list for block ""%1"" is not defined","Renderer list for block ""%1"" is not defined",module,Magento_NegotiableQuote
+"This quote is currently locked for editing. It will become available once released by the Merchant.","Ez az ajánlat nem szerkeszthető a kereskedő engedélyéig.",module,Magento_NegotiableQuote
+"Your quote has expired and the product prices have been updated as per the latest prices in your catalog. You can either re-submit the quote to seller for further negotiation or go to checkout.","Your quote has expired and the product prices have been updated as per the latest prices in your catalog. You can either re-submit the quote to seller for further negotiation or go to checkout.",module,Magento_NegotiableQuote
+"You are not an owner of this quote. You cannot edit it or take any actions on it.","You are not an owner of this quote. You cannot edit it or take any actions on it.",module,Magento_NegotiableQuote
+"Discount","Kedvezmény",module,Magento_NegotiableQuote
+"Estimated Tax","Becsült adó",module,Magento_NegotiableQuote
+"Quote Subtotal (Excl. Tax)","Ajánlat részösszege (Nettó)",module,Magento_NegotiableQuote
+"Quote Grand Total (Incl. Tax)","Ajánlat végösszege (Bruttó)",module,Magento_NegotiableQuote
+"Grand Total to Be Charged","Terhelendő teljes összeg",module,Magento_NegotiableQuote
+"Requested quote was not found","Kért ajánlat nem található",module,Magento_NegotiableQuote
+"Sales","Eladások",module,Magento_NegotiableQuote
+"Quotes","Ajánlatok",module,Magento_NegotiableQuote
+"Be the first to review this product","Legyen az első, aki értékeli a terméket",module,Magento_Review
+"Create an Account","Felhasználó létrehozása",module,Magento_Company
+"My Cart","Kosaram",module,Magento_Checkout
+"continue shopping","vásárlás folytatása",module,Magento_Worldpay
+"Continue Shopping","Vásárlás folytatása",module,Magento_Checkout
+"Stored Payment Methods","Stored Payment Methods",module,Magento_Vault
+"Billing Agreements","Számlázási megállapodások",module,Magento_Paypal
+"You aren't subscribed to our newsletter.","Ön nem iratkozott fel hírlevelünkre.",module,Magento_Customer
+"View All","Összes megtekintése",module,Magento_Review
+"View All","Összes megtekintése",module,Magento_Sales
+"Ship to:","Szállítási cím:",module,Magento_Sales
+"Ship To:","Szállítási cím:",module,Magento_Checkout
+"Ship to:","Szállítási cím:",module,Magento_Multishipping
+"Ship To","Szállítási cím",module,Magento_Paypal
+"You have no stored payment methods.","Nincsenek tárolt fizetési módjai.",module,Magento_Vault
+"There are no billing agreements yet.","Még nincsenek számlázási megállapodások.",module,Magento_Paypal
+"Be the first to review this product","Legyen Ön az első aki véleményt ír erről a termékről",module,Magento_Review
+"You added %1 product to your shopping cart.","%1 terméket a kosarába tett.",module,Magento_AdvancedCheckout
+"You added %1 products to your shopping cart.","%1 termékeket a kosarába tett.",module,Magento_AdvancedCheckout
+"You added product %1 to the comparison list.","%1 termék hozzáadva az összehasonlító listához.",module,Magento_Catalog
+"You added product %1 to the <a href=""%2"">comparison list</a>.","A %1 terméket hozzáadta a <a href=""%2"">comparison list</a>-hoz.",module,Magento_Catalog
+"You added %1 to your shopping cart.","%1 a kosárba került.",module,Magento_Checkout
+"You added %1 to your <a href=""%2"">shopping cart</a>.","You added %1 to your <a href=""%2"">shopping cart</a>.",module,Magento_Checkout
+"You added %1 item(s) to your shopping cart.","%1 termékeket hozzáadta kosarához.",module,Magento_RequisitionList
+"You added %1 to your shopping cart.","%1 a kosárba került.",module,Magento_AdvancedCheckout
+"Are you sure you would like to remove this item from the shopping cart?","Biztosan eltávolítja ezt a terméket a kosárból?",module,Magento_Checkout
+"The shipping method is missing. Select the shipping method and try again.","Hiányzik a szállítási mód. Válassza ki a szállítási módot, és próbálja újra.",module,Magento_Checkout
+"The shipping method is missing. Select the shipping method and try again.","Hiányzik a szállítási mód. Válassza ki a szállítási módot, és próbálja újra.",module,Magento_Quote
+"The shipping method is missing. Select the shipping method and try again.","Hiányzik a szállítási mód. Válassza ki a szállítási módot, és próbálja újra.",module,Magento_Sales
+"Ship Here","Szállítás ide",module,Magento_Checkout
+"Ship Here","Szállítás ide",module,Magento_GiftRegistry
+"Ship Here","Szállítás ide",module,Magento_NegotiableQuote
+"Check / Money Order","Átutalás",module,Magento_OfflinePayments
+"What is PayPal?","Mi a PayPal?",module,Magento_Paypal
+"Cash On Delivery Payment","Utánvétes fizetés",module,Magento_OfflinePayments
+"Bank Transfer Payment","Banki átutalásos fizetés",module,Magento_OfflinePayments
+"Order Total Incl. Tax","Vásárlás összege adóval",module,Magento_Tax
+"Order Total Excl. Tax","Vásárlás összege adó nélkül",module,Magento_Tax
+"You will be charged for","Fizetendő",module,Magento_Tax
+"You will be charged for","Fizetendő",module,Magento_CompanyCredit

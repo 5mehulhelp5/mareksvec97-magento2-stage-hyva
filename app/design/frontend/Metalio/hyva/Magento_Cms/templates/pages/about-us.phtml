@@ -1,0 +1,186 @@
+<?php
+/** @var \Magento\Framework\View\Element\Template $block */
+$escUrl  = [$block, 'escapeUrl'];
+$escAttr = [$block, 'escapeHtmlAttr'];
+
+/* --- media URL helper --- */
+$mediaBaseUrl = '';
+try {
+    if (method_exists($block, 'getStoreManager')) {
+        $mediaBaseUrl = $block->getStoreManager()->getStore()
+            ->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_MEDIA);
+    }
+} catch (\Throwable $e) { $mediaBaseUrl = ''; }
+if (!$mediaBaseUrl) {
+    $om = \Magento\Framework\App\ObjectManager::getInstance();
+    $storeManager = $om->get(\Magento\Store\Model\StoreManagerInterface::class);
+    $mediaBaseUrl = $storeManager->getStore()
+        ->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_MEDIA);
+}
+$media = function (string $path) use ($mediaBaseUrl, $escUrl): string {
+    return $escUrl($mediaBaseUrl . ltrim($path, '/'));
+};
+
+/* --- config helpery --- */
+$om = \Magento\Framework\App\ObjectManager::getInstance();
+/** @var \Magento\Framework\App\Config\ScopeConfigInterface $cfg */
+$cfg = $om->get(\Magento\Framework\App\Config\ScopeConfigInterface::class);
+$val = function (string $path, string $default = '') use ($cfg) {
+    $x = (string)$cfg->getValue($path, \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
+    return ($x !== '') ? $x : $default;
+};
+/* povolené HTML tagy pre obsah z configu */
+$allow = ['a','br','strong','em','u','ul','ol','li','p'];
+
+/* --- načítaj titles + html s fallbackom --- */
+$s1Title = $val('metalio_cms/about/s1_title', 'Všetko pod jednou strechou');
+$s1Html  = $val('metalio_cms/about/s1_html',
+    '<p>Veríme v poctivú prácu ... prvotriedne služby.</p>'
+);
+$s2Title = $val('metalio_cms/about/s2_title', 'Vlastný vývoj produktov');
+$s2Html  = $val('metalio_cms/about/s2_html',
+    '<p>Každý produkt ... premeníme vaše nápady na reality.</p>'
+);
+$s3Title = $val('metalio_cms/about/s3_title', 'Bezpečné doručenie priamo k vám');
+$s3Html  = $val('metalio_cms/about/s3_html',
+    '<p>V Metalio si dávame záležať ... spoľahlivosť prepravy.</p>'
+);
+$s4Title = $val('metalio_cms/about/s4_title', 'Naše poslanie a história');
+$s4Html  = $val('metalio_cms/about/s4_html',
+    '<p>Naša firemná cesta ... garantujeme kvalitu a presnosť.</p>'
+);
+
+$mHeading = $val('metalio_cms/about/machines_heading', 'Pálime a ohýbame na moderných strojoch');
+
+$m1Title = $val('metalio_cms/about/m1_title', 'Laser na plechy');
+$m1Html  = $val('metalio_cms/about/m1_html',
+    '<p>Fiber laser Bodor ... oceľ 20 mm, nerez 12 mm, hliník 10 mm.</p>'
+);
+$m2Title = $val('metalio_cms/about/m2_title', 'Trubkový laser');
+$m2Html  = $val('metalio_cms/about/m2_html',
+    '<p>3D trubkový laser Bodor ... 6 m, Ø 20–220 mm.</p>'
+);
+$m3Title = $val('metalio_cms/about/m3_title', 'Ohraňovací lis');
+$m3Html  = $val('metalio_cms/about/m3_html',
+    '<p><strong>WD67K Series CNC Hybrid Servo Press Brake</strong> ... presné CNC ohýbanie.</p>'
+);
+?>
+
+<section class="w-full">
+  <div class="mx-auto w-full">
+
+    <!-- 1) Všetko pod jednou strechou -->
+    <section class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+      <div class="overflow-hidden rounded-2xl ring-1 ring-black/5 shadow-sm bg-white order-1">
+        <img src="<?= $media('wysiwyg/Frame_5_1_1_.png') ?>"
+             alt="<?= $escAttr('Metalio – pôsobenie SK & CZ') ?>"
+             loading="lazy" class="w-full h-72 sm:h-80 lg:h-96 object-cover">
+      </div>
+      <div class="order-2">
+        <h2 class="text-xl md:text-2xl font-semibold text-[#1C1C1C]"><?= $escAttr($s1Title) ?></h2>
+        <div class="mt-2 space-y-3 text-[15px] leading-relaxed text-[#2C2C2C]">
+          <?= $s1Html; ?>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2) Vlastný vývoj produktov -->
+    <section class="mt-12 grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+      <div class="order-2 lg:order-1">
+        <h2 class="text-xl md:text-2xl font-semibold text-[#1C1C1C]"><?= $escAttr($s2Title) ?></h2>
+        <div class="mt-2 space-y-3 text-[15px] leading-relaxed text-[#2C2C2C]">
+          <?= $s2Html; ?>
+        </div>
+      </div>
+      <div class="overflow-hidden rounded-2xl ring-1 ring-black/5 shadow-sm bg-white order-1 lg:order-2">
+        <img src="<?= $media('wysiwyg/metalio-in-work_1_.jpg') ?>"
+             alt="<?= $escAttr('Metalio – vlastný vývoj a výroba') ?>"
+             loading="lazy" class="w-full h-72 sm:h-80 lg:h-96 object-cover">
+      </div>
+    </section>
+
+    <!-- 3) Bezpečné doručenie -->
+    <section class="mt-12 grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+      <div class="overflow-hidden rounded-2xl ring-1 ring-black/5 shadow-sm bg-white order-1">
+        <img src="<?= $media('wysiwyg/metalio-man.jpg') ?>"
+             alt="<?= $escAttr('Bezpečné balenie a doručenie') ?>"
+             loading="lazy" class="w-full h-72 sm:h-80 lg:h-96 object-cover">
+      </div>
+      <div class="order-2">
+        <h2 class="text-xl md:text-2xl font-semibold text-[#1C1C1C]"><?= $escAttr($s3Title) ?></h2>
+        <div class="mt-2 space-y-3 text-[15px] leading-relaxed text-[#2C2C2C]">
+          <?= $s3Html; ?>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4) Naše poslanie a história -->
+    <section class="mt-12 grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+      <div class="order-2 lg:order-1">
+        <h2 class="text-xl md:text-2xl font-semibold text-[#1C1C1C]"><?= $escAttr($s4Title) ?></h2>
+        <div class="mt-2 space-y-3 text-[15px] leading-relaxed text-[#2C2C2C]">
+          <?= $s4Html;?>
+        </div>
+      </div>
+      <div class="overflow-hidden rounded-2xl ring-1 ring-black/5 shadow-sm bg-white order-1 lg:order-2">
+        <img src="<?= $media('wysiwyg/metalio-laser_1.jpg') ?>"
+             alt="<?= $escAttr('Metalio – história a technológie') ?>"
+             loading="lazy" class="w-full h-72 sm:h-80 lg:h-96 object-cover">
+      </div>
+    </section>
+
+    <!-- Divider -->
+    <div class="my-12 h-[1px] w-full bg-gradient-to-r from-primary/60 to-transparent"></div>
+
+    <!-- Strojový blok -->
+    <header class="text-center">
+      <h2 class="text-2xl md:text-3xl font-semibold text-[#1C1C1C]"><?= $escAttr($mHeading) ?></h2>
+    </header>
+
+    <!-- Laser na plechy -->
+    <section class="mt-8 grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+      <div class="order-2 lg:order-1">
+        <h3 class="text-lg md:text-xl font-semibold text-[#1C1C1C]"><?= $escAttr($m1Title) ?></h3>
+        <div class="mt-2 space-y-3 text-[15px] leading-relaxed text-[#2C2C2C]">
+          <?= $m1Html; ?>
+        </div>
+      </div>
+      <div class="overflow-hidden order-1 lg:order-2">
+        <img src="<?= $media('wysiwyg/Frame_8.png') ?>"
+             alt="<?= $escAttr('Fiber laser na plechy') ?>"
+             loading="lazy" class="w-full">
+      </div>
+    </section>
+
+    <!-- Trubkový laser -->
+    <section class="mt-12 grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+      <div class="overflow-hidden order-1">
+        <img src="<?= $media('wysiwyg/Frame_7.png') ?>"
+             alt="<?= $escAttr('3D trubkový laser') ?>"
+             loading="lazy" class="w-full">
+      </div>
+      <div class="order-2">
+        <h3 class="text-lg md:text-xl font-semibold text-[#1C1C1C]"><?= $escAttr($m2Title) ?></h3>
+        <div class="mt-2 space-y-3 text-[15px] leading-relaxed text-[#2C2C2C]">
+          <?= $m2Html; ?>
+        </div>
+      </div>
+    </section>
+
+    <!-- Ohraňovací lis -->
+    <section class="mt-12 grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+      <div class="order-2 lg:order-1">
+        <h3 class="text-lg md:text-xl font-semibold text-[#1C1C1C]"><?= $escAttr($m3Title) ?></h3>
+        <div class="mt-2 space-y-3 text-[15px] leading-relaxed text-[#2C2C2C]">
+          <?= $m3Html; ?>
+        </div>
+      </div>
+      <div class="overflow-hidden order-1 lg:order-2">
+        <img src="<?= $media('wysiwyg/ohranovak2.png') ?>"
+             alt="<?= $escAttr('Ohraňovací lis – WD67K Series CNC Hybrid Servo Press Brake') ?>"
+             loading="lazy" class="w-full">
+      </div>
+    </section>
+
+  </div>
+</section>

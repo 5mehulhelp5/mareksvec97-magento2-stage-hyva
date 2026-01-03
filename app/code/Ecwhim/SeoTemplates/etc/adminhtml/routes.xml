@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Ecwhim. All rights reserved.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:App/etc/routes.xsd">
+    <router id="admin">
+        <route id="ecwhim_seotemplates" frontName="ecwhim_seotemplates">
+            <module name="Ecwhim_SeoTemplates"/>
+        </route>
+    </router>
+</config>

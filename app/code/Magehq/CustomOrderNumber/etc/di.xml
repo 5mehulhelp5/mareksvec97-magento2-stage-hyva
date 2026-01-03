@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Magehq
+ * 
+ * NOTICE OF LICENSE
+ * 
+ * This source file is subject to the mageqh.com license that is
+ * available through the world-wide-web at this URL:
+ * https://magehq.com/license.html
+ * 
+ * DISCLAIMER
+ * 
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ * 
+ * @category   Magehq
+ * @package    Magehq_CustomOrderNumber
+ * @copyright  Copyright (c) 2022 Magehq (https://magehq.com/)
+ * @license    https://magehq.com/license.html
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\Quote\Model\ResourceModel\Quote">
+        <plugin name="Magehq_CustomOrderNumber::manipulateReservedOrderId" type="Magehq\CustomOrderNumber\Plugin\Model\Quote\ResourceModel\QuotePlugin"/>
+    </type>
+    <type name="Magehq\CustomOrderNumber\Logger\Handler">
+        <arguments>
+            <argument name="filesystem" xsi:type="object">Magento\Framework\Filesystem\Driver\File</argument>
+        </arguments>
+    </type>
+    <type name="Magehq\CustomOrderNumber\Logger\Logger">
+        <arguments>
+            <argument name="name" xsi:type="string">magesalesLogger</argument>
+            <argument name="handlers" xsi:type="array">
+                <item name="system" xsi:type="object">Magehq\CustomOrderNumber\Logger\Handler</item>
+            </argument>
+        </arguments>
+    </type>
+</config>

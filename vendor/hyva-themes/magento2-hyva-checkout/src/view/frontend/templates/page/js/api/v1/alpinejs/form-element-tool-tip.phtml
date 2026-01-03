@@ -1,0 +1,54 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2022-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+declare(strict_types=1);
+
+use Hyva\Theme\ViewModel\HyvaCsp;
+
+/** @var HyvaCsp $hyvaCsp */
+?>
+    <script>
+        function hyvaCheckoutFormElementTooltip() {
+            return Object.assign(
+                hyva.createBooleanObject('visible', false, {}),
+                {
+                    isHoverableDevice: window.matchMedia('(hover: hover) and (pointer: fine)'),
+                    wrapper: {
+                        ['x-on:click.outside']() {
+                            this.setVisibleFalse();
+                        },
+                        ['x-on:keydown.escape.window']() {
+                            this.setVisibleFalse();
+                        },
+                    },
+                    trigger: {
+                        ['x-on:mouseenter.self']() {
+                            if (!this.isHoverableDevice.matches) return;
+                            this.setVisibleTrue();
+                        },
+                        ['x-on:mouseleave.self']() {
+                            if (!this.isHoverableDevice.matches) return;
+                            this.setVisibleFalse();
+                        },
+                        ['x-on:click']() {
+                            if (this.isHoverableDevice.matches) return;
+                            this.toggleVisible()
+                        },
+                        ['x-on:keydown.enter']() {
+                            this.toggleVisible()
+                        }
+                    },
+                }
+            )
+        }
+
+        window.addEventListener('alpine:init', () => {
+            Alpine.data('hyvaCheckoutFormElementTooltip', hyvaCheckoutFormElementTooltip)
+        }, { once: true })
+    </script>
+<?php $hyvaCsp->registerInlineScript() ?>

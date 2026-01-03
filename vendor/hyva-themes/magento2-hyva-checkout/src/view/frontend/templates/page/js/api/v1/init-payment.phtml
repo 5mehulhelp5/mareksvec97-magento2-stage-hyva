@@ -1,0 +1,51 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2022-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+declare(strict_types=1);
+
+use Hyva\Theme\ViewModel\HyvaCsp;
+use Magento\Framework\View\Element\Template;
+
+/** @var Template $block */
+/** @var HyvaCsp $hyvaCsp */
+
+/**
+ * @Internal Prefer utilizing the "after" container for injecting additional code.
+ */
+?>
+<script>
+    (() => {
+        <?php /* Handles payment method activation. */ ?>
+        window.addEventListener('magewire:available', () => {
+            const checkoutPaymentMethodActivate = method => {
+                if (method) {
+                    window.dispatchEvent(new CustomEvent('checkout:payment:method-activate', {
+                        detail: {
+                            method: method
+                        }
+                    }))
+                }
+            }
+
+            <?php /* 1. Activate the payment method when the Magewire component emitted the updated event. */ ?>
+            window.addEventListener('checkout:init:evaluation', () => {
+                Magewire.on('payment_method_selected', event => checkoutPaymentMethodActivate(event.method))
+            })
+
+            <?php /* 2. Activate the payment method when the Magewire component is initialized on the page. */ ?>
+            Magewire.hook('component.initialized', component => {
+                if (component.id === 'checkout.payment.methods') {
+                    checkoutPaymentMethodActivate(component.data.method)
+                }
+            })
+        })
+    })()
+</script>
+<?php $hyvaCsp->registerInlineScript() ?>
+
+<?= $block->getChildHtml('after') ?>

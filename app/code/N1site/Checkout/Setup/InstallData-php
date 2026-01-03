@@ -1,0 +1,61 @@
+<?php
+
+namespace N1site\Checkout\Setup;
+
+use Magento\Framework\Setup\UpgradeSchemaInterface;
+use Magento\Framework\Setup\SchemaSetupInterface;
+use Magento\Framework\Setup\ModuleContextInterface;
+use Magento\Framework\Setup\InstallDataInterface;
+use Magento\Framework\Setup\ModuleDataSetupInterface;
+use Magento\Quote\Setup\QuoteSetupFactory;
+use Magento\Sales\Setup\SalesSetupFactory;
+use Magento\Framework\DB\Ddl\Table;
+use Magento\Quote\Setup\QuoteSetup;
+use Magento\Sales\Setup\SalesSetup;
+
+class InstallData implements InstallDataInterface {
+    protected $quoteSetupFactory;
+    protected $salesSetupFactory;
+
+    public function __construct(
+        QuoteSetupFactory $quoteSetupFactory,
+        SalesSetupFactory $salesSetupFactory
+    ) {
+        $this->quoteSetupFactory = $quoteSetupFactory;
+        $this->salesSetupFactory = $salesSetupFactory;
+    }
+
+    public function install(ModuleDataSetupInterface $setup, ModuleContextInterface $context)     {
+        $quoteInstaller = $this->quoteSetupFactory->create(['resourceName' => 'quote_setup', 'setup' => $setup]);
+        $salesInstaller = $this->salesSetupFactory->create(['resourceName' => 'sales_setup', 'setup' => $setup]);
+
+        $setup->startSetup();
+
+        $quoteInstaller->addAttribute('quote', 'company_id', ['type' => Table::TYPE_TEXT]);
+        $salesInstaller->addAttribute('order', 'company_id', ['type' => Table::TYPE_TEXT]);
+
+        $quoteInstaller->addAttribute('quote', 'tax_id', ['type' => Table::TYPE_TEXT]);
+        $salesInstaller->addAttribute('order', 'tax_id', ['type' => Table::TYPE_TEXT]);
+		
+		$customerAddress = $setup->getTable('customer_address_entity');
+        $columns = [
+            'company_id' => [
+                'type' => Table::TYPE_TEXT,
+                'nullable' => true,
+                'comment' => 'Company ID'
+            ],
+            'tax_id' => [
+                'type' => Table::TYPE_TEXT,
+                'nullable' => true,
+                'comment' => 'Tax ID'
+            ]
+        ];
+        $connection = $setup->getConnection();
+        foreach($columns as $name=>$definition) {
+            $connection->addColumn($customerAddress, $name, $definition);
+        }
+		
+        $setup->endSetup();
+
+    }
+}

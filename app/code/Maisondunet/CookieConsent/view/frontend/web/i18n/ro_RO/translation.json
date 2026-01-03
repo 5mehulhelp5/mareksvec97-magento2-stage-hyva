@@ -1,0 +1,53 @@
+{
+  "modal_trigger_title": "Setări cookie",
+
+  "consent_modal_title": "Folosim cookie-uri!",
+  "consent_modal_description": "Acest site folosește cookie-uri esențiale pentru a asigura funcționarea corectă și cookie-uri de urmărire pentru a înțelege cum interacționați cu acesta. Acestea din urmă vor fi setate doar după consimțământ.",
+  "consent_modal_primary_btn": "Sunt de acord",
+  "consent_modal_secondary_btn_settings": "Personalizează",
+  "consent_modal_secondary_btn_accept_necessary": "Acceptă necesarele",
+
+  "settings_modal_title": "Setări cookie",
+  "settings_modal_save_settings_btn": "Salvează setările",
+  "settings_modal_accept_all_btn": "Acceptă toate",
+  "settings_modal_reject_all_btn": "Acceptă necesarele",
+  "settings_modal_close_btn_label": "Închide",
+
+  "settings_modal_before_consent_title": "Utilizarea cookie-urilor",
+  "settings_modal_before_consent_description": "Folosim cookie-uri pentru a asigura funcționalitățile de bază ale site-ului web și pentru a îmbunătăți experiența dvs. online. Puteți alege pentru fiecare categorie să acceptați sau să refuzați când doriți.",
+
+  "settings_modal_after_consent_title": "Mai multe informații",
+  "settings_modal_after_consent_description": "Pentru orice întrebări legate de politica mea privind cookie-urile și alegerile dvs., vă rugăm să ne contactați.",
+
+  "functionality_storage_title": "Cookie-uri de funcționalitate",
+  "functionality_storage_description": "Aceste cookie-uri sunt necesare pentru funcționarea corectă a site-ului nostru web. Fără aceste cookie-uri, site-ul web s-ar putea să nu funcționeze corect.",
+
+  "personalization_storage_title": "Cookie-uri de personalizare",
+  "personalization_storage_description": "Cookie-urile de personalizare pot folosi cookie-uri de la terți pentru a ajuta la personalizarea conținutului și urmărirea utilizatorilor pe diferite site-uri web și dispozitive.",
+
+  "security_storage_title": "Cookie-uri de securitate",
+  "security_storage_description": "Cookie-urile de securitate permit stocarea informațiilor legate de securitate, cum ar fi autentificarea, protecția împotriva fraudelor și alte mijloace de protecție a utilizatorului.",
+
+  "ad_storage_title": "Cookie-uri publicitare",
+  "ad_storage_description": "Cookie-urile publicitare sunt utilizate de noi sau de partenerii noștri pentru a vă arăta conținut sau reclame relevante atât pe site-ul nostru, cât și pe site-uri terțe. Acest lucru ne permite să creăm profiluri bazate pe interesele dvs., așa-numitele profiluri pseudonimizate. Pe baza acestei informații, în general, nu este posibil să vă identificăm direct ca persoană, deoarece sunt utilizate doar date pseudonimizate. Dacă nu vă exprimați consimțământul, nu veți primi conținut și reclame adaptate intereselor dvs.",
+
+  "analytics_storage_title": "Cookie-uri analitice",
+  "analytics_storage_description": "Cookie-urile analitice ne permit să măsurăm performanța site-ului nostru web și a campaniilor noastre publicitare. Le folosim pentru a determina numărul de vizite și sursele vizitelor pe site-ul nostru web. Procesăm datele obținute prin aceste cookie-uri în mod agregat, fără a folosi identificatori care să indice utilizatori specifici ai site-ului nostru web. Dacă dezactivați utilizarea cookie-urilor analitice în legătură cu vizita dvs., pierdem capacitatea de a analiza performanța și de a optimiza măsurile noastre.",
+
+  "cookie_table_col_name": "Nume",
+  "cookie_table_col_purpose": "Descriere",
+  "cookie_table_col_processing_time": "Expirare",
+  "cookie_table_col_provider": "Furnizor",
+  "cookie_table_col_type": "Tip",
+  "cookie_table_col_link": "Link",
+  "cookie_table_col_link_find_out_more": "Află mai multe",
+  "cookie_table_col_category": "Categorie",
+
+  "processing_time_session": "Sesiune",
+  "processing_time_persistent": "Persistent",
+
+  "cookie_type_1st_party": "Prima parte",
+  "cookie_type_3rd_party": "A treia parte",
+
+  "find_out_more": "Află mai multe"
+}

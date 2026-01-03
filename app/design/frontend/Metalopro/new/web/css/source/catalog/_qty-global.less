@@ -1,0 +1,28 @@
+//
+//  Common
+//  _____________________________________________
+
+& when (@media-common = true) {
+	.qty {
+		.control, &.details-qty {
+			display: flex;
+			height: 34px;
+			button, input, label, button[disabled] {
+				border: none;
+				opacity: 1;
+				background: #efeeec;
+				height: 100%;
+				&:active {
+					box-shadow: none;
+				}
+			}
+		}
+	}
+	.box-tocart {
+			 .qty {
+			 	.control {
+			 		height: 65px;
+			 	}
+			}
+	}
+}

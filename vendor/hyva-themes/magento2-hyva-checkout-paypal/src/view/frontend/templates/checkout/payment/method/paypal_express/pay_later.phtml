@@ -1,0 +1,37 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2022-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+declare(strict_types=1);
+
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Element\Template;
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\CheckoutPayPal\ViewModel\Payment\PayLater as ViewModel;
+use Hyva\CheckoutPayPal\Magewire\Payment\Method\PaypalExpress;
+
+/** @var Escaper $escaper */
+/** @var Template $block */
+/** @var ViewModelRegistry $viewModels */
+/** @var ViewModel $viewModel */
+/** @var PaypalExpress $magewire */
+
+$viewModel = $viewModels->require(ViewModel::class);
+$magewire = $block->getParentBlock()->getData('magewire');
+$methodCode = $magewire->getMethodCode();
+?>
+<?php if ($viewModel->isPayLaterEnabled()): ?>
+    <div>
+        <div id="paypal-messages-<?= $escaper->escapeHtmlAttr($methodCode) ?>"
+             class="paypal checkout" data-pp-message></div>
+
+        <div x-data="PaypalExpressPayLater"
+             data-sdk-url="<?= $escaper->escapeHtmlAttr($viewModel->getSdkUrl()) ?>"
+             data-method-code="<?= $escaper->escapeHtmlAttr($methodCode) ?>">
+        </div>
+    </div>
+<?php endif;?>

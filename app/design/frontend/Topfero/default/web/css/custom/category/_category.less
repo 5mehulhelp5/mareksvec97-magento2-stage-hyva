@@ -1,0 +1,248 @@
+
+
+& when (@critical) {
+    .product-items { 
+        .product-item-details {
+            text-align: center;
+            display: block  ;
+            width: 100%;
+            .product-item-name,
+            .price-box,
+            .product-reviews-summary {
+                margin-bottom: @1;
+            }
+          .product-reviews-summary.short {
+            justify-content: center;
+            margin-top: 0.25rem;
+            .action.view {
+              span {
+                display: none;
+              }
+            }
+          }
+        }
+    }
+    .products-grid .product-items .product-item-details:not(:has(.msrp-message)) .price-box, [data-appearance="carousel"] .product-items .product-item-details:not(:has(.msrp-message)) .price-box {
+            max-width: 100% !important;
+            text-align: center !important;
+    }
+    .product-image-container {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        max-width: 100%;
+        aspect-ratio: var(--image-container-aspect-ratio, none);
+        width: var(--image-container-width, auto);
+        overflow: hidden;
+        .lib-css(border, @product-image__border);
+        .lib-css(border-radius, @product-image__border-radius);
+
+        .product-image-wrapper {
+            padding: 0 !important;
+            width: 100%;
+        }
+
+        .product-image-photo {
+            position: relative;
+            z-index: 1; /* Nastavte na vyššiu hodnotu ako hover obrázok */
+            transition: opacity 0.3s; /* Pre hebký prechod */
+        }
+
+        .products-image-hover {
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 0; /* Nižšia hodnota ako hlavný obrázok produktu */
+            opacity: 0; /* Skryte ho */
+            transition: opacity 0.3s; /* Pre hebký prechod */
+        }
+
+    }
+
+    .catalog-category-view, .catalogsearch-result-index {
+        .product-image-container {
+            &:hover {
+                .product-image-photo {
+                    opacity: 0; /* Skryte hlavný obrázok produktu */
+                }
+
+                .products-image-hover {
+                    opacity: 1; /* Zobrazte hover obrázok */
+                }
+
+            }
+
+        }
+
+    }
+
+.category-description.bottom {
+  margin-top: 80px;
+  border-top: 1px solid #eff3f6;
+  padding-top: 40px;
+}
+.category-description {
+    line-height: inherit;
+    font-size: 15px;
+    &.bottom-description {
+      margin-top: 50px;
+    }
+  }
+.apptrian-subcategories-grid {
+    display: flex;
+    flex-wrap: wrap;
+    padding-left: 0;
+    width: 100%;
+    li {
+        float: left;
+        list-style: none;
+        width: ~"calc(25% - 9px)";
+        margin-inline-end: 12px;
+        margin-bottom: 12px;
+        &.current-category {
+          .apptrian-subcategories-category {
+              .apptrian-subcategories-category-image {
+                  a {
+                    background: @color_light_gray;
+                  }
+                }
+              }
+        }
+        .apptrian-subcategories-category {
+            .apptrian-subcategories-category-image {
+                a {
+                    font-size: 16px;
+                    max-height: 90px;
+                    padding: 10px;
+                    border: 2px solid @color_light_gray;
+                    display: flex;
+                    align-items: center;
+                    border-radius: 8px;
+
+                    img {
+                        max-width: 65px;
+                        max-height: 65px;
+                        margin-right: 15px;
+                        background: white;
+                        border-radius: 8px;
+                    }
+
+                    &:hover {
+                        color: black;
+                        -webkit-box-shadow: 0 0 12px rgba(0,0,0,0.12);
+                        -moz-box-shadow: 0 0 12px rgba(0,0,0,0.12);
+                        -ms-box-shadow: 0 0 12px rgba(0,0,0,0.12);
+                        box-shadow: 0 0 12px rgba(0,0,0,0.12);
+                        text-decoration: none;
+                    }
+
+                }
+
+            }
+
+        }
+    }
+  .current-category {
+    .apptrian-subcategories-category {
+        .apptrian-subcategories-category-image {
+            a { 
+                
+                color: black;
+            }
+        }
+    }
+   }
+}
+//
+//  Desktop
+//  _____________________________________________
+
+@media @media-lg {
+    .apptrian-subcategories-grid {
+        li:nth-child(4n) {
+            margin-inline-end: 0;
+        }
+
+    }
+
+}
+
+//
+//  Tablet
+//  _____________________________________________
+@media @media-lg-down {
+.apptrian-subcategories-grid {
+    li {
+      width: ~"calc(33% - 9px)";
+      margin-inline-end: 12px;
+      margin-bottom: 12px;
+      &:nth-child(3n) {
+            margin-inline-end: 0;
+        }
+    }
+  }
+ }
+
+//
+//  Mobile
+//  _____________________________________________
+
+@media @media-md-down { 
+  .catalog-category-view {
+    .page-title {
+      font-size: 30px;
+      margin-bottom: 25px;
+    }
+  }
+  .category-description.bottom {
+    margin-top: 50px;
+    padding-top: 30px;
+  }
+  .category-description {
+      line-height: inherit;
+      font-size: 14px;
+    }
+  .apptrian-subcategories-grid {
+      li {
+        width: ~"calc(50% - 9px)";
+        margin-inline-end: 12px;
+        margin-bottom: 12px;
+        &:nth-child(2n) {
+              margin-inline-end: 0 !important;
+          }
+        &:nth-child(3n) {
+            margin-inline-end: 12px;
+        }
+        a {
+          font-size: 14px !important;
+        }
+        .apptrian-subcategories-category {
+         .apptrian-subcategories-category-image {
+           a {
+             img {
+               max-width: 50px;
+               max-height: 50px;
+             }
+           } 
+         } 
+        }
+      }
+   }
+
+ }
+//
+// Small Mobile
+//  _____________________________________________
+
+@media only screen and (max-width: 390px) {
+  .apptrian-subcategories-grid {
+      li {
+        width: 100%;
+        margin-inline-end: 0 !important;
+        margin-bottom: 7px;
+      }
+   }
+}
+}
+

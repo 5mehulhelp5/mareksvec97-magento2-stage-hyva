@@ -1,0 +1,26 @@
+<div class="additional-options">
+    <div data-role="checkout-agreements">
+        <div class="checkout-agreements" data-bind="visible: isVisible">
+            <!-- ko foreach: agreements -->
+            <div class="checkout-agreement required">
+                <input type="checkbox"
+                       data-bind="attr: {
+                        'id': 'agreement__' + agreementId,
+                        'name': 'agreement[' + agreementId + ']',
+                        'value': agreementId
+                        }"
+                />
+                <label data-bind="attr: {'for': $parent.getCheckboxId($parentContext, agreementId)}">
+                    <span class="main" data-bind="i18n: 'Your personal information is safe with us.'"></span>
+                    <span class="action" data-bind="i18n: 'Read our business terms and conditions for personal', click: function(data, event) { return $parent.showContent(data, event) }"></span>
+                    <span data-bind="i18n: 'data processing.'"></span>
+                    <span class="red-star">*</span>
+                </label>
+            </div>
+            <!-- /ko -->
+            <div id="checkout-agreements-modal" data-bind="afterRender: initModal" style="display: none">
+                <div class="checkout-agreements-item-content" data-bind="html: modalContent"></div>
+            </div>
+        </div>
+    </div>
+</div>

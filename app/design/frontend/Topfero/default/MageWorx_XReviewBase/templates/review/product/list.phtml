@@ -1,0 +1,231 @@
+<?php
+/**
+ * Copyright © MageWorx. All rights reserved.
+ * See LICENSE.txt for license details.
+ */
+?>
+<?php
+//@formatter:off
+/** @var \MageWorx\XReviewBase\Block\Review\Product\ListView $block */
+$ratings       = $block->getRatings();
+$overallRating = $block->getOverallRating();
+
+/** @var \Magento\Review\Model\Review[] $items */
+$items  = $block->getReviewsCollection()->getItems();
+$format = $block->getDateFormat() ?: \IntlDateFormatter::SHORT;
+?>
+<?php if (count($items)) : ?>
+
+    <div id="customer-reviews-container">
+        <div class="mw-grid-left">
+       
+            
+                <div class="mw-rating-filter">
+                    <div class="mw-rating-filter__overall">
+                        <div class="mw-rating-filter__sum mw-text mw-text--size-xxl mw-text--variation-strong">
+                            <?= (float)$overallRating['rating_summary'] ?>/5
+                        </div>
+                        <div class="mw-rating-filter__count mw-text">
+                            <?= $block->escapeHtml(
+                                __('Based on %count reviews', ['count' => (int)$overallRating['reviews_count']])
+                            ) ?>
+                        </div>
+                    </div>
+                    <ul class="mw-rating-filter__detailed">
+                        <?php foreach ($ratings as $rating): ?>
+                            <li class="mw-rating-filter__item">
+                                <div
+                                    class="mw-rating-filter__stars mw-rating-filter__stars--<?= $block->escapeHtmlAttr($rating['style_suffix']) ?>">
+                                </div>
+                                <div class="mw-rating-filter__graph">
+                                    <div class="mw-rating-filter__graph-value"
+                                         style="width: <?= (int)$rating['percent'] ?>%">
+                                    </div>
+                                </div>
+                                <div class="mw-rating-filter__score mw-text">
+                                    <?= (int)$rating['percent'] ?>%(<?= (int)$rating['stage_count'] ?>)
+                                </div>
+                            </li>
+                        <?php endforeach; ?>
+                    </ul>
+                </div>
+           
+        </div>
+    
+        <div class="mw-grid-right" itemscope itemprop="review" itemtype="http://schema.org/Review">
+            <?php foreach ($items as $review): ?>
+                
+                    
+                    <div class="mw-grid__item mw-review">
+                        <div class="mw-user__content">
+                            <div class="mw-user__name mw-text mw-text--size-md">
+                                <div class="a-profile-avatar"><svg width="27" height="27" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g clip-path="url(#clip0_1201_2)">
+<circle cx="25" cy="25" r="25" fill="#A9B7B7"/>
+<g clip-path="url(#clip1_1201_2)">
+<path d="M36.3137 27.3327C34.5711 25.5356 32.4968 24.2052 30.2337 23.3999C32.6576 21.6783 34.25 18.797 34.25 15.5391C34.25 10.2792 30.1004 6 25 6C19.8996 6 15.75 10.2792 15.75 15.5391C15.75 18.797 17.3424 21.6783 19.7664 23.3999C17.5032 24.2052 15.429 25.5356 13.6863 27.3327C10.6643 30.4492 9 34.5927 9 39H11.5C11.5 31.3234 17.5561 25.0781 25 25.0781C32.4439 25.0781 38.5 31.3234 38.5 39H41C41 34.5927 39.3357 30.4492 36.3137 27.3327ZM25 22.5C21.2781 22.5 18.25 19.3774 18.25 15.5391C18.25 11.7008 21.2781 8.57812 25 8.57812C28.7219 8.57812 31.75 11.7008 31.75 15.5391C31.75 19.3774 28.7219 22.5 25 22.5Z" fill="white"/>
+</g>
+</g>
+<defs>
+<clipPath id="clip0_1201_2">
+<rect width="50" height="50" fill="white"/>
+</clipPath>
+<clipPath id="clip1_1201_2">
+<rect width="32" height="33" fill="white" transform="translate(9 6)"/>
+</clipPath>
+</defs>
+</svg>
+</div>
+                                <?= $block->escapeHtml($review->getNickname()) ?>
+                                <?php if ($block->allowLocation($review)) : ?>
+                                    <div class="mw-country">
+                                        <div class="mw-country__location mw-text mw-text--variation-subdued">
+                                            <?= /* @noEscape */ $review->getLocationText() ?>
+                                        </div>
+                                    </div>
+                                <?php endif; ?>
+                            </div>
+                            
+                            <?php if ($block->allowVerifiedLabel($review)) : ?>
+                                <div class="mw-verified-buyer"><?= $block->escapeHtml(__('Verified Buyer')) ?></div>
+                            <?php endif; ?>
+                            <?php if ($block->allowRecommendLabel($review)) : ?>
+                                <div class="mw-recommend"><?= $block->escapeHtml(__('Recommend')) ?></div>
+                            <?php endif; ?>
+                        </div>
+                        <div class="stars-and-title">
+                            <?php if (count($review->getRatingVotes())): ?>
+                                <?php foreach ($review->getRatingVotes() as $vote): ?>
+                                    <div class="mw-rating mw-review__rating">
+                                        
+                                        <div class="mw-rating__result">
+                                            <meta itemprop="worstRating" content="1"/>
+                                            <meta itemprop="bestRating" content="100"/>
+                                            <div class="mw-rating__stars" aria-hidden="true">
+                                                <div class="mw-rating__stars-value"
+                                                     style="width:<?= $block->escapeHtmlAttr($vote->getPercent()) ?>%">
+                                                </div>
+                                            </div>
+                                            <div class="mw-rating__text">
+                                                <?= $block->escapeHtmlAttr($vote->getPercent()) ?>%
+                                            </div>
+                                        </div>
+                                    </div>
+                                <?php endforeach; ?>
+                            <?php endif; ?>
+                        <div class="mw-text mw-text--size-md mw-text--variation-strong mw-review__title"
+                             itemprop="name">
+                            <?= $block->escapeHtml($review->getTitle()) ?>
+                        </div>
+                        </div>
+                        <div class="mw-text mw-text--variation-subdued mw-review__date"
+                             itemprop="datePublished"
+                             datetime="<?= $block->escapeHtmlAttr(
+                                 $block->formatDate($review->getCreatedAt(), $format)
+                             ) ?>">
+                            <?= $block->escapeHtml($block->formatDate($review->getCreatedAt(), $format)) ?>
+                        </div>
+                        
+                        <div class="mw-text mw-review__text" itemprop="description">
+                            <?= /* @noEscape */ nl2br($block->escapeHtml($review->getDetail())) ?>
+                        </div>
+                        <?php if ($block->allowMediaGallery($review)): ?>
+                        <div class="mw-gallery mw-review__photos">
+                            <?php foreach ($review->getMediaGallery() as $mediaItem): ?>
+                                <a class="mw-gallery__item"
+                                   href="<?= $block->escapeUrl($mediaItem->getMediaUrl()) ?>"
+                                   data-fslightbox="gallery"
+                                   data-thumb="<?= $block->escapeUrl($mediaItem->getThumbnailMediaUrl()) ?>">
+                                    <img src="<?= $block->escapeUrl($mediaItem->getThumbnailMediaUrl()) ?>"
+                                         alt="<?= $block->escapeHtmlAttr($mediaItem->getLabel()) ?>"/>
+                                </a>
+                            <?php endforeach; ?>
+                        </div>
+                        <?php endif; ?>
+                        <?php if ($block->isEnableProsAndCons($review)): ?>
+                            <div class="mw-grid mw-review__pros-and-cons">
+                                <div class="mw-grid__item mw-grid__item--half">
+                                    <div class="mw-pros"><?= /* @noEscape */
+                                        nl2br($block->escapeHtml($review->getPros())) ?></div>
+                                </div>
+                                <div class="mw-grid__item mw-grid__item--half">
+                                    <div class="mw-cons"><?= /* @noEscape */
+                                        nl2br($block->escapeHtml($review->getCons())) ?></div>
+                                </div>
+                            </div>
+                        <?php endif; ?>
+                        <?php if ($block->isDisplayHelpful()): ?>
+                            <div class="mw-review__meta"
+                                 data-index="<?= (int)$review->getId() ?>"
+                                 data-mage-init='{"vote":<?= /* @noEscape */ $block->getJsonVoteConfig() ?>}'>
+                                    <input type="hidden" name="form_key"
+                                           value="<?= $block->escapeHtmlAttr($block->getFormKey()) ?>"
+                                    />
+                                <div class="mw-text mw-text--variation-subdued mw-review__meta-text">
+                                    <?= $block->escapeHtml(__('Review helpful?')) ?>
+                                </div>
+                                <div class="mw-rate mw-review__meta-rate-like">
+                                    <button class="mw-rate__icon" aria-label="Like">
+                                        <svg fill="currentColor" width="19" height="15" viewBox="0 0 19 19"
+                                             xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                            <path
+                                                d="m3.99998 9.54075-3.49998.00001v7.00004h3.49998m0-7.00005c.5-.66667 1.99983-1.99992 3-2.5.8-.4 1.66667-2.49993 2-3.99993 0-1 0-2 .5-2s2.50002-.500003 2.50002 2c0 2-.5 3-1 3.99993 1.1666-.16667 3.8-.4 5 0s1.5 1.5 1 2.5c.3333.49995 1 1.49995 0 2.49995.5 1 .5 2-.5 3 0 1 0 2-2 2.5-1.6.4-7.83335-.6665-10.50002-.9999m0-7.00005v7.00005"
+                                                stroke="#000" stroke-linejoin="round"/>
+                                        </svg>
+                                    </button>
+                                    <div class="mw-rate__count">0</div>
+                                </div>
+                                <div class="mw-rate mw-review__meta-rate-dislike">
+                                    <button class="mw-rate__icon mw-rate__icon--dislike" aria-label="Dislike">
+                                        <svg fill="currentColor" height="15" viewBox="0 0 19 19" width="19"
+                                             xmlns="http://www.w3.org/2000/svg">
+                                            <path
+                                                d="m3.99998 9.08846-3.499981-.00001v-7.00009l3.499981.00002m0 7.00008c.5.66667 1.99983 1.99994 3 2.50004.8.4 1.66667 2.4999 2 3.9999 0 1 0 2 .5 2s2.50002.5 2.50002-2c0-2-.5-3-1-3.9999 1.1666.1666 3.8.4 5 0s1.5-1.5 1-2.50004c.3333-.5 1-1.5 0-2.5.5-1 .5-2-.5-3 0-1 0-1.99999-2-2.49999-1.6-.400001-7.83336.66658-10.50002.99991m0 7.00008v-7.00008"
+                                                stroke="#000" stroke-linejoin="round"/>
+                                        </svg>
+                                    </button>
+                                    <div class="mw-rate__count">0</div>
+                                </div>
+                            </div>
+                        <?php endif; ?>
+                        <?php if ($review->getAnswer()): ?>
+                            <div class="mw-review__reply">
+                                <div class="mw-text mw-text--size-md mw-review__reply-heading">
+                                    <?= $block->escapeHtml(__('Brand reply')) ?>
+                                </div>
+                                <div class="mw-text mw-review__reply-content">
+                                    <?= /* @noEscape */ nl2br($block->escapeHtml($review->getAnswer())) ?>
+                                </div>
+                            </div>
+                        <?php endif; ?>
+                    </div>
+             
+            <?php endforeach; ?>
+           </div>
+     
+    </div>
+
+    <?php if ($block->getReviewCharactersLimit()) : ?>
+        <script type="text/x-magento-init">
+            {
+                ".mw-review__text": {
+                    "MageWorx_XReviewBase/js/show-more-less": {
+                        "characters_limit": <?= (int)$block->getReviewCharactersLimit() ?>,
+                        "show_less_label": "<?= $block->escapeJs(__('Show less')) ?>",
+                        "show_more_label": "<?= $block->escapeJs(__('Show more')) ?>"
+                    }
+                }
+            }
+        </script>
+    <?php endif; ?>
+
+    <script type="text/x-magento-init">
+    {
+        "*": {
+            "xReviewGallery": {}
+        }
+    }
+    </script>
+<?php elseif ($block->isDisplayRewardMessage()): ?>
+    <div class="mw-text mw-reward-message"><?= $block->escapeHtml($block->getRewardMessage(), ['span']) ?></div>
+<?php endif; ?>

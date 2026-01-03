@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © MageWorx. All rights reserved.
+ * See LICENSE.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+    <menu>
+        <add id="MageWorx_ReviewReminderBase::reviewreminderbase" title="Review Reminders" module="MageWorx_ReviewReminderBase" sortOrder="51" resource="MageWorx_ReviewReminderBase::reviewreminderbase" parent="Magento_Backend::marketing"/>
+        <add id="MageWorx_ReviewReminderBase::reviewreminderbase_reminder" title="Manage Reminders" module="MageWorx_ReviewReminderBase" sortOrder="20" action="mageworx_reviewreminderbase/reminder" resource="MageWorx_ReviewReminderBase::reviewreminderbase_reminder" parent="MageWorx_ReviewReminderBase::reviewreminderbase"/>
+        <add id="MageWorx_ReviewReminderBase::reviewreminderbase_unsubscribed" title="Unsubscribed Clients" module="MageWorx_ReviewReminderBase" sortOrder="30" action="mageworx_reviewreminderbase/unsubscribed" resource="MageWorx_ReviewReminderBase::reviewreminderbase_unsubscribed" parent="MageWorx_ReviewReminderBase::reviewreminderbase"/>
+        <add id="MageWorx_ReviewReminderBase::reviewreminderbase_log" title="Logs" module="MageWorx_ReviewReminderBase" sortOrder="40" action="mageworx_reviewreminderbase/log" resource="MageWorx_ReviewReminderBase::reviewreminderbase_log" parent="MageWorx_ReviewReminderBase::reviewreminderbase"/>
+    </menu>
+</config>

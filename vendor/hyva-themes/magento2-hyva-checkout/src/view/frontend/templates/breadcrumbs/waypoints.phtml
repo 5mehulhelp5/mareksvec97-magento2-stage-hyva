@@ -1,0 +1,109 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2022-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+declare(strict_types=1);
+
+use Hyva\Checkout\ViewModel\Breadcrumbs;
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\HeroiconsOutline;
+use Hyva\Theme\ViewModel\HyvaCsp;
+use Magento\Framework\View\Element\Template;
+use Magento\Framework\Escaper;
+
+/** @var ViewModelRegistry $viewModels */
+/** @var Template $block */
+/** @var Escaper $escaper */
+/** @var Breadcrumbs $viewModel */
+/** @var HyvaCsp $hyvaCsp */
+
+/** @var HeroiconsOutline $heroicons */
+$heroicons = $viewModels->require(HeroiconsOutline::class);
+
+/** @var Breadcrumbs $breadcrumbs */
+$breadcrumbs = $viewModels->require(Breadcrumbs::class);
+
+$settingShowWaypoints = $breadcrumbs->getSystemConfig()->showBreadcrumbsWaypoints();
+$settingShowBreadcrumbsCart = $breadcrumbs->getSystemConfig()->showBreadcrumbsCart();
+
+$navigator = $breadcrumbs->getNavigator();
+$currentStep = $navigator->getActiveStep();
+$checkout = $navigator->getActiveCheckout();
+
+$stepCount = $checkout->countSteps();
+?>
+
+<ul class="breadcrumbs flex items-center gap-4" x-data="hyvaCheckoutBreadcrumbsNavigation">
+    <?php if ($settingShowBreadcrumbsCart): ?>
+        <li class="<?= ($currentStep->getPosition() === 1)
+            ? 'inline-flex gap-4 items-center'
+            : 'hidden lg:inline-flex lg:gap-4 lg:items-center'
+        ?>">
+            <a
+                href="<?= $escaper->escapeUrl($block->getUrl('checkout/cart', ['_secure' => true])) ?>"
+                class="item completed inline-flex gap-1 items-center text-gray-700"
+            >
+                <?php if ($currentStep->getPosition() === 1): ?>
+                    <?= $heroicons->chevronLeftHtml(
+                        'lg:hidden group-hover:-translate-x-0.5 transition rtl:rotate-180',
+                        16,
+                        16,
+                        ['aria-hidden' => 'true']
+                    ); ?>
+                <?php endif; ?>
+                <span class="font-bold lg:sr-only"><?= $escaper->escapeHtml(__('Go back to the cart')) ?></span>
+                <?= $heroicons->shoppingCartHtml('hidden lg:block text-gray-500', 20, 20, ['aria-hidden' => 'true']) ?>
+            </a>
+
+            <?= $heroicons->chevronRightHtml('hidden lg:block text-gray-500', 16, 16, ['aria-hidden' => 'true']) ?>
+        </li>
+    <?php endif ?>
+
+    <?php foreach ($checkout->getAvailableSteps() as $step): ?>
+        <?php
+            $isPrevious = ($step->getPosition() === ($currentStep->getPosition() - 1));
+            $isCurrent = ($step->getPosition() === $currentStep->getPosition());
+        ?>
+
+        <li class="<?= $isPrevious
+            ? 'inline-flex gap-4 items-center'
+            : 'hidden lg:inline-flex lg:gap-4 lg:items-center'
+        ?>">
+            <?php if ($settingShowWaypoints && ! $checkout->isFirstStep($step)): ?>
+                <?= $heroicons->chevronRightHtml('hidden lg:block text-gray-500', 16, 16, ['aria-hidden' => 'true']) ?>
+            <?php endif ?>
+
+            <?php if ($checkout->isStepBackwards($step, $currentStep) || $checkout->isComparison($step, $currentStep)): ?>
+                <button
+                    type="button"
+                    <?php if ($isCurrent): ?>
+                        class="item active"
+                        aria-current="step"
+                    <?php else: ?>
+                        class="item completed font-bold lg:font-normal"
+                    <?php endif ?>
+                    data-route="<?= $escaper->escapeHtmlAttr($step->getRoute()) ?>"
+                    x-on:click="navigateToStep"
+                >
+                    <?php if ($isPrevious): ?>
+                        <?= $heroicons->chevronLeftHtml(
+                            'group-hover:-translate-x-0.5 transition rtl:rotate-180 lg:hidden',
+                            16,
+                            16,
+                            ['aria-hidden' => 'true']
+                        ); ?>
+                    <?php endif; ?>
+                    <?= $escaper->escapeHtml(__($step->getLabel())) ?>
+                </button>
+            <?php elseif ($settingShowWaypoints): ?>
+                <span class="item locked">
+                    <?= $escaper->escapeHtml(__($step->getLabel())) ?>
+                </span>
+            <?php endif ?>
+        </li>
+    <?php endforeach ?>
+</ul>

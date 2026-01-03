@@ -1,0 +1,88 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2022-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+-->
+<include xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_include.xsd"
+>
+    <group id="address_form"
+           showInDefault="1"
+           showInStore="1"
+           showInWebsite="1"
+           sortOrder="70"
+           translate="label"
+    >
+        <label>Address Forms</label>
+
+        <group id="street"
+               showInDefault="1"
+               showInStore="1"
+               showInWebsite="1"
+               sortOrder="10"
+               translate="label comment"
+        >
+            <label>Street Labels</label>
+
+            <comment>
+                <![CDATA[When a Hyva checkout is active, along with the regular shipping and payment address components,
+                you have the option to customize labels for each line here. It's not mandatory to fill them. You can
+                leave them blank if you prefer not to display a label, except from the first field, who always
+                requires a label.<br /><br />
+
+                The configuration for the amount of street lines visible can be found at
+                <strong>Name and Address Options</strong> by navigating to <strong>Stores > Configuration > Customers >
+                Customer Configuration</strong>.]]>
+            </comment>
+
+            <field id="field_label_0"
+                   translate="label comment"
+                   type="text"
+                   sortOrder="10"
+                   showInDefault="1"
+                   showInWebsite="1"
+                   showInStore="1"
+            >
+                <label>Field 1</label>
+                <validate>required-entry</validate>
+            </field>
+
+            <field id="field_label_1"
+                   translate="label comment"
+                   type="text"
+                   sortOrder="20"
+                   showInDefault="1"
+                   showInWebsite="1"
+                   showInStore="1"
+            >
+                <label>Field 2</label>
+            </field>
+
+            <field id="field_label_2"
+                   translate="label comment"
+                   type="text"
+                   sortOrder="30"
+                   showInDefault="1"
+                   showInWebsite="1"
+                   showInStore="1"
+            >
+                <label>Field 3</label>
+            </field>
+
+            <field id="field_label_3"
+                   translate="label comment"
+                   type="text"
+                   sortOrder="40"
+                   showInDefault="1"
+                   showInWebsite="1"
+                   showInStore="1"
+            >
+                <label>Field 4</label>
+            </field>
+        </group>
+    </group>
+</include>

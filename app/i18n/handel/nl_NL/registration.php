@@ -1,0 +1,10 @@
+<?php
+/**
+ * Magento 2 Romanian Language Pack
+*/
+
+\Magento\Framework\Component\ComponentRegistrar::register(
+    \Magento\Framework\Component\ComponentRegistrar::LANGUAGE,
+    'handel_nl_nl',
+    __DIR__
+);

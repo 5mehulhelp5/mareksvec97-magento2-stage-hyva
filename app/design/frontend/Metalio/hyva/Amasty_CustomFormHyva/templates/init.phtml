@@ -1,0 +1,95 @@
+<?php
+/**
+ * @author Amasty Team
+ * @copyright Copyright (c) Amasty (https://www.amasty.com)
+ * @package Custom Form Compatibility with Hyva Theme
+ */
+/** @var Amasty\CustomForm\Block\Init $block */
+/** @var Form $form */
+/** @var Escaper $escaper */
+/** @var ViewModelRegistry $viewModels */
+/** @var Amasty\Customform\ViewModel\Form\FormInitInterface $viewModel */
+/** @var Hyva\Theme\ViewModel\HyvaCsp|null $hyvaCsp */
+
+use Hyva\Theme\Model\ViewModelRegistry;
+use Magento\Framework\Escaper;
+use Amasty\CustomFormHyva\ViewModel\Form;
+
+$viewModel = $block->getViewModel() ?? $block;
+$formViewModel = $viewModels->require(Form::class);
+$formId = $viewModel->getFormId();
+$currentForm = $formViewModel->getForm((int)$formId);
+$isSurvey = $viewModel->isSurvey();
+$usePopup = $viewModel->isPopupUsed();
+$formData = $formViewModel->getFormJsonModifier($currentForm);
+?>
+
+<?php if ($usePopup): ?>
+    <script>
+        'use strict';
+
+        function initFormModal() {
+            return {
+                ...hyva.modal(),
+            }
+        }
+
+        window.addEventListener(
+            'alpine:init',
+            () => Alpine.data('initFormModal', initFormModal),
+            { once: true }
+        );
+    </script>
+    <?php isset($hyvaCsp) && $hyvaCsp->registerInlineScript() ?>
+    <div class="amform-parent"
+         x-data="initFormModal"
+         @amcform-hide-modal-<?= (int)$formId ?>.window="hide">
+        <button type="button"
+                @click="show"
+                aria-label="<?= $escaper->escapeHtml(__('Show form')) ?>"
+                class="modal-opener inline-flex items-center justify-center rounded-full px-5 py-2 text-sm font-semibold
+                                   bg-slate-100 text-slate-700 hover:bg-slate-200 focus:outline-none focus:ring-2 focus:ring-slate-300">
+            <?= $escaper->escapeHtml($viewModel->getPopupButtonTitle()) ?>
+        </button>
+        <div x-cloak
+             x-spread="overlay"
+             x-bind="overlay"
+             class="fixed inset-0 flex items-center justify-center text-left bg-black/50 backdrop-blur-[1px] z-40">
+            <div x-ref="dialog" role="dialog"
+                 class="relative inline-block max-h-screen overflow-auto bg-white shadow-xl rounded-lg p-10 text-gray-700 w-full max-w-2xl">
+                <button @click="hide"
+                        aria-label="<?= $escaper->escapeHtml(__('Close form')) ?>"
+                        style="top: 12px; right: 12px;"
+                        class="absolute p-2 text-gray-300 transition duration-150 ease-in-out hover:text-black">
+                    <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                              stroke-width="2" d="M6 18L18 6M6 6l12 12">
+                        </path>
+                    </svg>
+                </button>
+<?php endif; ?>
+
+<?php if (!(int)$isSurvey || (int)$isSurvey && $formViewModel->isSurveyAvailable((int)$formId)): ?>
+    <?= $block->getLayout()
+        ->createBlock(\Magento\Framework\View\Element\Template::class)
+        ->setTemplate("Amasty_CustomFormHyva::form.phtml")
+        ->setData([
+            'wrapper_block' => $block,
+            'view_model' => $viewModel,
+            'is_survey' => (int)$isSurvey,
+            'current_form' => $currentForm,
+            'form_id' => (int)$formId,
+            'form_data' => $formData,
+            'view_models' => $viewModels
+        ])->toHtml(); ?>
+<?php else: ?>
+    <p class="note pr-8">
+        <?= $escaper->escapeHtml(__('Thank you for participating in this survey!')) ?>
+    </p>
+<?php endif; ?>
+
+<?php if ($usePopup): ?>
+            </div>
+        </div>
+    </div>
+<?php endif; ?>

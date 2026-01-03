@@ -1,0 +1,41 @@
+<?php 
+/** @var $block \Magento\Catalog\Block\Product\Image */
+$objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+/** @var \Magento\Catalog\Model\ProductRepository $productRepository */
+$productRepository = $objectManager->get(\Magento\Catalog\Model\ProductRepository::class);
+$currentProduct = $productRepository->getById($block->getProductId());
+$imageFile = $currentProduct->getCustomAttribute('hover');
+$imageValue = ($imageFile) ? $imageFile->getValue() : null;
+
+// Later on...
+if ($imageValue) {
+    $resizedImageUrl = $this->helper('Magento\Catalog\Helper\Image')
+        ->constrainOnly(TRUE)
+        ->keepAspectRatio(TRUE)
+        ->keepFrame(FALSE)
+        ->init($currentProduct, 'hover_product_list')
+        ->setImageFile($imageValue)
+        ->getUrl();
+}
+?>
+
+<span class="product-image-container"
+    style="--image-container-width: <?= $block->getWidth() ?>px; --image-container-aspect-ratio: <?= $block->getWidth() ?>/<?= $block->getHeight() ?>;">
+    <?php if ($imageFile) { ?>
+    <img class="products-image-hover lazyload" data-src="<?= $resizedImageUrl ?>"
+        src="<?= $resizedImageUrl ?>"
+        loading="lazy"
+        width="<?= $escaper->escapeHtmlAttr($block->getWidth()) ?>"
+        height="<?= $escaper->escapeHtmlAttr($block->getHeight()) ?>"
+        alt="<?= $escaper->escapeHtmlAttr($block->getLabel()) ?>"/>
+    <?php } ?>
+    <img class="<?= $escaper->escapeHtmlAttr($block->getClass()) ?>"
+        <?php foreach ($block->getCustomAttributes() as $name => $value): ?>
+            <?= $escaper->escapeHtmlAttr($name) ?>="<?= $escaper->escapeHtml($value) ?>"
+        <?php endforeach; ?>
+        src="<?= $escaper->escapeUrl($block->getImageUrl()) ?>"
+        loading="lazy"
+        width="<?= $escaper->escapeHtmlAttr($block->getWidth()) ?>"
+        height="<?= $escaper->escapeHtmlAttr($block->getHeight()) ?>"
+        alt="<?= $escaper->escapeHtmlAttr($block->getLabel()) ?>"/>
+</span>

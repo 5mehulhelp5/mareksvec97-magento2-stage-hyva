@@ -1,0 +1,845 @@
+<?php
+
+declare(strict_types=1);
+
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Element\Template;
+use Hyva\Theme\ViewModel\HyvaCsp;
+use Hyva\GeisswebEuvatCheckout\ViewModel\Config as GwConfig;
+
+/** @var Template $block */
+/** @var Escaper $escaper */
+/** @var HyvaCsp $hyvaCsp */
+/** @var ViewModelRegistry $viewModels */
+
+$configVm = $viewModels->require(GwConfig::class);
+$debugEnabled = $configVm->isDebugEnabled();
+?>
+<script>
+    (() => {
+        /**
+         * VAT Validation Data Manager
+         * Manages validation results for VAT numbers, persistent in sessionStorage if available.
+         */
+        class GwVatValidationDataManager {
+            /**
+             * @constructor
+             * @description Initializes the manager, loads from sessionStorage (if available) or memory.
+             */
+            constructor() {
+                this._storageKey = 'gw-vat-validation-cache';
+                this._storageAvailable = this._isSessionStorageAvailable();
+                this.results = this._loadFromSession();
+            }
+
+            /**
+             * @description Check if sessionStorage is available (may not be in privacy mode, etc)
+             * @returns {boolean}
+             */
+            _isSessionStorageAvailable() {
+                try {
+                    const testKey = '__test__';
+                    sessionStorage.setItem(testKey, testKey);
+                    sessionStorage.removeItem(testKey);
+                    return true;
+                } catch (e) {
+                    return false;
+                }
+            }
+
+            /**
+             * @description Loads the VAT validation cache from sessionStorage (if available).
+             * @returns {object}
+             */
+            _loadFromSession() {
+                if (!this._storageAvailable) {
+                    <?php if ($debugEnabled): ?>console.warn('VAT DataManager: sessionStorage not available, using RAM cache.');<?php endif; ?>
+                    return {};
+                }
+                try {
+                    const str = sessionStorage.getItem(this._storageKey);
+                    return str ? JSON.parse(str) : {};
+                } catch (e) {
+                    return {};
+                }
+            }
+
+            /**
+             * @description Saves the VAT validation cache to sessionStorage (if available).
+             */
+            _saveToSession() {
+                if (!this._storageAvailable) return;
+                try {
+                    sessionStorage.setItem(this._storageKey, JSON.stringify(this.results));
+                } catch (e) {
+                    // Ignore if storage quota is exceeded, etc.
+                }
+            }
+
+            /**
+             * @description Parses a validation result string or object into a normalized object.
+             * @param {string|object} data - JSON string or result object
+             * @returns {object} Parsed validation result
+             */
+            parseData(data) {
+                try {
+                    return typeof data === 'string' ? JSON.parse(data) : data;
+                } catch (e) {
+                    const fallback = (window.GwVatValidation?.Messages?.validationError) || 'Validation error';
+                    return {
+                        vat_is_valid: false,
+                        vat_request_success: false,
+                        request_message: fallback
+                    };
+                }
+            }
+
+            /**
+             * @description Add validation result for a VAT ID.
+             * @param {string} vatId - VAT ID (normalized incl. prefix if present)
+             * @param {string|object} data - Validation result data
+             */
+            addResult(vatId, data) {
+                const key = this.getCacheKey(vatId);
+                const parsedData = this.parseData(data);
+                this.results[key] = {
+                    vat_is_valid: parsedData.vat_is_valid === true,
+                    vat_request_success: parsedData.vat_request_success === true,
+                    request_message: parsedData.request_message || ''
+                };
+                this._saveToSession();
+                <?php if ($debugEnabled): ?>
+                console.log('[DataManager] Current cache:', this.results);
+                <?php endif; ?>
+            }
+
+            /**
+             * @description Get validation result for a VAT ID
+             * @param {string} vatId - VAT ID
+             * @returns {object|null} Validation result or null
+             */
+            getResult(vatId) {
+                return this.results[this.getCacheKey(vatId)] || null;
+            }
+
+            /**
+             * @description Check if validation result exists for a VAT ID
+             * @param {string} vatId - VAT ID
+             * @returns {boolean} True if result exists
+             */
+            hasResult(vatId) {
+                return Object.prototype.hasOwnProperty.call(this.results, this.getCacheKey(vatId));
+            }
+
+            /**
+             * @description Normalizes the cache key (VAT number, always uppercase and trimmed).
+             * @param {string} vatId
+             * @returns {string}
+             */
+            getCacheKey(vatId) {
+                return (vatId || '').trim().toUpperCase();
+            }
+        }
+
+        /** 
+         * @namespace GwVatValidation 
+         * @description Global container for VAT validation logic and configuration
+         */
+        window.GwVatValidation = window.GwVatValidation || {};
+        /**
+         * @description Initialize and store a shared instance of the VAT validation data manager.
+         * This handles storing and dispatching validation results globally.
+         */
+        window.GwVatValidation.DataManager = new GwVatValidationDataManager();
+
+        /**
+         * @description Defines raw regex patterns for each supported country’s VAT number format.
+         * These patterns are based on official EU VAT validation rules.
+         * Used for quick client-side format validation before sending requests to the server.
+         */
+        window.GwVatValidation.VatPatterns = {
+            'AT': '(AT)U[0-9]{8}',
+            'BE': '(BE)[01][0-9]{9}',
+            'BG': '(BG)[0-9]{9,10}',
+            'CY': '(CY)[0-9]{8}[A-Z]',
+            'CZ': '(CZ)[0-9]{8,10}',
+            'DE': '(DE)[0-9]{9}',
+            'DK': '(DK)[0-9]{8}',
+            'EE': '(EE)[0-9]{9}',
+            'EL': '(EL|GR)[0-9]{9}',
+            'ES': '(ES)[0-9A-Z][0-9]{7}[0-9A-Z]',
+            'FI': '(FI)[0-9]{8}',
+            'FR': '(FR)[0-9A-Z]{2}[0-9]{9}',
+            'GB': '(GB)([0-9]{9}([0-9]{3})?|[A-Z]{2}[0-9]{3})',
+            'GR': '(EL|GR)[0-9]{9}',
+            'HR': '(HR)[0-9]{11}',
+            'HU': '(HU)[0-9]{8}',
+            'IE': '(IE)(([0-9]{7}WI|[0-9][0-9A-Z\\*\\+][0-9]{5}[A-Z]{1,2}))',
+            'IT': '(IT)[0-9]{11}',
+            'LT': '(LT)([0-9]{9}|[0-9]{12})',
+            'LU': '(LU)[0-9]{8}',
+            'LV': '(LV)[0-9]{11}',
+            'MT': '(MT)[0-9]{8}',
+            'NL': '(NL)[0-9]{9}B([0-9]{2}|O[0-9]{1})',
+            'PL': '(PL)[0-9]{10}',
+            'PT': '(PT)[0-9]{9}',
+            'RO': '(RO)[0-9]{2,10}',
+            'SE': '(SE)[0-9]{12}',
+            'SI': '(SI)[0-9]{8}',
+            'SK': '(SK)[0-9]{10}',
+            'XI': '(XI)[0-9]{3}[0-9]{4}[0-9]{2}'
+        };
+        /**
+         * @description Compiled version of the VAT regex patterns for faster validation.
+         * Converts the pattern strings into RegExp objects.
+         * Used to test whether the input matches the country-specific VAT format.
+         */
+        window.GwVatValidation.CompiledVatPatterns = Object.fromEntries(
+            Object.entries(window.GwVatValidation.VatPatterns).map(([key, pattern]) => [key, new RegExp(`^${pattern}$`)])
+        );
+
+        /**
+         * @description User-facing error and helper messages used during VAT validation.
+         * These are dynamically injected and translated by Magento's escape helpers.
+         */
+        window.GwVatValidation.Messages = {
+            invalidVat: '<?= $escaper->escapeJs(__('Please type a valid VAT number in this field, or leave it empty.')) ?>',
+            timeout: '<?= $escaper->escapeJs(__('VAT validation timed out. Please try again.')) ?>',
+            invalidCountryPrefix: '<?= $escaper->escapeJs(__('Please provide a valid country code prefix for the VAT number.')) ?>',
+            invalidFormat: '<?= $escaper->escapeJs(__('The format of the VAT number is invalid for this country.')) ?>',
+            validationError: '<?= $escaper->escapeJs(__('An error occurred during VAT validation. Please try again.')) ?>',
+            missingPrefix: '<?= $escaper->escapeJs(__('Please provide the country code prefix of the VAT number.')) ?>',
+            invalidWithCompany: '<?= $escaper->escapeJs(__('Please type a valid VAT number in this field, or leave the company field empty.')) ?>',
+            requiredVat: '<?= $escaper->escapeJs(__('Please type a valid VAT number in this field.')) ?>',
+            countryMismatch: '<?= $escaper->escapeJs(__('The VAT country prefix does not match the selected country.')) ?>'
+        };
+
+        /**
+         * Wait for validation result with timeout.
+         * Modern Polling using Promise.race (no EventBus needed).
+         * @param {string} vatId - VAT ID
+         * @param {number} timeout - Timeout in milliseconds
+         * @returns {Promise<boolean>} Promise resolving to validation result
+         */
+        function waitForValidationResult(vatId, timeout = 10000) {
+            const dm = window.GwVatValidation.DataManager;
+            if (dm.hasResult(vatId)) {
+                return Promise.resolve(dm.getResult(vatId).vat_is_valid);
+            }
+            return Promise.race([
+                new Promise(resolve => {
+                    const poll = () => {
+                        if (dm.hasResult(vatId)) {
+                            return resolve(dm.getResult(vatId).vat_is_valid);
+                        }
+                        setTimeout(poll, 150);
+                    };
+                    poll();
+                }),
+                new Promise((_, reject) => setTimeout(() => reject(new Error('Validation timeout')), timeout))
+            ]).catch(() => false);
+        }
+
+        /**
+         * Check if VAT number is valid (sync/async, uses cache/polling).
+         * @param {string} vatId - VAT ID
+         * @returns {Promise<boolean>} Promise resolving to validation result
+         */
+        function isValidVatNumber(vatId, countryId) {
+            if (!vatId || vatId.trim().length === 0) return Promise.resolve(false);
+            if (!countryId) {
+                const m = vatId.match(/^[A-Z]{2}/);
+                countryId = m ? m[0].toUpperCase() : '';
+            }
+            const dataManager = window.GwVatValidation.DataManager;
+            if (dataManager.hasResult(vatId)) {
+                return Promise.resolve(dataManager.getResult(vatId).vat_is_valid);
+            }
+            return waitForValidationResult(vatId).catch(() => false);
+        }
+
+        // Add form validation rules for Hyvä
+        if (hyva && hyva.formValidation && !window.__gw_vat_rules_registered) {
+            window.__gw_vat_rules_registered = true;
+
+            // Rule: VAT is valid if specified, or can be empty
+            hyva.formValidation.addRule('valid-vat-if-specified', (value, options, field, context) => {
+                context.removeMessages(field, 'valid-vat-if-specified-msg');
+                if (value.length === 0) {
+                    return true;
+                }
+                const allowDiff = !(window.GwVatValidation?.Flags?.allowDifferentPrefix === false);
+                if (!allowDiff) {
+                    const selected = (context.fields.country_id?.element?.value || '').toUpperCase();
+                    const prefix   = (value.match(/^[A-Z]{2}/) || [])[0] || '';
+                    const selNorm  = selected === 'GR' ? 'EL' : selected;
+                    const preNorm  = prefix   === 'GR' ? 'EL' : prefix;
+                    if (prefix && selected && selNorm !== preNorm) {
+                        return GwVatValidation.Messages.countryMismatch;
+                    }
+                }
+                const countryId = context.fields.country_id?.element?.value || '';
+                return isValidVatNumber(value, countryId)
+                    .then(isValid => isValid ? true : GwVatValidation.Messages.invalidVat)
+                    .catch(() => GwVatValidation.Messages.timeout);
+            });
+
+            // Rule: VAT is valid if company is specified
+            hyva.formValidation.addRule('valid-vat-if-company-specified', (value, options, field, context) => {
+                const companyField = context.fields.company?.element;
+                const hasCompany = companyField && companyField.value.trim().length > 0;
+                if (!hasCompany) {
+                    context.removeMessages(field, 'valid-vat-if-company-specified-msg');
+                    return true;
+                }
+                const countryId = context.fields.country_id?.element?.value || '';
+                return isValidVatNumber(value, countryId)
+                    .then(isValid => isValid ? true : GwVatValidation.Messages.invalidWithCompany)
+                    .catch(() => GwVatValidation.Messages.timeout);
+            });
+
+            // Rule: VAT is required and must be valid
+            hyva.formValidation.addRule('valid-vat-required', (value, options, field, context) => {
+                if (value.length === 0) {
+                    return GwVatValidation.Messages.requiredVat;
+                }
+                const countryId = context.fields.country_id?.element?.value || '';
+                return isValidVatNumber(value, countryId)
+                    .then(isValid => isValid ? true : GwVatValidation.Messages.requiredVat)
+                    .catch(() => GwVatValidation.Messages.timeout);
+            });
+        }
+    })();
+
+    function initVatIdValidation() {
+        return {
+            autoSaveTime: 500,
+            addressType: '',
+            vatNumber: '',
+            countryId: '',
+            isPassedRegex: false,
+            isLoading: false,
+            validationResult: {
+                vat_is_valid: false,
+                vat_request_success: false,
+                request_message: ''
+            },
+            showFrontendMessage: false,
+            timeoutId: null,
+            eventListeners: [],
+            vatValidationUnsubscribe: null,
+            allowDifferentPrefix: true,
+            isVisible: null,
+            init() {
+                const configElement = this.$el.querySelector('[data-vat-config]');
+                const config = configElement ? JSON.parse(configElement.dataset.vatConfig || '{}') : {};
+
+                this.addressType = config.addressType || this.$el.dataset.addressType || '';
+                this.vatNumber = config.vatNumber || '';
+                this.countryId = config.countryId || '';
+                this.autoSaveTime = typeof config.autoSaveTime === 'number'
+                    ? config.autoSaveTime
+                    : Number(config.autoSaveTime || this.autoSaveTime);
+                this.allowDifferentPrefix = typeof config.allowDifferentPrefix === 'boolean'
+                    ? config.allowDifferentPrefix
+                    : true;
+                
+                window.GwVatValidation.Flags = window.GwVatValidation.Flags || {};
+                window.GwVatValidation.Flags.allowDifferentPrefix = this.allowDifferentPrefix;
+
+                if (config.initialResult && this.vatNumber) {
+                    if (window.GwVatValidation?.DataManager) {
+                        window.GwVatValidation.DataManager.addResult(this.vatNumber, config.initialResult);
+                    }
+                    this.validationResult = { ...config.initialResult };                        
+                    this.showFrontendMessage = false;
+                }
+                        
+                this.countryId = (this.countryId || this.readSelectedCountry() || '').toUpperCase();
+                this.checkVisibility();
+                this.loadResult(!!this.vatNumber);
+                     
+                const onCountryChanged = (event) => {
+                    if (event.detail.addressType === this.addressType) {
+                        const newCountry = event.detail.value;
+                        if (newCountry && newCountry !== this.countryId) {
+                            this.countryId = newCountry;
+                            if (this.vatNumber && !/^[A-Z]{2}/i.test(this.vatNumber)) {
+                                this.vatNumber = (newCountry === 'GR' ? 'EL' : newCountry) + this.vatNumber;
+                            }
+                            if (this.isVisible && this.vatNumber) {
+                                this.onUpdate(this.vatNumber);
+                            } else {
+                                this.resetValidation();
+                                this.refreshTotals();
+                            }
+                            <?php if ($debugEnabled): ?>
+                            console.log(`[alpine] Country changed to ${newCountry} for ${this.addressType}`);
+                            <?php endif; ?>
+                        }
+                    }
+                };
+                window.addEventListener('country-id-changed', onCountryChanged);
+                this.eventListeners.push({ event: 'country-id-changed', handler: onCountryChanged });
+    
+                const visibilityChangeHandler = (event) => {
+                    if (event.detail.addressType !== this.addressType) {
+                        return;
+                    }
+                    this.isVisible = event.detail.isVisible === true;
+                    if (!this.isVisible) {
+                        this.clear();
+                    }
+                };
+                document.addEventListener('vat-id-visibility-changed', visibilityChangeHandler);
+                this.eventListeners.push({ event: 'vat-id-visibility-changed', handler: visibilityChangeHandler });
+
+                // Cleanup
+                this.$cleanup = () => {
+                    if (this.timeoutId) {
+                        clearTimeout(this.timeoutId);
+                    }
+                    if (this.refreshTimeout) {
+                        clearTimeout(this.refreshTimeout);
+                    }
+                    this.eventListeners.forEach(({ event, handler }) => {
+                        document.removeEventListener(event, handler);
+                    });
+                    if (this.vatValidationUnsubscribe) {
+                        this.vatValidationUnsubscribe();
+                    }
+                    this._destroyed = true;
+                };
+
+                // Watcher: Refresh only when status changes/triage
+                this.$watch('validationResult', (val, old) => {
+                    if (!val) return;
+
+                    const becameReady = !old?.vat_request_success && !!val.vat_request_success;
+                    const validityChanged = old?.vat_is_valid !== val.vat_is_valid;
+
+                    if (becameReady || validityChanged) {
+                        this.refreshTotals();
+                    }
+                });
+                this.$watch('isVisible', (vis, prev) => {
+                    if (prev && !vis) this.clear();
+                });
+            },
+
+            /**
+             * Load existing validation result
+             */
+            loadResult(force = false) {
+                if (!this.vatNumber || this.vatNumber.length === 0 || !window.GwVatValidation.DataManager) return;
+
+                const cached = window.GwVatValidation.DataManager.getResult(this.vatNumber);
+                if (cached && !force) {
+                    this.validationResult = { ...cached };
+                    this.showFrontendMessage = true;
+                    return;
+                }
+                this.onUpdate(this.vatNumber, { force });
+            },
+
+            /**
+             * @description Creates a normalized VAT validation result object.
+             * @param {Object} options - Validation state options
+             * @param {boolean} [options.isValid=false] - Whether the VAT is valid
+             * @param {boolean} [options.isSuccess=false] - Whether the request was successful
+             * @param {string} [options.message=''] - Message to display
+             * @returns {Object} VAT result object
+             */
+            createValidationResult(options) {
+                const { isValid = false, isSuccess = false, message = '' } = options || {};
+                return {
+                    vat_is_valid: isValid,
+                    vat_request_success: isSuccess,
+                    request_message: message
+                };
+            },
+                
+            /**
+             * @description Extracts the country prefix from a VAT number.
+             * @param {string} vatNumber - VAT number
+             * @returns {string} Two-letter country code or empty string
+             */
+            getCountryCodeFromVatNumber(vatNumber) {
+                return vatNumber.match(/^[A-Z]{2}/i)
+                    ? vatNumber.slice(0, 2).toUpperCase()
+                    : '';
+            },
+
+            /**
+             * @description Checks the visibility of the VAT field and updates internal state.
+             * @param {boolean|null} [explicitlyProvidedIsVisible=null] - Override visibility state if provided
+             */
+            checkVisibility(explicitlyProvidedIsVisible = null) {
+                const input = document.querySelector(`input[data-form="${this.addressType}"][data-attribute="vat_id"]`);
+                if (input) {
+                    this.isVisible = explicitlyProvidedIsVisible !== null ? explicitlyProvidedIsVisible : input.dataset.vatIdVisible === 'true';
+                } else {
+                    this.isVisible = false;
+                }
+                this.dispatchVisibilityChange();
+
+                if (!this.isVisible) {
+                    this.clear();
+                }
+            },
+
+            /**
+             * @description Dispatches a custom event indicating a change in VAT field visibility.
+             */
+            dispatchVisibilityChange() {
+                const eventDetail = {
+                    addressType: this.addressType,
+                    isVisible: this.isVisible
+                };
+                const event = new CustomEvent('vat-id-visibility-changed', { detail: eventDetail });
+                document.dispatchEvent(event);
+            },
+            
+            /**
+             * Clear value when field is invisible
+             */
+            clear() {
+                const vatIdField = document.querySelector(`input[data-form="${this.addressType}"][data-attribute="vat_id"]`);
+                if (vatIdField && vatIdField.value) {
+                    vatIdField.value = '';
+                    this.vatNumber = '';
+                    vatIdField.dispatchEvent(new Event('input', { bubbles: true }));
+                    vatIdField.dispatchEvent(new Event('change', { bubbles: true }));
+                    this.resetValidation();
+                }
+            },
+
+            /**
+             * Reset validation state
+             */
+            resetValidation() {
+                this.showFrontendMessage = false;
+                this.validationResult = this.createValidationResult();
+                this.refreshTotals();
+            },
+
+            /**
+             * Show validation message
+             * @param {string} message - Message to display
+             */
+            showMessage(message) {
+                this.validationResult.request_message = message;
+                this.showFrontendMessage = true;
+            },
+            
+            /**
+             * @description Returns the CSS class for validation background color.
+             * @returns {Object} CSS class map
+             */
+            statusClass() {
+                return this.validationResult.vat_is_valid
+                    ? { 'bg-green-50': true }
+                    : { 'bg-red-50': true };
+            },
+
+            /**
+             * @description Returns the CSS class for validation text color.
+             * @returns {Object} CSS class map
+             */
+            textClass() {
+                return this.validationResult.vat_is_valid
+                    ? { 'text-green-800': true }
+                    : { 'text-red-800': true };
+            },
+
+            /**
+             * @description Returns the current validation message text.
+             * @returns {string} Validation message
+             */
+            getMessageText() {
+                return this.validationResult?.request_message || '';
+            },
+
+            /**
+             * @description Returns whether to show the green success icon.
+             * @returns {boolean} True if validation is successful and VAT is valid
+             */
+            showSuccessIcon() {
+                return this.validationResult.vat_request_success && this.validationResult.vat_is_valid;
+            },
+
+            /**
+             * @description Returns whether to show the red error icon.
+             * @returns {boolean} True if validation failed or VAT is invalid
+             */
+            showErrorIcon() {
+                return this.validationResult.vat_request_success && !this.validationResult.vat_is_valid;
+            },
+
+            /**
+             * @description Handles VAT input change from an external component.
+             * @param {CustomEvent} event - Event containing VAT number and address type
+             */
+            handleVatIdChanged(event) {
+                if (!event?.detail?.vatNumber || event.detail.addressType !== this.addressType) {
+                    return;
+                }
+                this.onUpdate(event.detail.vatNumber);
+            },
+
+            /**
+             * @description Handles user input in the VAT field and normalizes the input value.
+             * @param {Event} event - Input event
+             */
+            handleVatInput(event) {
+                if (!event || !event.target) return;
+                event.target.value = event.target.value
+                    .replace(/[^A-Za-z0-9]/g, '')
+                    .toUpperCase()
+                    .trim();
+
+                this.vatNumber = event.target.value || '';
+                if (this.vatNumber.length === 0) {
+                    this.resetValidation();
+                }
+            },
+
+            /**
+             * @description Emits a custom event to notify that the VAT number has changed.
+             */
+            handleVatChange() {
+                if (!this.vatNumber?.length) {
+                    return;
+                }
+
+                this.$dispatch('vat-id-changed', {
+                    addressType: this.addressType,
+                    vatNumber: this.vatNumber
+                });
+            },
+
+            /**
+             * @description Adds a VAT validation result to the shared DataManager cache.
+             * @param {string} vatNumber - VAT number
+             * @param {Object} result - Validation result object
+             */
+            addResultToManager(vatNumber, result) {
+                if (!vatNumber || !result || typeof result !== 'object') return;
+                if (window.GwVatValidation.DataManager) {
+                    window.GwVatValidation.DataManager.addResult(vatNumber, result);
+                }
+            },
+
+            readSelectedCountry() {
+                const sel = document.querySelector(
+                    `select[name="country_id"][data-form="${this.addressType}"]`
+                );
+                return (sel?.value || '').toUpperCase();
+            },
+                
+            /**
+             * Handle VAT number update
+             * @param {string} newNumber - New VAT number
+             */
+            onUpdate(newNumber, { force = false } = {}) {
+                <?php if ($debugEnabled): ?>
+                console.log('Starting validation for VAT ID:', this.vatNumber, 'and country:', this.countryId);
+                <?php endif; ?>
+
+                if (this.timeoutId) {
+                    clearTimeout(this.timeoutId);
+                }
+
+                this.resetValidation();
+                this.vatNumber = newNumber;
+
+                if (!this.vatNumber || this.vatNumber.length === 0) {
+                    this.refreshTotals();
+                    return;
+                }
+
+                // Handle country code prefix
+                if (!this.vatNumber.match(/^[A-Z]{2}/i)) {
+                    if (this.countryId === 'GR') {
+                        this.vatNumber = 'EL' + this.vatNumber;
+                    } else if (this.countryId) {
+                        this.vatNumber = this.countryId + this.vatNumber;
+                    } else {
+                        this.validationResult = this.createValidationResult({ message: GwVatValidation.Messages.missingPrefix });
+                        this.showFrontendMessage = true;
+                        this.addResultToManager(this.vatNumber, this.validationResult);
+                        return;
+                    }
+                }
+
+                const countryCode = this.getCountryCodeFromVatNumber(this.vatNumber);
+                const regex = window.GwVatValidation.CompiledVatPatterns?.[countryCode];
+
+                if (this.allowDifferentPrefix === false) {
+                    const selRaw = (this.countryId || this.readSelectedCountry() || '').toUpperCase();
+                    const selNorm = selRaw === 'GR' ? 'EL' : selRaw;
+                    const prefNorm = countryCode === 'GR' ? 'EL' : (countryCode || '');
+
+                    if (selNorm && prefNorm && selNorm !== prefNorm) {
+                        this.validationResult = this.createValidationResult({
+                            message: GwVatValidation.Messages.countryMismatch
+                        });
+                        this.showFrontendMessage = true;
+                        this.refreshTotals();
+                        return;
+                    }
+                }
+
+                if (!regex) {
+                    this.resetValidation();
+                    this.showFrontendMessage = false;
+                    this.closeMessageButton?.();
+                    this.refreshTotals();
+                    return;
+                }
+
+                this.isPassedRegex = regex.test(this.vatNumber);
+                if (!this.isPassedRegex) {
+                    this.validationResult = this.createValidationResult({ message: GwVatValidation.Messages.invalidFormat });
+                    this.addResultToManager(this.vatNumber, this.validationResult);
+                    this.showFrontendMessage = true;
+                    this.refreshTotals();
+                    return;
+                }
+
+                if (!force && window.GwVatValidation.DataManager.hasResult(this.vatNumber)) {
+                    const result = window.GwVatValidation.DataManager.getResult(this.vatNumber);
+                    if (result) {
+                        this.validationResult = { ...result };
+                        this.showFrontendMessage = true;
+                        this.refreshTotals();
+                        return;
+                    }
+                }
+
+                this.isLoading = true;
+                this.timeoutId = setTimeout(() => {
+                    this.validateVatId();
+                }, this.autoSaveTime);
+            },
+
+            /**
+             * @description Hides the validation message after a timeout.
+             * @param {number} [timeout=10000] - Timeout in milliseconds (0 = immediately)
+             */
+            closeMessage(timeout = 10000) {
+                if (timeout === 0) {
+                    this.showFrontendMessage = false;
+                } else {
+                    setTimeout(() => {
+                        this.showFrontendMessage = false;
+                    }, timeout);
+                }
+            },
+
+            /**
+             * @description Immediately hides the validation message.
+             */
+            closeMessageButton() {
+                this.closeMessage(0);
+            },
+
+            /**
+             * Refresh order total summary
+             */
+            refreshTotals() {
+                if (!this.addressType) return;
+                clearTimeout(this.refreshTimeout);
+                this.refreshTimeout = setTimeout(() => {
+                    Magewire.emitTo('price-summary.total-segments', `${this.addressType}_address_saved`);
+                }, this.autoSaveTime);
+            },
+
+            /**
+             * Validate VAT ID with server
+             */
+            validateVatId() {
+                this.showFrontendMessage = false;
+                if (!this.vatNumber || this.vatNumber.length === 0) {
+                    this.isLoading = false;
+                    return;
+                }
+
+                const requestUrl = `${BASE_URL}euvat/vatnumber/validation`;
+                const params = new URLSearchParams({
+                    form_key: hyva.getFormKey(),
+                    vat_number: this.vatNumber,
+                    handle: 'hyva_front'
+                });
+
+                fetch(requestUrl + '?' + params, {
+                    headers: {'X-Requested-With': 'XMLHttpRequest'},
+                    method: 'GET',
+                    mode: 'cors',
+                    credentials: 'include'
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        <?php if ($debugEnabled): ?>
+                        console.error('Fetch error:', response.statusText);
+                        <?php endif; ?>
+                        throw new Error(`HTTP error ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {                        
+                        <?php if ($debugEnabled): ?>
+                        if (!data || typeof data !== 'object') {
+                            console.warn('Not a data object! data:', data);
+                            return "FALLBACK";
+                        }
+                        if (!data.vat_is_valid) {
+                            console.warn('VAT is not valid! Error:', data.request_message);
+                        }
+                        console.log('Validation successful. Result:', data);
+                        <?php endif; ?>
+                        
+                        this.validationResult = {...data};
+                        this.addResultToManager(this.vatNumber, this.validationResult);
+                })
+                .catch(error => {
+                    <?php if ($debugEnabled): ?>
+                    console.error('Validation failed. Error:', error);
+                    <?php endif; ?>
+                    this.validationResult = this.createValidationResult({ message: GwVatValidation.Messages.validationError });
+                    this.addResultToManager(this.vatNumber, this.validationResult);
+                })
+                .finally(() => {
+                    <?php if ($debugEnabled): ?>
+                    console.log('Validation finished. Ending loading state.');
+                    <?php endif; ?>
+                    this.showFrontendMessage = true;
+                    this.refreshTotals();
+                    this.isLoading = false;
+                });
+            }
+        }
+    }
+
+    window.addEventListener(
+        'alpine:init',
+        () => Alpine.data('initVatIdValidation', initVatIdValidation),
+        {once: true}
+    );
+    
+    document.addEventListener('change', function(e) {
+        if (e.target.matches('select[data-attribute="country_id"][data-form]')) {
+            const formType = e.target.getAttribute('data-form');
+            window.dispatchEvent(new CustomEvent('country-id-changed', {
+                detail: {
+                    addressType: formType,
+                    value: e.target.value
+                }
+            }));
+            <?php if ($debugEnabled): ?>
+            console.log(`[global] country-id-changed dispatched for ${formType}: ${e.target.value}`);
+            <?php endif; ?>
+        }
+    });
+</script>
+<?php $hyvaCsp->registerInlineScript() ?>

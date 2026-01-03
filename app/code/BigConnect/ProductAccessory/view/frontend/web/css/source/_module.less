@@ -1,0 +1,130 @@
+& when (@media-common = true) {
+.product-accessory {
+	border: 3px solid #f7f6f4;
+	padding: 10px 10px;
+	margin-top: 30px;
+	margin-bottom: 0px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	position: relative;
+	padding-top: 25px;
+	.headline {
+	    position: absolute;
+	    top: -15px;
+	    background: white;
+	    padding: 0px 15px;
+	    font-size: 16px;
+	    font-weight: 600;
+	    color: #999999;
+	}
+	ul {
+		list-style: none;
+		padding: 0;
+		display: flex;
+		flex-wrap: wrap;
+		height: 100%;
+		margin-bottom: 0px;
+		li {
+			display: flex;
+			margin-right: 8px;
+			margin-bottom: 8px;
+			.accessory-single {
+				display: flex;
+				align-items: center;
+				position: relative;
+				padding: 8px;
+				&:after {					
+					content: "";
+					background: #000000;
+					z-index: 2;
+					position: absolute;
+					width: 100%;
+					height: 100%;
+					top: 0;
+					left: 0;
+					opacity: 0.02;
+
+				}
+			}
+			.accessory-images {
+				margin-left: 8px;
+				display: flex;
+				img {
+					height: 40px;
+					width: auto;
+					&:not(:first-child) {
+					margin-left: -15px;
+					}
+					&.skrutky {
+						height: 40px;
+						&:not(:first-child) {
+						margin-left: -12px;
+						}
+					}
+					&.imbusak {
+						height: 40px;
+					}
+					&.zaslepky {
+					    height: 28px;
+					}
+					&.kluc {
+						height: 35px;
+					}
+					&.sruba10 {
+						margin-right: 10px;
+					}
+					&.filc {
+						margin-left: 1px;
+						height: 35px;
+					}
+				}
+			}
+		}
+	}
+}
+.rectification-badge {
+		background: #f7f6f4;
+	    padding: 5px 13px;
+	    color: #202020;
+	    font-weight: 600;
+	    font-size: 16px;
+	    width: max-content;
+	    display: flex;
+	    align-items: center;
+	    margin-bottom: 15px;
+	    img {
+	    	width: 40px;
+	    	margin-right: 10px;
+	    }
+}
+}
+
+//
+//  Mobile
+//  _____________________________________________
+
+.media-width(@extremum, @break) when (@extremum ='max') and (@break = @screen__m) {
+		.product-accessory {
+			margin-top: 15px;
+			margin-bottom: 20px;
+			ul {
+				li {
+					.accessory-images {
+						img {
+							height: 45px;
+							&.imbusak {
+								height: 40px;
+							}
+							&.skrutky {
+								height: 38px;
+							}
+							&.zaslepky {
+								height: 25px;
+							}
+						}
+					}
+				}
+			}
+		}
+}

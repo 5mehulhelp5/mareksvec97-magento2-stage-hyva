@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2022-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd"
+>
+    <body>
+        <referenceContainer name="magewire.plugin.scripts">
+            <block name="checkout.payment.credit_card_form"
+                   class="Magento\Payment\Block\Form\Cc"
+                   template="Hyva_CheckoutPayPal::checkout/payment/credit_card_form-csp-js.phtml"
+            />
+            <block name="checkout.payment.method.payflow_iframe.iframe"
+                   template="Hyva_CheckoutPayPal::checkout/payment/method/payflow_iframe/iframe-csp-js.phtml"
+            />
+            <block name="checkout.payment.method.payflowpro.iframe_hidden_form"
+                   template="Hyva_CheckoutPayPal::checkout/payment/method/payflowpro/iframe_hidden_form-csp-js.phtml"
+            />
+            <block name="checkout.payment.method.payflowpro.payflowpro_form"
+                   template="Hyva_CheckoutPayPal::checkout/payment/method/payflowpro/payflowpro_form-csp-js.phtml"
+            />
+            <block name="checkout.payment.method.payflowpro.recaptcha"
+                   template="Hyva_CheckoutPayPal::checkout/payment/method/payflowpro/recaptcha-csp-js.phtml"
+            />
+            <block name="checkout.payment.method.paypal_express.pay_later"
+                   template="Hyva_CheckoutPayPal::checkout/payment/method/paypal_express/pay_later-csp-js.phtml"
+            />
+            <block name="checkout.payment.method.paypal_express.paypal_express_in_context"
+                   template="Hyva_CheckoutPayPal::checkout/payment/method/paypal_express/paypal_express_in_context-csp-js.phtml"
+            />
+        </referenceContainer>
+    </body>
+</page>

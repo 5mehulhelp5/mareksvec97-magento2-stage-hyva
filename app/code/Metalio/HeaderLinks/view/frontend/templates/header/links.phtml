@@ -1,0 +1,38 @@
+<?php
+declare(strict_types=1);
+
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Element\Template;
+use Hyva\Theme\Model\ViewModelRegistry;
+use Metalio\HeaderLinks\ViewModel\HeaderLinks;
+
+/** @var Template $block */
+/** @var Escaper $escaper */
+/** @var ViewModelRegistry $viewModels */
+
+$vm = $viewModels->require(HeaderLinks::class);
+
+if (!$vm->isEnabled()) {
+    return;
+}
+
+$links = $vm->getLinks();
+if (!$links) {
+    return;
+}
+?>
+
+<nav class="flex items-center gap-3">
+    <?php foreach ($links as $l): ?>
+        <a
+          href="<?= $escaper->escapeUrl($l['href']) ?>"
+          class="inline-flex items-center md:h-[48px] min-w-[48px] min-h-[48px] h-full gap-2
+                 bg-gray-100 px-5 rounded-full hover:bg-gray-200 transition-colors relative text-slate-800
+                 font-bold"
+          <?= !empty($l['new_tab']) ? 'target="_blank" rel="noopener noreferrer"' : '' ?>
+        >
+          <span><?= $escaper->escapeHtml($l['label']) ?></span>
+        </a>
+
+    <?php endforeach; ?>
+</nav>

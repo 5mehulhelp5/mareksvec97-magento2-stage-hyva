@@ -1,0 +1,131 @@
+//
+//  Common
+//  _____________________________________________
+
+& when (@media-common = true) {
+	.options-list.color_options {
+		display: flex;
+		flex-wrap: wrap;
+			.field {
+				input {
+					display: none;
+					&:checked + .label {
+						img {
+							border: 3px solid @primary-color;
+						}
+
+					}
+				}
+				.label {
+					cursor: pointer;
+					img {
+						border: 3px solid #e4e4e4;
+						border-radius: 100%;
+						margin-bottom: 5px;
+					}
+					.color-name {
+						margin-bottom: 3px;
+					}
+				}
+			}
+	}
+	.catalog-product-view {
+		.product-options-wrapper {
+				.options-list.color_options {
+						.admin__field-option {
+							margin-bottom: 0px;
+							input[type="radio"] {
+								+ .admin__field-label {
+									width: max-content;
+								} 
+						}
+						}
+				}
+		.swatch-attribute {
+			&.color {
+				.swatch-attribute-options {
+					display: flex;
+					flex-wrap: wrap;
+					gap: 10px;
+					.swatch-option {
+						border: 3px solid #e4e4e4;
+						height: 60px;
+						width: 60px;
+						font-size: 13px;
+						font-weight: 500;
+						display: flex;
+						align-items: center;
+						justify-content: center;
+						cursor: pointer;
+						border-radius: 100%;
+						margin: 0px;
+						outline: none;
+						&.selected {
+							border: 3px solid @primary-color;
+						}
+					}
+				}
+			}
+		}
+			
+		}
+		
+	}
+}
+//
+//  Desktop
+//  _____________________________________________
+
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) { 
+	.options-list.color_options {
+		gap: 15px;
+	}
+		.catalog-product-view {
+			.product-options-wrapper {
+					.options-list.color_options {
+							.admin__field-option {
+								input[type="radio"] {
+									+ .admin__field-label {
+										img {
+										width: 60px;
+										height: 60px;
+									}
+									} 
+							}
+							}
+					}
+				
+			}
+			
+		}
+}
+
+
+
+//
+//  Mobile
+//  _____________________________________________
+
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) { 
+	.options-list.color_options {
+		gap: 10px;
+	}
+		.catalog-product-view {
+			.product-options-wrapper {
+					.options-list.color_options {
+							.admin__field-option {
+								input[type="radio"] {
+									+ .admin__field-label {
+										img {
+										width: 50px;
+										height: 50px;
+									}
+									} 
+							}
+							}
+					}
+				
+			}
+			
+		}
+}

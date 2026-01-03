@@ -1,0 +1,41 @@
+& when (@critical) {
+	.homepage-categories {
+		h2 {
+			font-weight: 600;
+			margin-bottom: 13px;
+			font-size: 21px;
+		}
+		p {
+			color: @color_light_black;
+			font-size: 14px;
+		}
+		.pagebuilder-banner-wrapper {
+			border-radius: 8px;
+			.pagebuilder-overlay {
+				padding: 35px;
+				button {
+				margin-top: 10px;	
+				}
+			}
+		}
+	.pagebuilder-column {
+		> div {
+			border-radius: 8px;
+			background: #efefef;
+		}
+	}
+	}
+//
+//  Mobile
+//  _____________________________________________
+
+	@media @media-md-down {
+		.homepage-categories {
+			.pagebuilder-banner-wrapper {
+				min-height: 340px !important;
+				background-position-y: 30% !important;
+			}
+		}
+
+		}
+}

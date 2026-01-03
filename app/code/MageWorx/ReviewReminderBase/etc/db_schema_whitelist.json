@@ -1,0 +1,91 @@
+{
+    "mageworx_reviewreminderbase_reminder": {
+        "column": {
+            "reminder_id": true,
+            "name": true,
+            "type": true,
+            "content": true,
+            "email_template_id": true,
+            "period": true,
+            "display_on_mobile": true,
+            "priority": true,
+            "created_at": true,
+            "updated_at": true,
+            "status": true
+        },
+        "index": {
+            "MAGEWORX_REVIEWREMINDERBASE_REMINDER_NAME_CONTENT": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    },
+    "mageworx_reviewreminderbase_reminder_store": {
+        "column": {
+            "reminder_id": true,
+            "store_id": true
+        },
+        "index": {
+            "MAGEWORX_REVIEWREMINDERBASE_REMINDER_STORE_STORE_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "FK_5E2CE86E1D363B5164F0035C7289C6E1": true,
+            "FK_035165755546E76F82BF436527C29E00": true
+        }
+    },
+    "mageworx_reviewreminderbase_reminder_customer_group": {
+        "column": {
+            "reminder_id": true,
+            "customer_group_id": true
+        },
+        "index": {
+            "MAGEWORX_REVIEWREMINDERBASE_REMINDER_CSTR_GROUP_CSTR_GROUP_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "FK_9154D83E502D55EDB553599EA7167495": true,
+            "FK_4B09904E1BE69C3083DACE663C318C60": true
+        }
+    },
+    "mageworx_reviewreminderbase_reminder_template": {
+        "column": {
+            "template_id": true,
+            "identifier": true,
+            "title": true,
+            "content": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "MAGEWORX_REVIEWREMINDERBASE_REMINDER_TEMPLATE_IDENTIFIER": true
+        }
+    },
+    "mageworx_reviewreminderbase_log": {
+        "column": {
+            "record_id": true,
+            "reminder_id": true,
+            "customer_email": true,
+            "email_template_id": true,
+            "product_count": true,
+            "details": true,
+            "sent_at": true,
+            "store_id": true,
+            "result": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "MAGEWORX_REVIEWREMINDERBASE_LOG_STORE_ID_STORE_STORE_ID": true
+        }
+    },
+    "mageworx_reviewreminderbase_unsubscribed": {
+        "column": {
+            "unsubscribed_id": true,
+            "email": true,
+            "unsubscribed_at": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "MAGEWORX_REVIEWREMINDERBASE_UNSUBSCRIBED_EMAIL": true
+        }
+    }
+}

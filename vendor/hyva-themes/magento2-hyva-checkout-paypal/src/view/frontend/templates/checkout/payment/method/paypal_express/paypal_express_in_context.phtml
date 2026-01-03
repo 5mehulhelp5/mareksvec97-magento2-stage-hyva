@@ -1,0 +1,45 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2022-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+declare(strict_types=1);
+
+use Hyva\CheckoutPayPal\Magewire\Payment\Method\PaypalExpress;
+use Hyva\Theme\Model\ViewModelRegistry;
+use Magento\Framework\Escaper;
+use Hyva\CheckoutPayPal\ViewModel\Payment\Method\PaypalExpress as ViewModel;
+use Hyva\CheckoutPayPal\ViewModel\Payment\PayLater;
+use Magento\Framework\View\Element\Template;
+
+/** @var Escaper $escaper */
+/** @var Template $block */
+/** @var PaypalExpress $magewire */
+/** @var ViewModelRegistry $viewModels */
+/** @var ViewModel $viewModel */
+/** @var PayLater $payLater */
+
+$viewModel = $viewModels->require(ViewModel::class);
+$payLater = $viewModels->require(PayLater::class);
+$magewire = $block->getParentBlock()->getData('magewire');
+
+$methodCode = $magewire->getMethodCode();
+?>
+<div id="paypal-in-context" class="relative z-10">
+    <div id="paypal-button-container" class="paypal checkout paypal-logo my-5 w-full">
+        <!-- PayPal button placeholder -->
+    </div>
+
+    <?php if ($payLater->isPayLaterEnabled()): ?>
+        <div id="paypal-messages-<?= $escaper->escapeHtmlAttr($methodCode) ?>"
+             class="paypal checkout" data-pp-message></div>
+    <?php endif; ?>
+
+    <div x-data="PaypalExpressInContext"
+         data-in-context-config='<?= $escaper->escapeHtmlAttr($viewModel->getInContextJsConfig($magewire->getQuote())) ?>'
+         data-funding-source="<?= $escaper->escapeHtmlAttr($magewire->fundingSource) ?>"
+         data-method-code="<?= $escaper->escapeHtmlAttr($methodCode) ?>">
+    </div>
+</div>

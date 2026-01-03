@@ -1,0 +1,26 @@
+{
+  "name": "hyva-themes/magento2-geissweb-euvat",
+  "description": "Hyvä Themes Compatibility module for Geissweb_Euvat",
+  "type": "magento2-module",
+  "require": {
+    "magento/framework": "*",
+    "hyva-themes/magento2-compat-module-fallback": "*",
+    "geissweb/module-euvat": "*"
+  },
+  "authors": [{
+      "name": "Hyvä Themes B.V.",
+      "email": "info@hyva.io"
+  }, {
+      "name": "Sven Geiß",
+      "email": "sven@geissweb.de"
+  }],
+  "license": "see LICENSE.md",
+  "autoload": {
+    "files": [
+      "src/registration.php"
+    ],
+    "psr-4": {
+      "Hyva\\GeisswebEuvat\\": "src/"
+    }
+  }
+}

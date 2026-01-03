@@ -1,0 +1,40 @@
+//
+//  Common
+//  _____________________________________________
+
+& when (@media-common = true) {
+	.options-list.rectification_options {
+		display: flex;
+		flex-direction: columns;
+		flex-wrap: wrap;
+		gap: 15px;
+		.admin__field-option {
+			margin-bottom: 0px !important;
+		}
+			.field {
+				input {
+					display: none;
+					&:checked + .label {
+
+							border: 3px solid @primary-color;
+
+
+					}
+				}
+				.label {
+					cursor: pointer;
+					border: 3px solid #e4e4e4;
+					img {
+						height: 45px !important;
+						width: 45px !important;
+					}
+				.group-rect {
+					.color-name {
+						
+					}
+				}
+
+				}
+			}
+	}
+}

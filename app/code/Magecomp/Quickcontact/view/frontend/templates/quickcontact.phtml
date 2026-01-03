@@ -1,0 +1,159 @@
+<?php if($block->isEnable()){?>
+    
+    <style type="text/css">
+        #get_help , .contact-header {
+    background-color: <?php echo $block->getBgcolor();?>;
+    }
+    </style>
+<div id="get_help">
+    <span class="symbole">&#63;</span>
+    <span class="help">Help</span>
+</div>
+<div id="mailcotentarea">
+    <div class="form">
+    <div class="contact-header">
+        <div class="title">
+            <div class="left"><p class="title-text"><?php echo "Leave us a message"; ?></p></div>
+            <div class="minus">&#8254;</div>
+        </div> 
+    </div>
+    <div id="maincontent">
+        <form id="contact-form" name="contact-form"  enctype="multipart/form-data">
+            <div class="fieldset">
+                <div class="field ">
+                    <label for="customername" class="label"><span><?php echo __('Your name (optional)') ?></span></label>
+                    <div class="control">
+                        <input type="text" id="customername" name="customername" 
+                         maxlength="255" class="input-text"/>
+                    </div>
+                </div>
+                <div class="field email required">
+                    <label for="customeremail" class="label"><span><?php echo __('Email address') ?></span></label>
+                    <div class="control">
+                        <input type="text" id="customeremail" name="customeremail" 
+                            maxlength="255"
+                               class="input-text validate-email required-entry"/>
+                    </div>
+                </div>
+                <div class="field required">
+                    <label for="comment" class="label"><span><?php echo __('How can we help you?') ?></span></label>
+                    <div class="control">
+                        <textarea id="comment" name="comment" 
+                                  class="input-text required-entry"></textarea>
+                    </div>
+                </div>
+                <div class="field file">
+                    <label for="attachment" class="label"><span><?php echo __('Attachements') ?></span></label>
+                    <div class="control">
+                        <input type="file" id="attachment" name="attachment[]" 
+                            maxlength="255"
+                              multiple />
+                    </div>
+                    <div>Add up to 5 files</div>
+                    <div class="quickcontact-error"></div>
+                </div>
+                <div class="actions-toolbar buttondiv">
+                    <div class="primary">
+                        <button class="button action primary" id="send-contact" title="<?php echo __('Send') ?>"
+                                type="button">
+                            <span><span><?php echo __('Send') ?></span></span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    </div>
+    <div class="send-msg">
+        <div class="contact-header">
+        <div class="title">
+            <div class="left-msg"><h3 class="title-text"><?php echo "Message Sent"; ?></h3></div>
+        </div> 
+    </div>
+        <div class="imageshow">
+            <img src="<?php echo $this->getViewFileUrl('Magecomp_Quickcontact::images/msgsentimage.png'); ?>" width="120">
+        </div>
+        <div class="message1">
+            <p>Thanks For Reaching Out </p>
+        </div>
+        <div class="message2">
+            <p>Someone will get back to you soon</p>
+        </div>
+        <div class="goback">
+            <a href="#" id="goback">Go Back</a>
+        </div>
+    </div>
+</div>
+
+    <script>
+    require([
+        'jquery'
+    ], function($){
+        $("#get_help").click(function(e) {
+          $("#mailcotentarea").css("display","block");
+          $("#get_help").css("display","none");  
+        });
+        $(".minus").click(function(e) {
+          $("#mailcotentarea").css("display","none");
+          $("#get_help").css("display","block");  
+        });
+        $("#goback").click(function(e) {
+          $("#mailcotentarea").css("display","none");
+          $("#get_help").css("display","block"); 
+          $(".form").css("display","block");
+          $(".send-msg").css("display","none"); 
+          $("#customername").val(""); 
+          $("#customeremail").val(""); 
+          $("#comment").val(""); 
+          $("#attachment").val(""); 
+        });
+        $("#attachment").on("change", function(){  
+            $('#send-contact').removeAttr('disabled');
+            $(".quickcontact-error").text("");
+            var numFiles = $("input:file")[0].files.length;
+            if(numFiles>5){
+                $(".quickcontact-error").text("you can't add more than 5 files");
+                $('#send-contact').attr('disabled','disabled');
+            }
+            var fileExtension = ['jpg', 'jpeg', 'gif', 'png','txt','pdf','docx'];
+            if ($.inArray($(this).val().split('.').pop().toLowerCase(), fileExtension) == -1) {
+            $(".quickcontact-error").text("Only these formats are allowed : "+fileExtension.join(', '));
+                $('#send-contact').attr('disabled','disabled');
+            }
+        });
+        $("#send-contact").on('click', function() {
+           if ($('#contact-form').valid()) {
+            var name= $("#customername").val();
+            var email= $("#customeremail").val();
+            var comment= $("#comment").val();
+            var formdata = new FormData(jQuery('#contact-form')[0]);
+            var formurl = '<?php echo $block->getSubmitUrl(); ?>';
+            jQuery.ajax({
+                type: "POST",
+                url: formurl,
+                data:formdata,
+                contentType: false,
+                processData: false,
+                showLoader: true,
+                success: function (data) {
+                    if(data.success==false)
+                    {
+                       $(".quickcontact-error").text(data.message);
+                    }
+                    else{
+                    $(".form").css("display","none");
+                    $(".send-msg").css("display","block");  
+                    }
+                },
+                error: function (data) {
+                    $(".quickcontact-error").text(data.message);
+                }
+            });
+        }
+        });    
+        
+    });
+
+</script>
+
+<?php } ?>

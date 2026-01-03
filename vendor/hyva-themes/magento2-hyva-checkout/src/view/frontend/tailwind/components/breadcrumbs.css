@@ -1,0 +1,19 @@
+:where(#hyva-checkout-main) {
+    .breadcrumbs {
+        .item {
+            @apply inline-flex items-center;
+
+            &.active {
+                @apply space-x-1 font-bold;
+            }
+
+            &.locked {
+                @apply text-gray-500 cursor-not-allowed;
+            }
+
+            &.completed {
+                @apply text-gray-700;
+            }
+        }
+    }
+}

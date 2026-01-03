@@ -1,0 +1,95 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// phpcs:disable Magento2.Templates.ThisInTemplate.FoundThis
+
+/**
+ * Product view template
+ *
+ * @var $block \Magento\Catalog\Block\Product\View\Description
+ */
+?>
+<?php
+$_helper = $this->helper(Magento\Catalog\Helper\Output::class);
+$_product = $block->getProduct();
+$layout = $this->getLayout();
+$attributesBlock = $layout->createBlock(\Magento\Catalog\Block\Product\View\Attributes::class);
+if (!$_product instanceof \Magento\Catalog\Model\Product) {
+    return;
+}
+
+$_call = $block->getAtCall();
+$_code = $block->getAtCode();
+$_className = $block->getCssClass();
+$_attributeLabel = $block->getAtLabel();
+$_attributeType = $block->getAtType();
+$_attributeAddAttribute = $block->getAddAttribute();
+
+$renderLabel = true;
+// if defined as 'none' in layout, do not render
+if ($_attributeLabel == 'none') {
+    $renderLabel = false;
+}
+
+if ($_attributeLabel && $_attributeLabel == 'default') {
+    $_attributeLabel = $_product->getResource()->getAttribute($_code)->getStoreLabel();
+}
+if ($_attributeType && $_attributeType == 'text') {
+    $_attributeValue = ($_helper->productAttribute($_product, $_product->$_call(), $_code))
+        ? $_product->getAttributeText($_code)
+        : '';
+} else {
+    $_attributeValue = $_helper->productAttribute($_product, $_product->$_call(), $_code);
+}
+?>
+
+<?php if ($_attributeValue) :?>
+<div class="product attribute <?= $block->escapeHtmlAttr($_className) ?> d-flex flex-wrap">
+    <?php if ($renderLabel) :?>
+        <strong class="type"><?= $block->escapeHtml($_attributeLabel) ?></strong>
+    <?php endif; ?>
+    <div class="value" <?= /* @noEscape */ $_attributeAddAttribute ?>><?= /* @noEscape */ $_attributeValue ?>
+        
+
+        <?php
+// Získajte aktuálny produkt
+$product = $block->getProduct();
+
+$imageFile = $product->getCustomAttribute('fotka_v_popise'); // Nahraďte 'fotka_v_popise' správnym kódom atribútu
+if ($imageFile) {
+    $hoverImageUrl = $this->helper('Magento\Catalog\Helper\Image')
+        ->init($product, 'image')
+        ->setImageFile($imageFile->getValue())
+        ->getUrl();
+    ?>
+    <?php if (strpos($hoverImageUrl, 'placeholder') == false) { ?>
+    <div class="interior-photo">
+        <div class="image-interior">
+            <div class="image" style="background: url(<?= $hoverImageUrl ?>)" alt="<?= $block->escapeHtmlAttr($product->getName()) ?>" ></div>
+        </div>
+        
+    </div>
+
+    <?php
+}}
+?>
+    </div>
+   
+    <?php if ($_additional = $attributesBlock->getAdditionalData()) :?>
+    <div class="atribues-block">
+        <ul class="custom_attributes">
+            <?php foreach ($_additional as $_data) :?>
+                <li class="d-flex items-center">
+                    <div class="attribute-name"><?= $block->escapeHtml($_data['label']) ?></div>
+                    <div class="atribute-value"><?= /* @noEscape */ $_helper->productAttribute($_product, $_data['value'], $_data['code']) ?></div>
+                </li>
+            <?php endforeach; ?>
+        </ul>
+    </div>    
+<?php endif;?>
+</div>
+<?php endif; ?>
+

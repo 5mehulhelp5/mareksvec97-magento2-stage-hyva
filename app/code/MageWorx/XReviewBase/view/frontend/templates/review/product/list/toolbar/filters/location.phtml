@@ -1,0 +1,39 @@
+<?php
+/**
+ * Copyright © MageWorx. All rights reserved.
+ * See LICENSE.txt for license details.
+ */
+?>
+<?php
+/** @var \Magento\Framework\View\Element\Template $block */
+/**
+ * @var $toolbar \MageWorx\XReviewBase\Block\Review\Product\ListView\Toolbar
+ */
+$toolbar = $block->getParentBlock()->getParentBlock();
+?>
+<?php $locationReviewCount = (int)$toolbar->getLocationReviewCount(); ?>
+
+<div class="mw-sorting-controls__item toolbar-filter">
+    <?php if ($toolbar->getCurrentLocationFilterValue() == 'on') : ?>
+        <input id="toolbar_location_filter"
+               type="checkbox"
+               checked
+               title="<?= $toolbar->escapeHtmlAttr(__('Discard filter by your country')) ?>"
+               data-role="location-filter"
+               data-value="off"
+            <?= !$locationReviewCount ? 'disabled' : '' ?>
+        />
+    <?php else: ?>
+        <input id="toolbar_location_filter"
+               type="checkbox"
+               title="<?= $toolbar->escapeHtmlAttr(__('Set filter by your country')) ?>"
+               data-role="location-filter"
+               data-value="on"
+            <?= !$locationReviewCount ? 'disabled' : '' ?>
+        />
+    <?php endif; ?>
+    <label class="mw-text" for="toolbar_location_filter">
+        <?= /* @noEscape */ $toolbar->getCurrentFlagImageHtml('mw-sorting-controls__flag') ?>
+        <?= $toolbar->escapeHtml(__('Your Country (%1)', $locationReviewCount)) ?>
+    </label>
+</div>

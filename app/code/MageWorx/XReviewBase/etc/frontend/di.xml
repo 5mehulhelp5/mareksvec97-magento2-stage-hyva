@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © MageWorx. All rights reserved.
+ * See LICENSE.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Magento\Review\Block\Product\View\ListView" type="MageWorx\XReviewBase\Block\Review\Product\ListView"/>
+    <preference for="Magento\Review\Block\Form" type="MageWorx\XReviewBase\Block\Review\Form"/>
+    <type name="Magento\Review\Model\Review">
+        <plugin name="mageworx_xreviewbase_add_additional_validate_after" type="MageWorx\XReviewBase\Plugin\ReviewValidatePlugin"/>
+    </type>
+    <type name="Magento\Review\Controller\Product\Post">
+        <plugin name="mageworx_xreviewbase_add_additional_validate_after" type="MageWorx\XReviewBase\Plugin\ReviewValidatePlugin"/>
+    </type>
+</config>

@@ -1,0 +1,92 @@
+Delete,Delete
+"Are you sure you want to do this?","Are you sure you want to do this?"
+Reset,Reset
+"Save and Continue Edit","Save and Continue Edit"
+Save,Save
+Conditions,Conditions
+"Conditions (don't add conditions if template is applied to all products)","Conditions (don't add conditions if template is applied to all products)"
+"The template ""%1"" has been applied.","The template ""%1"" has been applied."
+"Something went wrong while applying this template.","Something went wrong while applying this template."
+"We can't find a template to apply.","We can't find a template to apply."
+"Page Not Found.","Page Not Found."
+"The template ""%1"" has been deleted.","The template ""%1"" has been deleted."
+"Something went wrong while deleting this template.","Something went wrong while deleting this template."
+"We can't find a template to delete.","We can't find a template to delete."
+"Category SEO Templates","Category SEO Templates"
+"Edit Category Template ""%1""","Edit Category Template ""%1"""
+"Something went wrong while editing this template.","Something went wrong while editing this template."
+"We can't find a template to edit.","We can't find a template to edit."
+"A total of %1 template(s) have been applied.","A total of %1 template(s) have been applied."
+"Something went wrong while applying these templates.","Something went wrong while applying these templates."
+"A total of %1 template(s) have been deleted.","A total of %1 template(s) have been deleted."
+"Something went wrong while deleting these templates.","Something went wrong while deleting these templates."
+"New Category Template","New Category Template"
+"The template ""%1"" has been saved.","The template ""%1"" has been saved."
+"Something went wrong while saving the template.","Something went wrong while saving the template."
+"The Name is missing. Enter and try again.","The Name is missing. Enter and try again."
+"Please choose Scope and try again.","Please choose Scope and try again."
+"Please choose Store View and try again.","Please choose Store View and try again."
+"Please choose Type and try again.","Please choose Type and try again."
+"The Content is missing. Enter and try again.","The Content is missing. Enter and try again."
+"Please choose Categories and try again.","Please choose Categories and try again."
+"Product SEO Templates","Product SEO Templates"
+"Edit Product Template ""%1""","Edit Product Template ""%1"""
+"New Product Template","New Product Template"
+"Inactive template ""%1"" cannot be applied.","Inactive template ""%1"" cannot be applied."
+"Could not save the template: %1","Could not save the template: %1"
+"The template with the ""%1"" ID wasn't found. Verify the ID and try again.","The template with the ""%1"" ID wasn't found. Verify the ID and try again."
+"The ""%1"" template couldn't be removed.","The ""%1"" template couldn't be removed."
+"Ecwhim SEO Product Template indexing failed. See details in exception log.","Ecwhim SEO Product Template indexing failed. See details in exception log."
+"Could not rebuild index for empty products array.","Could not rebuild index for empty products array."
+"We can't rebuild the index for an undefined product.","We can't rebuild the index for an undefined product."
+"Could not rebuild index for empty templates array.","Could not rebuild index for empty templates array."
+"We can't rebuild the index for an undefined template.","We can't rebuild the index for an undefined template."
+"Indexer ""%1"" is not valid.","Indexer ""%1"" is not valid."
+"Store View","Store View"
+Global,Global
+Inactive,Inactive
+Active,Active
+"Meta Title","Meta Title"
+"Meta Keywords","Meta Keywords"
+"Meta Description","Meta Description"
+"Entity IDs is not specified.","Entity IDs is not specified."
+"Template Content is not specified.","Template Content is not specified."
+"Store ID is not specified.","Store ID is not specified."
+"Current Entity ID is not specified.","Current Entity ID is not specified."
+"The Name is missing.","The Name is missing."
+"The Content is missing.","The Content is missing."
+"The Scope is missing.","The Scope is missing."
+"The Scope is invalid.","The Scope is invalid."
+"The Store IDs is missing.","The Store IDs is missing."
+"The Store View with the ""%1"" ID wasn't found. Verify the ID and try again.","The Store View with the ""%1"" ID wasn't found. Verify the ID and try again."
+"The Type is missing.","The Type is missing."
+"The Type is invalid.","The Type is invalid."
+Apply,Apply
+"Apply ""%1""","Apply ""%1"""
+"Are you sure you want to apply ""%1""?","Are you sure you want to apply ""%1""?"
+Edit,Edit
+"Delete ""%1""","Delete ""%1"""
+"Are you sure you want to delete ""%1""?","Are you sure you want to delete ""%1""?"
+"SEO Templates","SEO Templates"
+"Product Templates","Product Templates"
+"Category Templates","Category Templates"
+"Ecwhim SEO Template Products","Ecwhim SEO Template Products"
+"Indexed template/product association","Indexed template/product association"
+"Ecwhim SEO Product Templates","Ecwhim SEO Product Templates"
+"Indexed product/template association","Indexed product/template association"
+"Template Information","Template Information"
+Back,Back
+Name,Name
+Scope,Scope
+Type,Type
+Content,Content
+"Apply by Cron","Apply by Cron"
+Priority,Priority
+Categories,Categories
+"Apply to all Categories","Apply to all Categories"
+"Add Template","Add Template"
+"Are you sure you want to delete selected items?","Are you sure you want to delete selected items?"
+"Delete items","Delete items"
+ID,ID
+Status,Status
+"Last Applied","Last Applied"

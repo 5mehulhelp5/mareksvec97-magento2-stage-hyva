@@ -1,0 +1,14 @@
+<?php
+
+$product = $block->getProduct();
+$nastavitelneNozicky = intval($block->getNastavitelneNozicky($product));
+if (!empty($nastavitelneNozicky)) {
+
+?>
+<?php if ($nastavitelneNozicky > 0): ?>
+<div class="rectification-badge">
+                    <img class="rectification" src="<?php echo $this->getViewFileUrl('BigConnect_ProductAccessory::image/rectification.png'); ?>" alt="rectification"/>
+                    <span><?php echo __('Hidden rectification'); ?></span>
+                </div>
+<?php endif; ?>
+<?php } ?>

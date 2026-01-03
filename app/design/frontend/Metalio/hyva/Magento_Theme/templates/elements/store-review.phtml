@@ -1,0 +1,200 @@
+<?php
+use Magento\Store\Model\ScopeInterface;
+
+/** Config z adminu */
+$scopeConfig = \Magento\Framework\App\ObjectManager::getInstance()
+    ->get(\Magento\Framework\App\Config\ScopeConfigInterface::class);
+
+$revEnabled = (bool) $scopeConfig->isSetFlag('metalio/reviews/enabled', ScopeInterface::SCOPE_STORE);
+$revAvg     = (string) ($scopeConfig->getValue('metalio/reviews/avg', ScopeInterface::SCOPE_STORE) ?? '4.68');
+$revLabel   = (string) ($scopeConfig->getValue('metalio/reviews/label', ScopeInterface::SCOPE_STORE) ?? 'Super');
+$revJson    = (string) ($scopeConfig->getValue('metalio/reviews/items_json', ScopeInterface::SCOPE_STORE) ?? '[]');
+$revLimit   = (int)    ($scopeConfig->getValue('metalio/reviews/limit', ScopeInterface::SCOPE_STORE) ?? 0);
+
+/** Normalizácia dát */
+$reviewsArr = json_decode($revJson, true);
+if (!is_array($reviewsArr)) $reviewsArr = [];
+if ($revLimit > 0) $reviewsArr = array_slice($reviewsArr, 0, $revLimit);
+
+$reviewsArr = array_values(array_filter(array_map(function ($r) {
+    $stars = isset($r['stars']) ? (int) $r['stars'] : 5;
+    $stars = max(0, min(5, $stars));
+    $date  = isset($r['date'])  ? (string) $r['date']  : '';
+    $text  = isset($r['text'])  ? (string) $r['text']  : '';
+    $name  = isset($r['name'])  ? (string) $r['name']  : '';   // voliteľné meno
+
+    return ['stars' => $stars, 'date' => $date, 'text' => $text, 'name' => $name];
+}, $reviewsArr), fn ($r) => trim($r['text']) !== ''));
+
+$reviewsJsonForJs = json_encode($reviewsArr, JSON_UNESCAPED_UNICODE);
+?>
+
+<?php if ($revEnabled): ?>
+<section class="bg-orange-50">
+  <div class="container mx-auto px-4 py-12"
+       x-data="reviewsSlider()"
+       x-init="initFromDataset()"
+       data-reviews='<?= $escaper->escapeHtmlAttr($reviewsJsonForJs) ?>'
+       data-avg='<?= $escaper->escapeHtmlAttr($revAvg) ?>'
+       data-label='<?= $escaper->escapeHtmlAttr($revLabel) ?>'>
+
+    <h2 class="text-3xl md:text-3xl font-extrabold text-primary mb-6 text-center md:text-left">
+      <?= $escaper->escapeHtml(__('Hodnotenia zákazníkov')) ?>
+    </h2>
+
+    <div class="flex flex-col lg:flex-row gap-6 items-stretch">
+      <!-- Ľavý sumár (fixná šírka na ≥lg) -->
+      <div class="bg-white border border-container-DEFAULT rounded-2xl shadow-sm shrink-0
+                  flex flex-col items-center justify-center text-center px-6 py-8
+                  w-full lg:w-[280px] xl:w-[300px]">
+        <div class="flex mb-3 justify-center">
+          <template x-for="i in 5" :key="'sum-'+i">
+            <svg class="w-6 h-6 md:w-7 md:h-7 fill-yellow-400" viewBox="0 0 20 20" aria-hidden="true">
+              <path d="M10 15l-5.878 3.09L5.82 11.545.94 7.41l6.09-.885L10 1l2.97 5.525 6.09.885-4.88 4.135 1.698 6.545z"/>
+            </svg>
+          </template>
+        </div>
+        <div class="text-2xl md:text-3xl font-extrabold leading-none" x-text="avg"></div>
+        <div class="text-slate-600 font-medium text-sm md:text-base" x-text="label"></div>
+      </div>
+
+      <!-- Pravý slider (min-w-0 nech nepretečie pri ~1200px) -->
+      <div class="flex-1 min-w-0 relative flex flex-col">
+        <!-- šípka vľavo -->
+        <button type="button"
+                class="hidden md:flex absolute left-2 top-1/2 -translate-y-1/2 z-10 w-10 h-10 items-center justify-center
+                       rounded-full border border-container-DEFAULT bg-white shadow-sm hover:shadow disabled:opacity-40"
+                @click="prev()" :disabled="isFirst" aria-label="Predchádzajúca">
+          <svg class="w-5 h-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+            <path d="M12.707 15.707a1 1 0 01-1.414 0l-5-5a1 1 0 010-1.414l5-5a1 1 0 111.414 1.414L8.414 10l4.293 4.293a1 1 0 010 1.414z"/>
+          </svg>
+        </button>
+
+        <!-- viewport -->
+        <div class="overflow-hidden flex-1 min-w-0" x-ref="viewport">
+          <div x-ref="track"
+               class="flex gap-3 md:gap-5 lg:gap-6 will-change-transform"
+               style="scroll-snap-type: x mandatory;">
+            <template x-for="(review, idx) in reviews" :key="idx">
+              <article class="shrink-0 basis-full md:basis-1/2 xl:basis-1/3 scroll-ml-4" style="scroll-snap-align: start;">
+                <div class="h-full bg-white rounded-2xl p-6 shadow-sm border border-container-DEFAULT">
+                  <!-- Hlavička karty: hviezdičky + meno vľavo, dátum vpravo -->
+                  <div class="flex items-center justify-between mb-3">
+                    <div>
+                      <div class="flex items-center mb-1">
+                        <template x-for="i in review.stars" :key="'s-'+i+'-'+idx">
+                          <svg class="w-4 h-4 fill-yellow-400" viewBox="0 0 20 20" aria-hidden="true">
+                            <path d="M10 15l-5.878 3.09L5.82 11.545.94 7.41l6.09-.885L10 1l2.97 5.525 6.09.885-4.88 4.135 1.698 6.545z"/>
+                          </svg>
+                        </template>
+                        <template x-if="review.stars < 5">
+                          <svg class="w-4 h-4 fill-slate-300" viewBox="0 0 20 20" aria-hidden="true">
+                            <path d="M10 15l-5.878 3.09L5.82 11.545.94 7.41l6.09-.885L10 1l2.97 5.525 6.09.885-4.88 4.135 1.698 6.545z"/>
+                          </svg>
+                        </template>
+                      </div>
+                      <div class="text-sm font-semibold text-slate-800" x-text="review.name || 'Anonymný zákazník'"></div>
+                    </div>
+                    <time class="text-xs text-slate-500" x-html="review.date"></time>
+                  </div>
+
+                  <!-- Text -->
+                  <p class="text-slate-700 leading-relaxed text-sm" x-html="review.text"></p>
+                </div>
+              </article>
+            </template>
+          </div>
+        </div>
+
+        <!-- šípka vpravo -->
+        <button type="button"
+                class="hidden md:flex absolute right-2 top-1/2 -translate-y-1/2 z-10 w-10 h-10 items-center justify-center
+                       rounded-full border border-container-DEFAULT bg-white shadow-sm hover:shadow disabled:opacity-40"
+                @click="next()" :disabled="isLast" aria-label="Nasledujúca">
+          <svg class="w-5 h-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+            <path d="M7.293 4.293a1 1 0 011.414 0l5 5a1 1 0 010 1.414l-5 5a1 1 0 11-1.414-1.414L11.586 10 7.293 5.707a1 1 0 010-1.414z"/>
+          </svg>
+        </button>
+
+        <!-- bodky (mobile) -->
+        <div class="mt-4 flex md:hidden items-center justify-center gap-2">
+          <template x-for="n in pages" :key="'dot-'+n">
+            <button type="button" class="w-2.5 h-2.5 rounded-full"
+                    :class="currentPage === (n-1) ? 'bg-primary' : 'bg-slate-300'"
+                    :aria-label="`${n}/${pages}`"
+                    @click="goTo(n-1)"></button>
+          </template>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+document.addEventListener('alpine:init', () => {
+  Alpine.data('reviewsSlider', () => ({
+    currentPage: 0,
+    pages: 1,
+    perView: 1,
+    isFirst: true,
+    isLast: false,
+    avg: '4.68',
+    label: 'Super',
+    reviews: [],
+
+    initFromDataset() {
+      try { this.reviews = JSON.parse(this.$root.dataset.reviews || '[]'); }
+      catch (e) { this.reviews = []; }
+      this.avg   = this.$root.dataset.avg   || this.avg;
+      this.label = this.$root.dataset.label || this.label;
+
+      this.$nextTick(() => {
+        this.recalculate();
+        window.addEventListener('resize', this.recalculate.bind(this));
+        const vp = this.$refs.viewport;
+        let raf = null;
+        vp.addEventListener('scroll', () => {
+          if (raf) return;
+          raf = requestAnimationFrame(() => {
+            const page = Math.round(vp.scrollLeft / vp.clientWidth);
+            if (page !== this.currentPage) {
+              this.currentPage = page;
+              this.syncButtons();
+            }
+            raf = null;
+          });
+        }, { passive: true });
+      });
+    },
+
+    recalculate() {
+      const w = window.innerWidth;
+      this.perView = w >= 1280 ? 3 : (w >= 768 ? 2 : 1);
+      const items = this.reviews.length;
+      this.pages = Math.max(1, Math.ceil(items / this.perView));
+      this.currentPage = Math.min(this.currentPage, this.pages - 1);
+      this.scrollToPage(this.currentPage, false);
+      this.syncButtons();
+    },
+
+    scrollToPage(page, smooth = true) {
+      const vp = this.$refs.viewport;
+      const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      vp.scrollTo({ left: page * vp.clientWidth, behavior: (smooth && !prefersReduced) ? 'smooth' : 'auto' });
+      this.currentPage = page;
+      this.syncButtons();
+    },
+
+    next() { if (this.currentPage < this.pages - 1) this.scrollToPage(this.currentPage + 1); },
+    prev() { if (this.currentPage > 0) this.scrollToPage(this.currentPage - 1); },
+    goTo(p) { this.scrollToPage(p); },
+
+    syncButtons() {
+      this.isFirst = this.currentPage === 0;
+      this.isLast  = this.currentPage === this.pages - 1;
+    }
+  }))
+});
+</script>
+<?php if (isset($hyvaCsp)) $hyvaCsp->registerInlineScript(); ?>
+<?php endif; ?>

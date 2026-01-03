@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Ecwhim. All rights reserved.
+ */
+-->
+<listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <argument name="data" xsi:type="array">
+        <item name="js_config" xsi:type="array">
+            <item name="provider"
+                  xsi:type="string">ecwhim_seotemplates_category_template_listing.ecwhim_seotemplates_category_template_listing_data_source
+            </item>
+        </item>
+    </argument>
+    <settings>
+        <buttons>
+            <button name="add">
+                <url path="*/*/new"/>
+                <class>primary</class>
+                <label translate="true">Add Template</label>
+            </button>
+        </buttons>
+        <spinner>template_columns</spinner>
+        <deps>
+            <dep>ecwhim_seotemplates_category_template_listing.ecwhim_seotemplates_category_template_listing_data_source</dep>
+        </deps>
+    </settings>
+    <dataSource name="ecwhim_seotemplates_category_template_listing_data_source" component="Magento_Ui/js/grid/provider">
+        <settings>
+            <storageConfig>
+                <param name="indexField" xsi:type="string">template_id</param>
+            </storageConfig>
+            <updateUrl path="mui/index/render"/>
+        </settings>
+        <aclResource>Ecwhim_SeoTemplates::seo_templates_category_template</aclResource>
+        <dataProvider class="Ecwhim\SeoTemplates\Ui\DataProvider\CategoryTemplate\ListingDataProvider"
+                      name="ecwhim_seotemplates_category_template_listing_data_source">
+            <settings>
+                <requestFieldName>template_id</requestFieldName>
+                <primaryFieldName>template_id</primaryFieldName>
+            </settings>
+        </dataProvider>
+    </dataSource>
+    <listingToolbar name="listing_top">
+        <settings>
+            <sticky>true</sticky>
+        </settings>
+        <bookmark name="bookmarks"/>
+        <columnsControls name="columns_controls"/>
+        <filters name="listing_filters">
+            <argument name="data" xsi:type="array">
+                <item name="observers" xsi:type="array">
+                    <item name="column" xsi:type="string">column</item>
+                </item>
+            </argument>
+            <settings>
+                <templates>
+                    <filters>
+                        <select>
+                            <param name="template" xsi:type="string">ui/grid/filters/elements/ui-select</param>
+                            <param name="component" xsi:type="string">Magento_Ui/js/form/element/ui-select</param>
+                        </select>
+                    </filters>
+                </templates>
+            </settings>
+            <filterSelect name="store_id" provider="${ $.parentName }">
+                <settings>
+                    <captionValue>0</captionValue>
+                    <options class="Magento\Cms\Ui\Component\Listing\Column\Cms\Options"/>
+                    <label translate="true">Store View</label>
+                    <dataScope>store_id</dataScope>
+                    <imports>
+                        <link name="visible">componentType = column, index = ${ $.index }:visible</link>
+                    </imports>
+                </settings>
+            </filterSelect>
+        </filters>
+        <massaction name="listing_massaction">
+            <action name="delete">
+                <settings>
+                    <confirm>
+                        <message translate="true">Are you sure you want to delete selected items?</message>
+                        <title translate="true">Delete items</title>
+                    </confirm>
+                    <url path="ecwhim_seotemplates/categoryTemplate/massDelete"/>
+                    <type>delete</type>
+                    <label translate="true">Delete</label>
+                </settings>
+            </action>
+            <action name="apply">
+                <settings>
+                    <url path="ecwhim_seotemplates/categoryTemplate/massApply"/>
+                    <type>apply</type>
+                    <label translate="true">Apply</label>
+                </settings>
+            </action>
+        </massaction>
+        <paging name="listing_paging"/>
+    </listingToolbar>
+    <columns name="template_columns">
+        <selectionsColumn name="ids">
+            <settings>
+                <indexField>template_id</indexField>
+            </settings>
+        </selectionsColumn>
+        <column name="template_id" sortOrder="10">
+            <settings>
+                <filter>textRange</filter>
+                <label translate="true">ID</label>
+                <sorting>asc</sorting>
+            </settings>
+        </column>
+        <column name="name" sortOrder="20">
+            <settings>
+                <filter>text</filter>
+                <label translate="true">Name</label>
+            </settings>
+        </column>
+        <column name="scope" sortOrder="30" component="Magento_Ui/js/grid/columns/select">
+            <settings>
+                <label translate="true">Scope</label>
+                <options class="Ecwhim\SeoTemplates\Model\Source\Scope"/>
+                <filter>select</filter>
+                <dataType>select</dataType>
+            </settings>
+        </column>
+        <column name="store_ids" sortOrder="40"
+                class="Magento\Store\Ui\Component\Listing\Column\Store">
+            <argument name="storeKey" xsi:type="string">store_ids</argument>
+            <settings>
+                <label translate="true">Store View</label>
+                <bodyTmpl>ui/grid/cells/html</bodyTmpl>
+                <sortable>false</sortable>
+            </settings>
+        </column>
+        <column name="type" sortOrder="50" component="Magento_Ui/js/grid/columns/select">
+            <settings>
+                <label translate="true">Type</label>
+                <options class="Ecwhim\SeoTemplates\Model\Source\CategoryTemplate\Type"/>
+                <filter>select</filter>
+                <dataType>select</dataType>
+            </settings>
+        </column>
+        <column name="content" sortOrder="60">
+            <settings>
+                <filter>text</filter>
+                <label translate="true">Content</label>
+                <sortable>false</sortable>
+            </settings>
+        </column>
+        <column name="priority" sortOrder="70">
+            <settings>
+                <filter>textRange</filter>
+                <label translate="true">Priority</label>
+            </settings>
+        </column>
+        <column name="is_active" sortOrder="80" component="Magento_Ui/js/grid/columns/select">
+            <settings>
+                <label translate="true">Status</label>
+                <options class="Ecwhim\SeoTemplates\Model\Source\TemplateStatus"/>
+                <filter>select</filter>
+                <dataType>select</dataType>
+            </settings>
+        </column>
+        <column name="apply_to_all_categories" sortOrder="90" component="Magento_Ui/js/grid/columns/select">
+            <settings>
+                <label translate="true">Apply to all Categories</label>
+                <options class="Magento\Config\Model\Config\Source\Yesno"/>
+                <filter>select</filter>
+                <dataType>select</dataType>
+            </settings>
+        </column>
+        <column name="apply_by_cron" sortOrder="100" component="Magento_Ui/js/grid/columns/select">
+            <settings>
+                <label translate="true">Apply by Cron</label>
+                <options class="Magento\Config\Model\Config\Source\Yesno"/>
+                <filter>select</filter>
+                <dataType>select</dataType>
+            </settings>
+        </column>
+        <column name="application_time" class="Magento\Ui\Component\Listing\Columns\Date"
+                component="Magento_Ui/js/grid/columns/date" sortOrder="110">
+            <settings>
+                <filter>dateRange</filter>
+                <dataType>date</dataType>
+                <label translate="true">Last Applied</label>
+            </settings>
+        </column>
+        <actionsColumn name="actions" sortOrder="120"
+                       class="Ecwhim\SeoTemplates\Ui\Component\CategoryTemplate\Listing\Column\Actions">
+            <settings>
+                <indexField>template_id</indexField>
+            </settings>
+        </actionsColumn>
+    </columns>
+</listing>

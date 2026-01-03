@@ -1,0 +1,35 @@
+"Delete Record Successfully !","Delete Record Successfully !"
+"Contact List","Contact List"
+"A total of %1 Record(s) have been deleted.","A total of %1 Record(s) have been deleted."
+"View Details","View Details"
+"File cannot be saved to path: $1","File cannot be saved to path: $1"
+Success,Success
+"Unknown template type","Unknown template type"
+"Please Enable The Extension","Please Enable The Extension"
+"Data Save Successfully","Data Save Successfully"
+View,View
+Delete,Delete
+"Are you sure you want to delete a this record?","Are you sure you want to delete a this record?"
+Back,Back
+"Customer Details","Customer Details"
+"Customer Name : ","Customer Name : "
+"Customer Email : ","Customer Email : "
+"Comment : ","Comment : "
+"Attachments : ","Attachments : "
+"Your name (optional)","Your name (optional)"
+"Email address","Email address"
+"How can we help you?","How can we help you?"
+Attachements,Attachements
+Send,Send
+"Quick Contact","Quick Contact"
+"Quick Contact Manager","Quick Contact Manager"
+Configuration,Configuration
+"Email ID of Admin","Email ID of Admin"
+"Email Template","Email Template"
+"Email Sender","Email Sender"
+"Email Subject","Email Subject"
+"Background Color","Background Color"
+"Do you want to delete selected row record?","Do you want to delete selected row record?"
+Name,Name
+Email,Email
+Comment,Comment

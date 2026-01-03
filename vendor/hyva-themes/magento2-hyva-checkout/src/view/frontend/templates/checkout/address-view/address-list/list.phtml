@@ -1,0 +1,85 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2022-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+declare(strict_types=1);
+
+use Hyva\Theme\Model\ViewModelRegistry;
+use Magento\Customer\Api\Data\AddressInterface;
+use Magento\Customer\Api\Data\AddressSearchResultsInterface;
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Element\Template;
+use Hyva\Checkout\Magewire\Checkout\AddressView\ShippingDetails\AddressList as Magewire;
+use Hyva\Checkout\ViewModel\Checkout\AddressView\AbstractAddressList;
+use Hyva\Theme\ViewModel\HeroiconsOutline;
+
+/** @var Template $block */
+/** @var ViewModelRegistry $viewModels */
+/** @var Magewire $magewire */
+/** @var AddressSearchResultsInterface $shippingAddressList */
+/** @var AddressInterface $address */
+/** @var Escaper $escaper */
+/** @var AbstractAddressList $addressList */
+
+/** @var HeroiconsOutline $heroicons */
+$heroicons = $viewModels->require(HeroiconsOutline::class);
+
+$addressList = $block->getData('address_list');
+$addressListItems = $addressList->getAddressListItems();
+?>
+<?php if ($addressListItems): ?>
+    <ol role="list" class="address-grid address-list flex flex-col gap-y-4" data-view="list">
+        <?php foreach ($addressListItems as $address): ?>
+            <li class="address-item border-2 rounded-md"
+                 wire:key="address-<?= /* @noEscape */ $address->getId() ?>"
+                 x-data="hyvaCheckoutAddressSelector"
+                 data-id="<?= $escaper->escapeHtmlAttr($address->getId() ?? 0) ?>"
+                 data-active-address-entity="<?= $escaper->escapeHtmlAttr((int)$magewire->activeAddressEntity) ?>"
+                 x-bind:class="activeEntityClasses"
+            >
+                <label class="flex gap-x-2.5 mb-0 p-4 cursor-pointer">
+                    <input
+                        type="radio"
+                        id="<?= $escaper->escapeHtmlAttr($addressList->renderEntityName($address)) ?>"
+                        name="<?= $escaper->escapeHtmlAttr('address_' . $addressList->getTypeNamespace()) ?>"
+                        class="form-radio"
+                        value="<?=  /* @noEscape */ $address->getId() ?? 0 ?>"
+                        wire:model="activeAddressEntity"
+                    >
+                    <span class="h-full text-sm">
+                        <?= $escaper->escapeHtml($addressList->renderAddress($address, 'oneline')) ?>
+                    </span>
+
+                    <?php if (! is_numeric($address->getId())): ?>
+                        <div class="toolbar block flex gap-x-4">
+                            <button data-modal-address-form-block-name="<?= $escaper->escapeHtmlAttr($addressList->getModalAddressFormBlockName()) ?>"
+                                    x-on:click="editAddress"
+                                    class="rounded-full
+                                           w-9 h-9
+                                           bg-gray-200
+                                           border-0
+                                           flex-shrink-0
+                                           group-hover:bg-gray-300 group-hover:text-gray-600"
+                                    title="<?= $escaper->escapeHtmlAttr(__('Edit Address')) ?>"
+                            >
+                                <span class="sr-only"><?= $escaper->escapeHtml(__('Edit Address')) ?></span>
+                                <span class="w-full h-full
+                                         rounded-full
+                                         inline-flex
+                                         items-center justify-center
+                                         hover:text-green-700"
+                                >
+                                    <?= $heroicons->pencilAltHtml('', 20, 20, ['aria-hidden' => 'true']) ?>
+                                </span>
+                            </button>
+                        </div>
+                    <?php endif ?>
+                </label>
+            </li>
+        <?php endforeach ?>
+    </ol>
+<?php endif ?>

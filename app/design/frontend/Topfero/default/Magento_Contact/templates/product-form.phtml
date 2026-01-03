@@ -1,0 +1,111 @@
+<div class="contact_us_bar_widget d-flex gap-4">
+    <div class="image-container">
+        <img class="contact-us-image" src="<?= $block->getViewFileUrl('Magento_Contact::images/topfero-user.jpg') ?>" alt="avatar">
+    </div>
+    <div class="contact-us-text">
+        <p class="main_text"><b><?= $block->escapeHtml(__('Máte otázky ohľadom produktu ?')) ?></b></p>
+        <p class="long_text"><?= $block->escapeHtml(__('Marek je náš špecialista na stolové nohy.')) ?></p>
+        <div class="cta-block">
+            <div class="actions">
+                <button class="button secondary modal-opener"><?= $block->escapeHtml(__('Spýtať sa')) ?></button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div style="display:none" id="contact-modal" data-mage-init='{
+        "Magento_Ui/js/modal/modal": {
+            "trigger": ".modal-opener",
+            "buttons": []
+        }
+    }'>
+    <form class="form contact" id="contact-form" data-hasrequired="<?= $block->escapeHtmlAttr(__('* Required Fields')) ?>">
+        <fieldset class="fieldset">
+            <legend class="legend"><span><?= $block->escapeHtml(__('Question about product?')) ?></span></legend><br />
+            <div class="field note no-label">
+                <?= $block->escapeHtml(__('If you have some question about product send message we will respond soon.')) ?>
+            </div>
+            <div class="field name required">
+                <label class="label" for="name"><span><?= $block->escapeHtml(__('Name')) ?></span></label>
+                <div class="control">
+                    <input name="name" id="name" title="<?= $block->escapeHtmlAttr(__('Name')) ?>" class="input-text" type="text" data-validate="{required:true}"/>
+                </div>
+            </div>
+            <div class="field email required">
+                <label class="label" for="email"><span><?= $block->escapeHtml(__('Email')) ?></span></label>
+                <div class="control">
+                    <input name="email" id="email" title="<?= $block->escapeHtmlAttr(__('Email')) ?>" class="input-text" type="email" data-validate="{required:true, 'validate-email':true}" />
+                </div>
+            </div>
+            <div class="field telephone">
+                <label class="label" for="telephone"><span><?= $block->escapeHtml(__('Phone Number')) ?></span></label>
+                <div class="control">
+                    <input name="telephone" id="telephone" title="<?= $block->escapeHtmlAttr(__('Phone Number')) ?>" class="input-text" type="tel" />
+                </div>
+            </div>
+            <div class="field comment required">
+                <label class="label" for="comment">
+                    <span><?= $block->escapeHtml(__('Your question')) ?></span>
+                </label>
+                <div class="control">
+                    <textarea name="comment" id="comment" title="<?= $block->escapeHtmlAttr(__('Your question')) ?>" class="input-text" cols="5" rows="3" data-validate="{required:true}"></textarea>
+                </div>
+            </div>
+            <?= $block->getChildHtml('form.additional.info') ?>
+        </fieldset>
+        <div class="actions-toolbar">
+            <div class="primary">
+                <button type="button" id="send-contact-form" class="action submit primary">
+                    <span class="button-text"><?= $block->escapeHtml(__('Send')) ?></span>
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var form = document.getElementById('contact-form');
+        var submitButton = document.getElementById('send-contact-form');
+        var buttonText = submitButton.querySelector('.button-text');
+
+        submitButton.addEventListener('click', function () {
+            if (form.checkValidity()) {
+                // Zablokuje tlačidlo a skryje text, zobrazí spinner
+                submitButton.disabled = true;
+                buttonText.textContent = '';
+                $(submitButton).spinner(true);
+
+                $.ajax({
+                    url: '<?= $block->escapeUrl($block->getFormAction()) ?>',
+                    method: 'post',
+                    data: new FormData(form),
+                    success: function(response) {
+                        // Zmení obsah modalu na potvrdenie
+                        var modalContent = `
+                            <div class="modal-inner-wrap success-message">
+                                <p><?= $block->escapeHtml(__('Your message has been sent successfully! We will contact you soon.')) ?></p>
+                                <button type="button" class="action primary close-modal"><?= $block->escapeHtml(__('Close')) ?></button>
+                            </div>`;
+                        $('#contact-modal').html(modalContent);
+                    },
+                    complete: function () {
+                        // Zastaví spinner a odblokuje tlačidlo
+                        $(submitButton).spinner(false);
+                        submitButton.disabled = false;
+                    },
+                    error: function(response, error) {
+                        alert('<?= $block->escapeHtml(__('There was an error sending your message. Please try again.')) ?>');
+                    }
+                });
+            } else {
+                form.reportValidity();
+            }
+        });
+
+        // Zatvorenie modalu po kliknutí na tlačidlo "Close"
+        $(document).on('click', '.close-modal', function() {
+            $('#contact-modal').modal('closeModal');
+        });
+    });
+</script>

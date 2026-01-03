@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © MageWorx. All rights reserved.
+ * See LICENSE.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <!-- Replace review form to own -->
+    <type name="Magento\Framework\Code\NameBuilder">
+        <plugin name="mageworx_xreviewbase_adminhtml_replace_review_form" type="MageWorx\XReviewBase\Plugin\Adminhtml\ReplaceReviewFormPlugin" sortOrder="1" />
+    </type>
+</config>

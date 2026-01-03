@@ -1,0 +1,50 @@
+<?php
+/** @var \Magento\Catalog\Block\Product\View $block */
+use Magento\Store\Model\ScopeInterface;
+
+$om = \Magento\Framework\App\ObjectManager::getInstance();
+/** @var \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig */
+$scopeConfig = $om->get(\Magento\Framework\App\Config\ScopeConfigInterface::class);
+
+$config = [
+    'title'        => (string)$scopeConfig->getValue('metalio_product/contact_bar/title', ScopeInterface::SCOPE_STORE),
+    'description'  => (string)$scopeConfig->getValue('metalio_product/contact_bar/description', ScopeInterface::SCOPE_STORE),
+    'button_label' => (string)$scopeConfig->getValue('metalio_product/contact_bar/button_label', ScopeInterface::SCOPE_STORE),
+    'form_id' => (string)$scopeConfig->getValue('metalio_product/contact_bar/form_id', ScopeInterface::SCOPE_STORE),
+];
+?>
+    <div class="contact_us_bar_widget rounded-2xl border border-slate-200 bg-white p-4 sm:p-5 mb-6">
+        <div class="flex items-start gap-4">
+            <div class="image-container shrink-0">
+                <img
+                    class="contact-us-image w-12 h-12 sm:w-14 sm:h-14 rounded-full object-cover ring-1 ring-black/5"
+                    src="<?= $this->getViewFileUrl('Magento_Contact::images/metalio-user.png'); ?>"
+                    alt="avatar metalio">
+            </div>
+
+            <div class="contact-us-text flex-1">
+                <?php if (!empty($config['title'])): ?>
+                    <p class="main_text text-slate-900 font-semibold leading-6">
+                        <?= $this->escapeHtml($config['title']); ?>
+                    </p>
+                <?php endif; ?>
+
+                <?php if (!empty($config['description'])): ?>
+                    <p class="long_text text-slate-600 mt-1">
+                        <?= $config['description']; ?>
+                    </p>
+                <?php endif; ?>
+
+                <div class="cta-block mt-3">
+                    <div class="actions">
+                        <?php if (!empty($config['form_id'])): ?>
+                        <?= $this->helper("Amasty\Customform\Helper\Data")->renderForm($config['form_id']) ?>
+                        <?php endif; ?>
+                    </div>
+                </div>
+
+                
+            </div>
+        </div>
+    </div>
+

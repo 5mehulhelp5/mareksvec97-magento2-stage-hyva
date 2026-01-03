@@ -1,0 +1,20 @@
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+    <table name="Magecomp_Quickcontact" resource="default" engine="innodb">
+        <!-- <column xsi:type="int" name="id" unsigned="true" identity="true" nullable="false" comment="Id" /> -->
+        <!-- <column xsi:type="varchar" name="customername" nullable="true" length="255" comment="Name"/> -->
+        <!-- <column xsi:type="varchar" name="customeremail" nullable="true" length="255" comment="Email"/> -->
+        <column xsi:type="varchar" name="customerphone" nullable="true" length="255" comment="Phone"/>
+        <!-- <column xsi:type="varchar" name="comment" nullable="true" length="255" default="NULL" comment="Description"/> -->
+        <!-- <column xsi:type="varchar" name="attachment" nullable="true" length="255" default="NULL" comment="Content"/> -->
+        <!-- <constraint xsi:type="primary" referenceId="PRIMARY"> -->
+            <!-- <column name="id"/> -->
+        <!-- </constraint> -->
+		<index referenceId="quick_contact_index" indexType="fulltext">
+			<!-- <column name="customername"/> -->
+			<!-- <column name="customeremail"/> -->
+			<column name="customerphone"/>
+			<!-- <column name="comment"/> -->
+		</index>
+    </table>
+</schema>

@@ -1,0 +1,168 @@
+& when (@critical) {
+    .page-footer {
+        margin-top: 40px;
+        position: relative;
+        
+            .footer-menu-items {
+                display: flex ;
+                flex-direction: column;
+                gap: 8px;
+            }
+            .social-box {
+                margin-top: 25px;
+                display: flex;
+                gap: 15px;
+                .social-item {
+                    display: flex;
+                    align-items: center;
+                    gap: 8px;
+                    img {
+                        width: 40px !important;
+                            height: 40px !important;
+                            margin-bottom: 0 !important;
+                            background: white;
+                            border-radius: 100%;
+                            padding: 6px;
+                    }
+                }
+            }
+    }
+    .footer-top,
+    .footer-middle {
+        margin-top: 0px !important;
+        padding: 0px !important;
+        position: relative;
+        background: @background-footer !important; // Použitie pastelového pozadia #F7F7F7
+        img {
+            width: auto;
+        }
+        .footer-copyright {
+            color: @footer-link-color; // Jemný kontrast pre text
+            background: @background-footer; // Biele pozadie
+            font-size: 14px;
+            .container {
+                border-top: 1px solid @footer-border-color;
+            }
+        }
+        .switcher-options {
+            max-width: 900px;
+        }
+        .secure-shopping {
+            margin-top: 20px;
+            align-items: center;
+            justify-content: center;
+            display: flex;
+            img {
+                max-width: 170px;
+            }
+        }
+        .footer-container {
+            padding-top: 100px;
+            padding-bottom: 85px;
+        }
+        .footer-box {
+            a, p {
+                color: @footer-link-color; 
+            }
+            a:hover {
+                    color: @footer-link-color-hover; 
+                    text-decoration: none;
+                }
+
+            &.box-1 {
+                max-width: 375px;
+                img {
+                    margin-bottom: 20px; 
+                    width: 200px;
+                    height: auto;
+                }
+            }
+            &.box-4 {
+                max-width: 275px;
+
+                p {
+                    margin-bottom: 8px;
+                    img {
+                        margin-right: 7px; 
+                    }  
+                }
+            }
+            &.box-3 {
+                p {
+                    margin-bottom: 8px;    
+                }
+            }
+            .payments-icon {
+                img {
+                    background: #fff; // Biele pozadie ikon
+                    border-radius: 0px;
+                    height: 25px;
+                    border: 1px solid @footer-border-color;
+                    width: auto;
+                    &.klarna-icon {
+                        background: #f9b3c7; // Špecifická farba pre Klarna
+                    }
+                }
+            }
+        }
+        h5, h6, .text-uppercase.fw-bold {
+            font-weight: 600;
+            font-size: 16px;
+            margin-bottom: 20px;
+            color: @contrast-black; // Čierny text pre nadpisy
+        }
+        
+        a {
+            &:hover {
+                color: @accent-pastel-yellow; // Hover efekt pre odkazy
+            }
+        }
+        .footer-stores {
+            background: @color_light_gray; // Jemné pastelové pozadie
+            a {
+                color: @contrast-black; // Čierny text pre odkazy
+                font-weight: 500;
+                font-size: 14px;
+            }
+            img {
+                height: 20px;
+                width: auto;
+            }
+        }
+    }
+
+    @media @media-sm-down {
+        .footer-top,
+        .footer-middle {
+            .footer-copyright {
+                >.container {
+                    justify-content: center;
+                }
+                .left {
+                    order: 2;
+                    width: 100%;
+                    margin-top: 8px;
+                    text-align: center;
+                }
+            }
+            .secure-shopping {
+                justify-content: flex-start;
+            }
+        }
+    }
+}
+
+& when not (@critical) {
+    .footer-top::after {
+        .lib-css(background, @footer-top-after__background);
+    }
+    .footer-middle {
+        & when (@footer-middle__dark) {
+            .breeze-rgb(--link-color, @white);
+            --link-alpha: .7;
+        }
+        &::after {
+            .lib-css(background, @footer-middle-after__background);
+        }
+    }
+}

@@ -1,0 +1,113 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2020-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+declare(strict_types=1);
+
+use Hyva\Theme\ViewModel\HyvaCsp;
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Element\Template;
+use Hyva\Theme\Model\ViewModelRegistry;
+use Magewirephp\Magewire\ViewModel\Magewire;
+
+/** @var Escaper $escaper */
+/** @var Template $block */
+/** @var ViewModelRegistry $viewModels */
+/** @var HyvaCsp $hyvaCsp */
+
+$magewireScripts = $viewModels->require(Magewire::class);
+?>
+<div x-data="hyvaCheckoutMagewirePluginError"
+     x-on:magewire:error:four-zero-four.window="reloadPage"
+>
+    <div x-cloak
+         x-bind="overlay"
+         class="fixed inset-0 flex items-center justify-center text-left bg-black bg-opacity-50"
+    >
+        <div x-ref="dialog"
+             role="dialog"
+             aria-labelledby="magewire-error-four-zero-four-dialog-label"
+             class="inline-block max-w-2xl mx-4 max-h-screen overflow-auto bg-white shadow-xl rounded-lg p-6 text-gray-700"
+        >
+            <div class="items-center border-b border-gray-400 pb-1 mb-6">
+                <h2 class="flex items-center text-slate-800 text-xl font-medium">
+                    <?= $escaper->escapeHtml(__('Something went wrong')) ?>
+                </h2>
+            </div>
+
+            <div class="text-center space-y-4">
+                <p class="px-4 py-2 md:text-xl">
+                    <?= $escaper->escapeHtml(
+                        __('Apologies, but an error occurred while updating the checkout, please refresh the current page to resolve the issue.')
+                    ) ?>
+                </p>
+            </div>
+
+            <div class="flex flex-col-reverse justify-between md:flex-row
+                        gap-y-2 md:gap-x-2 mt-6
+                        w-full
+                        md:items-center"
+            >
+                <button type="button"
+                        x-on:click="cancel"
+                        class="btn"
+                >
+                    <?= $escaper->escapeHtml(__('Close')) ?>
+                </button>
+
+                <button type="button"
+                        x-on:click="ok"
+                        class="btn btn-primary"
+                        x-focus-first
+                >
+                    <?= $escaper->escapeHtml(__('Refresh page')) ?>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    (() => {
+        const magewireOriginOnErrorCallback = Magewire.components.onErrorCallback;
+
+        Magewire.onError((status, response) => {
+            magewireOriginOnErrorCallback(status, response)
+
+            <?php if ($magewireScripts->isProductionMode()): ?>
+            response.clone().text().then(result => {
+                result = JSON.parse(result)
+
+                <?php // phpcs:ignore ?>
+                const message = '<?= $escaper->escapeJs(__('Unfortunately, something went wrong while trying to update a component on the page. As a result, a page refresh is required to attempt to resolve this issue. By clicking OK, the page will automatically reload itself. We apologize for this inconvenience and thank you for your patience.')) ?>'
+
+                hyvaCheckout.message.dialog(message, `${ result.code }: <?= $escaper->escapeJs(__('Something went wrong')) ?>`, 'error', () => window.location.reload())
+            }).catch((exception) => {
+                console.error(exception)
+            })
+
+            return false
+            <?php endif ?>
+        })
+    })();
+
+    function hyvaCheckoutMagewirePluginError() {
+        return Object.assign(
+            hyva.modal.apply(this), {
+                reloadPage() {
+                    this.show().then(result => {
+                        if (result) {
+                            window.location.reload(true)
+                        }
+                    })
+                }
+            }
+        )
+    }
+    window.addEventListener('alpine:init', () => Alpine.data('hyvaCheckoutMagewirePluginError', hyvaCheckoutMagewirePluginError), {once: true})
+</script>
+<?php $hyvaCsp->registerInlineScript() ?>

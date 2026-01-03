@@ -1,0 +1,80 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2020-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+declare(strict_types=1);
+
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\HeroiconsOutline;
+use Hyva\Theme\ViewModel\SvgIcons;
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Element\Template;
+
+/** @var Template $block */
+/** @var Escaper $escaper */
+/** @var ViewModelRegistry $viewModels */
+
+/** @var HeroiconsOutline $heroicons */
+$heroicons = $viewModels->require(HeroiconsOutline::class);
+
+/** @var SvgIcons $hyvaicons */
+$hyvaicons = $viewModels->require(SvgIcons::class);
+?>
+
+<button
+    x-data="{ loading: false }"
+    type="submit"
+    form="product_addtocart_form"
+    title="<?= $escaper->escapeHtmlAttr(__('Add to Cart')) ?>"
+    class="inline-flex items-center justify-center gap-2 rounded-full px-6 py-3
+           bg-green-500 hover:bg-green-600 text-white font-bold transition
+           focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-offset-2
+           relative"
+    id="product-addtocart-button"
+    data-addto="cart"
+    :disabled="loading"
+    :aria-busy="loading ? 'true' : 'false'"
+    @click.prevent="
+        const form = document.getElementById('product_addtocart_form');
+        if (!form) { return; }
+
+        if (typeof form.reportValidity === 'function' && !form.reportValidity()) {
+            loading = false;
+            return;
+        }
+
+        loading = true;
+
+        if (typeof form.requestSubmit === 'function') {
+            form.requestSubmit();
+        } else {
+            form.submit();
+        }
+    "
+>
+    <!-- loader overlay -->
+    <span
+        class="absolute inset-0 flex items-center justify-center"
+        x-show="loading"
+        x-cloak
+        aria-hidden="true"
+    >
+        <span class="w-5 h-5 rounded-full border-2 border-current border-t-transparent animate-spin"></span>
+    </span>
+
+    <!-- pôvodný obsah (skryje sa počas loadingu) -->
+    <span class="inline-flex items-center gap-2" :class="loading ? 'invisible' : ''">
+        <?= $heroicons->shoppingCartHtml('border-current', 24, 24, ['aria-hidden' => 'true']); ?>
+        <span class="block">
+            <?= $block->getData('is_cart_configure')
+                ? $escaper->escapeHtml(__('Update item'))
+                : $escaper->escapeHtml(__('Add to Cart')) ?>
+        </span>
+    </span>
+</button>
+
+<?= $block->getChildHtml('', true) ?>

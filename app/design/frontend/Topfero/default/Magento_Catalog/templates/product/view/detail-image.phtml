@@ -1,0 +1,24 @@
+<?php
+// Získajte aktuálny produkt
+$product = $block->getProduct();
+
+$imageFile = $product->getCustomAttribute('fotka_v_popise'); // Nahraďte 'fotka_v_popise' správnym kódom atribútu
+if ($imageFile) {
+    $hoverImageUrl = $this->helper('Magento\Catalog\Helper\Image')
+        ->init($product, 'image')
+        ->setImageFile($imageFile->getValue())
+        ->getUrl();
+    ?>
+    <div class="interior-photo">
+    	<div class="interior-text">
+			<span>Fotka v interiéri</span>
+		</div>
+    	<div class="image-interior">
+    		<div class="image" style="background: url(<?= $hoverImageUrl ?>)" alt="<?= $block->escapeHtmlAttr($product->getName()) ?>" />
+		</div>
+		
+	</div>
+    <?php
+}
+?>
+

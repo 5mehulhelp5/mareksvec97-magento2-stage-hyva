@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\Checkout\Controller\Cart\Add">
+        <plugin name="MagePal_GoogleAnalytics4::controllerAdd" type="MagePal\GoogleAnalytics4\Plugin\Controller\Cart\Add" sortOrder="10" />
+        <plugin name="MagePal_EnhancedEcommerce::controllerAdd"  disabled="true"/>
+    </type>
+    <virtualType name="MagePal\GoogleAnalytics4\Model\Session\Storage" type="Magento\Framework\Session\Storage">
+        <arguments>
+            <argument name="namespace" xsi:type="string">magepal_google_analytics4</argument>
+        </arguments>
+    </virtualType>
+    <type name="MagePal\GoogleAnalytics4\Model\Session">
+        <arguments>
+            <argument name="storage" xsi:type="object">MagePal\GoogleAnalytics4\Model\Session\Storage</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Customer\CustomerData\SectionPool">
+        <arguments>
+            <argument name="sectionSourceMap" xsi:type="array">
+                <item name="magepal-eegtm-jsdatalayer" xsi:type="string">MagePal\GoogleAnalytics4\CustomerData\JsDataLayer</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="MagePal\EnhancedEcommerce\CustomerData\JsDataLayer">
+        <plugin name="MagePal_GoogleAnalytics4::JsDataLayerPlugin"
+                type="MagePal\GoogleAnalytics4\Plugin\CustomerData\JsDataLayerPlugin"
+                sortOrder="5"/>
+    </type>
+</config>

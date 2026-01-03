@@ -1,0 +1,59 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2020-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+declare(strict_types=1);
+
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\HyvaCsp;
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Element\Template;
+
+/** @var Template $block */
+/** @var Escaper $escaper */
+/** @var ViewModelRegistry $viewModels */
+/** @var HyvaCsp $hyvaCsp */
+?>
+<script>
+
+function PaypalExpressPayLater() {
+
+    const dataset = this.$el.dataset,
+        sdkUrl = dataset.sdkUrl;
+
+    return {
+        async init() {
+            return new Promise((resolve, reject) => {
+                const scriptId = 'paypal-script';
+
+                let paypalScript = document.getElementById(scriptId);
+                if (paypalScript) {
+                    return resolve(window.paypal);
+                }
+
+                const script = document.createElement('script');
+                script.src = `${sdkUrl}`;
+                script.id = scriptId;
+
+                script.addEventListener('load', function() {
+                    resolve(window.paypal);
+                }, false);
+
+                script.addEventListener('error', function() {
+                    reject(script);
+                }, false);
+
+                document.body.appendChild(script);
+            })
+        }
+    }
+}
+
+
+window.addEventListener('alpine:init', () => Alpine.data('PaypalExpressPayLater', PaypalExpressPayLater), {once: true});
+</script>
+<?php $hyvaCsp->registerInlineScript() ?>

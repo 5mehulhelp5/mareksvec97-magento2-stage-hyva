@@ -1,0 +1,101 @@
+& when (@critical) {
+    .minicart-wrapper {
+        .action.showcart {
+            .counter.qty {
+                animation: shadowPulse 2s infinite;
+                font-size: 0px
+            }
+        } 
+    } 
+    @keyframes shadowPulse {
+      0%,
+      100% {
+        box-shadow: 0 0 0 0px #ff4949;
+      }
+      50% {
+        box-shadow: 0 0 0 5px rgba(0, 0, 0, 0);
+      }
+    }
+    .page-header {
+        .panel.wrapper {
+            background: @color_dark_coral_green;
+        }
+    }
+    .header.panel,
+    .header.content {
+        @media @media-sm {
+            --container-max-width: 100%;
+        }
+        @media @media-xxl {
+            --container-max-width: 1280px;
+        }
+        justify-content: space-between;
+        .header-panel-left {
+        	ul {
+        		list-style: disc;
+        	    font-size: 14px;
+        	    font-weight: 600;
+        	    margin-left: 15px;
+                h2 {
+                    font-size: 14px;
+                    font-weight: 600;
+                    line-height: normal;
+                    margin-bottom: 0;
+                }	
+        	}
+        }
+        .switcher-language {
+            img {
+                margin-right: 5px;
+            }
+        }
+        .slovak-production {
+            img {
+                width: 19px;
+                height: 19px;
+            }
+        }
+    }
+
+    //
+    //  Mobile
+    //  _____________________________________________
+    @media @media-md-down {
+        .page-header .panel.wrapper {
+            display: block !important;
+            .top-mobile-bar {
+                font-size: 15px;
+                font-weight: 500;
+            }
+            .switcher-language {
+            	display: none;
+            }
+        }
+        .page-header {
+            .mobile-header-panel {
+                .switcher-language {
+                    .switcher-dropdown {
+                        left: 0;
+                    }
+                    .switcher-label {
+                        span {
+                            display: none;
+                        }
+                    }
+                }
+            }
+        }
+        .header.content {
+            padding-top: 15px;
+            padding-bottom: 15px;
+            padding-left: 0px;
+            .logo {
+                img {
+                      height: 35px;
+                      width: auto;  
+                }
+            }
+        }
+
+    }
+}

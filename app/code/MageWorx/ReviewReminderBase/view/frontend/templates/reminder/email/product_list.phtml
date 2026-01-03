@@ -1,0 +1,80 @@
+<?php
+/**
+ * Copyright © MageWorx. All rights reserved.
+ * See LICENSE.txt for license details.
+ */
+?>
+<?php
+/**
+ * @var \MageWorx\ReviewReminderBase\Block\Reminder\Email $block
+ */
+?>
+
+<?php $count = 0;?>
+
+<?php foreach ($block->getProducts() as $orderData): ?>
+    <?php
+    /** @var \MageWorx\ReviewReminderBase\Model\Content\DataContainer\Component\Product $product */
+    foreach ($orderData as $product): ?>
+        <div class="mj-column-per-50 mj-outlook-group-fix div_jgmyyl">
+            <table border="0" cellpadding="0" cellspacing="0" role="presentation" width="100%">
+                <tbody>
+                <tr>
+                    <td class="td_rai1fk">
+                        <table border="0" cellpadding="0" cellspacing="0" role="presentation" width="100%">
+                            <tr>
+                                <td align="left" class="td_sxr32a">
+                                    <table cellpadding="0" cellspacing="0" width="100%" border="0"
+                                           class="table_9wcq5e">
+                                        <tr>
+                                            <td class="td_v36sm9">
+                                                <table border="0" cellpadding="0" cellspacing="0" role="presentation" width="100%">
+                                                    <tr>
+                                                        <td align="center" class="td_9zkrkq">
+                                                            <img
+                                                                src="<?= $block->escapeHtmlAttr($product->getImageUrl())?>"
+                                                                alt="<?= $block->escapeHtmlAttr($product->getName())?>"
+                                                                class="img_kzjglv">
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                            <td class="td_ulm39p">
+                                                <span class="span_8sgz32"><?= $block->escapeHtml($product->getName()); ?></span>
+                                                <br>
+                                                <img
+                                                    src="<?= $block->escapeHtmlAttr($block->getRatingImageUrlForProduct($product)) ?>"
+                                                    width="87" height="15"
+                                                    alt="<?= $block->escapeHtmlAttr(__('Rating')) ?>"
+                                                    class="img_kr9h6q">
+                                                <br>
+                                                <a href="<?= $block->escapeHtmlAttr($product->getUrl()) ?>">
+                                                    <?= $block->escapeHtml(__('Write a review')) ?>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    <?php $count++ ?>
+    <?php endforeach; ?>
+<?php endforeach; ?>
+
+<?php if ($count%2 != 0): ?>
+    <div class="mj-column-per-50 mj-outlook-group-fix div_jgmyyl">
+        <table border="0" cellpadding="0" cellspacing="0" role="presentation" width="100%">
+            <tbody>
+            <tr>
+                <td class="td_rai1fk">&nbsp;</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+<?php endif; ?>

@@ -1,0 +1,64 @@
+<?php if ($block->shouldRenderSubcategoryListing()): ?>
+<?php 
+$objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+$storeManager = $objectManager->get(\Magento\Store\Model\StoreManagerInterface::class);
+$assetRepo = $objectManager->get(\Magento\Framework\View\Asset\Repository::class);
+$imageCnc = $assetRepo->getUrlWithParams(
+    'MetaloPro_GateCategoryControl::images/benefits/cnc.jpg',
+    ['_secure' => $storeManager->getStore()->isCurrentlySecure()]
+);
+$imageCoating = $assetRepo->getUrlWithParams(
+    'MetaloPro_GateCategoryControl::images/benefits/marian2.jpg',
+    ['_secure' => $storeManager->getStore()->isCurrentlySecure()]
+);
+$imageFirma = $assetRepo->getUrlWithParams(
+    'MetaloPro_GateCategoryControl::images/benefits/detail-metalopro.jpg',
+    ['_secure' => $storeManager->getStore()->isCurrentlySecure()]
+);
+$imageDrawing = $assetRepo->getUrlWithParams(
+    'MetaloPro_GateCategoryControl::images/benefits/jany.jpg',
+    ['_secure' => $storeManager->getStore()->isCurrentlySecure()]
+);
+?>
+<section class="metalo-benefits-section">
+  <div class="metalo-benefit-row">
+    <div class="benefit-image">
+      <img src="<?= $imageCnc ?>" alt="CNC obrábanie">
+    </div>
+    <div class="benefit-text">
+      <h3>Vlastné CNC stroje</h3>
+      <p>Používame moderné CNC technológie, ktoré zaručujú presnosť na desatiny milimetra. Výsledok? Každý kus je rovnaký, presne sedí a eliminuje ručné chyby.</p>
+    </div>
+  </div>
+
+  <div class="metalo-benefit-row">
+    <div class="benefit-image">
+      <img src="<?= $imageCoating ?>" alt="Prášková lakovňa">
+    </div>
+    <div class="benefit-text">
+      <h3>Vlastná prášková lakovňa</h3>
+      <p>Lakujeme vo vlastnej práškovej lakovni s UV ochranou a dôrazom na detaily. Žiadny outsourcing – máme všetko pod kontrolou, odtieň aj kvalitu.</p>
+    </div>
+  </div>
+
+  <div class="metalo-benefit-row">
+    <div class="benefit-image">
+      <img src="<?= $imageDrawing ?>" alt="Návrh riešenia">
+    </div>
+    <div class="benefit-text">
+      <h3>Riešenie na kľúč – od návrhu po montáž</h3>
+      <p>Navrhneme, vyrobíme a zrealizujeme celý systém vo vlastnej réžií. A ak potrebujete niečo špeciálne, navrhneme to s konštruktérom priamo na mieru.</p>
+    </div>
+  </div>
+
+  <div class="metalo-benefit-row">
+    <div class="benefit-image">
+      <img src="<?= $imageFirma ?>" alt="Stabilný tím MetaloPro">
+    </div>
+    <div class="benefit-text">
+      <h3>Sme stabilná firma, nie jeden človek</h3>
+      <p>Za MetaloPro stojí tím odborníkov – projektanti, technici, montážnici. Máte istotu, že aj o 2 roky sa budete mať na koho obrátiť. Sme tu pre vás pred, počas aj po realizácii.</p>
+    </div>
+  </div>
+</section>
+<?php endif; ?>

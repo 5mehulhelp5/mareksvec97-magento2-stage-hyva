@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Magehq
+ * 
+ * NOTICE OF LICENSE
+ * 
+ * This source file is subject to the mageqh.com license that is
+ * available through the world-wide-web at this URL:
+ * https://magehq.com/license.html
+ * 
+ * DISCLAIMER
+ * 
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ * 
+ * @category   Magehq
+ * @package    Magehq_CustomOrderNumber
+ * @copyright  Copyright (c) 2022 Magehq (https://magehq.com/)
+ * @license    https://magehq.com/license.html
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+	<menu> 
+        <add id="Magehq_CustomOrderNumber::customordernumber" title="Custom Order Number" module="Magehq_CustomOrderNumber" sortOrder="36" parent="Magehq_Core::magehq_core" resource="Magehq_CustomOrderNumber::customordernumber"/>
+        <add id="Magehq_CustomOrderNumber::settings" title="Settings" module="Magehq_CustomOrderNumber" sortOrder="20" parent="Magehq_CustomOrderNumber::customordernumber" action="adminhtml/system_config/edit/section/customordernumber" resource="Magehq_CustomOrderNumber::settings"/> 
+	</menu>
+</config>	

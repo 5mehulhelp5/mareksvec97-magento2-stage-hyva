@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Ecwhim. All rights reserved.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
+    <event name="ecwhim_seotemplates_api_data_categorytemplateinterface_save_before">
+        <observer name="validate_template"
+                  instance="Ecwhim\SeoTemplates\Observer\CategoryTemplate\ValidateBeforeSavingObserver"/>
+        <observer name="prepare_template"
+                  instance="Ecwhim\SeoTemplates\Observer\CategoryTemplate\PrepareBeforeSavingObserver"/>
+    </event>
+    <event name="ecwhim_seotemplates_api_data_producttemplateinterface_save_before">
+        <observer name="validate_template"
+                  instance="Ecwhim\SeoTemplates\Observer\ProductTemplate\ValidateBeforeSavingObserver"/>
+        <observer name="prepare_template"
+                  instance="Ecwhim\SeoTemplates\Observer\ProductTemplate\PrepareBeforeSavingObserver"/>
+    </event>
+
+    <event name="ecwhim_seotemplates_api_data_producttemplateinterface_save_after">
+        <observer name="reindex_after_template_save"
+                  instance="Ecwhim\SeoTemplates\Observer\ProductTemplate\ReindexAfterSavingObserver"/>
+    </event>
+    <event name="ecwhim_seotemplates_api_data_producttemplateinterface_delete_after">
+        <observer name="reindex_after_delete_template"
+                  instance="Ecwhim\SeoTemplates\Observer\ProductTemplate\ReindexAfterDeletingObserver"/>
+    </event>
+</config>

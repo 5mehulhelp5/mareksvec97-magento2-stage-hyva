@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+
+<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/layout_generic.xsd">
+    <update handle="formkey"/>
+    <referenceContainer name="root">
+        <referenceBlock name="product.info.product_additional_data">
+            <action method="setTemplate">
+                <argument name="template" xsi:type="string">MageWorx_XReviewBase::review/product/list.phtml</argument>
+            </action>
+        </referenceBlock>
+        <!-- Remove magento pager -->
+        <referenceBlock name="product_review_list.toolbar" remove="true" />
+        <!-- Add toolbar -->
+        <block class="MageWorx\XReviewBase\Block\Review\Product\ListView\Toolbar"
+               name="product_review_list.extended_toolbar" template="MageWorx_XReviewBase::review/product/list/toolbar.phtml"
+               ifconfig="catalog/review/active">
+            <block class="Magento\Framework\View\Element\Template"
+                   name="product_review_list.extended_toolbar.filters"
+                   as="filters"
+                   template="MageWorx_XReviewBase::review/product/list/toolbar/filters.phtml"
+            >
+                <block class="Magento\Framework\View\Element\Template"
+                       name="product_review_list.extended_toolbar.filters.customer"
+                       as="customer"
+                       template="MageWorx_XReviewBase::review/product/list/toolbar/filters/customer.phtml"
+                />
+                <block class="Magento\Framework\View\Element\Template"
+                       name="product_review_list.extended_toolbar.filters.location"
+                       as="location"
+                       template="MageWorx_XReviewBase::review/product/list/toolbar/filters/location.phtml"
+                />
+                <block class="Magento\Framework\View\Element\Template"
+                       name="product_review_list.extended_toolbar.filters.media"
+                       as="media"
+                       template="MageWorx_XReviewBase::review/product/list/toolbar/filters/media.phtml"
+                />
+            </block>
+            <block class="Magento\Framework\View\Element\Template"
+                   name="product_review_list.extended_toolbar.sorter"
+                   as="sorter"
+                   template="MageWorx_XReviewBase::review/product/list/toolbar/sorter.phtml"
+            />
+            <block class="Magento\Theme\Block\Html\Pager" name="product_review_list.pager">
+                <arguments>
+                    <argument name="show_per_page" xsi:type="boolean">false</argument>
+                    <argument name="show_amounts" xsi:type="boolean">false</argument>
+                </arguments>
+            </block>
+        </block>
+    </referenceContainer>
+</layout>

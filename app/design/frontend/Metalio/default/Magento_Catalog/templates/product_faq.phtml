@@ -1,0 +1,75 @@
+<?php
+$objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+$storeManager = $objectManager->get('Magento\Store\Model\StoreManagerInterface');
+$scopeConfig = $objectManager->get('Magento\Framework\App\Config\ScopeConfigInterface');
+
+// Získanie kontaktnej e-mailovej adresy z nastavení
+$contactEmail = $scopeConfig->getValue('trans_email/ident_general/email', \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $storeManager->getStore()->getId());
+
+$faqs = [
+    [
+        'question' => __('Do akých materiálov dokážete rezať a do akej hrúbky?'),
+        'answer' => __('Naše lasery dokážu rezať oceľ do hrúbky 20 mm, nerez do 12 mm a hliník do 10 mm. Pri trubkách a profiloch zvládame priemery od 20 mm do 220 mm a dĺžku až 6 metrov.'),
+    ],
+    [
+        'question' => __('Ako prebieha proces objednávky na mieru?'),
+         'answer' => __('Po zaslaní vašich požiadaviek a návrhu na %1 vám pripravíme cenovú ponuku a časový plán výroby. Okrem toho vám radi pomôžeme s technickými detailmi a pripravíme aj vizuálny návrh, aby ste mali jasnú predstavu o finálnom produkte.', '<a href="mailto:' . $contactEmail . '">' . $contactEmail . '</a>'),
+    ],
+    [
+        'question' => __('Zabezpečujete aj montáž alebo inštaláciu?'),
+        'answer' => __('Naša ponuka nezahŕňa montáž, ale vieme vám poskytnúť detailné inštrukcie a odporúčania na správne upevnenie našich produktov.'),
+    ],
+    [
+        'question' => __('Je možná úprava produktu na mieru?'),
+        'answer' => __('Áno, je. Ak máte záujem o úpravu produktu na mieru, napíšte nám na %1 a my vám pomôžeme. Úprava na mieru môže zvýšiť cenu produktu.', '<a href="mailto:' . $contactEmail . '">' . $contactEmail . '</a>'),
+    ],
+    [
+    'question' => __('Môžem si objednať produkt s vlastným logom alebo textom?'),
+    'answer' => __('Samozrejme! Dokážeme vám na mieru vyrezať logo, nápis alebo akýkoľvek iný dizajn. Pošlite nám svoje požiadavky e-mailom na %1 alebo navštívte našu podstránku %2, kde nájdete viac informácií o produktoch na mieru.', '<a href="mailto:' . $contactEmail . '">' . $contactEmail . '</a>', '<a href="/na-mieru"><b>výroba na mieru</b></a>'),
+    ],
+    [
+        'question' => __('Za aký čas mi príde objednávka?'),
+        'answer' => __('Objednávku doručujeme zvyčajne do 5-10 pracovných dní.'),
+    ],
+];
+?>
+
+<div class="faq-container scroll-reveal">
+    <h3><?= __('Frequently Asked Questions') ?></h3>
+    <div class="accordion">
+        <?php foreach ($faqs as $index => $faq) : ?>
+            <div class="faq-item">
+                <span class="h4 question">
+                    <?= $index + 1 ?>. <?= $faq['question'] ?>
+                </span>
+                <div class="faq-content">
+                    <p><?= $faq['answer'] ?></p>
+                </div>
+            </div>
+        <?php endforeach; ?>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var faqItems = document.querySelectorAll('.faq-item');
+
+        faqItems.forEach(function (item) {
+            item.querySelector('.question').addEventListener('click', function () {
+                var content = item.querySelector('.faq-content');
+
+                if (item.classList.contains('active')) {
+                    item.classList.remove('active');
+                    content.style.maxHeight = '0';
+                } else {
+                    faqItems.forEach(function (otherItem) {
+                        otherItem.classList.remove('active');
+                        otherItem.querySelector('.faq-content').style.maxHeight = '0';
+                    });
+                    item.classList.add('active');
+                    content.style.maxHeight = content.scrollHeight + 'px';
+                }
+            });
+        });
+    });
+</script>

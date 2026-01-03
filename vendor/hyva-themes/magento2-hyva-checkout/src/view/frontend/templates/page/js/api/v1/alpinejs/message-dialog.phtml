@@ -1,0 +1,178 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2022-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+declare(strict_types=1);
+
+use Hyva\Theme\ViewModel\HyvaCsp;
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Element\Template;
+
+/** @var Template $block */
+/** @var Escaper $escaper */
+/** @var HyvaCsp $hyvaCsp */
+?>
+<script>
+    function initMessageDialog() {
+        return Object.assign(
+            {
+                messages: [],
+                active: 0
+            },
+
+            {
+                initialize() {
+                    this.$watch('messages', dialogs => {
+                        if (dialogs.length === 0) {
+                            this.$el.close()
+                        } else if(dialogs.length > 0) {
+                            this.$el.showModal()
+                        }
+                    })
+
+                    this.$el.addEventListener('close', event => {
+                        this.resetMessages()
+                    })
+
+                    window.addEventListener('checkout:dialog:new', event => {
+                        let dialog = event.detail
+
+                        const ignore  = dialog.actions.ignore || function () {}
+                        const confirm = dialog.actions.confirm || function () {}
+
+                        dialog.actions.ignore = async () => await ignore()
+                        dialog.actions.confirm = async () => await confirm()
+
+                        this.messages.push(dialog)
+                    })
+                },
+                toNextMessage() {
+                    if (this.messages.length === 0 || ((this.active + 1) === this.messages.length)) {
+                        return
+                    }
+
+                    this.active++
+                },
+                toPreviousMessage() {
+                    if (this.messages.length === 0 || this.active === 0) {
+                        return
+                    }
+
+                    this.active--
+                },
+                deleteMessage(index) {
+                    this.messages.splice(index, 1)
+
+                    if (this.messages.length === 0) {
+                        this.active = 0
+                        return
+                    }
+
+                    this.active = Math.min(this.active, this.messages.length - 1)
+                },
+                confirmMessage(index, callback) {
+                    this.messages[index].actions.confirm().then(result => {
+                        this.deleteMessage(index)
+                        callback(result)
+                    })
+                },
+                cancelMessage(index, callback) {
+                    this.messages[index].actions.ignore().then(result => {
+                        this.deleteMessage(index)
+                        callback(result)
+                    })
+                },
+                resetMessages() {
+                    this.messages = []
+                },
+                hasMessages() {
+                    return this.messages.length > 0
+                }
+            },
+
+            {
+                navButtonConfirmMessage: {
+                    ['x-on:click'](el) {
+                        el.target.disabled = true
+
+                        this.confirmMessage(this.active, result => el.target.disabled = false)
+                    },
+                    ['x-ref']: 'messageDialogButtonConfirm',
+                },
+                navButtonCancelMessage: {
+                    ['x-on:click'](el) {
+                        el.target.disabled = true
+
+                        this.cancelMessage(this.active, result => el.target.disabled = false)
+                    },
+                    ['x-ref']: 'messageDialogButtonCancel'
+                },
+                navButtonNextMessage: {
+                    ['x-on:click']() {
+                        this.toNextMessage()
+                    },
+                    ['x-bind:disabled']() {
+                        return this.active === (this.messages.length - 1)
+                    },
+                    ['x-bind:class']() {
+                        return {
+                            'cursor-not-allowed': this.active === (this.messages.length - 1)
+                        }
+                    },
+                    ['x-ref']: 'messageDialogButtonNext'
+                },
+                navButtonPreviousMessage: {
+                    ['x-on:click']() {
+                        this.toPreviousMessage()
+                    },
+                    ['x-bind:disabled']() {
+                        return this.active === 0
+                    },
+                    ['x-bind:class']() {
+                        return {
+                            'cursor-not-allowed': this.active === 0
+                        }
+                    },
+                    ['x-ref']: 'messageDialogButtonPrevious'
+                },
+                messageDialog: {
+                    ['x-on:keydown.window.escape']() {
+                        this.resetMessages()
+                    },
+                    ['x-on:keydown.window.right']() {
+                        this.toNextMessage()
+                    },
+                    ['x-on:keydown.window.left']() {
+                        this.toPreviousMessage()
+                    }
+                }
+            },
+            <?php /* In the messages loop template */ ?>
+            {
+                isActiveMessage() {
+                    return this.index === this.active
+                },
+                needsNavigation() {
+                    return this.messages.length > 1
+                },
+                getPaginationText() {
+                    return `${ this.active + 1 } <?= $escaper->escapeJs(__('of')) ?> ${ this.messages.length }`
+                },
+                canShowTypeIcon() {
+                    return this.$el.dataset.messageType === this.message.type
+                }
+            }
+        )
+    }
+
+    window.addEventListener('alpine:init', () => {
+        Alpine.data('initMessageDialog', initMessageDialog)
+    }, { once: true })
+</script>
+<?php $hyvaCsp->registerInlineScript() ?>
+
+<?= $block->getChildHtml('after') ?>

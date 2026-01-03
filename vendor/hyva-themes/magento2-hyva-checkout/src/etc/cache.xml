@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2022-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Cache/etc/cache.xsd"
+>
+    <type name="hyva_checkout" translate="label,description" instance="Hyva\Checkout\Model\Cache\Type\HyvaCheckout">
+        <label>Checkout Deployments</label>
+        <description>Checkout deployment versions - Hyvä Themes</description>
+    </type>
+</config>

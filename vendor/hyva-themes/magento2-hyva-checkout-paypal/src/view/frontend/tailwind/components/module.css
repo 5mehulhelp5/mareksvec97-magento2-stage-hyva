@@ -1,0 +1,18 @@
+/* global styles for paypal checkout */
+@layer components {
+    .payment-method-note {
+        @apply inline-block rounded-md font-normal px-4 py-2 bg-gray-200 mb-4 w-full md:w-11/12;
+    }
+}
+#hyva-checkout-container {
+    [id*="paypal-messages"] {
+        @apply inline-block p-4 border border-gray-200 rounded-lg text-center;
+    }
+    [id*='payment-method-view'] {
+        > [id*='paypal-button-'] {
+            @apply py-4;
+        }
+    }
+}
+
+

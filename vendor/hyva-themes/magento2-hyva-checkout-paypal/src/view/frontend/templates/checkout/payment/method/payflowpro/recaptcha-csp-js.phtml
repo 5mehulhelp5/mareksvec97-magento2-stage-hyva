@@ -1,0 +1,137 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2020-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+declare(strict_types=1);
+
+use Hyva\CheckoutPayPal\ViewModel\Payment\PayflowproReCaptcha as ViewModel;
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\HyvaCsp;
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Element\Template;
+use Magento\ReCaptchaUi\Model\CaptchaResponseResolverInterface as CaptchaResolver;
+
+/** @var Template $block */
+/** @var Escaper $escaper */
+/** @var ViewModelRegistry $viewModels */
+/** @var HyvaCsp $hyvaCsp */
+/** @var ViewModel $viewModel */
+
+$viewModel = $viewModels->require(ViewModel::class);
+$reCaptchaContainerId = $viewModel->getContainerId();
+$reCaptchaV2InvisibleCallback = $viewModel->getV2InvisibleCallback();
+?>
+<script>
+    let isReCaptchaInit = false;
+
+    function initReCaptchaForm() {
+        return {
+            errors: false,
+            hasCaptchaToken: 0,
+            submitForm() {
+                this.validateRecaptcha();
+            },
+            init(){
+                <?php if (!$viewModel->isV3InvisibleReCaptcha()): ?>
+                    const {
+                        methodCode,
+                        siteKey,
+                        recaptchaV2Callback,
+                        containerId
+                    } = this.$el.dataset;
+
+                    window.addEventListener('payflowpro-boot', () => {
+                        refreshReCaptcha();
+                    }, { once: true });
+
+                    window.addEventListener('checkout:payment:method-activate', (event) => {
+                        if (event.detail.method === `${methodCode}`) {
+                            refreshReCaptcha();
+                        }
+                    }, { once: true });
+
+                    function refreshReCaptcha() {
+                        if (!window.grecaptcha) {
+                            initReCaptcha();
+                            return;
+                        }
+
+                        if (!isReCaptchaInit) {
+                            try {
+                                window.grecaptcha.reset();
+                            } catch (e) {
+                                renderReCaptcha();
+                            }
+
+                            isReCaptchaInit = true;
+                        }
+                    }
+
+                    function initReCaptcha() {
+                        if (isReCaptchaInit) {
+                            return;
+                        }
+
+                        isReCaptchaInit = true;
+
+                        grecaptchaV2LoadCallbacks.push(() => {
+                            renderReCaptcha();
+                        });
+
+                        forceLoadRecaptchaScript(
+                            document.getElementById(`${containerId}`).closest('form')
+                        );
+                    }
+
+                    function renderReCaptcha() {
+                        <?php if ($viewModel->isV2NotRobotReCaptcha()): ?>
+                            window.grecaptcha.render(`${containerId}`, {
+                                sitekey: `${siteKey}`
+                            });
+                        <?php elseif ($viewModel->isV2InvisibleReCaptcha()): ?>
+                            window.grecaptcha.render(`${containerId}`, {
+                                sitekey: `${siteKey}`,
+                                callback: `${recaptchaV2Callback}`,
+                                size: 'invisible'
+                            });
+                        <?php endif; ?>
+                    }
+                <?php endif; ?>
+            },
+            validateRecaptcha() {
+                const { recaptchaResolver } = this.$el.dataset;
+                const $form = document.querySelector(`#${this.$el.id}`);
+                <?= /** noEscape */ $viewModel->getReCaptchaValidationJsHtml() ?>
+
+                if (this.errors === 0) {
+                    const reCaptchaKey = `${recaptchaResolver}`;
+
+                    let reCaptchaResponse = $form.elements['g-recaptcha-response'];
+
+                    let requestData = {detail: {}};
+                    requestData.detail[reCaptchaKey] = reCaptchaResponse ? reCaptchaResponse.value : '';
+
+                    document.getElementById('payflowpro-authorize')
+                        .dispatchEvent(new CustomEvent('payflowpro-authorize-card', requestData));
+                }
+
+                window.dispatchEvent(new Event('magewire:loader:done'));
+            }
+        }
+    }
+
+    window.addEventListener('alpine:init', () => Alpine.data('initReCaptchaForm', initReCaptchaForm), {once: true});
+
+    <?php if (!$viewModel->isV3InvisibleReCaptcha()): ?>
+        <?php if ($viewModel->isV2NotRobotReCaptcha()): ?>
+            document.addEventListener('DOMContentLoaded', () => {
+                isReCaptchaInit = true;
+            }, { once: true });
+        <?php endif; ?>
+    <?php endif; ?>
+</script>
+<?php $hyvaCsp->registerInlineScript() ?>

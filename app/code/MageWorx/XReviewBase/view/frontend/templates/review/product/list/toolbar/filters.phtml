@@ -1,0 +1,24 @@
+<?php
+/**
+ * Copyright © MageWorx. All rights reserved.
+ * See LICENSE.txt for license details.
+ */
+?>
+<?php
+/**
+ * Review list toolbar
+ *
+ * @var $block \MageWorx\XReviewBase\Block\Review\Product\ListView\Toolbar
+ */
+
+$toolbar = $block->getParentBlock();
+?>
+
+<?php if ($toolbar->getAllowedFilters()): ?>
+    <div class="mw-sorting-controls__label text"><?= $toolbar->escapeHtml(__('Filter reviews by:')) ?></div>
+    <div class="mw-sorting-controls__items">
+        <?php foreach ($toolbar->getAllowedFilters() as $filter): ?>
+            <?= $block->getChildHtml($filter) ?>
+        <?php endforeach; ?>
+    </div>
+<?php endif; ?>

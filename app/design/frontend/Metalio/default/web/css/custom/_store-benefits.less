@@ -1,0 +1,127 @@
+& when (@critical) {
+	.cms-index-index {
+		.store-benefits {
+			.pagebuilder-column {
+				
+				p {
+					font-size: 15px !important;
+				}
+			}
+		}
+		.cart-benefit-group {
+			background: @color_white;
+			color: @base__color;
+			&:before {
+				display: none;
+			}
+			.container-benefits.d-flex {
+				padding-top: 0px;
+				padding-bottom: 0px;
+				margin-top: 0px;
+			}
+		}
+	}
+	.cart-benefit-group {
+		background: @background-primary;
+		color: @color_white;
+		position: relative;
+		
+	}
+	.container-benefits.d-flex {
+	        gap: 30px;
+	        margin-top: 100px;
+	        padding-top: 45px;
+	        padding-bottom: 45px;
+	      
+	    .single.benefit.d-flex {
+	        gap: 20px;
+	        width: 20%;
+	        img {
+	            height: auto;
+	            min-width: 40px;
+	            max-width: 40px;
+	            &.slovakia-flag {
+	            	min-height: 30px;
+	            	    min-width: 50px;
+	            }
+	        }
+	        .benefit-text-group.d-flex {
+	            flex-direction: column;
+	            .benefit-headline {
+	                font-size: 15px;
+	                font-weight: 600;
+	            }
+	            .u-txt-dark {
+	                font-size: 14px;
+	            }
+	        }
+	    }
+	}
+
+@media only screen and (max-width: 1150px) and (min-width: 768px)  {
+.container-benefits.d-flex {
+	    margin-top: 45px;
+	    .single.benefit.d-flex {
+	        flex-direction: column;
+	       	gap: 12px;
+	    }
+	}
+}
+
+@media only screen and (max-width: 450px) and (min-width: 390px)  {
+.container-benefits.d-flex {
+	    
+	    .single.benefit.d-flex {
+	        flex-direction: column;
+	       	gap: 12px;
+	       	align-items: center;
+	       	.benefit-headline, .u-txt-dark {
+	       		text-align: center;
+	       	}
+	    }
+	}
+}
+//
+//  Mobile
+//  _____________________________________________
+
+	@media @media-md-down {
+		.container-benefits.d-flex {
+	    	flex-wrap: wrap;
+	    	justify-content: center;
+	    	gap: 25px;
+	    	margin-top: 15px;
+	    .single.benefit.d-flex {
+	    	width: ~"calc(50% - 13px)";
+	    	gap: 15px;
+
+	    }
+	}	
+		.store-benefits {
+			margin-bottom: 25px;
+			.pagebuilder-column {
+				img.pagebuilder-mobile-only {
+					height: 50px !important;
+					width: auto;
+				}
+				h4 {
+					font-size: 18px;
+				}
+				p {
+
+				}
+			}
+
+		}
+
+	}
+}
+
+@media screen and (max-width: 390px) {
+	.container-benefits.d-flex {
+	    
+	    .single.benefit.d-flex {
+	           width: 100%;
+	    }
+	}
+}

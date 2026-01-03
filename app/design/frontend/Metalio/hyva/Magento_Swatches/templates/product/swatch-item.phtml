@@ -1,0 +1,131 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2020-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+declare(strict_types=1);
+
+use Hyva\Theme\Model\ViewModelRegistry;
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Element\Template;
+use Magento\Swatches\ViewModel\Product\Renderer\Configurable as ConfigurableViewModel;
+
+/** @var Template $block */
+/** @var Escaper $escaper */
+/** @var ViewModelRegistry $viewModels */
+
+/** @var ConfigurableViewModel $configurableViewModel */
+$configurableViewModel = $viewModels->require(ConfigurableViewModel::class);
+
+$productId   = $block->getProductId();
+$attributeId = $block->getAttributeId();
+
+if (!$productId || !$attributeId) {
+    return '';
+}
+?>
+
+<div x-id="['attribute-option-<?= (int) $productId ?>-'+item.id]">
+  <!-- Enabled + selectable -->
+  <template x-if="optionIsEnabled(<?= (int) $attributeId ?>, item.id) && optionIsActive(<?= (int) $attributeId ?>, item.id)">
+    <label
+      :for="$id('attribute-option-<?= (int) $productId ?>-'+item.id)"
+      class="swatch-option m-0  cursor-pointer relative inline-flex items-center justify-center cursor-pointer select-none
+             overflow-hidden border leading-none transition-colors duration-150 focus:outline-none"
+      :class="{
+        // VIZUÁLNY (farba/obrázok)
+        '!w-7 !h-7 !min-w-[28px] !min-h-[28px] !max-w-[28px] !max-h-[28px] aspect-square rounded-full p-0 ring-1 ring-gray-300':
+          !isTextSwatch(<?= (int) $attributeId ?>, item.id),
+
+        // TEXT swatch – základ (pill)
+        'px-4 h-10 rounded-full text-md transition-colors ':
+          isTextSwatch(<?= (int) $attributeId ?>, item.id),
+
+        // TEXT swatch – AKTÍVNY (vybraný)
+        'bg-primary text-white border-primary hover:bg-primary':
+          isTextSwatch(<?= (int) $attributeId ?>, item.id)
+          && (selectedValues[<?= (int) $attributeId ?>] === item.id),
+
+        // TEXT swatch – NEAKTÍVNY
+        'bg-white text-gray-700 border-container-darker hover:bg-gray-50':
+          isTextSwatch(<?= (int) $attributeId ?>, item.id)
+          && (selectedValues[<?= (int) $attributeId ?>] !== item.id),
+
+        // Focus
+        'ring-2 ring-primary/50 ring-offset-1 ring-offset-white': focusedLabel === item.id
+      }"
+      :style="isTextSwatch(<?= (int) $attributeId ?>, item.id)
+                ? ''                               // TEXT: žiadny inline style -> necháme padding z tried
+                : getSwatchBackgroundStyle('<?= (int) $attributeId ?>', item.id) // VIZUÁLNY: farba/obrázok
+      "
+      <?php if ($configurableViewModel->getShowSwatchTooltip()): ?>
+      @mouseenter.self="activeTooltipItem = { attribute: '<?= (int) $attributeId ?>', item: item.id, index }; tooltipPositionElement = $event.target;"
+      @mouseleave.self="activeTooltipItem = false"
+      <?php endif; ?>
+    >
+      <input
+        :id="$id('attribute-option-<?= (int) $productId ?>-'+item.id)"
+        :value="item.id"
+        name="super_attribute[<?= (int) $attributeId ?>]"
+        type="radio"
+        class="absolute cursor-pointer inset-0 w-full h-full opacity-0 focus:outline-none"
+        x-on:focus="focusLabel(item.id)"
+        x-on:blur="blurLabel()"
+        x-on:change="changeOption(<?= (int) $attributeId ?>, $event.target.value)"
+        x-on:click="clearOptionIfActive(<?= (int) $attributeId ?>, item.id)"
+        x-model="selectedValues[<?= (int) $attributeId ?>]"
+        :required="getAllowedAttributeOptions(<?= (int) $attributeId ?>).filter(a => selectedValues[a]).length === 0"
+        :aria-label="getSwatchText(<?= (int) $attributeId ?>, item.id)"
+        aria-describedby="attribute-label-<?= $escaper->escapeHtmlAttr($productId . '-' . $attributeId) ?>"
+      >
+
+      <!-- TEXT: nápis vo vnútri pilla -->
+      <template x-if="isTextSwatch(<?= (int) $attributeId ?>, item.id)">
+        <div
+          x-html="getSwatchText(<?= (int) $attributeId ?>, item.id)"
+          class="pointer-events-none select-none whitespace-nowrap font-medium"
+          :class="{
+            'text-white'    : (selectedValues[<?= (int) $attributeId ?>] === item.id),
+            'text-gray-700' : (selectedValues[<?= (int) $attributeId ?>] !== item.id)
+          }"
+          aria-hidden="true"
+        ></div>
+      </template>
+
+      <!-- VIZUÁLNY: zvýraznenie výberu ringom (neprebíj na bielej farbe) -->
+      <div
+        x-show="!isTextSwatch(<?= (int) $attributeId ?>, item.id) && (selectedValues[<?= (int) $attributeId ?>] === item.id)"
+        class="absolute inset-0 rounded-full ring-2 ring-primary pointer-events-none"
+        aria-hidden="true"
+      ></div>
+    </label>
+  </template>
+
+  <!-- Enabled + not active -->
+  <template x-if="optionIsEnabled(<?= (int) $attributeId ?>, item.id) && !optionIsActive(<?= (int) $attributeId ?>, item.id)">
+    <div
+      class="relative overflow-hidden leading-none select-none swatch-option opacity-50 cursor-not-allowed transition"
+      :class="{
+        '!w-7 !h-7 !min-w-[28px] !min-h-[28px] !max-w-[28px] !max-h-[28px] aspect-square rounded-full p-0 border ring-1 ring-gray-300':
+          !isTextSwatch(<?= (int) $attributeId ?>, item.id),
+        'px-3 h-8 rounded-full border bg-gray-50':
+          isTextSwatch(<?= (int) $attributeId ?>, item.id),
+        'border-container-darker': true
+      }"
+      :style="isTextSwatch(<?= (int) $attributeId ?>, item.id) ? '' : getSwatchBackgroundStyle('<?= (int) $attributeId ?>', item.id)"
+    >
+      <div x-html="getSwatchText(<?= (int) $attributeId ?>, item.id)"
+           class="whitespace-nowrap text-gray-600"
+           :class="{ 'sr-only' : !isTextSwatch(<?= (int) $attributeId ?>, item.id) }"></div>
+
+      <!-- preškrtnutie -->
+      <svg class="absolute inset-0 w-full h-full text-gray-500/70 pointer-events-none" aria-hidden="true">
+        <line x1="0" y1="100%" x2="100%" y2="0" class="stroke-current stroke-[1.5]"></line>
+      </svg>
+    </div>
+  </template>
+</div>
+

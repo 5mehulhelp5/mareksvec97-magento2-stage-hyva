@@ -1,0 +1,31 @@
+<?xml version="1.0" ?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <tab id="BigConnect" translate="label" sortOrder="400">
+            <label>BigConnect</label>
+        </tab>
+        <section id="bigconnect_cookies" translate="label" type="text" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
+            <label>Cookies Conset</label>
+            <tab>BigConnect</tab>
+            <resource>Magento_Config::config_admin</resource>
+            <group id="general" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                <attribute type="expanded">1</attribute>
+                <label>General settings</label>
+                <field id="active" translate="label" sortOrder="0" type="select" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Enable cookie notice</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="country" translate="label" sortOrder="1" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Set country code</label>
+                    <comment>You can use code like (sk,cz,en,de,it)</comment>
+                </field>
+                <field id="name" translate="label" sortOrder="2" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Enter site name</label>
+                </field>
+                <field id="privacypolicyurl" translate="label" sortOrder="2" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Website privacy policy url</label>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

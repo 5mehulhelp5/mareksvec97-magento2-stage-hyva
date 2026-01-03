@@ -1,0 +1,37 @@
+<?php
+namespace N1site\Checkout\Setup;
+
+class InstallSchema implements \Magento\Framework\Setup\InstallSchemaInterface {
+	
+    public function install(
+		\Magento\Framework\Setup\SchemaSetupInterface $installer, 
+		\Magento\Framework\Setup\ModuleContextInterface $context
+	) {
+        $installer->startSetup();
+
+        $quoteTable = $installer->getTable('quote');
+        $salesTable = $installer->getTable('sales_order');
+
+        $columns = [
+            'company_id' => [
+                'type' => \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+                'nullable' => true,
+                'comment' => 'Company ID'
+            ],
+            'tax_id' => [
+                'type' => \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+                'nullable' => true,
+                'comment' => 'Tax ID'
+            ]
+        ];
+
+        $connection = $installer->getConnection();
+
+        foreach($columns as $name=>$definition) {
+            $connection->addColumn($quoteTable, $name, $definition);
+            $connection->addColumn($salesTable, $name, $definition);
+        }
+
+        $installer->endSetup();
+    }
+}

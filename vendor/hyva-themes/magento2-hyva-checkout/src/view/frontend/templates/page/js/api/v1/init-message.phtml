@@ -1,0 +1,59 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2022-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+declare(strict_types=1);
+
+use Hyva\Theme\ViewModel\HyvaCsp;
+use Magento\Framework\View\Element\Template;
+
+/** @var Template $block */
+/** @var HyvaCsp $hyvaCsp */
+
+/**
+ * @Internal Prefer utilizing the "after" container for injecting additional code.
+ */
+?>
+<script>
+    <?php /* @api */ ?>
+    hyvaCheckout.evaluation.registerProcessor(
+        'message',
+        (component, el, result) => {
+            const dispatchMessage = () => {
+                hyvaCheckout.message.send(
+                    result.arguments.text,
+                    result.arguments.type,
+                    result.arguments.duration || null
+                )
+
+                return result.result || false
+            }
+
+            if (result.dispatch) {
+                dispatchMessage()
+                return
+            }
+
+            Magewire.hook('message.received', (message, component) => {
+                const id = result.id
+                const hash = result.hash
+
+                if (component.id === id && result.result === false) {
+                    hyvaCheckout.validation.remove(hash)
+                }
+            })
+
+            <?php /* Registers the evaluation result as a validation for the specified component. */ ?>
+            hyvaCheckout.validation.register(result.hash, () => dispatchMessage(), el, result.group, {
+                stackPosition: result.arguments.position || 500
+            })
+        }
+    )
+</script>
+<?php $hyvaCsp->registerInlineScript() ?>
+
+<?= $block->getChildHtml('after') ?>

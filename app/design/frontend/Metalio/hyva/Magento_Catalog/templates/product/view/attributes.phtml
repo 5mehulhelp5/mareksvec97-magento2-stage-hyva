@@ -1,0 +1,60 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ */
+
+declare(strict_types=1);
+
+use Magento\Framework\Escaper;
+use Magento\Catalog\Helper\Output as CatalogOutputHelper;
+use Magento\Catalog\Block\Product\View\Attributes;
+use Magento\Catalog\Model\Product;
+
+/** @var Escaper $escaper */
+/** @var Attributes $block */
+/** @var CatalogOutputHelper $catalogOutputHelper */
+$catalogOutputHelper = $this->helper(CatalogOutputHelper::class);
+/** @var Product $product */
+$product = $block->getProduct();
+
+$getLayoutStyle = (string) $block->getLayoutStyle() ?: "";
+
+$layoutStyleTableRow         = $getLayoutStyle === "" ? "block lg:table-row" : ($getLayoutStyle === "list" ? "block" : "");
+$layoutStyleTableCellHeading = $getLayoutStyle === ""
+    ? "block lg:table-cell px-4 pt-3 lg:py-3 align-top"
+    : ($getLayoutStyle === "list" ? "block px-4 pt-3" : "py-3 px-4");
+$layoutStyleTableCellItem    = $getLayoutStyle === ""
+    ? "block lg:table-cell px-4 pb-3 lg:py-3 align-top"
+    : ($getLayoutStyle === "list" ? "block px-4 pb-3" : "py-3 px-4");
+?>
+
+<?php if ($attributes = $block->getAdditionalData()): ?>
+    <div id="product-attributes"
+         class="table-wrapper overflow-x-auto"
+         style="max-width:550px; font-size:14px;">
+
+        <!-- Nadpis -->
+        <div class="bg-slate-100 px-4 py-2">
+            <span class="font-bold text-slate-900"><?= $escaper->escapeHtml(__('Technical specifications')) ?></span>
+        </div>
+
+        <table class="additional-attributes w-full table-fixed border-t border-slate-200">
+            <?php foreach ($attributes as $attribute): ?>
+                <tr class="border-b border-slate-200 <?= $layoutStyleTableRow ?>">
+                    <th
+                        scope="row"
+                        class="col label product-attribute-label text-start font-medium <?= $layoutStyleTableCellHeading ?> lg:w-2/3"
+                    >
+                        <?= $escaper->escapeHtml($attribute['label']) ?>
+                    </th>
+                    <td
+                        class="col data product-attribute-value text-start lg:text-end text-slate-900 font-semibold <?= $layoutStyleTableCellItem ?> lg:w-1/3"
+                        data-th="<?= $escaper->escapeHtmlAttr($attribute['label']) ?>"
+                    >
+                        <?= /* @noEscape */ $catalogOutputHelper->productAttribute($product, $attribute['value'], $attribute['code']) ?>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+        </table>
+    </div>
+<?php endif; ?>

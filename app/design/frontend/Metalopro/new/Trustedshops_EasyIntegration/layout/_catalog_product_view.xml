@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * @category  Trustedshops
+ * @package   Trustedshops\EasyIntegration
+ * @author    Trusted Shops GmbH
+ * @copyright 2022 Trusted Shops GmbH
+ * @license   https://policies.etrusted.com/IE/en/plugin-licence.html
+ * @link      http://www.trustedshops.de/
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceBlock name="content">
+            <block class="Trustedshops\EasyIntegration\Block\ProductPageExtension"
+                   name="trustedshops.rating.product_name"
+                   template="Trustedshops_EasyIntegration::ts_extension_assembler.phtml"
+                   after="product.info.details">
+            </block>
+            <block class="Trustedshops\EasyIntegration\Block\Widget" name="trustedshops.product.title"
+                   template="Trustedshops_EasyIntegration::ts_assembler.phtml" after="trustedshops.rating.product_name">
+                <action method="setLocation">
+                    <argument name="location" xsi:type="string">wdg-loc-pn</argument>
+                </action>
+            </block>
+        </referenceBlock>
+        <referenceBlock name="product.info.details">
+            <referenceBlock name="product.info.description"
+                            template="Trustedshops_EasyIntegration::product/view/description.phtml">
+                <block class="Trustedshops\EasyIntegration\Block\Widget" name="trustedshops.review.description"
+                       template="Trustedshops_EasyIntegration::ts_assembler.phtml">
+                    <action method="setLocation">
+                        <argument name="location" xsi:type="string">wdg-loc-pd</argument>
+                    </action>
+                </block>
+            </referenceBlock>
+            <block class="Trustedshops\EasyIntegration\Block\Widget" name="trustedshops.review.tab"
+                   template="Trustedshops_EasyIntegration::ts_assembler.phtml" group="detailed_info">
+                <arguments>
+                    <argument name="sort_order" xsi:type="string">30</argument>
+                </arguments>
+                <action method="setLocation">
+                    <argument name="location" xsi:type="string">wdg-loc-pp</argument>
+                </action>
+                <action method="setTitle">
+                    <argument name="title" xsi:type="string" translate="true">Trusted Shops Reviews</argument>
+                </action>
+            </block>
+        </referenceBlock>
+    </body>
+</page>

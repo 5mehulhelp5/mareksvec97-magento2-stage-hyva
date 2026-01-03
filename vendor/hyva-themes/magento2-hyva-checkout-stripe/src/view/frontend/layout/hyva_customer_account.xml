@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+  <body>
+      <!-- Subscriptions are not supported by Hyva_StripePayments -->
+    <referenceBlock name="stripe-payments-subscriptions" remove="true" />
+    <!-- If you want to sortOrder the Stripe methods in customer account area you can use this (does not adhere to config)
+    <referenceBlock name="customer_account_navigation">
+        <block class="Magento\Customer\Block\Account\SortLinkInterface" name="stripe-payments-customer-cards">
+            <arguments>
+                <argument name="path" xsi:type="string">stripe/customer/paymentmethods</argument>
+                <argument name="label" xsi:type="string" translate="true">Stripe Payment Methods</argument>
+                <argument name="sortOrder" xsi:type="number">170</argument>
+            </arguments>
+        </block>
+    </referenceBlock -->
+  </body>
+</page>

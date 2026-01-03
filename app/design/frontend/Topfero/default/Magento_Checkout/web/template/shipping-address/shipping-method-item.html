@@ -1,0 +1,49 @@
+<div class="shipping-method" data-bind="attr: {class: (element.isSelected()==(method.carrier_code+'_'+method.method_code))?'shipping-block active':'shipping-block' }" click="element.selectShippingMethod">
+    <div class="shipping-method-title field choice flex-wrap">
+        
+        <label attr="'for': 'label_method_' + method.method_code + '_' + method.carrier_code" class="amcheckout-label w-100">
+            <div class="top-shipping d-flex w-100 items-center">
+            <input type="radio"
+                   class="radio"
+                   ifnot="method.error_message"
+                   ko-checked="element.isSelected"
+                   ko-value="method.carrier_code + '_' + method.method_code"
+                   attr="'id': 'label_method_' + method.method_code + '_' + method.carrier_code,
+                   'checked': element.rates().length == 1 || element.isSelected"/>
+            <div class="shipping-block__wrapp d-flex justify-between w-100">
+                <div class="shipping-price-title d-flex gap-3">
+                    <span class="shipping-block__price">
+                        <each args="element.getRegion('price')" render=""/>
+                    </span>
+                    <span class="method" data-bind="attr: {visible: false}" text="method.carrier_title"/>
+                </div>
+                <div class="shipping-logo">
+                    <!--ko if: method.extension_attributes && method.extension_attributes.logo_url -->
+                        <div class="shipping-block__icon">
+                            <img data-bind="attr: { 'src': method.extension_attributes.logo_url }">
+                        </div>
+                    <!--/ko-->
+                </div>  
+            </div>
+        </div>
+        
+        </label>
+        <div class="bottom-shipping">
+            <!-- ko if: method.extension_attributes && method.extension_attributes.description -->
+                <div class="shipping-block__desc">
+                    <span class="method-description" data-bind="html: method.extension_attributes.description"></span>
+                </div>
+            <!-- /ko -->
+        </div>
+    </div>
+    <div class="row row-error" if="method.error_message">
+        <div class="col col-error">
+            <div role="alert" class="message error">
+                <div text="method.error_message"></div>
+            </div>
+            <span class="no-display">
+                <input type="radio" attr="'value' : method.method_code, 'id': 's_method_' + method.method_code" />
+            </span>
+        </div>
+    </div>
+</div>

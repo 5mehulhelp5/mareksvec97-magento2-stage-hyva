@@ -1,0 +1,12 @@
+{
+    "quote": {
+        "column": {
+            "customer_comment": true
+        }
+    },
+    "sales_order_status_history": {
+        "column": {
+            "is_customer_comment": true
+        }
+    }
+}

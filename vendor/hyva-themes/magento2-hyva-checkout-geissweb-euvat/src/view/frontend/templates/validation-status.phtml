@@ -1,0 +1,87 @@
+<?php declare(strict_types=1);
+
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Element\Template;
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\HeroiconsOutline;
+use Hyva\GeisswebEuvatCheckout\ViewModel\Validation\Data;
+
+/** @var Escaper $escaper */
+/** @var Template $block */
+/** @var \Hyva\Checkout\Magewire\Checkout\AddressView\AbstractMagewireAddressForm $magewire */
+/** @var ViewModelRegistry $viewModels */
+
+/** @var HeroiconsOutline $heroIcons */
+$heroIcons = $viewModels->require(HeroiconsOutline::class);
+
+/** @var Data $validationVm */
+$validationVm = $viewModels->require(Data::class);
+$vatId = $magewire->address['vat_id'] ?? '';
+$countryId = $magewire->address['country_id'] ?? '';
+$isVisible = $magewire->address['isVisible'] ?? '';
+$addressType = $magewire->getAddressType()->getNamespace();
+$autoSaveTime = $magewire->getAutoSaveTimeout();
+$validationResult = $validationVm->getByVatId($vatId);
+
+// CSP-konform: initialResult direkt ins JSON schreiben, falls vorhanden
+$vatConfig = [
+    'addressType' => $addressType,
+    'vatNumber' => $vatId,
+    'countryId' => $countryId,
+    'autoSaveTime' => $autoSaveTime,
+];
+
+if (is_string($validationResult)) {
+    $vatConfig['initialResult'] = json_decode($validationResult, true);
+}
+?>
+<div id="<?= $escaper->escapeHtmlAttr($addressType) ?>-vat-request-status"
+     x-cloak
+     data-vat-config="<?= $block->escapeHtmlAttr(json_encode($vatConfig)) ?>"
+     @vat-id-changed.window="handleVatIdChanged"
+>
+    <div x-show="isLoading"
+         class="rounded-md p-4 my-2 bg-gray-100"
+         x-transition
+         role="status"
+         aria-live="polite">
+        <div class="flex">
+            <div class="flex-shrink-0" aria-hidden="true">
+                <?= /* @noEscape */ $heroIcons->dotsVerticalHtml('h-5 w-5 stroke-gray-400 animate-spin') ?>
+            </div>
+            <div class="ml-3">
+                <p class="text-sm font-medium"><?= $escaper->escapeHtml(__('Validating your VAT number.')) ?></p>
+            </div>
+        </div>
+    </div>
+    <div class="rounded-md p-4 my-2"
+         :class="statusClass"
+         x-show="showFrontendMessage"
+         x-transition
+         role="status"
+         aria-live="polite">
+        <div class="flex">
+            <div class="flex-shrink-0" aria-hidden="true">
+                <div x-show="showSuccessIcon" class="text-green-400">
+                    <?= /* @noEscape */ $heroIcons->checkCircleHtml('h-5 w-5 stroke-green-400') ?>
+                </div>
+                <div x-show="showErrorIcon" class="text-red-400">
+                    <?= /* @noEscape */ $heroIcons->exclamationCircleHtml('h-5 w-5 stroke-red-400') ?>
+                </div>
+            </div>
+            <div class="ml-3">
+                <p x-text="getMessageText"
+                   :class="textClass"
+                   class="text-sm font-medium"></p>
+            </div>
+            <div class="ml-auto cursor-pointer"
+                 @click="closeMessageButton">
+                <button type="button"
+                        aria-label="<?= $escaper->escapeHtmlAttr(__('Close message')) ?>"
+                        class="p-1 bg-transparent border-0">
+                    <?= /* @noEscape */ $heroIcons->xHtml('h-5 w-5') ?>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

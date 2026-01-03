@@ -1,0 +1,147 @@
+<!-- jQuery UI Slider kód -->
+<script>
+    require(['jquery', 'mage/validation', 'mage/translate', 'Magento_Catalog/js/price-utils', 'jquery/ui'], function($, validation, $t, priceUtils){
+        $(document).ready(function() {
+
+            function validateInput($input, minVal, maxVal) {
+                var inputValue = parseFloat($input.val());
+                if (inputValue < minVal || inputValue > maxVal) {
+                    $input.val(minVal);
+                    $input.after('<div class="mage-error" generated="true">' + $t('Please enter a value between %1cm and %2cm').replace('%1', minVal).replace('%2', maxVal) + '</div>');
+                } else {
+                    $input.next('.mage-error').remove();
+                }
+            }
+
+            function updatePrice() {
+                // Get the price box element
+                var $priceBox = $('[data-role="priceBox"]');
+
+                // Get the final price element
+                // var $finalPriceElement = $priceBox.find('.price-final_price .price-wrapper .price');
+                var $finalPriceElement = $priceBox.find('.price-final_price .price-wrapper').attr('data-price-amount');
+                console.log($finalPriceElement);
+
+                // Get the base price
+                // var basePrice = parseFloat($finalPriceElement.text().replace(/\xa0€/g, '').replace(/,/g, '.'));
+                var basePrice = parseFloat($finalPriceElement);
+
+                var optionsPrice = 0;
+                $('.product-options-wrapper .field .control .field.choice input.product-custom-option').each(function(i){
+                   if($(this).is(':checked')){
+                       optionsPrice = optionsPrice + parseFloat($(this).attr('price'));
+                       // console.log('Option price:', $(this).attr('price'));
+                       // console.log('Option id:', $(this).find('input.product-custom-option').attr('id'));
+                       console.log('Option price:', $(this).attr('price'));
+                       console.log('Option id:', $(this).attr('id'));
+                   }
+                });
+                basePrice = basePrice + optionsPrice;
+
+                // Get the input values
+                var inputValueHeight = parseFloat($('.slider-vyska').find('input.input-text.product-custom-option').val()) - parseFloat($('.range-slider.slider-vyska').attr('min'));
+                // var inputValueHeightMin = parseFloat($('.range-slider.slider-vyska').attr('min'));
+                // inputValueHeight = inputValueHeight = inputValueHeightMin;
+
+                var inputValueWidth = parseFloat($('.slider-sirka').find('input.input-text.product-custom-option').val()) - parseFloat($('.range-slider.slider-sirka').attr('min'));
+                // var inputValueWidthMin = parseFloat($('.range-slider.slider-sirka').attr('min'));
+                // inputValueWidth = inputValueWidth = inputValueWidthMin;
+
+                var inputValueLength = parseFloat($('.slider-dlzka').find('input.input-text.product-custom-option').val()) - parseFloat($('.range-slider.slider-dlzka').attr('min'));
+                // var inputValueWidthMin = parseFloat($('.range-slider.slider-dlzka').attr('min'));
+                // inputValueLength = inputValueLength = inputValueWidthMin;
+
+                // Get the price factors
+                var priceFactorHeight = parseFloat($('.slider-vyska').data('option-price'));
+                var priceFactorWidth = parseFloat($('.slider-sirka').data('option-price'));
+                var priceFactorLength = parseFloat($('.slider-dlzka').data('option-price'));
+
+                // Calculate the new price
+                var newPrice = basePrice + (inputValueHeight * priceFactorHeight) + (inputValueWidth * priceFactorWidth) + (inputValueLength * priceFactorLength);
+                console.log('newPrice: ', newPrice);
+
+                // Use priceUtils to format the price
+                var formattedPrice = priceUtils.formatPrice(newPrice);
+                console.log('formattedPrice: ', formattedPrice);
+                // Update the final price element
+
+                // $finalPriceElement.text(formattedPrice);
+                if($('.price-final_price .special-price').length > 0){
+                    $('.price-final_price .special-price .price-wrapper .price').text(formattedPrice);
+                }else{
+                    $('.price-final_price .price-wrapper .price').text(formattedPrice);
+                }
+
+                console.log('inputValue: ', inputValueHeight);
+                console.log('priceFactor: ', priceFactorHeight);
+                console.log('basePrice: ', basePrice);
+            }
+
+            var classesAndDataAttributes = [
+                { class: 'slider-vyska', dataAttrMin: 'option-vyska-min', dataAttrMax: 'option-vyska-max', dataAttrPrice: 'option-price' },
+                { class: 'slider-sirka', dataAttrMin: 'option-sirka-min', dataAttrMax: 'option-sirka-max', dataAttrPrice: 'option-price' },
+                { class: 'slider-dlzka', dataAttrMin: 'option-dlzka-min', dataAttrMax: 'option-dlzka-max', dataAttrPrice: 'option-price' }
+            ];
+
+            $.each(classesAndDataAttributes, function(index, item) {
+                $('.' + item.class).each(function() {
+                    var minVal = parseFloat($(this).data(item.dataAttrMin));
+                    var maxVal = parseFloat($(this).data(item.dataAttrMax));
+                    var priceFactor = parseFloat($(this).data(item.dataAttrPrice));
+                    var $input = $(this).find('input.input-text.product-custom-option');
+                    $input.val(minVal);
+
+                    $input.on('change', function() {
+                        validateInput($(this), minVal, maxVal);
+                        updatePrice();
+                    });
+                });
+            });
+
+            // Create an observer instance linked to the callback function
+            var observer = new MutationObserver(updatePrice);
+
+            // Start observing the target node for configured mutations
+            observer.observe(document.querySelector('.price-final_price .price-wrapper .price'), { childList: true, subtree: true });
+
+
+
+
+            $('.product-price-slider').each(function(i)
+            {
+                var slider_id = $(this).attr('option_id');
+                var slider_min = parseInt($('.range-slider-id-' + slider_id ).attr('min'));
+                var slider_max = parseInt($('.range-slider-id-' + slider_id ).attr('max'));
+
+                $('.product-price-slider.slider-' + slider_id ).slider({
+                    min: slider_min,
+                    max: slider_max,
+                    value: slider_min,
+                    slide: function(event, ui) {
+                        var option_id = this.getAttribute('option_id');
+                        $('#options_' + option_id + '_text').val(ui.value);
+
+                        var minVal = parseInt($('.range-slider-id-' + option_id ).attr('min'));
+                        var maxVal = parseInt($('.range-slider-id-' + option_id ).attr('max'));
+                        var option_price = parseInt($('.range-slider-id-' + option_id ).attr('data-option-price'));
+
+                        validateInput($('#options_' + option_id + '_text'), minVal, maxVal);
+                        updatePrice();
+                    }
+                });
+
+                $(this).attr('rel'); // This is your rel value
+            });
+
+            $('input.product-custom-option').click(function () {
+
+                setTimeout(function () {
+                    updatePrice();
+                    // return false;
+                }, 20);
+
+            });
+
+        });
+    });
+</script>

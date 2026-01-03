@@ -1,0 +1,277 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2022-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+declare(strict_types=1);
+
+/** @var \Hyva\CheckoutStripe\Magewire\Payment\Method\StripePayments $magewire */
+/** @var \Magento\Framework\View\Element\Template $block */
+/** @var \Magento\Framework\Escaper $escaper */
+/** @var \Hyva\Theme\ViewModel\HyvaCsp $hyvaCsp */
+?>
+<script>
+    let stripeData = {
+        js: null,
+        elements: null,
+        cardCvcElement: null,
+        selectedSavedMethod: null,
+        cvcMounted: false,
+        cvcToken: null,
+    };
+
+    /**
+     * trigger form update if address data changes
+     */
+    const STRIPE_PAYMENT_METHOD = 'stripe_payments';
+    const STRIPE_PAYMENT_BANKTRANSFERS_METHOD = 'stripe_payments_bank_transfers';
+
+    function dispatchPaymentMethodEvent(paymentMethodCode) {
+        if (paymentMethodCode === STRIPE_PAYMENT_METHOD) {
+            window.dispatchEvent(new CustomEvent('checkout:payment:method-activate', {
+                detail: { method: paymentMethodCode },
+            }));
+        }
+    }
+
+    function handleAddressSave(event) {
+        const activePaymentCode = hyvaCheckout?.payment?.getActive()?.getCode()
+        const paymentMethodCode =  typeof activePaymentCode === 'string' ? activePaymentCode : '';
+        dispatchPaymentMethodEvent(paymentMethodCode);
+    }
+
+    window.addEventListener('magewire:load', () => {
+        Magewire.on('shipping_address_saved', handleAddressSave);
+        Magewire.on('billing_address_saved', handleAddressSave);
+    }, { once: true });
+    /**
+     * trigger form update if address data changes end
+     */
+
+    window.addEventListener('checkout:payment:method-activate', event => {
+         const tempMethod = event?.detail?.method;
+         const method = (typeof tempMethod === 'string' ? tempMethod : '') ?? '';
+
+        if (method !== STRIPE_PAYMENT_METHOD && method !== STRIPE_PAYMENT_BANKTRANSFERS_METHOD) {
+            return;
+        }
+
+        Promise.all([
+            new Promise(resolve => {
+                // Make sure the element is available.
+                if (document.querySelector('.stripe-element')) {
+                    resolve(document.querySelector('.stripe-element'));
+                    return;
+                }
+
+                const observer = new MutationObserver(() => {
+                    if (document.querySelector('.stripe-element')) {
+                        resolve(document.querySelector('.stripe-element'));
+                        observer.disconnect();
+                    }
+                });
+            }),
+
+            new Promise(async resolve => {
+                let component;
+
+                try {
+                    component = Magewire.find('<?= $escaper->escapeJs($block->getNameInLayout()) ?>');
+                } catch (error) {
+                    await Livewire.onLoad(() => {
+                        component = Magewire.find('<?= $escaper->escapeJs($block->getNameInLayout()) ?>');
+                    })
+                }
+
+                resolve(component.loadElementOptions(method))
+            })
+
+        ]).then(() => {
+            const element = document.getElementById('stripe-element-' + method);
+            hyvaCheckout.payment.activate(
+                method,
+                {
+                    initialize() {
+                        if (typeof window.Stripe === 'undefined') {
+                            window.loadStripe(() => this.onStripeLoad());
+                        } else {
+                            this.onStripeLoad();
+                        }
+
+                        window.addEventListener('stripe-update-selected-method', event => {
+                            stripeData.selectedSavedMethod = event.detail;
+
+                            if (stripeData.selectedSavedMethod &&
+                                stripeData.selectedSavedMethod.type === 'card' &&
+                                stripeData.selectedSavedMethod.cvc === 1
+                            ) {
+                                let elements = stripeData.js.elements();
+                                stripeData.cardCvcElement = elements.create('cardCvc', {
+                                    style: {
+                                        base: {
+                                            fontSize: '16px',
+                                        },
+                                    },
+                                });
+                                stripeData.cardCvcElement.mount('#stripe-card-cvc-element');
+
+                                stripeData.cvcMounted = true;
+                            }
+                        })
+                    },
+
+                    /**
+                     * This loads the Stripe.js script and initializes the Stripe Elements, which renders the payment
+                     * method options form.
+                     */
+                    onStripeLoad() {
+                        const component = Magewire.find('<?= $escaper->escapeJs($block->getNameInLayout()) ?>');
+                        stripeData.js = Stripe("<?= $escaper->escapeJs($magewire->getPublishableKey()) ?>");
+                        stripeData.js.registerAppInfo(<?= json_encode($magewire->getAppInfo()) ?>);
+                        stripeData.elements = stripeData.js.elements(component.elementOptions);
+
+                        component.getPaymentElementOptions(method).then(() => {
+                            let options = component.paymentElementData;
+                            window.dispatchEvent(new CustomEvent('stripe-update-saved-methods', {
+                                detail: {
+                                    savedMethods: options.savedMethods
+                                }
+                            }));
+
+                            if (typeof options.wallets === 'undefined'
+                                || !options.wallets
+                                || options.wallets === null
+                            ) {
+                                delete options['wallets'];
+                            }
+
+                            const paymentElement = stripeData.elements.create('payment', options);
+                            paymentElement.mount(element);
+                        });
+                    },
+
+                    /**
+                     * Whenever the customer clicks "next" or "place order", depending on the checkout settings, the
+                     * payment is validated. When this is successful, Stripe returns a payment method id, which is then
+                     * set on the quote.
+                     *
+                     * @returns {Promise<unknown>}
+                     */
+                    async validate() {
+                        const component = Magewire.find('<?= $escaper->escapeJs($block->getNameInLayout()) ?>');
+
+                        const paymentMethodData = {
+                            elements: stripeData.elements,
+                            params: {
+                                billing_details: component.paymentElementData.defaultValues.billingDetails,
+                            }
+                        };
+
+                        /**
+                         * This function holds 3 possible flows:
+                         * 1. Adding a new payment method, which is the default for guests.
+                         * 2. Selecting a saved payment method. See payment/stripe_payments/save_payment_method
+                         * 3. Selecting a saved payment method and updating the CVC. See payment/stripe_payments/cvc_code == new_saved_cards
+                         */
+                        return new Promise(async (resolve, reject) => {
+                            // Option 3: Update the CVC for a saved card and set the payment method id.
+                            if (stripeData.cvcMounted && stripeData.selectedSavedMethod && stripeData.selectedSavedMethod.id) {
+                                stripeData.js.createToken('cvc_update', stripeData.cardCvcElement).then(result => {
+                                    if (result.error) {
+                                        hyvaCheckout.message.alert(result.error.message);
+                                        resolve(false);
+                                        return;
+                                    }
+
+                                    component.setPaymentMethodId(stripeData.selectedSavedMethod.id, result.token.id).then(() => {
+                                        resolve(true);
+                                    }, () => {
+                                        reject(new Error('<?= $escaper->escapeJs(
+                                            __('Something went wrong. Please try again.')
+                                        ); ?>'));
+                                    });
+                                });
+
+                                return;
+                            }
+
+                            // Option 2: Save the selected payment method id
+                            if (stripeData.selectedSavedMethod && stripeData.selectedSavedMethod.id) {
+                                component.setPaymentMethodId(stripeData.selectedSavedMethod.id).then(() => {
+                                    resolve(true);
+                                }, () => {
+                                    reject(new Error('<?= $escaper->escapeJs(
+                                        __('Something went wrong. Please try again.')
+                                    ); ?>'));
+                                });
+                                return;
+                            }
+
+                            // Option 1: Creating a new payment method.
+                            stripeData.elements.submit().then((result) => {
+                                if (result.error) {
+                                    resolve(false);
+                                    return;
+                                }
+
+                                stripeData.js.createPaymentMethod(paymentMethodData).then((result) => {
+                                    if (result.error) {
+                                        console.error(result.error.message);
+                                        resolve(false);
+                                        return;
+                                    }
+
+                                    component.setPaymentMethodId(result.paymentMethod.id).then(() => {
+                                        resolve(true);
+                                    }, () => {
+                                        reject(new Error('<?= $escaper->escapeJs(
+                                            __('Something went wrong. Please try again.')
+                                        ); ?>'));
+                                    });
+                                }, (error) => {
+                                    console.error(error);
+                                    reject(new Error(error));
+                                });
+                            }, (result) => {
+                                if (result.error) {
+                                    console.error(result.error.message);
+                                    resolve(false);
+                                    return;
+                                }
+
+                                console.error(result);
+                                resolve(false);
+                            });
+                        });
+                    }
+                },
+                element
+            );
+        });
+    });
+
+    window.addEventListener('stripe:intent_status:requires_action', event => {
+        stripeData.js.handleNextAction({
+            clientSecret: event.detail.secret
+        }).then((result) => {
+            if (!result || result.error) {
+                hyvaCheckout.message.alert(
+                    result.error.message || '<?= $escaper->escapeJs(__('An error occurred while processing your payment.')) ?>'
+                );
+
+                return;
+            }
+
+            if (result?.paymentIntent?.next_action?.type && result.paymentIntent.next_action.type === 'display_bank_transfer_instructions') {
+                window.location.href = '<?= $block->getUrl('checkout/onepage/success') ?>';
+                return;
+            }
+
+            hyvaCheckout.main.getWireComponent().placeOrder();
+        });
+    });
+</script>
+<?php $hyvaCsp->registerInlineScript() ?>

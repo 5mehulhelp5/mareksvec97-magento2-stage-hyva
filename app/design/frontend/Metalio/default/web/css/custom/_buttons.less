@@ -1,0 +1,17 @@
+.button, button, a {
+	&.secondary, &.action.update {
+		background: @button-secondary-background;
+		border: 1px solid @border-color;
+		color: @button-secondary-text;
+		border-radius: 2px;
+		font-weight: 500;
+		padding: .5rem 1.25rem;
+
+	}
+	&.primary, &.pagebuilder-button-primary {
+		background: @button-primary-background !important;
+		&:hover {
+			background: @button-primary-hover !important;
+		}
+	}
+}

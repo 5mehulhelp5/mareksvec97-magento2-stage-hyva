@@ -1,0 +1,62 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * @category  Apptrian
+ * @package   Apptrian_PinterestPixel
+ * @author    Apptrian
+ * @copyright Copyright (c) Apptrian (http://www.apptrian.com)
+ * @license   http://www.apptrian.com/license Proprietary Software License EULA
+ */
+-->
+<csp_whitelist xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Csp:etc/csp_whitelist.xsd">
+    <policies>
+        <policy id="script-src">
+            <values>
+                <value id="apptrian-script-src" type="host">www.apptrian.com</value>
+                <value id="apptrian-pinterest-pixel-script-src" type="host">pinterest.com</value>
+                <value id="apptrian-pinterest-pixel-script-src-www" type="host">www.pinterest.com</value>
+                <value id="apptrian-pinterest-pixel-script-src-lib" type="host">s.pinimg.com</value>
+            </values>
+        </policy>
+        <policy id="connect-src">
+            <values>
+                <value id="apptrian-connect-src" type="host">www.apptrian.com</value>
+                <value id="apptrian-pinterest-pixel-connect-src" type="host">pinterest.com</value>
+                <value id="apptrian-pinterest-pixel-connect-src-www" type="host">www.pinterest.com</value>
+                <value id="apptrian-pinterest-pixel-connect-src-ct" type="host">ct.pinterest.com</value>
+            </values>
+        </policy>
+        <policy id="img-src">
+            <values>
+                <value id="apptrian-img-src" type="host">www.apptrian.com</value>
+                <value id="apptrian-pinterest-pixel-img-src" type="host">pinterest.com</value>
+                <value id="apptrian-pinterest-pixel-img-src-www" type="host">www.pinterest.com</value>
+                <value id="apptrian-pinterest-pixel-img-src-ct" type="host">ct.pinterest.com</value>
+            </values>
+        </policy>
+        <policy id="media-src">
+            <values>
+                <value id="apptrian-media-src" type="host">www.apptrian.com</value>
+                <value id="apptrian-pinterest-pixel-media-src" type="host">pinterest.com</value>
+                <value id="apptrian-pinterest-pixel-media-src-www" type="host">www.pinterest.com</value>
+                <value id="apptrian-pinterest-pixel-media-src-ct" type="host">ct.pinterest.com</value>
+            </values>
+        </policy>
+        <policy id="form-action">
+            <values>
+                <value id="apptrian-form-action" type="host">www.apptrian.com</value>
+                <value id="apptrian-pinterest-pixel-form-action" type="host">pinterest.com</value>
+                <value id="apptrian-pinterest-pixel-form-action-www" type="host">www.pinterest.com</value>
+                <value id="apptrian-pinterest-pixel-form-action-ct" type="host">ct.pinterest.com</value>
+            </values>
+        </policy>
+        <policy id="frame-src">
+            <values>
+                <value id="apptrian-frame-src" type="host">www.apptrian.com</value>
+                <value id="apptrian-pinterest-pixel-frame-src" type="host">pinterest.com</value>
+                <value id="apptrian-pinterest-pixel-frame-src-www" type="host">www.pinterest.com</value>
+                <value id="apptrian-pinterest-pixel-frame-src-ct" type="host">ct.pinterest.com</value>
+            </values>
+        </policy>
+    </policies>
+</csp_whitelist>

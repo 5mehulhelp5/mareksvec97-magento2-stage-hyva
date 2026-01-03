@@ -1,0 +1,289 @@
+<?php
+/*
+ * Hyvä Themes - https://hyva.io
+ *  Copyright © Hyvä Themes 2020-present. All rights reserved.
+ *  This product is licensed per Magento install
+ *  See https://hyva.io/license
+ */
+
+declare(strict_types=1);
+
+use Hyva\CheckoutStripe\Magewire\View\PaymentRequestButton;
+use Hyva\Theme\ViewModel\HyvaCsp;
+use Magento\Framework\Escaper;
+use StripeIntegration\Payments\Block\Button;
+
+/** @var Escaper $escaper */
+/** @var Button $block */
+/** @var PaymentRequestButton $magewire */
+/** @var HyvaCsp $hyvaCsp */
+
+/**
+ * This file renders its content in the HTML of
+ * Hyva_CheckoutStripe::component/payment/method/stripe_express_button.phtml
+ */
+?>
+<?php if ($block->isEnabled('checkout_page') && isset($magewire)): ?>
+    <div class="stripe-paymentrequest-container"
+         x-data="initStripeExpressCheckoutPaymentRequest"
+         wire:ignore
+    >
+        <script>
+            function initStripeExpressCheckoutPaymentRequest() {
+                const component = Magewire.find('stripe.paymentrequest.checkout');
+                let StripeJs,expressCheckoutElement;
+
+                return {
+                    loading: false,
+                    currentStepIsPayment: false,
+                    stripeLoaded: false,
+
+                    init() {
+                        /**
+                         * This code is executed in the checkout, but not on the payment section per se. So check on
+                         * what page we currently are. If we are on the payment page, we can initialize
+                         * the payment request. Whenever the user switches between steps, we need to re-initialize
+                         * the steps too.
+                         */
+                        window.addEventListener('checkout:step:loaded', event => {
+                            this.currentStepIsPayment = ['payment', 'onepage'].includes(event.detail.route);
+
+                            if (this.currentStepIsPayment && this.stripeLoaded) {
+                                this.initPaymentRequest();
+                            }
+                        })
+
+                        window.addEventListener(
+                            'stripe-authenticate-customer',
+                            event => this.authenticateCustomer(event)
+                        );
+
+                        // listener for the reload signal from the backend
+                        window.addEventListener('reload-stripe-express-element', () => {
+                            this.initPaymentRequest();
+                        });
+
+                        component.loadSettings('checkout').then(() => this.loadStripe());
+
+                        this.$watch('loading', () => {
+                            if (this.loading) {
+                                window.dispatchEvent(new CustomEvent('magewire:loader:start'));
+                                return;
+                            }
+                            window.dispatchEvent(new CustomEvent('magewire:loader:done'));
+                        })
+                    },
+
+                    loadStripe() {
+                        if (typeof window.Stripe === 'undefined') {
+                            window.loadStripe(() => {
+                                this.stripeLoaded = true;
+                                this.initPaymentRequest()
+                            });
+                        } else {
+                            this.stripeLoaded = true;
+                            this.initPaymentRequest();
+                        }
+                    },
+
+                    initPaymentRequest() {
+                        if (!this.currentStepIsPayment || !this.stripeLoaded) {
+                            return;
+                        }
+
+                        if (expressCheckoutElement) {
+                            expressCheckoutElement.destroy();
+                        }
+
+                        const eceParams = component.eceParams;
+                        const walletParams = component.walletParams;
+
+                        // Safety check
+                        if (!eceParams || !walletParams || !eceParams.resolvePayload || !eceParams.resolvePayload.lineItems || eceParams.resolvePayload.lineItems.length === 0) {
+                            console.warn('Stripe Express Checkout: Invalid config or empty cart. Not mounting.');
+                            return;
+                        }
+
+                        StripeJs = Stripe(walletParams.apiKey, walletParams.options);
+
+                        const elements = StripeJs.elements(component.eceParams.elementOptions);
+
+                        const fullEceParams = component.eceParams;
+                        const creationOptions = { ...fullEceParams };
+                        delete creationOptions.resolvePayload;
+                        delete creationOptions.elementOptions;
+                        expressCheckoutElement = elements.create('expressCheckout', creationOptions);
+                        expressCheckoutElement.mount('#stripe-express-button');
+
+                        expressCheckoutElement.on('click', (event) => {
+                            this.loading = true;
+                            elements.update({amount: component.totalAmount});
+                            event.resolve(component.resolvePayload);
+                        });
+
+                        expressCheckoutElement.on('shippingaddresschange', event => {
+                            const address = event.address
+                            // For some countries like Japan, the ECE does not set the City, only the region
+                            if (address.city.length === 0 && address.region.length > 0) {
+                                address.city = address.region;
+                            }
+
+                            component.shippingAddress = event.address;
+                            component.estimateCart(event.address, 'checkout').then(
+                                () => {
+                                    this.loading = true;
+                                    const amount = window.stripeUtils.addLineItemsAmounts(component.resolvePayload.lineItems);
+                                    if (amount > 0) {
+                                        elements.update({ amount: amount });
+                                    }
+                                    const resolveObject = {
+                                        shippingRates: component.resolvePayload.shippingRates,
+                                        lineItems: component.resolvePayload.lineItems
+                                    };
+                                    event.resolve(resolveObject);
+                                }
+                            );
+                        });
+
+                        expressCheckoutElement.on('shippingratechange', event => {
+                            const shippingMethod = event.shippingRate.hasOwnProperty('id')
+                                ? event.shippingRate.id
+                                : null;
+
+                            component.updateShippingRate(shippingMethod, 'checkout').then(
+                                () => {
+                                    this.loading = true;
+                                    const amount = window.stripeUtils.addLineItemsAmounts(component.resolvePayload.lineItems);
+                                    if (amount > 0) {
+                                        elements.update({ amount: amount });
+                                    }
+                                    const resolveObject = {
+                                        shippingRates: component.resolvePayload.shippingRates,
+                                        lineItems: component.resolvePayload.lineItems
+                                    };
+                                    event.resolve(resolveObject);
+                                }
+                            );
+                        });
+
+                        expressCheckoutElement.on('cancel', (ev) => {
+                            component.loadSettings('cart').then(() => {
+                                if (component.isEmptyCart) {
+                                    // Cart is empty, don't continue
+                                    return;
+                                }
+                                this.loadStripe()
+                            });
+                            this.loading = false;
+                            window.dispatchEvent(new Event('reload-customer-section-data'));
+
+                            return window.dispatchMessages && window.dispatchMessages([{
+                                type: 'error',
+                                text: '<?= $escaper->escapeJs(__('Express Checkout has been canceled.')); ?>'
+                            }], 5000);
+
+                        });
+
+                        expressCheckoutElement.on('confirm', confirm => {
+                            this.loading = true;
+                            this.confirm = confirm;
+                            elements.submit().then(() => {
+                                const paymentMethodData = {
+                                    elements: elements,
+                                    params: {
+                                        billing_details: confirm.billingDetails
+                                    },
+                                    shipping: confirm.shippingAddress
+                                };
+
+                                StripeJs.createConfirmationToken(paymentMethodData).then(result => {
+                                    confirm.confirmationToken = result.confirmationToken;
+                                    this.placeOrder(confirm);
+                                });
+                            });
+                        });
+                    },
+
+                    placeOrder() {
+                        this.loading = true;
+                        component.placeOrder(
+                            this.confirm,
+                            'checkout'
+                        ).then(() => {
+                            if (component.placeOrderResult.redirect) {
+                                window.location = component.placeOrderResult.redirect;
+                                return;
+                            }
+
+                            if (component.placeOrderResult.error) {
+                                window.dispatchMessages && window.dispatchMessages([{
+                                    type: 'error',
+                                    text: component.placeOrderResult.error
+                                }], 5000);
+                                this.loading = false;
+                                return;
+                            }
+
+                            if (component.orderPlaced) {
+                                //this.loading = false;
+                            }
+                        })
+                    },
+                    authenticateCustomer(event) {
+                        const intentId = event.detail.clientSecret;
+                        const handleIntent = result => {
+                            const intent = result.paymentIntent || result.setupIntent;
+                            const requiresActionStatuses = ['requires_action', 'requires_source_action'];
+
+                            if (!requiresActionStatuses.includes(intent.status)) {
+                                this.placeOrder();
+                                return;
+                            }
+
+                            if (intent.next_action && intent.next_action.type === 'verify_with_microdeposits') {
+                                window.location = intent.next_action.verify_with_microdeposits.hosted_verification_url;
+                                return;
+                            }
+
+                            StripeJs.handleNextAction({
+                                clientSecret: intent.client_secret
+                            }).then(result => {
+                                if (result.error) {
+                                    this.loading = false;
+                                    window.dispatchMessages && window.dispatchMessages([{
+                                        type: 'error',
+                                        text: result.error.message
+                                    }], 5000);
+                                    return;
+                                }
+                                this.placeOrder();
+                            });
+                        };
+                        if (intentId.startsWith('pi_')) {
+                            StripeJs.retrievePaymentIntent(intentId).then(handleIntent);
+                            return;
+                        }
+                        if (intentId.startsWith('seti_')) {
+                            StripeJs.retrieveSetupIntent(intentId).then(handleIntent);
+                            return;
+                        }
+                        throw new Error("Invalid intent ID");
+                    }
+                };
+            }
+
+            window.addEventListener(
+                'alpine:init',
+                () => Alpine.data(
+                    'initStripeExpressCheckoutPaymentRequest',
+                    initStripeExpressCheckoutPaymentRequest
+                ),
+                {once: true}
+            )
+        </script>
+        <?php $hyvaCsp->registerInlineScript() ?>
+    </div>
+<?php else: ?>
+    <?php // Magewire requires an element to be returned. So, when this option is disabled, we return an empty div. ?>
+    <div class="hidden"></div>
+<?php endif; ?>

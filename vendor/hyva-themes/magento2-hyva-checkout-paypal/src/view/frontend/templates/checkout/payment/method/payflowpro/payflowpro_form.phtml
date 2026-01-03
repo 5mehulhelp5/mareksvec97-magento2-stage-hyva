@@ -1,0 +1,65 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2022-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+declare(strict_types=1);
+
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Element\Template;
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\CheckoutPayPal\Magewire\Payment\Method\Payflowpro;
+use Hyva\CheckoutPayPal\ViewModel\Payment\Method\Payflowpro as ViewModel;
+use Hyva\CheckoutPayPal\ViewModel\Payment\PayflowproReCaptcha;
+
+/** @var Escaper $escaper */
+/** @var Template $block */
+/** @var ViewModelRegistry $viewModels */
+/** @var Payflowpro $magewire */
+/** @var ViewModel $viewModel */
+/** @var PayflowproReCaptcha $payflowproReCaptcha */
+
+$magewire = $block->getParentBlock()->getData('magewire');
+$methodCode = $magewire->getMethodCode();
+$viewModel = $viewModels->require(ViewModel::class);
+$payflowproReCaptcha = $viewModels->require(PayflowproReCaptcha::class);
+?>
+<div class="pp-card-wrapper w-full">
+    <?= /** noEscape */ $block->getChildHtml('credit_card_form') ?>
+
+    <?= /** noEscape */ $block->getChildHtml('payflowpro_recaptcha') ?>
+
+    <?php if ($viewModel->isVaultEnabled()): ?>
+
+        <div class="field-tooltip-content flex items-start mb-6 mt-2 p-4 bg-gray-100 rounded-lg items-center gap-x-4">
+            <input type="checkbox"
+                   <?php if ($viewModel->shouldSaveCustomerVault()): ?>
+                       checked
+                   <?php endif; ?>
+                   id="payflowpro-save-vault"
+                   class="checkbox-inline"/>
+            <label class="label" for="payflowpro-save-vault">
+                <span><?= $escaper->escapeHtml('Save credit card information for future use.') ?></span>
+            </label>
+        </div>
+
+    <?php endif; ?>
+
+    <button type="button"
+            disabled
+            class="btn btn-primary"
+            id="payflowpro-authorize">
+        <span>
+            <?= $escaper->escapeHtml(__('Authorize')) ?>
+        </span>
+    </button>
+
+    <div x-data="PaypalPayflowproForm"
+         data-recaptcha-enabled="<?= $escaper->escapeHtmlAttr($payflowproReCaptcha->isEnabled() ? 'true' : 'false') ?>"
+         data-method-code="<?= $escaper->escapeHtmlAttr($methodCode) ?>"
+         data-component-name="<?= $escaper->escapeHtmlAttr($block->getParentBlock()->getNameInLayout()) ?>">
+    </div>
+</div>

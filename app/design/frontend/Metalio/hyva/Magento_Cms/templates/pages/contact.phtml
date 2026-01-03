@@ -1,0 +1,193 @@
+<?php
+/** @var \Magento\Framework\View\Element\Template $block */
+use Hyva\Theme\ViewModel\HeroiconsOutline;
+use Hyva\Theme\ViewModel\HeroiconsSolid;
+use Magento\Store\Model\ScopeInterface;
+// Heroicons ViewModels (Hyvä)
+
+/** @var \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig */
+$scopeConfig = \Magento\Framework\App\ObjectManager::getInstance()
+    ->get(\Magento\Framework\App\Config\ScopeConfigInterface::class);
+
+/** Telefón z natívneho Store Information */
+$storePhone = (string) ($scopeConfig->getValue('general/store_information/phone', ScopeInterface::SCOPE_STORE) ?? '');
+$phoneHref = $storePhone ? 'tel:' . preg_replace('/[^\d\+]/', '', $storePhone) : '';
+/** Email z General Contact */
+$generalEmail = (string) ($scopeConfig->getValue(
+    'trans_email/ident_general/email',
+    ScopeInterface::SCOPE_STORE
+) ?? '');
+
+$showPhone    = (bool)   $scopeConfig->isSetFlag('metalio/footer/show_phone', ScopeInterface::SCOPE_STORE);
+
+$heroiconsOutline = $viewModels->require(HeroiconsOutline::class);
+/** @var HeroiconsSolid $heroiconsSolid */
+$heroiconsSolid = $viewModels->require(HeroiconsSolid::class);
+
+/** @var \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig */
+$scopeConfig = \Magento\Framework\App\ObjectManager::getInstance()
+    ->get(\Magento\Framework\App\Config\ScopeConfigInterface::class);
+
+$complaintsUrl = (string) ($scopeConfig->getValue(
+    'metalio_cms/contact/complaints_url',
+    \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+) ?? '');
+?>
+
+<section class="mx-auto w-full">
+  <!-- Hero -->
+  <header class="max-w-3xl">
+
+    <p class="mt-2 text-[15px] leading-relaxed">
+      <?= $escaper->escapeHtml(__('Need help with an order, product availability, or a partnership? We’re here for you.')) ?>
+    </p>
+  </header>
+
+  <!-- Karty: kontakt + fakturačné údaje -->
+  <div class="mt-6 grid grid-cols-1 lg:grid-cols-2 gap-6">
+    <!-- Kontakt karta -->
+    <article class="rounded-2xl shadow-sm ring-1 ring-black/5 p-5" style="background-color: rgba(88,108,172,0.1);">
+      <div class="text-[15px] leading-relaxed text-[#2C2C2C]">
+        <div class="mb-3">
+          <span class="font-medium text-[#1C1C1C]"><?= $escaper->escapeHtml(__('Working hours (excluding holidays)')) ?>:</span>
+          <span class="ml-2 font-semibold text-[#1C1C1C]"><?= $escaper->escapeHtml(__('Mon – Fri')) ?> 9:00 – 16:00</span>
+        </div>
+
+        <ul class="mt-2 space-y-3">
+          <?php if ($showPhone && $storePhone): ?>
+            <li class="flex items-center gap-3">
+              <span class="inline-flex h-8 w-8 shrink-0 items-center justify-center" style="color:#586cac;">
+                <?= $heroiconsOutline->phoneHtml('w-7 h-7'); ?>
+              </span>
+              <a href="<?= $escaper->escapeUrl($phoneHref) ?>" class="font-semibold text-[#1C1C1C] underline">
+                <?= $escaper->escapeHtml($storePhone) ?>
+              </a>
+            </li>
+          <?php endif; ?>
+
+          <?php if ($generalEmail): ?>
+            <li class="flex items-center gap-3">
+              <span class="inline-flex h-8 w-8 shrink-0 items-center justify-center" style="color:#586cac;">
+                <?= $heroiconsOutline->mailHtml('w-7 h-7'); ?>
+              </span>
+              <a href="mailto:<?= $escaper->escapeHtmlAttr($generalEmail) ?>" class="font-semibold text-[#1C1C1C] underline">
+                <?= $escaper->escapeHtml($generalEmail) ?>
+              </a>
+            </li>
+          <?php endif; ?>
+
+          <li class="flex items-center gap-3">
+            <span class="inline-flex h-8 w-8 shrink-0 items-center justify-center" style="color:#586cac;">
+              <?= $heroiconsOutline->clockHtml('w-7 h-7'); ?>
+            </span>
+            <span class="text-[#1C1C1C]"><?= $escaper->escapeHtml(__('We usually reply within 24 hours')) ?></span>
+          </li>
+        </ul>
+
+
+        <div class="mt-4 flex flex-wrap gap-3">
+          <?php if ($generalEmail): ?>
+            <a href="mailto:<?= $escaper->escapeHtmlAttr($generalEmail) ?>"
+               class="inline-flex items-center gap-2 justify-center rounded-xl px-4 py-2 text-sm font-semibold
+                      ring-1 transition-all duration-200 active:translate-y-[1px]
+                      text-white bg-[#586cac] ring-[#586cac]
+                      hover:opacity-90 hover:shadow-md
+                      focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#586cac]/60">
+              <?= $heroiconsOutline->mailHtml('w-4 h-4'); ?>
+              <?= $escaper->escapeHtml(__('Email us')) ?>
+            </a>
+          <?php endif; ?>
+
+          <?php if ($showPhone && $storePhone): ?>
+            <a href="<?= $escaper->escapeUrl($phoneHref) ?>"
+               class="inline-flex items-center gap-2 justify-center rounded-xl px-4 py-2 text-sm font-semibold
+                      ring-1 transition-all duration-200 active:translate-y-[1px]
+                      bg-white text-[#1C1C1C] ring-[#586cac]/40
+                      hover:bg-[#586cac] hover:text-white hover:ring-[#586cac] hover:shadow-md
+                      focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#586cac]/60">
+              <?= $heroiconsOutline->phoneHtml('w-4 h-4'); ?>
+              <?= $escaper->escapeHtml(__('Call us')) ?>
+            </a>
+          <?php endif; ?>
+        </div>
+      </div>
+    </article>
+
+    <!-- Fakturačné údaje -->
+    <article class="rounded-2xl bg-white ring-1 ring-black/5 shadow-sm p-5" itemscope itemtype="https://schema.org/Organization">
+      <h3 class="text-lg font-semibold text-[#1C1C1C]"><?= $escaper->escapeHtml(__('Billing details')) ?></h3>
+      <div class="mt-2 text-[15px] leading-relaxed text-[#2C2C2C]">
+        <p itemprop="name" class="font-medium text-[#1C1C1C]">BigConnect s.r.o.</p>
+        <p itemprop="address" itemscope itemtype="https://schema.org/PostalAddress">
+          <span itemprop="streetAddress">Harhaj 1</span><br>
+          <span itemprop="postalCode">08645</span> <span itemprop="addressLocality">Harhaj</span>, <span itemprop="addressCountry"><?= $escaper->escapeHtml(__('Slovakia')) ?></span>
+        </p>
+        <p class="mt-2">
+          <strong>IČO:</strong> 53342992<br>
+          <strong>DIČ:</strong> 2121344533<br>
+          <strong>IČ DPH:</strong> SK2121344533
+        </p>
+      </div>
+    </article>
+  </div>
+
+  <!-- Prevádzka / odber + mapa -->
+  <div class="mt-6 grid grid-cols-1 lg:grid-cols-2 gap-6">
+    <article class="rounded-2xl bg-white ring-1 ring-black/5 shadow-sm p-5">
+      <h3 class="text-lg font-semibold text-[#1C1C1C]"><?= $escaper->escapeHtml(__('Facility / personal pickup')) ?></h3>
+      <div class="mt-2 text-[15px] leading-relaxed text-[#2C2C2C]">
+        <p class="font-medium text-[#1C1C1C]"><?= $escaper->escapeHtml(__('Metalio (production & dispatch)')) ?></p>
+        <p>Duklianska 21, 08501 Bardejov, <?= $escaper->escapeHtml(__('Slovakia')) ?></p>
+        <p class="mt-2 text-[#2C2C2C]/70">
+            <?= $escaper->escapeHtml(__('In-person pickup is available by appointment on business days.')) ?>
+        </p>
+        <div class="mt-4">
+          <a href="https://maps.google.com/?q=Duklianska+21,+08501+Bardejov,+Slovensko" target="_blank" rel="noopener"
+             class="inline-flex items-center justify-center rounded-full px-5 py-2 text-sm font-semibold
+                   bg-slate-100 text-slate-700 hover:bg-slate-200 focus:outline-none focus:ring-2 focus:ring-slate-300">
+            <?= $heroiconsOutline->map('w-4 h-4'); ?>
+            <?= $escaper->escapeHtml(__('Open in Maps')) ?>
+          </a>
+        </div>
+      </div>
+    </article>
+
+    <div class="rounded-2xl overflow-hidden ring-1 ring-black/5 shadow-sm bg-white">
+      <iframe
+        src="https://www.google.com/maps?q=Duklianska+21,+08501+Bardejov,+Slovensko&output=embed"
+        loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+        class="w-full h-56">
+      </iframe>
+    </div>
+  </div>
+
+  <!-- Pomocné odkazy -->
+  <div class="mt-8 grid grid-cols-1 sm:grid-cols-2 gap-6">
+    <a href="/faq" class="group rounded-2xl bg-white ring-1 ring-black/5 shadow-sm p-5">
+      <div class="flex items-center gap-2 text-lg font-semibold text-[#1C1C1C]">
+        <?= $heroiconsOutline->questionMarkCircle('w-5 h-5'); ?>
+        <?= $escaper->escapeHtml(__('FAQ – Frequently Asked Questions')) ?>
+      </div>
+      <p class="mt-1 text-[15px] leading-relaxed text-[#2C2C2C]">
+        <?= $escaper->escapeHtml(__('Quick answers about materials, colors, shipping, and custom manufacturing.')) ?>
+      </p>
+      <span class="mt-2 inline-flex items-center gap-1 text-sm font-medium text-primary group-hover:underline">
+        <?= $heroiconsOutline->arrowNarrowRight('w-4 h-4'); ?> <?= $escaper->escapeHtml(__('View FAQ')) ?>
+      </span>
+    </a>
+
+    <a href="<?= $complaintsUrl; ?>" class="group rounded-2xl bg-white ring-1 ring-black/5 shadow-sm p-5">
+      <div class="flex items-center gap-2 text-lg font-semibold text-[#1C1C1C]">
+        <?= $heroiconsOutline->refresh('w-5 h-5'); ?>
+        <?= $escaper->escapeHtml(__('Returns & Claims')) ?>
+      </div>
+      <p class="mt-1 text-[15px] leading-relaxed text-[#2C2C2C]">
+        <?= $escaper->escapeHtml(__('How to proceed in case of a damaged parcel, product exchange, or return.')) ?>
+
+      </p>
+      <span class="mt-2 inline-flex items-center gap-1 text-sm font-medium text-primary group-hover:underline">
+        <?= $heroiconsOutline->arrowNarrowRight('w-4 h-4'); ?> <?= $escaper->escapeHtml(__('Process & forms')) ?>
+      </span>
+    </a>
+  </div>
+</section>

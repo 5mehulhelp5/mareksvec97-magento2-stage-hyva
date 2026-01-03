@@ -1,0 +1,22 @@
+{
+    "name": "zymion/module-seo-friendly-images",
+    "description": "SEO Friendly Images is an extension that renames the images of a product to the full product name, making it more descriptive.",
+    "require": {
+        "magento/module-store": ">100.0",
+        "magento/module-backend": ">100.0",
+        "magento/framework": ">100.0"
+    },
+    "type": "magento2-module",
+    "version": "1.4.1",
+    "license": [
+        "proprietary"
+    ],
+    "autoload": {
+        "files": [
+            "registration.php"
+        ],
+        "psr-4": {
+            "Zymion\\SeoFriendlyImages\\": ""
+        }
+    }
+}

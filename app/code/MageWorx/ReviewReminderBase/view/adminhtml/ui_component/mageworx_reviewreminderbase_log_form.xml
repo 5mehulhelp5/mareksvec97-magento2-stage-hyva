@@ -1,0 +1,138 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © MageWorx. All rights reserved.
+ * See LICENSE.txt for license details.
+ */
+-->
+<form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <argument name="data" xsi:type="array">
+        <item name="js_config" xsi:type="array">
+            <item name="provider" xsi:type="string">mageworx_reviewreminderbase_logRecord_form.logRecord_form_data_source</item>
+        </item>
+        <item name="label" xsi:type="string" translate="true">LogRecord Information</item>
+        <item name="template" xsi:type="string">templates/form/collapsible</item>
+    </argument>
+    <settings>
+        <buttons>
+            <button name="back" class="MageWorx\ReviewReminderBase\Block\Adminhtml\LogRecord\Edit\Buttons\Back"/>
+            <button name="delete" class="MageWorx\ReviewReminderBase\Block\Adminhtml\LogRecord\Edit\Buttons\Delete"/>
+            <button name="reset" class="MageWorx\ReviewReminderBase\Block\Adminhtml\LogRecord\Edit\Buttons\Reset"/>
+            <button name="save" class="MageWorx\ReviewReminderBase\Block\Adminhtml\LogRecord\Edit\Buttons\Save"/>
+            <button name="save_and_continue" class="MageWorx\ReviewReminderBase\Block\Adminhtml\LogRecord\Edit\Buttons\SaveAndContinue"/>
+        </buttons>
+        <namespace>mageworx_reviewreminderbase_logRecord_form</namespace>
+        <dataScope>data</dataScope>
+        <deps>
+            <dep>mageworx_reviewreminderbase_logRecord_form.logRecord_form_data_source</dep>
+        </deps>
+    </settings>
+    <dataSource name="logRecord_form_data_source">
+        <argument name="data" xsi:type="array">
+            <item name="js_config" xsi:type="array">
+                <item name="component" xsi:type="string">Magento_Ui/js/form/provider</item>
+            </item>
+        </argument>
+        <settings>
+            <submitUrl path="mageworx_reviewreminderbase/log/save"/>
+        </settings>
+        <dataProvider class="MageWorx\ReviewReminderBase\Model\LogRecord\DataProvider" name="logRecord_form_data_source">
+            <settings>
+                <requestFieldName>record_id</requestFieldName>
+                <primaryFieldName>record_id</primaryFieldName>
+            </settings>
+        </dataProvider>
+    </dataSource>
+    <fieldset name="general">
+        <settings>
+            <label translate="true">LogRecord Information</label>
+        </settings>
+        <field name="record_id" formElement="input">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">logRecord</item>
+                </item>
+            </argument>
+            <settings>
+                <dataType>text</dataType>
+                <visible>false</visible>
+                <dataScope>record_id</dataScope>
+            </settings>
+        </field>
+        <field name="customer_email" sortOrder="10" formElement="input">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">logRecord</item>
+                </item>
+            </argument>
+            <settings>
+                <validation>
+                    <rule name="required-entry" xsi:type="boolean">true</rule>
+                </validation>
+                <dataType>text</dataType>
+                <label translate="true">Customer Email</label>
+                <dataScope>customer_email</dataScope>
+            </settings>
+        </field>
+        <field name="email_template_id" formElement="input" sortOrder="20">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">logRecord</item>
+                </item>
+            </argument>
+            <settings>
+                <dataType>text</dataType>
+                <label translate="true">Email Template</label>
+                <dataScope>email_template_id</dataScope>
+                <validation>
+                    <rule name="required-entry" xsi:type="boolean">true</rule>
+                </validation>
+            </settings>
+        </field>
+        <field name="product_count" formElement="input" sortOrder="30">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">logRecord</item>
+                </item>
+            </argument>
+            <settings>
+                <dataType>text</dataType>
+                <label translate="true">Count Of Products</label>
+                <dataScope>product_count</dataScope>
+                <validation>
+                    <rule name="required-entry" xsi:type="boolean">true</rule>
+                </validation>
+            </settings>
+        </field>
+        <field name="details" formElement="input" sortOrder="40">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">logRecord</item>
+                </item>
+            </argument>
+            <settings>
+                <dataType>text</dataType>
+                <label translate="true">Details</label>
+                <dataScope>details</dataScope>
+                <validation>
+                    <rule name="required-entry" xsi:type="boolean">true</rule>
+                </validation>
+            </settings>
+        </field>
+        <field name="store_id" formElement="input" sortOrder="50">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">logRecord</item>
+                </item>
+            </argument>
+            <settings>
+                <dataType>text</dataType>
+                <label translate="true">Store</label>
+                <dataScope>store_id</dataScope>
+                <validation>
+                    <rule name="required-entry" xsi:type="boolean">true</rule>
+                </validation>
+            </settings>
+        </field>
+    </fieldset>
+</form>

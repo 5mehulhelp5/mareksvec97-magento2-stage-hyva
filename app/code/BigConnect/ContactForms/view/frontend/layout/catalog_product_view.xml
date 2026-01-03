@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="1column" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+   
+        <referenceContainer name="content">
+            <block class="BigConnect\ContactForms\Block\ContactForms" name="contact.form.product.mobile" template="BigConnect_ContactForms::block/product_page_mobile.phtml" after="-">
+            </block>
+        </referenceContainer>
+        <referenceContainer name="product.info.media">
+            <block class="BigConnect\ContactForms\Block\ContactForms" name="contact.form.product" template="BigConnect_ContactForms::block/product_page.phtml" after="-">
+            </block>
+        </referenceContainer>
+   
+    </body>
+</page>

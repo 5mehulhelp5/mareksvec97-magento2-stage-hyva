@@ -1,0 +1,32 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2022-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+declare(strict_types=1);
+
+use Hyva\Theme\ViewModel\HyvaCsp;
+
+/** @var HyvaCsp $hyvaCsp */
+
+/**
+ * @Internal Use layout container "hyva.checkout.evaluation.executables" to inject custom executables.
+ */
+?>
+<script>
+    window.addEventListener('checkout:init:evaluation', () => {
+        <?php /* Executable for hyvaCheckout.navigation.stepTo(). */ ?>
+        hyvaCheckout.evaluation.registerExecutable('checkout.navigation.step-to', result => {
+            const route = result.arguments.params.route
+            const validate = result.arguments.params.validate || false
+
+            if (route) {
+                hyvaCheckout.navigation.stepTo(route, validate)
+            }
+        })
+    })
+</script>
+<?php $hyvaCsp->registerInlineScript() ?>

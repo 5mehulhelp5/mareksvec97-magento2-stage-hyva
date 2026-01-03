@@ -1,0 +1,65 @@
+<?php 
+$stars_image = "<img src='" . $block->getViewFileUrl('Magento_Store::img/store-review/star.svg') . "' />";
+
+function renderStars($count, $starImage) {
+    $stars = '';
+    for ($i = 0; $i < $count; $i++) {
+        $stars .= $starImage;
+    }
+    return $stars;
+}
+?>
+
+<!-- HTML -->
+<section class="reviews-block">
+  
+    <h2 class="reviews-title scroll-reveal reveal-slide-in">Hodnotenia zákazníkov</h2>
+    <div class="reviews-list">
+      <div class="review summary scroll-reveal reveal-slide-in">
+        <span class="review-stars big"><?php echo renderStars(5, $stars_image); ?></span>
+        <span class="review-rating">4,68</span>
+        <p class="review-text-bold">Super</p>
+      </div>
+      <div class="reviews-group" data-appearance="carousel" data-show-arrows="true" data-show-dots="true" data-content-type="products" data-mage-init='{"Magento_PageBuilder/js/content-type/slider/appearance/default/widget":{"arrows":true,"dots":false, "slidesToShow": 3, "responsive": [{"breakpoint": 768, "settings": {"slidesToShow": 1}}]}}'>
+        <div class="product-items widget-product-carousel slick-list">
+
+      <div class="review product-item scroll-reveal reveal-slide-in">
+        <span class="review-stars"><?php echo renderStars(5, $stars_image); ?></span>
+        <span class="review-date">3.1.2025</span>
+        <p class="review-text">Objednal som si kovové popisné číslo pre náš dom a výsledok je úžasný! Materiál je pevný a dizajn presne podľa predstáv. Dodanie bolo rýchle a bezpečne zabalené. Určite odporúčam Metalio každému, kto hľadá kvalitné kovové produkty.</p>
+      </div>
+       <div class="review product-item scroll-reveal reveal-slide-in">
+        <span class="review-stars"><?php echo renderStars(5, $stars_image); ?></span>
+        <span class="review-date">12.12.2024</span>
+        <p class="review-text">Krásna kovová dekorácia, presne podľa očakávaní. Rýchle dodanie!</p>
+      </div>
+      <div class="review product-item scroll-reveal reveal-slide-in">
+        <span class="review-stars"><?php echo renderStars(5, $stars_image); ?></span>
+        <span class="review-date">3.11.2024</span>
+        <p class="review-text">Kovová dekorácia na stenu, ktorú som si zakúpila, dodala našej obývačke moderný vzhľad. Oceňujem profesionálny prístup a rýchlu odozvu na moje otázky. </p>
+      </div>
+      <div class="review product-item scroll-reveal reveal-slide-in">
+        <span class="review-stars"><?php echo renderStars(4, $stars_image); ?></span>
+        <span class="review-date">29.8.2024</span>
+        <p class="review-text">Dobrý produkt, no doručenie trvalo trochu dlhšie.</p>
+      </div>
+      <div class="review product-item scroll-reveal reveal-slide-in">
+        <span class="review-stars"><?php echo renderStars(5, $stars_image); ?></span>
+        <span class="review-date">28.6.2024</span>
+        <p class="review-text">Metalio mi pomohlo s výrobou jedinečného laserového dizajnu na mieru. Komunikácia bola rýchla a celý proces bezproblémový. Výsledok je presne to, čo som si predstavoval. Určite ich oslovím znova.</p>
+      </div>
+      <div class="review product-item scroll-reveal reveal-slide-in">
+        <span class="review-stars"><?php echo renderStars(4, $stars_image); ?></span>
+        <span class="review-date">5.5.2024</span>
+        <p class="review-text">Zakúpila som si kovovú dekoráciu s geometrickým vzorom. Kvalita je výborná a cena primeraná. Dodanie by mohlo byť trochu rýchlejšie, ale produkt je skutočne krásny.</p>
+      </div>
+      <div class="review product-item scroll-reveal reveal-slide-in">
+        <span class="review-stars"><?php echo renderStars(4, $stars_image); ?></span>
+        <span class="review-date">24.4.2024</span>
+        <p class="review-text">Objednávka prišla rýchlo a bola presne podľa popisu. Ďakujem!</p>
+      </div>
+  </div>
+  </div>
+    </div>
+  
+</section>

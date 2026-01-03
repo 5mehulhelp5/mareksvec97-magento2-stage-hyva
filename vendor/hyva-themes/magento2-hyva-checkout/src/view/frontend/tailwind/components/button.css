@@ -1,0 +1,17 @@
+@layer components {
+    :where(#hyva-checkout-main) {
+        & .btn {
+            @apply border-2 disabled:opacity-60 disabled:cursor-not-allowed;
+
+            &:not(.btn-secondary) {
+                @apply border-transparent;
+            }
+        }
+    }
+}
+
+:where(.step-layout-3columns) {
+    .btn-place-order {
+        @apply w-full;
+    }
+}

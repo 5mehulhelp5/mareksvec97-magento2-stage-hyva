@@ -1,0 +1,19 @@
+<?php
+//@formatter:off
+/** @var \MageWorx\XReviewBase\Block\Review\Product\ListView $block */
+$ratings       = $block->getRatings();
+$overallRating = $block->getOverallRating();
+
+/** @var \Magento\Review\Model\Review[] $items */
+$items  = $block->getReviewsCollection()->getItems();
+$format = $block->getDateFormat() ?: \IntlDateFormatter::SHORT;
+?>
+<?php if (count($items)) : ?>
+	
+	                       
+	                       <div class="mw-rating-filter__count mw-text">
+	                           <?= $block->escapeHtml(
+	                               __('%count reviews', ['count' => (int)$overallRating['reviews_count']])
+	                           ) ?>
+	                       </div>
+<?php endif; ?>

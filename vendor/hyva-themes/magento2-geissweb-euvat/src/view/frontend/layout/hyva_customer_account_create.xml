@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <update handle="hyva_form_validation"/>
+    <body>
+        <referenceBlock name="customer_address_vat_id" remove="true"/>
+
+        <referenceBlock name="customer_form_register">
+            <block class="Hyva\GeisswebEuvat\Block\VatNumber\Field"
+                   name="account_create.vat_id">
+                <block name="loading" template="Hyva_Theme::ui/loading.phtml"/>
+            </block>
+        </referenceBlock>
+    </body>
+</page>

@@ -1,0 +1,21 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2022-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+declare(strict_types=1);
+
+use Hyva\Checkout\Model\Form\EntityField\AbstractEntityField;
+use Magento\Framework\View\Element\Template;
+
+/** @var Template $block */
+/** @var AbstractEntityField $element */
+
+$element = $block->getData('element');
+?>
+<div class="space-y-6 <?= /* @noEscape */ $element->isRequired() ? 'required' : 'not-required' ?>">
+    <?= /** @noEscape */ $element->getRenderer()->renderWithTemplate('Hyva_Checkout::form/field/checkbox.phtml', $element) ?>
+</div>

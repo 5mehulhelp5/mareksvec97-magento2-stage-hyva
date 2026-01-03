@@ -1,0 +1,41 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2022-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+declare(strict_types=1);
+
+use Hyva\Checkout\ViewModel\Breadcrumbs;
+use Hyva\Theme\Model\ViewModelRegistry;
+use Magento\Framework\View\Element\Template;
+
+/** @var Template $block */
+/** @var ViewModelRegistry $viewModels */
+/** @var Breadcrumbs $viewModel */
+
+$viewModel = $viewModels->require(Breadcrumbs::class);
+$navigator = $viewModel->getNavigator();
+$checkout  = $navigator->getActiveCheckout();
+$breadcrumbStyle = $viewModel->getSystemConfig()->getBreadcrumbsStyle();
+?>
+
+<nav
+    id="breadcrumbs"
+    aria-label="Breadcrumb"
+    class="nav-breadcrumbs mb-6 pb-1 lg:space-x-4 <?php if ($breadcrumbStyle === 'classic'): ?>flex justify-between <?php endif; ?>"
+>
+    <?php if ($breadcrumbStyle === 'classic'): ?>
+        <?php if ($checkout->hasSteps() && $checkout->isMultiStepper()): ?>
+            <?= $block->getChildHtml('hyva.checkout.breadcrumbs.waypoints') ?>
+        <?php endif ?>
+    <?php elseif ($breadcrumbStyle === 'progress_bar'): ?>
+        <?= $block->getChildHtml('hyva.checkout.breadcrumbs.progress.bar') ?>
+    <?php endif; ?>
+
+    <div class="flex flex-col space-y-4 ml-auto md:space-x-4 md:space-y-0 md:flex-row">
+        <?= $block->getChildHtml('hyva.checkout.breadcrumbs.additional') ?>
+    </div>
+</nav>

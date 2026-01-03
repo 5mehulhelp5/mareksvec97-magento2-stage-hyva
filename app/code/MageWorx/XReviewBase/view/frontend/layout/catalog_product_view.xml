@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © MageWorx. All rights reserved.
+ * See LICENSE.txt for license details.
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <!-- Replace process-review js -->
+        <referenceBlock name="reviews.tab">
+            <action method="setTemplate">
+                <argument name="template" xsi:type="string">MageWorx_XReviewBase::review/product/review.phtml</argument>
+            </action>
+        </referenceBlock>
+
+        <!-- Replace in full-width layout for "built-in" layout schema for full-width product layout -->
+        <!-- In case the layout schema is not "built-in" we remove this block from layout and use ajax -->
+        <referenceBlock name="product.info.product_additional_data.wrapper">
+            <action method="setTemplate">
+                <argument name="template" xsi:type="string">MageWorx_XReviewBase::review/product/list.phtml</argument>
+            </action>
+        </referenceBlock>
+    </body>
+</page>

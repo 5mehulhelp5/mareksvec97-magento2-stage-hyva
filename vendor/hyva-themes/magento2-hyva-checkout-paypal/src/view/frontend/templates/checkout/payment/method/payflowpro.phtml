@@ -1,0 +1,56 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2022-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+declare(strict_types=1);
+
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Element\Template;
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\CheckoutPayPal\Magewire\Payment\Method\Payflowpro;
+use Hyva\CheckoutPayPal\ViewModel\Payment\Method\Payflowpro as ViewModel;
+
+/** @var Escaper $escaper */
+/** @var Template $block */
+/** @var ViewModelRegistry $viewModels */
+/** @var Payflowpro $magewire */
+/** @var ViewModel $viewModel */
+
+$magewire = $block->getData('magewire');
+$methodCode = $magewire->getMethodCode();
+$viewModel = $viewModels->require(ViewModel::class);
+?>
+<div id="paypal-container-<?= $escaper->escapeHtmlAttr($methodCode) ?>" class="relative z-10 py-4">
+
+    <?php if ($magewire->transactionRequested): ?>
+
+        <?= /** noEscape */ $block->getChildHtml('payflowpro_selected_card') ?>
+
+        <button type="button" class="btn btn-secondary mt-4" wire:click="resetTransaction">
+            <span><?= $escaper->escapeHtml(__('Cancel')) ?></span>
+        </button>
+
+    <?php elseif ($magewire->submitCardInProgress): ?>
+
+        <?= /** noEscape */ $block->getChildHtml('payflowpro_iframe_hidden_form') ?>
+
+        <div class="payment-method-note">
+            <span><?= $escaper->escapeHtml(__('Authorizing...')) ?></span>
+        </div>
+
+    <?php elseif ($magewire->requestTokenInProgress): ?>
+
+        <div class="payment-method-note">
+            <span><?= $escaper->escapeHtml(__('Authorizing...')) ?></span>
+        </div>
+
+    <?php else: ?>
+
+        <?= /** noEscape */ $block->getChildHtml('payflowpro_form') ?>
+
+    <?php endif ?>
+</div>

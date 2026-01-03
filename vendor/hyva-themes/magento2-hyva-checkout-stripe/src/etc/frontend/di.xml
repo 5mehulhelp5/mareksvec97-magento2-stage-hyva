@@ -1,0 +1,94 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2022-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd"
+>
+    <type name="StripeIntegration\Payments\Api\Response\ECEResponse">
+        <plugin name="Hyva_CheckoutStripe_ReorderStripeShippingRates"
+                type="Hyva\CheckoutStripe\Plugin\Stripe\Response\ECEResponsePlugin"
+                sortOrder="10" />
+    </type>
+
+    <type name="Hyva\CompatModuleFallback\Model\CompatModuleRegistry">
+        <arguments>
+            <argument name="compatModules" xsi:type="array">
+                <item name="hyva-magento2-checkout-stripe" xsi:type="array">
+                    <item name="original_module" xsi:type="string">StripeIntegration_Payments</item>
+                    <item name="compat_module" xsi:type="string">Hyva_CheckoutStripe</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="Hyva\Checkout\Model\Magewire\Payment\PlaceOrderServiceProvider">
+        <arguments>
+            <argument name="placeOrderServiceList" xsi:type="array">
+                <item name="stripe_payments" xsi:type="object">Hyva\CheckoutStripe\Model\Magewire\Payment\StripePlaceOrderService</item>
+                <item name="stripe_payments_bank_transfers" xsi:type="object">Hyva\CheckoutStripe\Model\Magewire\Payment\StripePlaceOrderService</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="Hyva\CheckoutStripe\Magewire\Payment\Method\StripePayments">
+        <arguments>
+            <argument name="checkoutSession" xsi:type="object">Magento\Checkout\Model\Session\Proxy</argument>
+        </arguments>
+    </type>
+
+    <type name="Hyva\CheckoutStripe\Model\Magewire\Payment\StripePlaceOrderService">
+        <arguments>
+            <argument name="checkoutSession" xsi:type="object">Magento\Checkout\Model\Session\Proxy</argument>
+        </arguments>
+    </type>
+
+    <type name="Hyva\CheckoutStripe\Service\Stripe\Quote\PaymentElementOptions">
+        <arguments>
+            <argument name="checkoutSession" xsi:type="object">Magento\Checkout\Model\Session\Proxy</argument>
+        </arguments>
+    </type>
+
+    <type name="Hyva\CheckoutStripe\Magewire\View\PaymentRequestButton">
+        <arguments>
+            <argument name="checkoutSession" xsi:type="object">Magento\Checkout\Model\Session\Proxy</argument>
+        </arguments>
+    </type>
+
+    <virtualType name="Hyva\CheckoutStripe\Magewire\View\PaymentRequestButtonMinicart"
+                 type="Hyva\CheckoutStripe\Magewire\View\PaymentRequestButton"
+    >
+        <arguments>
+            <argument name="id" xsi:type="string">stripe.paymentrequest.minicart</argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="Hyva\CheckoutStripe\Magewire\View\PaymentRequestButtonCart"
+                 type="Hyva\CheckoutStripe\Magewire\View\PaymentRequestButton"
+    >
+        <arguments>
+            <argument name="id" xsi:type="string">stripe.paymentrequest.cart</argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="Hyva\CheckoutStripe\Magewire\View\PaymentRequestButtonProduct"
+                 type="Hyva\CheckoutStripe\Magewire\View\PaymentRequestButton"
+    >
+        <arguments>
+            <argument name="id" xsi:type="string">stripe.paymentrequest.product</argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="Hyva\CheckoutStripe\Magewire\View\PaymentRequestButtonCheckout"
+                 type="Hyva\CheckoutStripe\Magewire\View\PaymentRequestButton"
+    >
+        <arguments>
+            <argument name="id" xsi:type="string">stripe.paymentrequest.checkout</argument>
+        </arguments>
+    </virtualType>
+</config>

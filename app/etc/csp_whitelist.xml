@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<csp_whitelist xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Csp:etc/csp_whitelist.xsd">
+    <policies>
+        <!-- Povolenie pre connect-src -->
+        <policy id="connect-src">
+            <values>
+            	<value id="localhost_websocket" type="host">ws://localhost:12387</value>
+            	<value id="localhost_websocket_ip" type="host">ws://167.172.98.224:12387</value>
+                <value id="bing-connection" type="host">https://bat.bing.com</value>
+                <value id="etrusted_integration" type="host">https://integrations.etrusted.com</value>
+                <value id="region1_google_analytics" type="host">https://region1.google-analytics.com</value>
+                <value id="digitalocean_spaces" type="host">https://eshops-uet-tags.ams3.cdn.digitaloceanspaces.com</value>
+                <value id="apptrian" type="host">https://www.apptrian.com</value>
+                <value id="google_analytics" type="host">https://www.google-analytics.com</value>
+                <value id="google_tagmanager" type="host">https://www.googletagmanager.com</value>
+                <value id="region1_google_analytics" type="host">https://region1.google-analytics.com</value>
+                <value id="etrusted_integrations" type="host">https://integrations.etrusted.com</value>
+                <value id="etrusted_site" type="host">https://integrations.etrusted.site</value>
+                <value id="braintree_analytics" type="host">https://api.braintreegateway.com</value>
+                <value id="braintree_sandbox" type="host">https://api.sandbox.braintreegateway.com</value>
+                <value id="stripe" type="host">https://*.stripe.com</value>
+                <value id="klarna" type="host">https://*.klarna.com</value>
+                <value id="trustedshops" type="host">https://*.trustedshops.com</value>
+                <value id="etrusted_com" type="host">https://*.etrusted.com</value>
+                <value id="googlesyndication" type="host">https://pagead2.googlesyndication.com</value>
+                <value id="etrusted_widget" type="host">https://integrations.etrusted.com</value>
+                <value id="google_fonts_api" type="host">https://fonts.googleapis.com</value>
+                <value id="trustedshops_static" type="host">https://static-app.connect.trustedshops.com</value>
+                <value id="trustedshops_static_qa" type="host">https://static-app.connect-qa.trustedshops.com</value>
+                <value id="stripe_network" type="host">https://*.stripe.network</value>
+                <value id="stripe_cdn" type="host">https://*.stripecdn.com</value>
+            </values>
+        </policy>
+        
+        <!-- Povolenie pre img-src -->
+        <policy id="img-src">
+            <values>
+                <value id="google-ads-img" type="host">https://www.google.sk</value>
+                <value id="bing-img" type="host">https://bat.bing.com</value>
+                <value id="google_ads_audience" type="host">https://www.google.sk/ads</value>
+                <value id="google_ads_image" type="host">https://www.googleadservices.com</value>
+                <value id="facebook" type="host">https://connect.facebook.net</value>
+                <value id="vimeo" type="host">https://i.vimeocdn.com</value>
+                <value id="youtube" type="host">https://i.ytimg.com</value>
+                <value id="paypal" type="host">https://www.paypalobjects.com</value>
+                <value id="trustedshops" type="host">https://widgets.trustedshops.com</value>
+                <value id="firebase" type="host">https://firebasestorage.googleapis.com</value>
+                <!-- Ďalšie povolené img-src adresy podľa potreby -->
+            </values>
+        </policy>
+
+        <!-- Povolenie pre style-src -->
+                <policy id="style-src">
+                    <values>
+                        <value id="google_fonts" type="host">https://fonts.googleapis.com</value>
+                        <value id="cdn_fonts" type="host">https://fonts.cdnfonts.com</value>
+                        <value id="trustedshops_styles" type="host">https://widgets.trustedshops.com</value>
+                        <value id="bunny_fonts" type="host">https://fonts.bunny.net</value>
+                        <value id="stripe_network_styles" type="host">https://*.stripe.network</value>
+                        <value id="stripe_cdn_styles" type="host">https://*.stripecdn.com</value>
+                        <value id="bootstrapcdn" type="host">https://maxcdn.bootstrapcdn.com</value>
+                        <value id="trustedshops_static_styles" type="host">https://static-app.connect.trustedshops.com</value>
+                        <value id="trustedshops_static_qa_styles" type="host">https://static-app.connect-qa.trustedshops.com</value>
+                        <value id="googletagmanager_styles" type="host">https://www.googletagmanager.com</value>
+                    </values>
+                </policy>
+
+        <!-- Povolenie pre script-src -->
+        <policy id="script-src">
+            <values>
+                <value id="cdn_jsdelivr" type="host">https://cdn.jsdelivr.net</value>
+                <value id="bing_ads" type="host">https://bat.bing.com</value>
+                <value id="google_ads" type="host">https://www.googleadservices.com</value>
+                <value id="facebook" type="host">https://connect.facebook.net</value>
+                <value id="vimeo" type="host">https://www.vimeo.com</value>
+                <value id="youtube" type="host">https://www.youtube.com</value>
+                <value id="apptrian" type="host">https://www.apptrian.com</value>
+                <value id="gstatic" type="host">https://www.gstatic.com</value>
+                <value id="googleapis" type="host">https://*.googleapis.com</value>
+                <value id="trustedshops" type="host">https://widgets.trustedshops.com</value>
+                <value id="etrusted_widget_js" type="host">https://integrations.etrusted.com</value>
+                <value id="trustedshops_widgets" type="host">https://widgets.trustedshops.com</value>
+                <value id="stripe_network_scripts" type="host">https://*.stripe.network</value>
+                <value id="stripe_cdn_scripts" type="host">https://*.stripecdn.com</value>
+                <value id="trustedshops_static_scripts" type="host">https://static-app.connect.trustedshops.com</value>
+                <value id="trustedshops_static_qa_scripts" type="host">https://static-app.connect-qa.trustedshops.com</value>
+                <!-- Ďalšie povolené script-src adresy podľa potreby -->
+            </values>
+        </policy>
+    </policies>
+</csp_whitelist>

@@ -1,0 +1,176 @@
+Back,Back
+"Delete Reminder","Delete Reminder"
+"Are you sure you want to do this?","Are you sure you want to do this?"
+Reset,Reset
+"Save Reminder","Save Reminder"
+"Save and Continue Edit","Save and Continue Edit"
+"Run Cleanup","Run Cleanup"
+"The records for the reminders sent more than %1 days ago will be removed. Are you sure you want to proceed?","The records for the reminders sent more than %1 days ago will be removed. Are you sure you want to proceed?"
+"Delete Unsubscribed","Delete Unsubscribed"
+"Save Unsubscribed","Save Unsubscribed"
+"MageWorx Review Reminder: Removed %1 records from log.","MageWorx Review Reminder: Removed %1 records from log."
+"Removed %1 records from %2 days ago or older","Removed %1 records from %2 days ago or older"
+"The LogRecord has been deleted.","The LogRecord has been deleted."
+"The LogRecord no longer exists.","The LogRecord no longer exists."
+"There was a problem deleting the LogRecord","There was a problem deleting the LogRecord"
+"We can't find a LogRecord to delete.","We can't find a LogRecord to delete."
+Log,Log
+"Review Reminder","Review Reminder"
+"The Reminder has been deleted.","The Reminder has been deleted."
+"The Reminder no longer exists.","The Reminder no longer exists."
+"There was a problem deleting the Reminder","There was a problem deleting the Reminder"
+"We can't find a Reminder to delete.","We can't find a Reminder to delete."
+Reminders,Reminders
+"New Email Reminder","New Email Reminder"
+"Edit Email Reminder","Edit Email Reminder"
+"Email reminder: %1","Email reminder: %1"
+"New Popup Reminder","New Popup Reminder"
+"Edit Popup Reminder","Edit Popup Reminder"
+"Popup reminder: %1","Popup reminder: %1"
+"Please correct the data sent.","Please correct the data sent."
+"Something went wrong while saving the Reminder.","Something went wrong while saving the Reminder."
+"You saved the Reminder","You saved the Reminder"
+"There was a problem saving the Reminder","There was a problem saving the Reminder"
+"The Unsubscribed has been deleted.","The Unsubscribed has been deleted."
+"The Unsubscribed no longer exists.","The Unsubscribed no longer exists."
+"There was a problem deleting the Unsubscribed","There was a problem deleting the Unsubscribed"
+"We can't find a Unsubscribed to delete.","We can't find a Unsubscribed to delete."
+Unsubscribed&#x20;Clients,Unsubscribed&#x20;Clients
+"New Unsubscribed","New Unsubscribed"
+"Edit Unsubscribed","Edit Unsubscribed"
+"You saved the Unsubscribed","You saved the Unsubscribed"
+"There was a problem saving the Unsubscribed","There was a problem saving the Unsubscribed"
+"Requested Data doesn't exist","Requested Data doesn't exist"
+"There was an error loading review reminder data.","There was an error loading review reminder data."
+"Your email is invalid.","Your email is invalid."
+"Something went wrong while saving your subscription.","Something went wrong while saving your subscription."
+"We have updated your subscription.","We have updated your subscription."
+"Could not save the LogRecord: %1","Could not save the LogRecord: %1"
+"Requested LogRecord doesn't exist","Requested LogRecord doesn't exist"
+"Unable to remove LogRecord %1","Unable to remove LogRecord %1"
+"Unable to detect user agent.","Unable to detect user agent."
+Disable,Disable
+Enable,Enable
+Email,Email
+Popup,Popup
+"Could not save the Reminder: %1","Could not save the Reminder: %1"
+"Requested Reminder doesn't exist","Requested Reminder doesn't exist"
+"Unable to remove Reminder %1","Unable to remove Reminder %1"
+"Could not save the Unsubscribed: %1","Could not save the Unsubscribed: %1"
+"Requested Unsubscribed doesn't exist","Requested Unsubscribed doesn't exist"
+"Unable to remove Unsubscribed %1","Unable to remove Unsubscribed %1"
+"Use config","Use config"
+Enabled,Enabled
+Disabled,Disabled
+Delete,Delete
+"Delete record","Delete record"
+"Are you sure you want to delete the Log Record ""%1"" ?","Are you sure you want to delete the Log Record ""%1"" ?"
+Edit,Edit
+"Are you sure you want to delete the Reminder ""%1"" ?","Are you sure you want to delete the Reminder ""%1"" ?"
+"Are you sure you want to delete the Unsubscribed ""%1"" ?","Are you sure you want to delete the Unsubscribed ""%1"" ?"
+Rating,Rating
+"Write a review","Write a review"
+"Feedback on:","Feedback on:"
+"Leave a review at %store_name and receive up to 10% OFF your next purchase","Leave a review at %store_name and receive up to 10% OFF your next purchase"
+"We want to hear YOU!","We want to hear YOU!"
+"Leave a review and receive up to <span class=""mw_rw_discount"">10% off</span> your next purchase","Leave a review and receive up to <span class=""mw_rw_discount"">10% off</span> your next purchase"
+"Hi %customer_name!","Hi %customer_name!"
+"I was indecisive on what size to get and I went through all of the questions and reviews to see if anyone who was similar to me provided any helpful info.","I was indecisive on what size to get and I went through all of the questions and reviews to see if anyone who was similar to me provided any helpful info."
+"&#xA9; 2008 - 2020 MageWorx.com. All Rights Reserved.","&#xA9; 2008 - 2020 MageWorx.com. All Rights Reserved."
+Unsubscribe,Unsubscribe
+"A total of %1 Reminders have been deleted.","A total of %1 Reminders have been deleted."
+"An error occurred while deleting Reminders.","An error occurred while deleting Reminders."
+"Email Reminder Settings","Email Reminder Settings"
+"Email Sender","Email Sender"
+"Review Reminder Email Template","Review Reminder Email Template"
+"The email template is chosen based on the theme fallback when the ""Default"" option is selected.","The email template is chosen based on the theme fallback when the ""Default"" option is selected."
+"Popup Reminder Settings","Popup Reminder Settings"
+"Max Products Count for Popup","Max Products Count for Popup"
+"UTM Params","UTM Params"
+"Add UTM Params","Add UTM Params"
+"UTM Source","UTM Source"
+"UTM Medium","UTM Medium"
+"UTM Campaign","UTM Campaign"
+"UTM Term","UTM Term"
+"UTM Content","UTM Content"
+"An error occurred while deleting Log.","An error occurred while deleting Log."
+"An error occurred while deleting Unsubscribed Clients.","An error occurred while deleting Unsubscribed Clients."
+"LogRecord Information","LogRecord Information"
+"Customer Email","Customer Email"
+"Email Template","Email Template"
+"Count Of Products","Count Of Products"
+Details,Details
+Store,Store
+"All Store Views","All Store Views"
+"Store View","Store View"
+"Are you sure you want to delete selected Log?","Are you sure you want to delete selected Log?"
+"Delete Log","Delete Log"
+ID,ID
+Reminder,Reminder
+"Sent At","Sent At"
+"Reminder Information","Reminder Information"
+Type,Type
+"
+                        Internal name of the reminder. Visible in the back-end only.
+                    ","
+                        Internal name of the reminder. Visible in the back-end only.
+                    "
+Name,Name
+"
+                        This setting defines the store views, for which the reviews reminder should be sent.
+                    ","
+                        This setting defines the store views, for which the reviews reminder should be sent.
+                    "
+"Store Views","Store Views"
+"
+                        This setting defines the customer groups, for which the reviews reminder should be sent.
+                    ","
+                        This setting defines the customer groups, for which the reviews reminder should be sent.
+                    "
+"Customer Groups","Customer Groups"
+"Sent In, days","Sent In, days"
+"
+                        This email template will be used for the review reminder email.
+                    ","
+                        This email template will be used for the review reminder email.
+                    "
+"Personal Email Template","Personal Email Template"
+"
+                        The reminder with higher priority will be executed if several reminders match at least one same condition (reminder type, customer groups, store views, period).
+                    ","
+                        The reminder with higher priority will be executed if several reminders match at least one same condition (reminder type, customer groups, store views, period).
+                    "
+Priority,Priority
+Status,Status
+"
+                        This setting defines the number of days after the order creation, when the review reminder can be display.
+                    ","
+                        This setting defines the number of days after the order creation, when the review reminder can be display.
+                    "
+"Displayed After, days","Displayed After, days"
+"
+                        This setting allows you to enable or disable the reminder, when the customers open your store on mobile devices.
+                    ","
+                        This setting allows you to enable or disable the reminder, when the customers open your store on mobile devices.
+                    "
+"To use this feature the '<a target=""_blank"" href=""https://packagist.org/packages/matomo/device-detector"">matomo/device-detector</a>' module should be installed. See the user guide for more details.","To use this feature the '<a target=""_blank"" href=""https://packagist.org/packages/matomo/device-detector"">matomo/device-detector</a>' module should be installed. See the user guide for more details."
+"Display On Mobile","Display On Mobile"
+"
+                        The reminder with higher priority will be executed if several reminders match the same conditions.
+                    ","
+                        The reminder with higher priority will be executed if several reminders match the same conditions.
+                    "
+Design,Design
+Templates,Templates
+load-template-modal,load-template-modal
+Cancel,Cancel
+"Load Template","Load Template"
+"Are you sure you want to delete selected Reminders?","Are you sure you want to delete selected Reminders?"
+"Delete Reminders","Delete Reminders"
+Period,Period
+Created,Created
+Modified,Modified
+"Unsubscribed Information","Unsubscribed Information"
+"Are you sure you want to delete selected Unsubscribed Clients?","Are you sure you want to delete selected Unsubscribed Clients?"
+"Delete Unsubscribed Clients","Delete Unsubscribed Clients"
+"Unsubscribed At","Unsubscribed At"

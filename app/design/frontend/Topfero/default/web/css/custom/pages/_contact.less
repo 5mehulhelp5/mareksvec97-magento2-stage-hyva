@@ -1,0 +1,39 @@
+& when (@critical) {
+	.contact-page-text {
+		.pagebuilder-column-group {
+			.pagebuilder-column-line {
+				.pagebuilder-column {
+					padding: 32px;
+					&:first-child {
+						background-color: #f3f4f6;
+						border-radius: 8px;
+						a {
+							font-size: 22px;
+							color: #464646;
+							strong {
+								font-weight: 800 !important;
+							}
+							&:hover {
+								text-decoration: none;
+								color: #000000;
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	.contact-page {
+		margin-top: 80px !important;	
+	}
+
+//
+//  Mobile
+//  _____________________________________________
+
+	@media @media-md-down {
+		.contact-page {
+		margin-top: 50px !important;	
+		}
+	}
+}

@@ -1,0 +1,69 @@
+<?php
+/** @var $block \MetaloPro\GateCategoryControl\Block\Visibility */
+if (!$block->shouldRenderSubcategoryListing()) {
+    return;
+}
+
+
+$category = $block->getLayout()
+    ->getBlock('category.products.list')
+    ->getLayer()
+    ->getCurrentCategory();
+
+$categoryRepository = $block->getCategoryRepository(); // musíš sprístupniť
+
+if ($category):
+    $parent = $category->getParentCategory();
+
+    if (
+        $parent &&
+        $parent->getIsActive() &&
+        $parent->getId() !== $category->getId() &&
+        $parent->getLevel() >= 2
+    ):
+?>
+    <div class="mb-4 back-to-cat-button">
+        <a href="<?= $parent->getUrl(); ?>" class="btn btn-outline-secondary">
+            <img src="<?= $block->getViewFileUrl('MetaloPro_GateCategoryControl::images/arrow-2-left.svg'); ?>"
+                 alt="<?= __('Back') ?>"
+                 class="me-1"
+                 width="16"
+                 height="16"
+            />
+            <?= __('Back to: %1', $parent->getName()); ?>
+        </a>
+    </div>
+<?php endif; ?>
+
+<?php
+    $subcategories = $category->getChildrenCategories();
+    if (count($subcategories)):
+?>
+    <div class="subcategory-list metalopro-subcategory-grid row g-3">
+        <?php foreach ($subcategories as $subcat): ?>
+            <?php
+                if (!$subcat->getIsActive()) continue;
+
+                // Načítame plný objekt kategórie (s obrázkom)
+                $fullSubcat = $block->getCategoryById($subcat->getId());
+
+                $name = $fullSubcat->getName();
+                $url = $fullSubcat->getUrl();
+                $imageUrl = $block->getCategoryImage($fullSubcat);
+            ?>
+            <div class="col-md-4 col-xl-3 col-6 subcategory-single">
+                <a href="<?= $url ?>" class="subcategory-box text-center">
+                    <?php if ($imageUrl): ?>
+                        <div class="subcategory-image mb-2">
+                            <img src="<?= $imageUrl ?>" alt="<?= $name ?>" loading="lazy" style="max-height:120px;" />
+                        </div>
+                    <?php endif; ?>
+                    <div class="subcategory-name fw-bold"><?= $name ?></div>
+                </a>
+            </div>
+        <?php endforeach; ?>
+    </div>
+<?php else: ?>
+    
+<?php endif; ?>
+<?php endif; ?>

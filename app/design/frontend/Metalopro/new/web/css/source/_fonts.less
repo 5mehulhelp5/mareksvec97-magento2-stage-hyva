@@ -1,0 +1,77 @@
+// Fonty
+
+@font-family-name__base: 'Jost', sans-serif;
+
+.lib-font-face(
+    @family-name: 'Jost',
+    @font-path: '@{baseDir}fonts/jost-web/Jost-900-Black',
+    @font-weight: 900,
+    @font-style: normal,
+    @font-display: swap
+);
+.lib-font-face(
+    @family-name: 'Jost',
+    @font-path: '@{baseDir}fonts/jost-web/Jost-800-Heavy',
+    @font-weight: 800,
+    @font-style: normal,
+    @font-display: swap
+);
+.lib-font-face(
+    @family-name: 'Jost',
+    @font-path: '@{baseDir}fonts/jost-web/Jost-700-Bold',
+    @font-weight: 700,
+    @font-style: normal,
+    @font-display: swap
+);
+.lib-font-face(
+    @family-name: 'Jost',
+    @font-path: '@{baseDir}fonts/jost-web/Jost-600-Semi',
+    @font-weight: 600,
+    @font-style: normal,
+    @font-display: swap
+);
+.lib-font-face(
+    @family-name: 'Jost',
+    @font-path: '@{baseDir}fonts/jost-web/Jost-500-Medium',
+    @font-weight: 500,
+    @font-style: normal,
+    @font-display: swap
+);
+.lib-font-face(
+    @family-name: 'Jost',
+    @font-path: '@{baseDir}fonts/jost-web/Jost-400-Book',
+    @font-weight: 400,
+    @font-style: normal,
+    @font-display: swap
+);
+.lib-font-face(
+    @family-name: 'Jost',
+    @font-path: '@{baseDir}fonts/jost-web/Jost-300-Light',
+    @font-weight: 300,
+    @font-style: normal,
+    @font-display: swap
+);
+.lib-font-face(
+    @family-name: 'Jost',
+    @font-path: '@{baseDir}fonts/jost-web/Jost-200-Thin',
+    @font-weight: 200,
+    @font-style: normal,
+    @font-display: swap
+);
+.lib-font-face(
+    @family-name: 'Jost',
+	@font-path: '@{baseDir}fonts/jost-web/Jost-100-Hairline',
+	@font-weight: 100,
+	@font-style: normal,
+	@font-display: swap
+);
+
+//
+//  Mobile
+//  _____________________________________________
+
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
+    body {
+        font-size: 14px;
+    }
+}

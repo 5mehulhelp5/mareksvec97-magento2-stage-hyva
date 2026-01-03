@@ -1,0 +1,45 @@
+<?php
+// Zabezpečte, že sa tento kód vykonáva v Magento prostredí
+/** @var \Magento\Catalog\Model\CategoryRepository $categoryRepository */
+/** @var \Magento\Framework\UrlInterface $urlInterface */
+$objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+$categoryRepository = $objectManager->get(\Magento\Catalog\Model\CategoryRepository::class);
+$urlInterface = $objectManager->get(\Magento\Framework\UrlInterface::class);
+
+// IDs kategórií, ktoré chcete zobraziť
+$categoryIds = [3, 71, 72, 73]; // Nahraďte svojimi vlastnými ID
+?>
+<section class="homepage-category-list">
+<h2 class="reviews-title scroll-reveal reveal-slide-in">Obľúbené kategórie</h2>
+<div class="categories-list">
+    <?php foreach ($categoryIds as $categoryId): ?>
+        <?php
+        try {
+            $category = $categoryRepository->get($categoryId);
+            $categoryUrl = $category->getUrl();
+            $categoryName = $category->getName();
+            $categoryImage = $category->getImageUrl();
+        } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
+            // Ak kategória neexistuje, preskočte ju
+            continue;
+        }
+        ?>
+
+        <div class="category-item scroll-reveal reveal-slide-in">
+            <a href="<?= htmlspecialchars($categoryUrl) ?>" style="text-decoration: none; color: #333;">
+                <div class="category-image" style="margin-bottom: 10px;">
+                    <?php if ($categoryImage): ?>
+                        <img src="<?= htmlspecialchars($categoryImage) ?>" alt="<?= htmlspecialchars($categoryName) ?>">
+                    <?php else: ?>
+                        <img src="/default-category-image.jpg" alt="<?= htmlspecialchars($categoryName) ?>" >
+                    <?php endif; ?>
+                </div>
+                <h3 class="category-name"> <?= htmlspecialchars($categoryName) ?> </h3>
+            </a>
+        </div>
+    <?php endforeach; ?>
+</div>
+</section>
+
+
+

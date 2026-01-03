@@ -1,0 +1,88 @@
+<?xml version="1.0"?>
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+  <table name="mageworx_reviewreminderbase_reminder" resource="default" engine="innodb" comment="Reminder Table">
+    <column xsi:type="int" name="reminder_id" padding="10" unsigned="true" nullable="false" identity="true" comment="Reminder ID"/>
+    <column xsi:type="varchar" name="name" nullable="true" length="255" comment="Reminder Name"/>
+    <column xsi:type="varchar" name="type" nullable="true" length="255" comment="Reminder Type"/>
+    <column xsi:type="text" name="content" nullable="true" comment="Reminder Content"/>
+    <column xsi:type="varchar" name="email_template_id" nullable="true" length="255" default="0" comment="Specific Email Template ID"/>
+    <column xsi:type="int" name="period" padding="11" unsigned="false" nullable="true" identity="false" comment="Reminder Period"/>
+    <column xsi:type="boolean" name="display_on_mobile" nullable="true" comment="Reminder Display On Mobile"/>
+    <column xsi:type="smallint" name="priority" padding="6" unsigned="false" nullable="true" identity="false" comment="Reminder Priority"/>
+    <column xsi:type="timestamp" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP" comment="Reminder Created At"/>
+    <column xsi:type="timestamp" name="updated_at" on_update="true" nullable="false" default="CURRENT_TIMESTAMP" comment="Reminder Updated At"/>
+    <column xsi:type="boolean" name="status" nullable="true" comment="Reminder Status"/>
+    <constraint xsi:type="primary" referenceId="PRIMARY">
+      <column name="reminder_id"/>
+    </constraint>
+    <index referenceId="MAGEWORX_REVIEWREMINDERBASE_REMINDER_NAME_CONTENT" indexType="fulltext">
+      <column name="name"/>
+      <column name="content"/>
+    </index>
+  </table>
+  <table name="mageworx_reviewreminderbase_reminder_store" resource="default" engine="innodb" comment="Reminder To Store Linkage Table">
+    <column xsi:type="int" name="reminder_id" padding="10" unsigned="true" nullable="false" identity="false" comment="Reminder ID"/>
+    <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="false" identity="false" comment="Store ID"/>
+    <constraint xsi:type="primary" referenceId="PRIMARY">
+      <column name="reminder_id"/>
+      <column name="store_id"/>
+    </constraint>
+    <constraint xsi:type="foreign" referenceId="FK_5E2CE86E1D363B5164F0035C7289C6E1" table="mageworx_reviewreminderbase_reminder_store" column="reminder_id" referenceTable="mageworx_reviewreminderbase_reminder" referenceColumn="reminder_id" onDelete="CASCADE"/>
+    <constraint xsi:type="foreign" referenceId="FK_035165755546E76F82BF436527C29E00" table="mageworx_reviewreminderbase_reminder_store" column="store_id" referenceTable="store" referenceColumn="store_id" onDelete="CASCADE"/>
+    <index referenceId="MAGEWORX_REVIEWREMINDERBASE_REMINDER_STORE_STORE_ID" indexType="btree">
+      <column name="store_id"/>
+    </index>
+  </table>
+  <table name="mageworx_reviewreminderbase_reminder_customer_group" resource="default" engine="innodb" comment="Reminder To Customer Group Linkage Table">
+    <column xsi:type="int" name="reminder_id" padding="10" unsigned="true" nullable="false" identity="false" comment="Reminder ID"/>
+    <column xsi:type="int" name="customer_group_id" padding="10" unsigned="true" nullable="false" identity="false" comment="Customer Group ID"/>
+    <constraint xsi:type="primary" referenceId="PRIMARY">
+      <column name="reminder_id"/>
+      <column name="customer_group_id"/>
+    </constraint>
+    <constraint xsi:type="foreign" referenceId="FK_9154D83E502D55EDB553599EA7167495" table="mageworx_reviewreminderbase_reminder_customer_group" column="reminder_id" referenceTable="mageworx_reviewreminderbase_reminder" referenceColumn="reminder_id" onDelete="CASCADE"/>
+    <constraint xsi:type="foreign" referenceId="FK_4B09904E1BE69C3083DACE663C318C60" table="mageworx_reviewreminderbase_reminder_customer_group" column="customer_group_id" referenceTable="customer_group" referenceColumn="customer_group_id" onDelete="CASCADE"/>
+    <index referenceId="MAGEWORX_REVIEWREMINDERBASE_REMINDER_CSTR_GROUP_CSTR_GROUP_ID" indexType="btree">
+      <column name="customer_group_id"/>
+    </index>
+  </table>
+  <table name="mageworx_reviewreminderbase_reminder_template" resource="default" engine="innodb" comment="Reminder Template Table">
+    <column xsi:type="smallint" name="template_id" padding="5" unsigned="true" nullable="false" identity="true" comment="Reminder Template ID"/>
+    <column xsi:type="varchar" name="identifier" nullable="true" length="100" comment="Reminder Template String Identifier"/>
+    <column xsi:type="varchar" name="title" nullable="true" length="255" comment="Reminder Template Title"/>
+    <column xsi:type="mediumtext" name="content" nullable="true" comment="Reminder Template Content"/>
+    <constraint xsi:type="primary" referenceId="PRIMARY">
+      <column name="template_id"/>
+    </constraint>
+    <constraint xsi:type="unique" referenceId="MAGEWORX_REVIEWREMINDERBASE_REMINDER_TEMPLATE_IDENTIFIER">
+      <column name="identifier"/>
+    </constraint>
+  </table>
+  <table name="mageworx_reviewreminderbase_log" resource="default" engine="innodb" comment="Reminder Log Table">
+    <column xsi:type="int" name="record_id" padding="10" unsigned="true" nullable="false" identity="true" comment="Reminder Log ID"/>
+    <column xsi:type="int" name="reminder_id" padding="10" unsigned="true" nullable="true" identity="false" comment="Reminder ID"/>
+    <column xsi:type="varchar" name="customer_email" nullable="true" length="255" comment="Customer Email"/>
+    <column xsi:type="varchar" name="email_template_id" nullable="true" length="255" default="0" comment="Email Template ID"/>
+    <column xsi:type="smallint" name="product_count" padding="6" unsigned="false" nullable="true" identity="false" comment="Product Count"/>
+    <column xsi:type="text" name="details" nullable="false" comment="Details"/>
+    <column xsi:type="timestamp" name="sent_at" on_update="true" nullable="false" default="CURRENT_TIMESTAMP" comment="Email Sent At"/>
+    <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="false" identity="false" comment="Store ID"/>
+    <column xsi:type="boolean" name="result" nullable="true" comment="Result"/>
+    <constraint xsi:type="primary" referenceId="PRIMARY">
+      <column name="record_id"/>
+      <column name="store_id"/>
+    </constraint>
+    <constraint xsi:type="foreign" referenceId="MAGEWORX_REVIEWREMINDERBASE_LOG_STORE_ID_STORE_STORE_ID" table="mageworx_reviewreminderbase_log" column="store_id" referenceTable="store" referenceColumn="store_id" onDelete="CASCADE"/>
+  </table>
+  <table name="mageworx_reviewreminderbase_unsubscribed" resource="default" engine="innodb" comment="Unsubscribed Table">
+    <column xsi:type="smallint" name="unsubscribed_id" padding="5" unsigned="true" nullable="false" identity="true" comment="Unsubscribed ID"/>
+    <column xsi:type="varchar" name="email" nullable="true" length="255" comment="Email"/>
+    <column xsi:type="timestamp" name="unsubscribed_at" on_update="true" nullable="false" default="CURRENT_TIMESTAMP" comment="Unsubscribed At"/>
+    <constraint xsi:type="primary" referenceId="PRIMARY">
+      <column name="unsubscribed_id"/>
+    </constraint>
+    <constraint xsi:type="unique" referenceId="MAGEWORX_REVIEWREMINDERBASE_UNSUBSCRIBED_EMAIL">
+      <column name="email"/>
+    </constraint>
+  </table>
+</schema>

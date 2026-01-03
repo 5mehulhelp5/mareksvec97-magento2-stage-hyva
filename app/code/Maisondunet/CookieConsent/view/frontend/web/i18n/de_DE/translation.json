@@ -1,0 +1,53 @@
+{
+  "modal_trigger_title": "Cookie-Einstellungen",
+
+  "consent_modal_title": "Wir verwenden Cookies!",
+  "consent_modal_description": "Diese Website verwendet notwendige Cookies, um ihren ordnungsgemäßen Betrieb zu gewährleisten, und Tracking-Cookies, um zu verstehen, wie Sie mit ihr interagieren. Letztere werden nur nach Zustimmung gesetzt.",
+  "consent_modal_primary_btn": "Ich stimme zu",
+  "consent_modal_secondary_btn_settings": "Anpassen",
+  "consent_modal_secondary_btn_accept_necessary": "Notwendige akzeptieren",
+
+  "settings_modal_title": "Cookie-Einstellungen",
+  "settings_modal_save_settings_btn": "Einstellungen speichern",
+  "settings_modal_accept_all_btn": "Alle akzeptieren",
+  "settings_modal_reject_all_btn": "Notwendige akzeptieren",
+  "settings_modal_close_btn_label": "Schließen",
+
+  "settings_modal_before_consent_title": "Verwendung von Cookies",
+  "settings_modal_before_consent_description": "Wir verwenden Cookies, um die grundlegenden Funktionalitäten der Website zu gewährleisten und Ihre Online-Erfahrung zu verbessern. Sie können für jede Kategorie wählen, ob Sie einwilligen oder nicht, wann immer Sie möchten.",
+
+  "settings_modal_after_consent_title": "Weitere Informationen",
+  "settings_modal_after_consent_description": "Bei Fragen zu meiner Richtlinie bezüglich Cookies und Ihren Optionen kontaktieren Sie uns bitte.",
+
+  "functionality_storage_title": "Funktionalitäts-Cookies",
+  "functionality_storage_description": "Diese Cookies sind für das ordnungsgemäße Funktionieren unserer Website notwendig. Ohne diese Cookies funktioniert die Website möglicherweise nicht richtig.",
+
+  "personalization_storage_title": "Personalisierungs-Cookies",
+  "personalization_storage_description": "Personalisierungs-Cookies können Cookies von Drittanbietern verwenden, um Inhalte zu personalisieren und Benutzer über verschiedene Websites und Geräte hinweg zu verfolgen.",
+
+  "security_storage_title": "Sicherheits-Cookies",
+  "security_storage_description": "Sicherheits-Cookies ermöglichen die Speicherung von sicherheitsrelevanten Informationen wie Authentifizierung, Betrugsschutz und anderen Mitteln zum Schutz des Benutzers.",
+
+  "ad_storage_title": "Werbe-Cookies",
+  "ad_storage_description": "Werbe-Cookies werden von uns oder unseren Partnern verwendet, um Ihnen relevante Inhalte oder Anzeigen sowohl auf unserer Site als auch auf Websites Dritter anzuzeigen. Dies ermöglicht es uns, Profile basierend auf Ihren Interessen zu erstellen, sogenannte pseudonymisierte Profile. Auf Basis dieser Informationen ist es in der Regel nicht möglich, Sie direkt als Person zu identifizieren, da nur pseudonymisierte Daten verwendet werden. Sofern Sie Ihre Zustimmung nicht ausdrücken, erhalten Sie keine auf Ihre Interessen zugeschnittenen Inhalte und Anzeigen.",
+
+  "analytics_storage_title": "Analytik-Cookies",
+  "analytics_storage_description": "Analytik-Cookies ermöglichen es uns, die Leistung unserer Website und unserer Werbekampagnen zu messen. Wir verwenden sie, um die Anzahl der Besuche und die Quellen der Besuche auf unserer Website zu bestimmen. Die durch diese Cookies erhaltenen Daten verarbeiten wir aggregiert, ohne Identifikatoren, die auf spezifische Nutzer unserer Website hinweisen. Wenn Sie die Verwendung von Analytik-Cookies in Bezug auf Ihren Besuch deaktivieren, verlieren wir die Fähigkeit, die Leistung zu analysieren und unsere Maßnahmen zu optimieren.",
+
+  "cookie_table_col_name": "Name",
+  "cookie_table_col_purpose": "Beschreibung",
+  "cookie_table_col_processing_time": "Ablauf",
+  "cookie_table_col_provider": "Anbieter",
+  "cookie_table_col_type": "Typ",
+  "cookie_table_col_link": "Link",
+  "cookie_table_col_link_find_out_more": "Mehr erfahren",
+  "cookie_table_col_category": "Kategorie",
+
+  "processing_time_session": "Sitzung",
+  "processing_time_persistent": "Dauerhaft",
+
+  "cookie_type_1st_party": "Erstanbieter",
+  "cookie_type_3rd_party": "Drittanbieter",
+
+  "find_out_more": "Mehr erfahren"
+}

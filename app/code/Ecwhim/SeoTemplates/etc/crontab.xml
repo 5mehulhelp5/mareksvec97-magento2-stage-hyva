@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Ecwhim. All rights reserved.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Cron:etc/crontab.xsd">
+    <group id="ecwhim_seotemplates">
+        <job name="ecwhim_seotemplates_apply_category_template"
+             instance="Ecwhim\SeoTemplates\Cron\ApplyCategoryTemplate" method="execute">
+            <schedule>0 2 * * *</schedule>
+        </job>
+        <job name="ecwhim_seotemplates_apply_product_template"
+             instance="Ecwhim\SeoTemplates\Cron\ApplyProductTemplate" method="execute">
+            <schedule>0 3 * * *</schedule>
+        </job>
+    </group>
+</config>

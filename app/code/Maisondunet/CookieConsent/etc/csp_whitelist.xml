@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<csp_whitelist xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+               xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Csp:etc/csp_whitelist.xsd">
+    <policies>
+        <!-- Povolenie zdroja pre Google Analytics -->
+        <policy id="connect-src">
+            <values>
+                <value id="region1_google_analytics" type="host">https://region1.google-analytics.com</value>
+                <value id="etrusted_integration" type="host">https://integrations.etrusted.com</value>
+            </values>
+        </policy>
+        <!-- Príklad povolenia pre cdn.jsdelivr.net -->
+        <policy id="style-src">
+            <values>
+                <value id="cdn_jsdelivr" type="host">cdn.jsdelivr.net</value>
+            </values>
+        </policy>
+         <policy id="script-src">
+            <values>
+                <value id="cdn_jsdelivr" type="host">cdn.jsdelivr.net</value>
+            </values>
+        </policy>
+    </policies>
+</csp_whitelist>

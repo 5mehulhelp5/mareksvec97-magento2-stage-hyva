@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+    <table name="catalog_product_entity_media_gallery_value">
+		<column xsi:type="varchar" name="filename_overwrite" length="255" nullable="true" comment="Filename overwrite" />
+	</table>
+</schema>

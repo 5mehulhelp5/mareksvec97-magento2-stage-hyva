@@ -1,0 +1,14 @@
+{
+    "name": "MetaloPro/language-de_de",
+    "description": "Magento 2.0.0: de_DE",
+	"version": "2.3.0.8",
+    "license": [
+        "proprietary"
+    ],
+    "type": "magento2-language",
+	"autoload": {
+        "files": [
+            "registration.php"
+        ]
+    }
+}

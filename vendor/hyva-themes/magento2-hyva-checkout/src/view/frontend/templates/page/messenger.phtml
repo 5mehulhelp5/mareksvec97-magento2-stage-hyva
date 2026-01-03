@@ -1,0 +1,70 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2022-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+declare(strict_types=1);
+
+use Hyva\Checkout\ViewModel\Page\Messenger;
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\HeroiconsOutline;
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Element\Template;
+
+/** @var Template $block */
+/** @var ViewModelRegistry $viewModels */
+/** @var Escaper $escaper */
+/** @var Messenger $messengerViewModel */
+
+/** @var HeroiconsOutline $heroicons */
+$heroicons = $viewModels->require(HeroiconsOutline::class);
+
+$messengerViewModel = $viewModels->require(Messenger::class);
+
+$errorEventHtml = $messengerViewModel->renderErrorEvent($block);
+$successEventHtml = $messengerViewModel->renderSuccessEvent($block);
+$defaultMessageText = $messengerViewModel->getDefaultMessageText();
+?>
+<template x-data="initComponentMessenger"
+          data-message-listener="<?= $escaper->escapeHtmlAttr($errorEventHtml) ?>"
+          data-options="<?= $escaper->escapeHtmlAttr(json_encode([
+                  'onEmptyMessageText' => $defaultMessageText,
+                  'messagesSuccessListener' => $successEventHtml,
+          ])) ?>"
+          x-init="initialize"
+          x-for="message in getMessages"
+          x-bind:key="message.id"
+>
+    <div
+        class="component-messenger message mb-4 relative"
+        x-data="initComponentMessengerMessage"
+        x-bind="wrapper"
+    >
+        <span role="alert" x-text="message.text">
+            <!-- Message Placeholder -->
+        </span>
+
+        <div class="absolute -left-2 -top-2"
+             x-show="isDispatchedLargerThan2"
+             x-bind="bindDot"
+        >
+            <span class="flex h-4 w-4">
+                <span class="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75"
+                      x-bind="bindDotColor"></span>
+                <span class="relative inline-flex rounded-full h-4 w-4 border-2 border-white shadow-xl"
+                      x-bind="bindDotColor"></span>
+            </span>
+        </div>
+
+        <button class="close cursor-pointer"
+                title="<?= $escaper->escapeHtmlAttr(__('Close')) ?>"
+                x-bind="close"
+        >
+            <span class="sr-only"><?= $escaper->escapeHtml(__('Close')) ?></span>
+            <?= $heroicons->xHtml('', 18, 18, ['aria-hidden' => 'true']) ?>
+        </button>
+    </div>
+</template>

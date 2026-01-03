@@ -1,0 +1,108 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © MagePal LLC. All rights reserved.
+ * See COPYING.txt for license details.
+ * https://www.magepal.com | support@magepal.com
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <googletagmanager>
+            <general>
+                <ua_purchase_tracking>0</ua_purchase_tracking>
+            </general>
+            <google_analytics4>
+                <active>1</active>
+                <refund>1</refund>
+                <admin_order_tracking>1</admin_order_tracking>
+            </google_analytics4>
+
+            <upsell>
+                <item_list_name>Upsell</item_list_name>
+                <class_name>.products-upsell .product-item a[class*="product-item-"]</class_name>
+                <container_class>li.product-item</container_class>
+                <block_name>product.info.upsell</block_name>
+            </upsell>
+
+            <related>
+                <item_list_name>Related</item_list_name>
+                <class_name>.products-related .product-item a[class*="product-item-"]</class_name>
+                <container_class>li.product-item</container_class>
+                <block_name>catalog.product.related</block_name>
+            </related>
+
+            <crosssell>
+                <item_list_name>Crosssell</item_list_name>
+                <class_name>.products-crosssell .product-item a[class*="product-item-"]</class_name>
+                <container_class>li.product-item</container_class>
+                <block_name>checkout.cart.crosssell</block_name>
+            </crosssell>
+
+            <category_list>
+                <list_type_category_name>0</list_type_category_name>
+                <item_list_name>Catalog</item_list_name>
+                <class_name>.products-grid .product-item a[class*="product-item-"]</class_name>
+                <container_class>li.product-item</container_class>
+            </category_list>
+
+            <search_list>
+                <item_list_name>Search Result</item_list_name>
+                <class_name>.products-grid .product-item a[class*="product-item-"]</class_name>
+                <container_class>li.product-item</container_class>
+            </search_list>
+
+            <wishlist>
+                <item_list_name>Wishlist Items</item_list_name>
+                <class_name>.products-grid .product-item a[class*="product-item-"]</class_name>
+                <container_class>li.product-item</container_class>
+            </wishlist>
+
+            <compare>
+                <item_list_name>Compare items</item_list_name>
+                <class_name>.table-comparison td.product a[class*="product-item-"]</class_name>
+                <container_class>td.product</container_class>
+            </compare>
+
+            <category_widget>
+                <use_widget_title>1</use_widget_title>
+                <item_list_name>Catalog Widget Items</item_list_name>
+                <class_name>.products-grid .product-item a[class*="product-item-"]</class_name>
+                <container_class>li.product-item</container_class>
+            </category_widget>
+
+            <homepage_widget>
+                <use_widget_title>1</use_widget_title>
+                <item_list_name>Homepage Widget Items</item_list_name>
+                <class_name>.widget-product-grid .product-item a[class*="product-item-"]</class_name>
+                <container_class>li.product-item</container_class>
+            </homepage_widget>
+
+            <enhanced_success_page>
+                <upsell>
+                    <item_list_name>Upsell - Enhanced Success Page</item_list_name>
+                    <class_name>.products-upsell .product-item a[class*="product-item-"]</class_name>
+                    <container_class>li.product-item</container_class>
+                </upsell>
+
+                <related>
+                    <item_list_name>Related - Enhanced Success Page</item_list_name>
+                    <class_name>.products-related .product-item a[class*="product-item-"]</class_name>
+                    <container_class>li.product-item</container_class>
+                </related>
+
+                <crosssell>
+                    <item_list_name>Crosssell - Enhanced Success Page</item_list_name>
+                    <class_name>.products-crosssell .product-item a[class*="product-item-"]</class_name>
+                    <container_class>li.product-item</container_class>
+                </crosssell>
+
+                <recent_viewed>
+                    <item_list_name>Recent Viewed - Enhanced Success Page</item_list_name>
+                    <class_name>.products-grid .product-item a[class*="product-item-"]</class_name>
+                    <container_class>li.product-item</container_class>
+                </recent_viewed>
+            </enhanced_success_page>
+        </googletagmanager>
+    </default>
+</config>

@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © MageWorx. All rights reserved.
+ * See LICENSE.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <mageworx_xreview>
+            <main>
+                <image_size>300</image_size>
+                <location_template>[flag] [country] [state]</location_template>
+                <privacy_message>
+                    <![CDATA[I have read and accept the <a href="privacy-policy-cookie-restriction-mode" target="_blank">Privacy Policy</a>]]>
+                </privacy_message>
+                <reward_message>
+                    <![CDATA[Get [review_points] for review!]]>
+                </reward_message>
+                <toolbar>
+                    <toolbar_filters>media,customer,location</toolbar_filters>
+                    <toolbar_sorting>created_at,stage_value</toolbar_sorting>
+                    <default_sort_field>created_at</default_sort_field>
+                    <default_sort_direction>asc</default_sort_direction>
+                    <default_toolbar_limit>10</default_toolbar_limit>
+                </toolbar>
+            </main>
+        </mageworx_xreview>
+    </default>
+</config>

@@ -1,0 +1,24 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+?>
+<?php
+/**
+ * Product list toolbar
+ *
+ * @var $block \Magento\Catalog\Block\Product\ProductList\Toolbar
+ */
+?>
+<div class="toolbar-sorter sorter">
+    <div id="sorter">
+        <?php foreach ($block->getAvailableOrders() as $_key => $_order) : ?>
+            <a href="<?= $block->getUrl('*/*/*', ['_current' => true, '_use_rewrite' => true, '_query' => ['product_list_order' => $_key]]) ?>"
+               class="<?= $block->isOrderCurrent($_key) ? 'selected' : '' ?>">
+                <?= $block->escapeHtml(__($_order)) ?>
+            </a>
+        <?php endforeach; ?>
+    </div>
+   
+</div>

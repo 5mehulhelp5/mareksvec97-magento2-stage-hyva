@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+
+    <type name="Hyva\CompatModuleFallback\Model\CompatModuleRegistry">
+        <arguments>
+            <argument name="compatModules" xsi:type="array">
+                <item name="magento2-hyva-checkout-geissweb-euvat" xsi:type="array">
+                    <item name="original_module" xsi:type="string">Geissweb_Euvat</item>
+                    <item name="compat_module" xsi:type="string">Hyva_GeisswebEuvatCheckout</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="Hyva\Checkout\Model\Form\EntityForm\EavAttributeBillingAddressForm">
+        <arguments>
+            <argument name="entityFormModifiers" xsi:type="array">
+                <item name="with_vat_id" sortOrder="1000" xsi:type="object">Hyva\GeisswebEuvatCheckout\Model\Address\WithVatIdFormModifier</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Hyva\Checkout\Model\Form\EntityForm\EavAttributeShippingAddressForm">
+        <arguments>
+            <argument name="entityFormModifiers" xsi:type="array">
+                <item name="with_vat_id" sortOrder="1000" xsi:type="object">Hyva\GeisswebEuvatCheckout\Model\Address\WithVatIdFormModifier</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="Hyva\Checkout\Model\Form\EntityFormFactory">
+        <arguments>
+            <argument name="elements" xsi:type="array">
+                <item name="vat_id" xsi:type="string">Hyva\GeisswebEuvatCheckout\Model\Form\EntityField\EavEntityAddress\VatIdAttributeField</item>
+            </argument>
+        </arguments>
+    </type>
+</config>

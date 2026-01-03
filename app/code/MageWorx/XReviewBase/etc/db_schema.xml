@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+  <table name="review_detail" resource="default">
+    <column xsi:type="varchar" name="location" nullable="true" length="50" comment="Country Code (MageWorx)"/>
+    <column xsi:type="varchar" name="region" nullable="true" length="100" comment="Region (MageWorx)"/>
+    <column xsi:type="text" name="answer" nullable="false" comment="Seller Answer (MageWorx)"/>
+    <column xsi:type="boolean" name="is_recommend" nullable="false" comment="Is Recommend Flag (MageWorx)"/>
+    <column xsi:type="boolean" name="is_verified" nullable="false" comment="Has Verified Customer (MageWorx)"/>
+    <column xsi:type="text" name="pros" nullable="false" comment="Pros (MageWorx)"/>
+    <column xsi:type="text" name="cons" nullable="false" comment="Cons (MageWorx)"/>
+  </table>
+  <table name="mageworx_xreviewbase_review_media" resource="default" engine="innodb" comment="mageworx_xreviewbase_review_media">
+    <column xsi:type="bigint" name="value_id" padding="20" unsigned="true" nullable="false" identity="true" comment="ID"/>
+    <column xsi:type="bigint" name="review_id" padding="20" unsigned="true" nullable="false" identity="false" comment="Review ID"/>
+    <column xsi:type="int" name="product_id" padding="10" unsigned="true" nullable="false" identity="false" comment="Product ID"/>
+    <column xsi:type="varchar" name="media_type" nullable="false" length="10" default="image" comment="Media Type"/>
+    <column xsi:type="text" name="file" nullable="false" comment="Media URL"/>
+    <column xsi:type="varchar" name="label" nullable="false" length="255" default="" comment="Label"/>
+    <column xsi:type="int" name="position" padding="11" unsigned="false" nullable="false" identity="false" default="0" comment="Disabled"/>
+    <column xsi:type="boolean" name="disabled" nullable="false" comment="Disabled"/>
+    <constraint xsi:type="primary" referenceId="PRIMARY">
+      <column name="value_id"/>
+    </constraint>
+    <constraint xsi:type="foreign" referenceId="MAGEWORX_XREVIEWBASE_REVIEW_MEDIA_REVIEW_ID_REVIEW_REVIEW_ID" table="mageworx_xreviewbase_review_media" column="review_id" referenceTable="review" referenceColumn="review_id" onDelete="CASCADE"/>
+    <constraint xsi:type="foreign" referenceId="MAGEWORX_XREVIEWBASE_REVIEW_MDA_PRD_ID_CAT_PRD_ENTT_ENTT_ID" table="mageworx_xreviewbase_review_media" column="product_id" referenceTable="catalog_product_entity" referenceColumn="entity_id" onDelete="CASCADE"/>
+  </table>
+  <table name="mageworx_xreviewbase_review_vote" resource="default" engine="innodb" comment="mageworx_xreviewbase_review_vote">
+    <column xsi:type="bigint" name="vote_id" padding="20" unsigned="true" nullable="false" identity="true" comment="ID"/>
+    <column xsi:type="bigint" name="review_id" padding="20" unsigned="true" nullable="false" identity="false" comment="Review ID"/>
+    <column xsi:type="smallint" name="like_count" padding="5" unsigned="true" nullable="false" identity="false" default="0" comment="Like Count"/>
+    <column xsi:type="smallint" name="dislike_count" padding="5" unsigned="true" nullable="false" identity="false" default="0" comment="Dislike Count"/>
+    <column xsi:type="varchar" name="ip_address" nullable="false" length="255" comment="Voter IP Address"/>
+    <column xsi:type="timestamp" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP" comment="Vote Created At"/>
+    <constraint xsi:type="primary" referenceId="PRIMARY">
+      <column name="vote_id"/>
+    </constraint>
+    <constraint xsi:type="foreign" referenceId="MAGEWORX_XREVIEWBASE_REVIEW_VOTE_REVIEW_ID_REVIEW_REVIEW_ID" table="mageworx_xreviewbase_review_vote" column="review_id" referenceTable="review" referenceColumn="review_id" onDelete="CASCADE"/>
+  </table>
+</schema>

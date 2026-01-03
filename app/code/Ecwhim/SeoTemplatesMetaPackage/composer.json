@@ -1,0 +1,12 @@
+{
+    "name": "ecwhim/product-seo-templates",
+    "description": "N/A",
+    "type": "metapackage",
+    "version": "1.0.3",
+    "license": [
+        "proprietary"
+    ],
+    "require": {
+        "ecwhim/module-seo-templates": "1.0.3"
+    }
+}

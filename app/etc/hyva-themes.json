@@ -1,0 +1,34 @@
+{
+    "extensions": [
+        {
+            "src": "vendor\/hyva-themes\/magento2-theme-module\/src"
+        },
+        {
+            "src": "vendor\/amasty\/module-custom-form-hyva"
+        },
+        {
+            "src": "vendor\/hyva-themes\/magento2-hyva-checkout-stripe\/src"
+        },
+        {
+            "src": "vendor\/amasty\/module-blog-hyva"
+        },
+        {
+            "src": "vendor\/hyva-themes\/magento2-geissweb-euvat\/src"
+        },
+        {
+            "src": "vendor\/hyva-themes\/magento2-hyva-checkout-geissweb-euvat\/src"
+        },
+        {
+            "src": "vendor\/amasty\/module-scroll-hyva"
+        },
+        {
+            "src": "vendor\/magewirephp\/magewire\/src"
+        },
+        {
+            "src": "vendor\/hyva-themes\/magento2-hyva-checkout\/src"
+        },
+        {
+            "src": "vendor\/hyva-themes\/magento2-hyva-checkout-paypal\/src"
+        }
+    ]
+}

@@ -1,0 +1,105 @@
+<?php
+// Příklad upraveného kódu
+if (count($block->getStores()) > 1) :
+    $id = $block->getIdModifier() ? '-' . $block->getIdModifier() : '';
+    $currentLanguageFlag = substr($block->getCurrentStoreCode(), -2);
+    $currentImageUrl = $this->getViewFileUrl('Magento_Store::img/' . $currentLanguageFlag . '.png');
+
+    // Funkce pro mapování kódu na lokaci
+    function getLocationNameByStoreCode($storeCode) {
+        switch ($storeCode) {
+            case 'at':
+                return 'Austria';
+            case 'be':
+                return 'Belgium';
+            case 'bg':
+                return 'Bulgaria';
+            case 'hr':
+                return 'Croatia';
+            case 'cy':
+                return 'Cyprus';
+            case 'cz':
+                return 'Czechia';
+            case 'dk':
+                return 'Denmark';
+            case 'ee':
+                return 'Estonia';
+            case 'fi':
+                return 'Finland';
+            case 'fr':
+                return 'France';
+            case 'de':
+                return 'Germany';
+            case 'gr':
+                return 'Greece';
+            case 'hu':
+                return 'Hungary';
+            case 'ie':
+                return 'Ireland';
+            case 'it':
+                return 'Italy';
+            case 'lv':
+                return 'Latvia';
+            case 'lt':
+                return 'Lithuania';
+            case 'lu':
+                return 'Luxembourg';
+            case 'mt':
+                return 'Malta';
+            case 'nl':
+                return 'Netherlands';
+            case 'pl':
+                return 'Poland';
+            case 'pt':
+                return 'Portugal';
+            case 'ro':
+                return 'Romania';
+            case 'sk':
+                return 'Slovakia';
+            case 'si':
+                return 'Slovenia';
+            case 'es':
+                return 'Spain';
+            case 'se':
+                return 'Sweden';
+            default:
+                return 'European Union';
+        }
+    }
+
+
+    $currentLocationName = getLocationNameByStoreCode($currentLanguageFlag);
+    ?>
+    <div class="switcher language switcher-language" data-ui-id="language-switcher" id="switcher-language<?= $block->escapeHtmlAttr($id) ?>">
+        <strong class="label switcher-label"><span><?= $block->escapeHtml(__('Language')) ?></span></strong>
+        <div class="actions dropdown options switcher-options">
+            <div class="action toggle switcher-trigger"
+                 id="switcher-language-trigger<?= $block->escapeHtmlAttr($id) ?>"
+                 data-mage-init='{"dropdown":{}}'
+                 data-toggle="dropdown"
+                 data-trigger-keypress-button="true">
+                <strong class="view-<?= $block->escapeHtml($block->getCurrentStoreCode()) ?>">
+                    <img src="<?= $block->escapeUrl($currentImageUrl) ?>" alt="<?= $block->escapeHtmlAttr($currentLocationName) ?>" />
+                    <span><?= $block->escapeHtml($block->getStoreName()) ?></span>
+                </strong>
+            </div>
+            <ul class="dropdown switcher-dropdown" data-target="dropdown">
+                <?php foreach ($block->getStores() as $_lang) : ?>
+                    <?php if ($_lang->getId() != $block->getCurrentStoreId()) : ?>
+                        <?php
+                        $languageFlag = $block->escapeHtml(substr($_lang->getCode(), -2));
+                        $imageUrl = $this->getViewFileUrl('Magento_Store::img/' . $languageFlag . '.png');
+                        $locationName = getLocationNameByStoreCode($languageFlag);
+                        ?>
+                        <li class="language <?= $block->escapeHtml($languageFlag) ?> switcher-option">
+                            <a href="<?= $block->escapeUrl($_lang->getBaseUrl()) ?>" class="d-flex gap-1">
+                                <img src="<?= $block->escapeUrl($imageUrl) ?>" alt="<?= $block->escapeHtmlAttr($locationName) ?>" />
+                                <span><?= $block->escapeHtml($_lang->getName()) ?></span>
+                            </a>
+                        </li>
+                    <?php endif; ?>
+                <?php endforeach; ?>
+            </ul>
+        </div>
+    </div>
+<?php endif; ?>

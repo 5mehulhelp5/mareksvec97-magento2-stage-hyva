@@ -1,0 +1,96 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2022-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+declare(strict_types=1);
+
+/** @var \Magento\Framework\Escaper $escaper */
+/** @var \Magento\Framework\View\Element\Template $block */
+/** @var \Hyva\Theme\ViewModel\HyvaCsp $hyvaCsp */
+?>
+
+<?php /** The HTML for this is living in src/view/frontend/templates/component/payment/method/stripe_payments_element.phtml */ ?>
+<script>
+    window.addEventListener('checkout:payment:method-activate', event => {
+        const tempMethod = event?.detail?.method;
+        const method = (typeof tempMethod === 'string' ? tempMethod : '') ?? '';
+
+        if (method.includes('stripe')) {
+            Alpine.initTree(document.getElementById('stripe-saved-cards'));
+        }
+    });
+
+    function stripeSavedCards() {
+        return {
+            savedMethods: [],
+            selectedMethod: null,
+
+            init() {
+                this.$watch('selectedMethod', value => {
+                    this.$dispatch('stripe-update-selected-method', value);
+                })
+
+                window.addEventListener('stripe-update-saved-methods', event => {
+                    this.savedMethods = Object.values(event.detail.savedMethods)
+
+                    if (this.savedMethods.length !== 0) {
+                        this.selectedMethod = this.savedMethods[0]
+                    }
+                });
+            },
+
+            hasSelectedMethod() {
+                return this.selectedMethod !== null;
+            },
+
+            notHasSelectedMethod() {
+                return !this.hasSelectedMethod();
+            },
+
+            setSelectedMethod() {
+                this.selectedMethod = this.method;
+            },
+
+            hasSavedMethods() {
+                return this.savedMethods.length;
+            },
+
+            addNewMethod() {
+                this.selectedMethod = null;
+            },
+
+            showStripeElement() {
+                return !this.savedMethods.length || this.selectedMethod === null;
+            },
+
+            markAsSelectedMethod() {
+                return {
+                    'bg-container-darker': this.selectedMethod === this.method,
+                };
+            },
+
+            showSecurity() {
+                return this.selectedMethod && this.selectedMethod.type === 'card' && this.selectedMethod.cvc === 1;
+            },
+
+            showAmexCcv() {
+                return this.showSecurity() && this.selectedMethod.brand === 'amex';
+            },
+
+            showNonAmexCcv() {
+                return this.showSecurity() && this.selectedMethod.brand !== 'amex';
+            }
+        }
+    }
+
+    window.addEventListener(
+        'alpine:init',
+        () => Alpine.data('stripeSavedCards', stripeSavedCards),
+        {once: true}
+    )
+</script>
+<?php $hyvaCsp->registerInlineScript() ?>

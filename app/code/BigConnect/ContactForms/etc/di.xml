@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+	<preference 
+		for="Magecomp\Quickcontact\Controller\Index\Save" 
+		type="BigConnect\ContactForms\Controller\Index\Save" />
+	<preference 
+		for="Magecomp\Quickcontact\Model\Mail\TransportBuilder" 
+		type="BigConnect\ContactForms\Model\Mail\TransportBuilder" />
+</config>

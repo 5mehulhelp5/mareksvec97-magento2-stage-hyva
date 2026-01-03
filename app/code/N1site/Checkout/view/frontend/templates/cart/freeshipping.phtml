@@ -1,0 +1,27 @@
+<?php
+	$price = $block->getFreeShippingPrice();
+	$priceExcl = $block->getFreeShippingPrice(0);
+	$incText = __('Incl. Tax');
+	$exclText = __('Excl. Tax');
+?>
+<div class="free-shipping">
+    <p>
+        <i class="icon-delivery"></i>
+        <?php if ($price) {
+			// if ($block->getTaxDisplay()==\Magento\Tax\Model\Config::DISPLAY_TYPE_INCLUDING_TAX) {
+				// $price .= ' '.$incText;
+			// } elseif ($block->getTaxDisplay()==\Magento\Tax\Model\Config::DISPLAY_TYPE_EXCLUDING_TAX) {
+				// $price = $priceExcl.' '.$exclText;				
+			// } elseif ($block->getTaxDisplay()==\Magento\Tax\Model\Config::DISPLAY_TYPE_BOTH) {
+				// $price = "<span class=''>$incText: $price</span> <span class=''>$priceExcl</span>';				
+			// } ?>
+			<?php if ($priceExcl) { ?>
+				<div><?php echo sprintf(__("For free shipping, buy for another <strong>%s</strong> %s"), $priceExcl, $exclText) ?></div>
+			 <?php } ?>
+			<div><?php echo sprintf(__("For free shipping, buy for another <strong>%s</strong> %s"), $price, $incText) ?></div>
+			<?php // echo sprintf(__("Order <strong>%s</strong> extra and shipping is <strong>free</strong>."), $price)
+		} else { ?>
+            <strong><?php echo __("Free Shipping Available") ?></strong>
+        <?php } ?>
+    </p>
+</div>

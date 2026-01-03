@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Api/etc/extension_attributes.xsd">
+
+    <!-- <extension_attributes for="Magento\Quote\Api\Data\AddressInterface"> -->
+        <!-- <attribute code="pn_id" type="string" /> -->
+        <!-- <attribute code="tax_id" type="string" /> -->
+    <!-- </extension_attributes> -->
+    <!-- <extension_attributes for="Magento\Checkout\Api\Data\ShippingInformationInterface"> -->
+        <!-- <attribute code="pn_id" type="string" /> -->
+        <!-- <attribute code="tax_id" type="string" /> -->
+    <!-- </extension_attributes> -->
+    <!-- <extension_attributes for="Magento\Customer\Api\Data\AddressInterface"> -->
+        <!-- <attribute code="pn_id" type="string" /> -->
+        <!-- <attribute code="tax_id" type="string" /> -->
+    <!-- </extension_attributes> -->
+    <!-- <extension_attributes for="Magento\Customer\Api\Data\CustomerInterface"> -->
+        <!-- <attribute code="pn_id" type="string" /> -->
+        <!-- <attribute code="tax_id" type="string" /> -->
+    <!-- </extension_attributes> -->
+	
+    <extension_attributes for="Magento\Quote\Api\Data\ShippingMethodInterface">
+        <attribute code="logo_url" type="string" />
+        <attribute code="description" type="string" />
+    </extension_attributes>
+	
+    <extension_attributes for="Magento\Quote\Api\Data\PaymentMethodInterface">
+        <attribute code="logo_url" type="string" />
+        <attribute code="description" type="string" />
+    </extension_attributes>
+	
+</config>

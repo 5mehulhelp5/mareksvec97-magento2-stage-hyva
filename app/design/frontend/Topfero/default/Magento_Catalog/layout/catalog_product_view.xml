@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceContainer name="content">
+            <!-- Product Details Block -->
+            <block class="Magento\Catalog\Block\Product\View\Details" name="product.info.details" template="Magento_Catalog::product/view/details.phtml" after="product.info.media">
+                <!-- Product Description Block -->
+                <block class="Magento\Catalog\Block\Product\View\Description" name="product.info.description" as="description" template="Magento_Catalog::product/view/description-special.phtml" group="detailed_info">
+                    <arguments>
+                        <argument name="at_call" xsi:type="string">getDescription</argument>
+                        <argument name="at_code" xsi:type="string">description</argument>
+                        <argument name="css_class" xsi:type="string">description</argument>
+                        <argument name="at_label" xsi:type="string">none</argument>
+                        <argument name="title" translate="true" xsi:type="string">Details</argument>
+                        <argument name="sort_order" xsi:type="string">10</argument>
+                    </arguments>
+                </block>
+
+                <!-- Product Reviews Block -->
+                <block class="Magento\Review\Block\Product\Review" name="reviews.tab" as="reviews" template="Magento_Review::review.phtml" group="detailed_info" ifconfig="catalog/review/active">
+                    <arguments>
+                        <argument name="sort_order" xsi:type="string">30</argument>
+                    </arguments>
+                    <block class="Magento\Review\Block\Form" name="product.review.form" as="review_form" ifconfig="catalog/review/active">
+                        <container name="product.review.form.fields.before" as="form_fields_before" label="Review Form Fields Before"/>
+                    </block>
+                </block>
+            </block>
+        </referenceContainer>
+
+        <!-- Contact Form Block -->
+        <referenceContainer name="product.info.main">    
+            <block class="Magento\Contact\Block\ContactForm" name="contactFormProduct" template="Magento_Contact::product-form.phtml" after="-" />
+        </referenceContainer>
+
+        <!-- Store Review and Benefits -->
+        <referenceContainer name="content">
+            <block class="Magento\Framework\View\Element\Template" name="product_faq" template="Magento_Catalog::product_faq.phtml" before="short_video" />
+            
+            <block class="Magento\Framework\View\Element\Template" name="short_video" template="Magento_Theme::short-video.phtml" before="store_review" />
+            <!-- Store Review Block -->
+            <block class="Magento\Framework\View\Element\Template" name="store_review" template="Magento_Store::store_review.phtml" before="store_benefits" />
+            
+            
+
+            <!-- Store Benefits Block -->
+                <block class="Magento\Framework\View\Element\Template" name="cart.benefits" after="-">
+                            <arguments>
+                                <argument name="template" xsi:type="string">Magento_Checkout::cart/cart-benefits.phtml</argument>
+                            </arguments>
+            </block>
+        </referenceContainer>
+
+        <!-- Remove Stock and SKU -->
+        <referenceBlock name="product.info.stock.sku" remove="true"/>
+        <referenceBlock name="product.attributes" remove="true"/>
+         <referenceBlock name="recently_viewed" remove="true"/>
+    </body>
+</page>

@@ -1,0 +1,13 @@
+<?php if ($block->shouldRenderSubcategoryListing()): ?>
+<?php
+
+try {
+    echo $this->getLayout()
+        ->createBlock(\Magento\Cms\Block\Block::class)
+        ->setBlockId('custom_production_category-brany')
+        ->toHtml();
+} catch (\Exception $e) {
+    // Voliteľne zaloguj alebo ignoruj
+}
+?>
+<?php endif; ?>

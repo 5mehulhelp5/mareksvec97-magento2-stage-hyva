@@ -1,0 +1,63 @@
+<?php
+// Načítanie Object Managera
+$objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+
+// Získanie Store Manageru
+$storeManager = $objectManager->get(\Magento\Store\Model\StoreManagerInterface::class);
+
+// Získanie kódu aktuálneho obchodu
+$storeCode = $storeManager->getStore()->getCode();
+
+// Nastavenie URL na základe kódu obchodu
+switch ($storeCode) {
+    case 'topfero_lv':
+        $storeUrl = 'par-mums';
+        break;
+    case 'topfero_lt':
+        $storeUrl = 'apie-mus';
+        break;
+    case 'topfero_cz':
+        $storeUrl = 'o-nas';
+        break;
+    case 'topfero_hr':
+        $storeUrl = 'o-nama';
+        break;
+    case 'topfero_be':
+        $storeUrl = 'over-ons';
+        break;
+    case 'topfero_nl':
+        $storeUrl = 'over-ons';
+        break;
+    case 'topfero_de':
+        $storeUrl = 'uber-uns';
+        break;
+    case 'topfero_es':
+        $storeUrl = 'sobre-nosotros';
+        break;
+    case 'topfero_at':
+        $storeUrl = 'uber-uns';
+        break;
+    default:
+        $storeUrl = 'o-nas';
+        break;
+}
+?>
+
+<div class="short-video scroll-reveal">
+    <video class="u-img-cover lazyloaded" preload="none" poster="<?= $block->getViewFileUrl('Magento_Theme::images/bg-video.jpg'); ?>" width="1194" height="320" autoplay muted loop playsinline>
+        <source data-src="<?= $block->getViewFileUrl('Magento_Theme::video/topfero-video.mp4'); ?>" type="video/mp4" src="<?= $block->getViewFileUrl('Magento_Theme::video/topfero-video.mp4'); ?>">
+        
+        <?= __('Váš prehliadač nepodporuje prehrávanie videa.') ?>
+    </video>
+    <img class="logo-video" src="<?= $block->getViewFileUrl('Magento_Theme::images/logo/logo-white.svg'); ?>" alt="topfero-logo">
+    <div class="video-text">
+        <div class="main-text"><?= __('Nakupujte priamo od výrobcu') ?></div>
+        <div class="small-text"><?= __('Vyrábame v Európe') ?></div>
+
+        <a href="<?= $this->getUrl($storeUrl) ?>">
+            <button class="action secondary">
+                <span><?= __('Viac informácií') ?></span>
+            </button>
+        </a>
+    </div>
+</div>

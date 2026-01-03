@@ -1,0 +1,27 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2022-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+declare(strict_types=1);
+
+use Magento\Framework\View\Element\Template;
+
+/** @var Template $block */
+
+// This element is rendered by src/view/frontend/templates/StripeIntegration_Payments/express/minicart_button.phtml
+?>
+<div class="stripe-minicart-button-container min-h-a11y">
+    
+    <div x-data="initStripePaymentRequestButtonMinicart"
+         id="stripe-minicart-button-wrapper"
+         @toggle-cart.window="initMinicartButton"
+         class="relative grid gap-6 px-4 bg-white sm:gap-8 sm:px-6 min-h-a11y !mb-0 !mr-0"
+    >
+        <div id="stripe-minicart-button"></div>
+        <?= $block->getChildHtml('stripe-minicart-loader') ?>
+    </div>
+</div>

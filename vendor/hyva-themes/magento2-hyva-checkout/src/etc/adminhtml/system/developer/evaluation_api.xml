@@ -1,0 +1,115 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2022-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+-->
+<include xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_include.xsd"
+>
+    <group id="evaluation_api"
+           showInDefault="1"
+           showInStore="1"
+           showInWebsite="1"
+           sortOrder="10"
+           translate="label"
+    >
+        <label>Evaluation API</label>
+
+        <field id="error_as_warning"
+               showInDefault="1"
+               showInStore="1"
+               showInWebsite="1"
+               sortOrder="10"
+               translate="label comment"
+               type="select"
+        >
+            <label>Error as Warning</label>
+            <comment>Error messages will be displayed as a warning styled message.</comment>
+            <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+        </field>
+
+        <group id="redirect"
+               showInDefault="1"
+               showInStore="1"
+               showInWebsite="1"
+               sortOrder="10"
+               translate="label comment"
+        >
+            <label>Redirect</label>
+            <comment>The 'redirect' evaluation result type empowers developers to redirect customers to an internal or external URL. The specific behavior of a redirect result type is determined by various configurable settings, outlined below.</comment>
+
+            <field id="enable_confirmation"
+                   showInDefault="1"
+                   showInStore="1"
+                   showInWebsite="1"
+                   sortOrder="10"
+                   translate="label comment"
+                   type="select"
+            >
+                <label>Enable Confirmation Dialog</label>
+                <comment>Activates the redirect confirmation dialog, which prompts users to confirm, before being redirected to an external URL. The dialog will be displayed only if it has been explicitly set and enabled, or if the 'Force' option is selected. Note that user confirmation will only be requested for external URLs.</comment>
+                <source_model>Hyva\Checkout\Model\Config\Source\YesNoForce</source_model>
+            </field>
+
+            <field id="confirmation_message"
+                   showInDefault="1"
+                   showInStore="1"
+                   showInWebsite="1"
+                   sortOrder="20"
+                   translate="label comment"
+                   type="text"
+            >
+                <label>Confirmation Message</label>
+                <comment>This message serves as the default confirmation message, for cases in which a confirmation dialog is set to be forced, and there is no explicitly set on the redirect instance.</comment>
+                <depends>
+                    <field id="hyva_themes_checkout/developer/evaluation_type/redirect/enable_confirmation" separator="|">1|2</field>
+                </depends>
+            </field>
+
+            <field id="enable_notification"
+                   showInDefault="1"
+                   showInStore="1"
+                   showInWebsite="1"
+                   sortOrder="30"
+                   translate="label comment"
+                   type="select"
+            >
+                <label>Enable Notification Dialog</label>
+                <comment>Activates the redirect notification dialog, providing users with a heads-up before being redirected. The dialog will be displayed only if it has been explicitly set and enabled, or if the 'Force' option is selected. Note that when enabled or forced, the dialog will be prompted for both internal and external URLs.</comment>
+                <source_model>Hyva\Checkout\Model\Config\Source\YesNoForce</source_model>
+            </field>
+
+            <field id="notification_message"
+                   showInDefault="1"
+                   showInStore="1"
+                   showInWebsite="1"
+                   sortOrder="40"
+                   translate="label comment"
+                   type="text"
+            >
+                <label>Notification Message</label>
+                <comment>This message serves as the default notification message for, cases in which a notification dialog is set to be forced, and there is no explicitly set on the redirect instance.</comment>
+                <depends>
+                    <field id="hyva_themes_checkout/developer/evaluation_type/redirect/enable_notification" separator="|">1|2</field>
+                </depends>
+            </field>
+
+            <field id="dialog_visibility_duration"
+                   showInDefault="1"
+                   showInStore="1"
+                   showInWebsite="1"
+                   sortOrder="50"
+                   translate="label comment"
+                   type="text"
+            >
+                <label>Dialog Visibility Duration</label>
+                <comment>The duration of dialog visibility is always specified in milliseconds and applies exclusively to notification dialogs. Leave this field empty to utilize the default system visibility duration.</comment>
+                <validate>integer</validate>
+            </field>
+        </group>
+    </group>
+</include>

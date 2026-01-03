@@ -1,0 +1,40 @@
+<?php
+/**
+ * Copyright © MageWorx. All rights reserved.
+ * See LICENSE.txt for license details.
+ */
+?>
+<?php
+/** @var \Magento\Framework\View\Element\Template $block */
+/**
+ * Review list toolbar
+ *
+ * @var $toolbar \MageWorx\XReviewBase\Block\Review\Product\ListView\Toolbar
+ */
+$toolbar = $block->getParentBlock()->getParentBlock();
+?>
+<?php $mediaCount = (int)$toolbar->getMediaCount(); ?>
+
+<div class="mw-sorting-controls__item toolbar-filter">
+    <?php if ($toolbar->getCurrentMediaFilterValue() == 'on') : ?>
+        <input id="toolbar_media_filter"
+               type="checkbox"
+               checked
+               title="<?= $toolbar->escapeHtmlAttr(__('Discard Filter By Images')) ?>"
+               data-role="media-filter"
+               data-value="off"
+            <?= !$mediaCount ? 'disabled' : '' ?>
+        />
+    <?php else: ?>
+        <input id="toolbar_media_filter"
+               type="checkbox"
+               title="<?= $toolbar->escapeHtmlAttr(__('Set Filter By Images')) ?>"
+               data-role="media-filter"
+               data-value="on"
+            <?= !$mediaCount ? 'disabled' : '' ?>
+        />
+    <?php endif; ?>
+    <label class="mw-text" for="toolbar_media_filter">
+        <?= $toolbar->escapeHtml(__('With Images (%1)', $mediaCount)) ?>
+    </label>
+</div>

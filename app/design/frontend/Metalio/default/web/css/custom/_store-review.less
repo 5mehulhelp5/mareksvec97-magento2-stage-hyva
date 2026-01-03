@@ -1,0 +1,125 @@
+& when (@critical) {
+	.reviews-block {
+	
+
+	  .container {
+	    max-width: 1200px;
+	    margin: 0 auto;
+	    padding: 0 15px;
+	  }
+	  .reviews-group {
+	  	display: flex;
+	  	gap: 15px;
+	  	padding-bottom: 0px !important
+	  }
+	  .review-stars {
+	   		gap: 4px;
+	        display: flex;
+	    img {
+	    		height: 13px;
+	    		width: 13px;
+	    	}
+	    &.big {
+	    	margin-bottom: 10px;
+	    	img {
+	    		height: 26px;
+	    		width: 26px;
+	    	}
+	    	
+	    }
+	  }
+	  .review {
+	  	&.summary {
+	  		max-width: 225px;
+	  		min-width: 225px !important;
+	  		display: flex;
+	  		justify-content: center;
+	  		flex-direction: column;
+	  		align-items: center;
+	  	}
+	  }
+
+	  .reviews-list {
+	    display: flex;
+	    flex-wrap: nowrap;
+	    gap: 20px;
+	    justify-content: center;
+
+	    .review {
+	      background-color: #fff;
+	      padding: 20px;
+	      border: 2px solid @border-color-light;
+	      border-radius: 4px;
+	      width: 33%;
+	      
+
+	      .review-rating {
+	        font-size: 18px;
+	        font-weight: bold;
+	        color: #000000;
+	      }
+
+	      .review-date {
+	        display: block;
+	        font-size: 14px;
+	        margin-top: 5px;
+	        color: #000;
+	        font-size: 15px;
+	        font-style: normal;
+	        font-weight: 500;
+	      }
+
+	      .review-text {
+	        margin-top: 8px;
+	        font-size: 14px;
+	        color: #000;
+	        line-height: 1.5;
+	      }
+	    }
+	  }
+	}
+
+	//
+	//  Mobile
+	//  _____________________________________________
+
+	@media @media-md-down {
+		.reviews-block {
+			.reviews-group {
+				overflow: hidden;
+			}
+			.review.summary {
+				min-width: 160px !important;
+			}
+			.review-stars.big {
+				img {
+					height: 20px;
+					width: 20px;
+				}
+			}
+			.reviews-list {
+				.review {
+					&.product-item {
+						width: 100%;
+					}
+				}
+			}
+			}
+      .store-review { 
+      	.stars-text {
+      		margin-top: 7px;
+      		margin-bottom: 7px;
+      	}
+      	.user-review {
+      		.stars {
+      			.fa-star {
+      				font-size: 16px;
+      				line-height: 20px;
+      			}
+      		}
+      	}
+      }
+      
+
+	}
+}

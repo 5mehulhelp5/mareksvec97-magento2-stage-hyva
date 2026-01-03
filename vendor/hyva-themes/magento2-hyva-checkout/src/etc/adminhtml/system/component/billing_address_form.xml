@@ -1,0 +1,45 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2022-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+-->
+<include xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_include.xsd"
+>
+    <!-- @OSCMAP: onestepcheckout_iosc/shippingfields/billingfields -->
+    <!-- @TO: hyva_themes_checkout/component/billing_address/form_fields -->
+    <group id="billing_address"
+           translate="label"
+           showInDefault="1"
+           showInWebsite="1"
+           showInStore="1"
+    >
+        <label>Billing Address Form</label>
+
+        <field id="eav_attribute_form_fields"
+               translate="label comment"
+               type="select"
+               sortOrder="10"
+               showInDefault="1"
+               showInWebsite="1"
+               showInStore="1"
+        >
+            <label>Form Fields</label>
+            <frontend_model>Hyva\Checkout\Block\Adminhtml\System\Config\Form\Field\FieldArray\AddressFieldArray</frontend_model>
+            <backend_model>Hyva\Checkout\Model\Config\Backend\EavAttributeFormFieldsSerialized</backend_model>
+            <comment><![CDATA[
+            <ul style="width: 80%;  padding-left: 35px;">
+                <li><span style="color: red">Tip:</span> Display custom tooltips and will overwrite any default tooltips.</li>
+                <li>All readonly fields are defined in the system and can be configured from different locations (like street fields count, gender etc) and might need to be enabled/configured from Magento settings: stores > configuration > customer configuration first.</li>
+                    <li>Fields you can edit (like some street fields) are not required or enabled from magento configuration </li>
+                    <li>ADD button is not meant for adding new fields to checkout address forms but rather to include 3rd party objects to the mix to allow sorting</li>
+                    <li>The "Auto Save" checkbox enables autosaving for that field. However, if it is unchecked and the field still autosaves, a form modifier may be overriding this behavior.</li>
+                </ul>
+            ]]></comment>
+        </field>
+    </group>
+</include>

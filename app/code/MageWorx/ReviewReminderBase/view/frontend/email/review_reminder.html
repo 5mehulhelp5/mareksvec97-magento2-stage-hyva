@@ -1,0 +1,464 @@
+<!--
+/**
+ * Copyright © MageWorx. All rights reserved.
+ * See LICENSE.txt for license details.
+ */
+-->
+<!--@subject {{trans "Leave a review at %store_name and receive up to 10% OFF your next purchase" store_name=$store.getFrontendName()}} @-->
+<!--@vars {
+"var logo_url":"Email Logo Image URL",
+"var logo_alt":"Email Logo Alt Text",
+"var logo_height":"Email Logo Image Height",
+"var logo_width":"Email Logo Image Width",
+"var template_styles|raw":"Template CSS",
+"var name|escape":"Customer Name",
+"var store.getFrontendName()|escape":"Store Name",
+"store url=\"\"":"Store URL",
+"var store.frontend_name":"Store Name",
+"var url_about_us":"About Us URL",
+"var url_customer_service":"Customer Service URL",
+"var store_phone":"Store Phone",
+"var store_hours":"Store Hours",
+"var store.formatted_address|raw":"Store Address",
+"var products":"Products",
+"var reviews":"Reviews",
+"var container":"Container",
+"var unsubscribe_url":"Unsubscribe URL"
+} @-->
+
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml"
+      xmlns:o="urn:schemas-microsoft-com:office:office" lang="">
+<head><title>We want to hear You</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <style type="text/css">
+        #outlook a {
+          padding: 0;
+        }
+        body {
+          margin: 0;
+          padding: 0;
+          -webkit-text-size-adjust: 100%;
+          -ms-text-size-adjust: 100%;
+        }
+        table,
+        td {
+          border-collapse: collapse;
+          mso-table-lspace: 0;
+          mso-table-rspace: 0;
+        }
+        img {
+          border: 0;
+          height: auto;
+          line-height: 100%;
+          outline: 0;
+          text-decoration: none;
+          -ms-interpolation-mode: bicubic;
+        }
+        p {
+          display: block;
+          margin: 13px 0;
+        }
+        @media only screen and (min-width: 500px) {
+          .mj-column-per-100 {
+            width: 100% !important;
+            max-width: 100%;
+          }
+          .mj-column-px-100 {
+            width: 100px !important;
+            max-width: 100px;
+          }
+          .mj-column-per-80 {
+            width: 80% !important;
+            max-width: 80%;
+          }
+          .mj-column-per-50 {
+            width: 50% !important;
+            max-width: 50%;
+          }
+        }
+        @media only screen and (max-width: 500px) {
+          table.mj-full-width-mobile {
+            width: 100% !important;
+          }
+          td.mj-full-width-mobile {
+            width: auto !important;
+          }
+        }
+        .mj-outlook-group-fix {
+            width: 100% !important;
+        }
+    </style>
+</head>
+<body class="body_reminder">
+{{inlinecss file="css/email-inline.css"}}
+<div>
+    <div class="section div_kl995o">
+        <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" class="table_xivs38">
+            <tbody>
+            <tr>
+                <td class="td_bm6638">
+                    <div class="mj-column-per-100 mj-outlook-group-fix div_pcd2u1">
+                        <table border="0" cellpadding="0" cellspacing="0" role="presentation" width="100%">
+                            <tbody>
+                            <tr>
+                                <td class="td_quan4q">
+                                    <table border="0" cellpadding="0" cellspacing="0" role="presentation" width="100%">
+                                        <tr>
+                                            <td align="left" class="td_xjxsnn">
+                                                <table border="0" cellpadding="0" cellspacing="0" role="presentation"
+                                                       class="table_rx281m">
+                                                    <tbody>
+                                                    <tr>
+                                                        <td class="td_vw9vto">
+                                                            <a class="logo" href="{{store url=""}}">
+                                                                <img
+                                                                    {{if logo_width}}
+                                                                        width="{{var logo_width}}"
+                                                                    {{else}}
+                                                                        width="180"
+                                                                    {{/if}}
+
+                                                                    {{if logo_height}}
+                                                                        height="{{var logo_height}}"
+                                                                    {{/if}}
+
+                                                                    src="{{var logo_url}}"
+                                                                    alt="{{var logo_alt}}"
+                                                                    border="0"
+                                                                />
+                                                            </a>
+                                                        </td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="div_z4yxec">
+        <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" class="table_ta7pkd">
+            <tbody>
+            <tr>
+                <td class="td_v3pxx3">
+                    <div class="mj-column-per-100 mj-outlook-group-fix div_96bwba">
+                        <table border="0" cellpadding="0" cellspacing="0" role="presentation" width="100%">
+                            <tbody>
+                            <tr>
+                                <td class="td_mgsr8w">
+                                    <table border="0" cellpadding="0" cellspacing="0" role="presentation" width="100%">
+                                        <tr>
+                                            <td align="left" class="td_jnmzfx">
+                                                <div class="div_c0j1w3">{{trans "We want to hear YOU!"}}</div>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="div_ld5jya">
+        <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" class="table_ke1rg0">
+            <tbody>
+            <tr>
+                <td class="td_i7wmnu">
+                    <div class="div_wjjta4">
+                        <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation"
+                               class="table_mlunl2">
+                            <tbody>
+                            <tr>
+                                <td class="td_9xy9mo">
+                                    <div class="mj-column-px-100 mj-outlook-group-fix div_ynv9uw">
+                                        <table border="0" cellpadding="0" cellspacing="0" role="presentation"
+                                               width="100%">
+                                            <tbody>
+                                            <tr>
+                                                <td class="td_zq511r">
+                                                    <table border="0" cellpadding="0" cellspacing="0"
+                                                           role="presentation" width="100%">
+                                                        <tr>
+                                                            <td align="left" class="td_85kork">
+                                                                <table border="0" cellpadding="0" cellspacing="0"
+                                                                       role="presentation" class="table_2p83q">
+                                                                    <tbody>
+                                                                    <tr>
+                                                                        <td class="td_9fxbko">
+                                                                            <img alt="Gift"
+                                                                                   height="70"
+                                                                                   src="{{view url='MageWorx_ReviewReminderBase::images/icons/gift-icon.png'}}"
+                                                                                   width="60"
+                                                                                   class="img_6cd4ak">
+                                                                        </td>
+                                                                    </tr>
+                                                                    </tbody>
+                                                                </table>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="mj-column-per-80 mj-outlook-group-fix div_5broz2">
+                                        <table border="0" cellpadding="0" cellspacing="0" role="presentation"
+                                               width="100%">
+                                            <tbody>
+                                            <tr>
+                                                <td class="td_rpvekv">
+                                                    <table border="0" cellpadding="0" cellspacing="0"
+                                                           role="presentation" width="100%">
+                                                        <tr>
+                                                            <td align="left" class="td_t6y78o">
+                                                                <div class="div_yflxrr">
+                                                                    {{trans 'Leave a review and receive up to <span class="mw_rw_discount">10% off</span> your next purchase' |raw}}
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="div_y85s15">
+        <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" class="table_lzmz4k">
+            <tbody>
+            <tr>
+                <td class="td_ncf2md">
+                    <div class="mj-column-per-100 mj-outlook-group-fix div_sjpd7p">
+                        <table border="0" cellpadding="0" cellspacing="0" role="presentation" width="100%">
+                            <tbody>
+                            <tr>
+                                <td class="td_ob4j5c">
+                                    <table border="0" cellpadding="0" cellspacing="0" role="presentation" width="100%">
+                                        <tr>
+                                            <td align="left" class="td_mfclpy">
+                                                <div class="div_ezk6cz">{{trans "Hi %customer_name!" customer_name=$customer_name}}</div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td align="left" class="td_gv9ccm">
+                                                <div class="div_4km99x">{{trans "I was indecisive on what size to get and I went through all of the questions and reviews to see if anyone who was similar to me provided any helpful info."}}</div>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="div_6sftdu">
+        <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" class="table_qgti3k">
+            <tbody>
+            <tr>
+                <td class="td_product">
+                {{layout handle="mageworx_reviewreminder_add_products_to_email" area="frontend" products=$products reviews=$reviews}}
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="div_lrjwme">
+        <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" class="table_wao6co">
+            <tbody>
+            <tr>
+                <td class="td_bg3a01">
+                    <div class="mj-column-per-100 mj-outlook-group-fix div_3uu7a6">
+                        <table border="0" cellpadding="0" cellspacing="0" role="presentation" width="100%">
+                            <tbody>
+                            <tr>
+                                <td class="td_vhzrph">
+                                    <table border="0" cellpadding="0" cellspacing="0" role="presentation" width="100%">
+                                        <tr>
+                                            <td class="td_bf4bv3"><p class="p_u3abqq"></p></td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="div_cpfc7g">
+        <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" class="table_qr69xs">
+            <tbody>
+            <tr>
+                <td class="td_ot1wo0">
+                    <div class="mj-column-per-100 mj-outlook-group-fix div_i9xetp">
+                        <table border="0" cellpadding="0" cellspacing="0" role="presentation" width="100%">
+                            <tbody>
+                            <tr>
+                                <td class="td_19go3l">
+                                    <table border="0" cellpadding="0" cellspacing="0" role="presentation" width="100%">
+                                        <tr>
+                                            <td align="left" class="td_8dbz08">
+                                                <div class="div_fshk87">What they say about us</div>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="div_ujyo5u">
+        <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" class="table_vvxbtc">
+            <tbody>
+            <tr>
+                <td class="td_9bi9wz">
+                    {{layout handle="mageworx_reviewreminder_add_reviews_to_email" area="frontend" products=$products reviews=$reviews}}
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="div_ec76g4">
+        <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" class="table_zcswjp">
+            <tbody>
+            <tr>
+                <td class="td_o7l19c">
+                    <div class="div_9oqrm8">
+                        <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation"
+                               class="table_v3atfo">
+                            <tbody>
+                            <tr>
+                                <td class="td_1chslj">
+                                    <div class="mj-column-per-100 mj-outlook-group-fix div_f0p63r">
+                                        <table border="0" cellpadding="0" cellspacing="0" role="presentation"
+                                               width="100%">
+                                            <tbody>
+                                            <tr>
+                                                <td class="td_hi0kqj">
+                                                    <table border="0" cellpadding="0" cellspacing="0"
+                                                           role="presentation" width="100%">
+                                                        <tr>
+                                                            <td class="td_h31cwl"><p class="p_3p0qv5"></p></td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="div_lfvbv0">
+                        <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation"
+                               class="table_xwei6r">
+                            <tbody>
+                            <tr>
+                                <td class="td_h0dgc6">
+                                    <div class="mj-column-per-100 mj-outlook-group-fix div_2ko3dn">
+                                        <table border="0" cellpadding="0" cellspacing="0" role="presentation"
+                                               width="100%">
+                                            <tbody>
+                                            <tr>
+                                                <td class="td_ysx9cw">
+                                                    <table border="0" cellpadding="0" cellspacing="0"
+                                                           role="presentation" width="100%">
+                                                        <tr>
+                                                            <td align="left" class="td_64vjmf">
+                                                                <div class="div_4yaktf">By clicking the Subscibe button,
+                                                                    you agree to our <a href="#">Terms &amp;
+                                                                        Conditions</a> and confirm that you&#x2019;ve
+                                                                    read the <a href="#">Privacy Policy</a>.
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td align="left" class="td_5q0dr9">
+                                                                <div class="div_61qjwd">
+                                                                    {{trans '&#xA9; 2008 - 2020 MageWorx.com. All Rights Reserved.' }} <a href="{{var unsubscribe_url}}">{{trans "Unsubscribe"}}</a>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="div_i9irkq">
+        <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" class="table_k93ab3">
+            <tbody>
+            <tr>
+                <td class="td_9huicp">
+                    <div class="mj-column-per-100 mj-outlook-group-fix div_yueftl">
+                        <table border="0" cellpadding="0" cellspacing="0" role="presentation" width="100%">
+                            <tbody>
+                            <tr>
+                                <td class="td_3mpj73">
+                                    <table border="0" cellpadding="0" cellspacing="0" role="presentation" width="100%">
+                                        <tr>
+                                            <td class="td_979tro">
+                                                <div class="div_5uhbr6">&#xA0;</div>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,68 @@
+<?php
+/**
+ * Top bar benefity (Hyvä)
+ */
+
+declare(strict_types=1);
+
+use Magento\Store\Model\ScopeInterface;
+use Hyva\Theme\ViewModel\HeroiconsOutline;
+use Hyva\Theme\ViewModel\HeroiconsSolid;
+
+/** @var \Magento\Framework\View\Element\Template $block */
+/** @var \Hyva\Theme\Model\ViewModelRegistry $viewModels */
+
+$hero      = $viewModels->require(HeroiconsOutline::class);
+$heroSolid = $viewModels->require(HeroiconsSolid::class);
+
+/** Získaj ScopeConfig – primárne z bloku, inak fallback cez ObjectManager */
+$scopeConfig = method_exists($block, 'getScopeConfig') ? $block->getScopeConfig() : null;
+if (!$scopeConfig) {
+    $scopeConfig = \Magento\Framework\App\ObjectManager::getInstance()
+        ->get(\Magento\Framework\App\Config\ScopeConfigInterface::class);
+}
+
+/** Načítaj benefity + CTA z adminu */
+$benefits = [
+    (string) $scopeConfig->getValue('metalio/topbar/benefit_1', ScopeInterface::SCOPE_STORE),
+    (string) $scopeConfig->getValue('metalio/topbar/benefit_2', ScopeInterface::SCOPE_STORE),
+    (string) $scopeConfig->getValue('metalio/topbar/benefit_3', ScopeInterface::SCOPE_STORE),
+    (string) $scopeConfig->getValue('metalio/topbar/benefit_4', ScopeInterface::SCOPE_STORE),
+];
+
+$ctaText = (string) $scopeConfig->getValue('metalio/topbar/cta_text', ScopeInterface::SCOPE_STORE);
+$ctaUrl  = (string) $scopeConfig->getValue('metalio/topbar/cta_url',  ScopeInterface::SCOPE_STORE);
+?>
+
+<!-- Top benefit bar (non-sticky) -->
+<div class="bg-primary text-white">
+  <div class="container mx-auto px-3 sm:px-4">
+    <div class="flex items-center gap-3 py-2">
+
+      <!-- Horizontálny zoznam benefitov: scroll len na mobile -->
+      <ul class="flex-1 flex items-center gap-4 sm:gap-6 overflow-x-auto md:overflow-visible scrollbar-none text-[12px] md:text-[13px]">
+        <?php foreach ($benefits as $benefit): ?>
+          <?php if (trim($benefit) !== ''): ?>
+            <li class="shrink-0 inline-flex items-center gap-2">
+              <span class="inline-grid place-items-center size-5 text-white/95">
+                <?= $hero->badgeCheckHtml('w-4 h-4 sm:w-5 sm:h-5') ?>
+              </span>
+              <span class="whitespace-nowrap"><?= $block->escapeHtml($benefit) ?></span>
+            </li>
+          <?php endif; ?>
+        <?php endforeach; ?>
+      </ul>
+
+      <!-- CTA: Pozrite si našu výrobu (z adminu) -->
+      <?php if (trim($ctaText) !== '' && trim($ctaUrl) !== ''): ?>
+        <a href="<?= $block->escapeUrl($ctaUrl) ?>"
+           class="hidden lg:inline-flex items-center gap-2 rounded-md bg-white/10 px-3 py-1.5 ring-1 ring-white/20 transition
+                  hover:bg-white/20 hover:ring-white/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white text-[12px] md:text-[13px]">
+          <?= $heroSolid->playHtml('w-5 h-5 text-white') ?>
+          <span><?= $block->escapeHtml($ctaText) ?></span>
+        </a>
+      <?php endif; ?>
+
+    </div>
+  </div>
+</div>

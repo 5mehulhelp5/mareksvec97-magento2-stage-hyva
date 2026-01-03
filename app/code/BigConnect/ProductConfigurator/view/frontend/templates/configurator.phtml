@@ -1,0 +1,151 @@
+<!-- jQuery UI Slider kód -->
+<script>
+    require(['jquery', 'mage/validation', 'mage/translate', 'Magento_Catalog/js/price-utils', 'jquery/ui'], function($, validation, $t, priceUtils){
+        $(document).ready(function() {
+
+            function validateInput($input, minVal, maxVal) {
+                var inputValue = parseFloat($input.val());
+                if (inputValue < minVal || inputValue > maxVal) {
+                    $input.val(minVal);
+                    $input.next('.mage-error').remove();
+                    $input.after('<div class="mage-error" generated="true">' + $t('Please enter a value between %1cm and %2cm').replace('%1', minVal).replace('%2', maxVal) + '</div>');
+                } else {
+                    $input.next('.mage-error').remove();
+                }
+            }
+
+             var toNumber = function (value) {
+                        var num = parseFloat(value);
+                        return Number.isFinite(num) ? num : 0;
+                    };
+
+                    var getOptionPrice = function ($elem) {
+                        var rawPrice = $elem.attr('price');
+                        if (rawPrice !== undefined) {
+                            return toNumber(rawPrice);
+                        }
+
+                        var dataAmount = $elem.data('price-amount');
+                        if (dataAmount !== undefined) {
+                            return toNumber(dataAmount);
+                        }
+
+                        return toNumber($elem.data('option-price'));
+                    };
+
+                    function getBasePrice($priceBox) {
+                        var priceAmount = toNumber($priceBox.find('.price-final_price .price-wrapper').attr('data-price-amount'));
+
+                        if (priceAmount) {
+                            return priceAmount;
+                        }
+
+                        // Fallback to priceBox config if the DOM attribute is missing or empty
+                        try {
+                            var priceBoxConfig = $priceBox.priceBox('option').prices || {};
+                            if (priceBoxConfig.finalPrice && priceBoxConfig.finalPrice.amount !== undefined) {
+                                return toNumber(priceBoxConfig.finalPrice.amount);
+                            }
+                            if (priceBoxConfig.basePrice && priceBoxConfig.basePrice.amount !== undefined) {
+                                return toNumber(priceBoxConfig.basePrice.amount);
+                            }
+                            return 0;
+                        } catch (e) {
+                            return 0;
+                        }
+                    }
+
+                    var $priceBox = $('.product-info-main [data-role="priceBox"]').first();
+                    if (!$priceBox.length) {
+                        $priceBox = $('[data-role="priceBox"]').first();
+                    }
+                    var basePriceSeed = getBasePrice($priceBox);
+
+                    function updatePrice() {
+                        var basePrice = getBasePrice($priceBox);
+                        if (!basePrice && basePriceSeed) {
+                            basePrice = basePriceSeed;
+                        }
+
+                        var optionsPrice = $('.product-options-wrapper .field .control .field.choice input.product-custom-option:checked').toArray().reduce(function(acc, elem) {
+                            return acc + getOptionPrice($(elem));
+                        }, 0);
+
+                        basePrice += optionsPrice;
+
+                        var calculatePriceForSlider = function(sliderClass) {
+                            var inputValue = toNumber($('.' + sliderClass).find('input.input-text.product-custom-option').val());
+                            var minValue = toNumber($('.' + sliderClass).attr('min'));
+                            var priceFactor = toNumber($('.' + sliderClass).data('option-price'));
+                            return (inputValue - minValue) * priceFactor;
+                        };
+
+                        var newPrice = basePrice + calculatePriceForSlider('slider-vyska') + calculatePriceForSlider('slider-sirka') + calculatePriceForSlider('slider-dlzka');
+                        var formattedPrice = priceUtils.formatPrice(newPrice);
+
+                        if($('.price-final_price .special-price').length > 0){
+                            $('.price-final_price .special-price .price-wrapper .price').text(formattedPrice);
+                        } else {
+                            $('.price-final_price .price-wrapper .price').text(formattedPrice);
+                        }
+                    }
+
+
+            var sliderAttributes = [
+                { class: 'slider-vyska', dataAttrMin: 'option-vyska-min', dataAttrMax: 'option-vyska-max', dataAttrPrice: 'option-price' },
+                { class: 'slider-sirka', dataAttrMin: 'option-sirka-min', dataAttrMax: 'option-sirka-max', dataAttrPrice: 'option-price' },
+                { class: 'slider-dlzka', dataAttrMin: 'option-dlzka-min', dataAttrMax: 'option-dlzka-max', dataAttrPrice: 'option-price' }
+            ];
+
+            $.each(sliderAttributes, function(index, item) {
+                $('.' + item.class).each(function() {
+                    var minVal = parseFloat($(this).data(item.dataAttrMin));
+                    var maxVal = parseFloat($(this).data(item.dataAttrMax));
+                    var $input = $(this).find('input.input-text.product-custom-option');
+                    $input.val(minVal);
+                    $input.on('change', function() {
+                        validateInput($(this), minVal, maxVal);
+                        updatePrice();
+                    });
+                });
+            });
+
+            var debounceTimer;
+
+            var debouncedUpdatePrice = function() {
+                clearTimeout(debounceTimer);
+                debounceTimer = setTimeout(updatePrice, 200); // 200ms oneskorenie
+            };
+
+            var observer = new MutationObserver(debouncedUpdatePrice);
+            observer.observe(document.querySelector('.price-final_price .price-wrapper .price'), { childList: true, subtree: true });
+
+
+            $('.product-price-slider').each(function(i) {
+                var slider_id = $(this).attr('option_id');
+                var slider_min = parseInt($('.range-slider-id-' + slider_id ).attr('min'));
+                var slider_max = parseInt($('.range-slider-id-' + slider_id ).attr('max'));
+
+                $('.product-price-slider.slider-' + slider_id ).slider({
+                    min: slider_min,
+                    max: slider_max,
+                    value: slider_min,
+                    slide: function(event, ui) {
+                        var option_id = this.getAttribute('option_id');
+                        $('#options_' + option_id + '_text').val(ui.value);
+
+                        var minVal = parseInt($('.range-slider-id-' + option_id ).attr('min'));
+                        var maxVal = parseInt($('.range-slider-id-' + option_id ).attr('max'));
+
+                        validateInput($('#options_' + option_id + '_text'), minVal, maxVal);
+                        updatePrice();
+                    }
+                });
+            });
+
+            $('input.product-custom-option').click(function() {
+                setTimeout(updatePrice, 20);
+            });
+        });
+    });
+</script>

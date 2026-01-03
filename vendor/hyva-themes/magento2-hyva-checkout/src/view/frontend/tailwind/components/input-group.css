@@ -1,0 +1,63 @@
+.input-group {
+    @apply relative flex gap-0 rounded-md shadow-sm hyva-checkout-border-slate-300;
+
+    &:focus-within {
+        @apply ring ring-primary ring-opacity-50 border-primary-lighter;
+    }
+
+    & > :not(:first-child) {
+        @apply rounded-l-none;
+    }
+
+    & > :not(:last-child) {
+        @apply rounded-r-none;
+    }
+
+    & > :not(:last-child, button, .btn) {
+        @apply border-r-0;
+    }
+}
+
+/* From here on these styles are Checkout specific */
+:where(#hyva-checkout-main) .input-group {
+    & :where(.form-input-addon) {
+        @apply rounded-md border bg-white p-2;
+        border-color: inherit;
+
+        &:first-child {
+            @apply pl-3 border-r-0;
+        }
+
+        &:last-child {
+            @apply pr-3 border-l-0;
+        }
+    }
+
+    &
+        > :where(
+            input:not([type="radio"], [type="checkbox"], [type="range"]),
+            select,
+            textarea
+        ) {
+        @apply shadow-none focus:ring-0;
+        border-color: inherit;
+
+        &:not(:first-child) {
+            @apply pl-2;
+        }
+
+        &:not(:last-child) {
+            @apply pr-2;
+        }
+    }
+
+    &
+        > :where(.form-input-addon)
+        + :where(
+            input:not([type="radio"], [type="checkbox"], [type="range"]),
+            select,
+            textarea
+        ) {
+        @apply border-l-0;
+    }
+}

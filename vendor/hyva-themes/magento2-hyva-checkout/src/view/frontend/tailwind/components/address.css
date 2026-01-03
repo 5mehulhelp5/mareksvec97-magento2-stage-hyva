@@ -1,0 +1,5 @@
+:where(#hyva-checkout-main) {
+    address {
+        @apply not-italic leading-loose;
+    }
+}

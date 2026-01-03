@@ -1,0 +1,166 @@
+.fieldset {
+  .input-text.product-custom-option {
+    border-radius: 3px;
+    border: 2px solid @border-color-light;
+    height: 45px;
+    &:focus {
+      background: @color_very_light_pastel_blue;
+      border: 2px solid @border-color-light;
+    }
+  }
+}
+.swatch-option {
+	font-weight: 500;
+	border-radius: 4px;
+	background: none;
+	padding: 10px;
+	height: 32px;
+	&.selected {
+		color: @contrast-black;
+	}
+	&:before {
+		border-radius: 2px;
+		box-shadow: 0 0 0 2px inset @border-color, 0 0 0 3px inset #fff;
+	}
+}
+
+// Colors swatch
+
+  .colors-dropdown {
+    position: relative;
+    width: 300px;
+    &.active {
+      .selected-option {
+        background: @color_very_light_pastel_blue;
+        border-radius: 3px 3px 0px 0px;
+        &:after {
+          transform: rotate(270deg);
+        }
+      }
+    }
+
+    .selected-option {
+      display: flex;
+      align-items: center;
+      height: 45px;
+      border: 2px solid @border-color-light;
+      padding: 0px 10px;
+      cursor: pointer;
+      background-color: @color_white;
+      font-size: 15px;
+      font-weight: 500;
+      border-radius: 3px;
+      &:after {
+    content: '';
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    margin-top: -.75rem;
+    width: 1.5rem;
+    height: 1.5rem;
+    background-color: @color_dark_blue;
+    -webkit-mask: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="red"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>') no-repeat 50% 50%;
+    -webkit-mask-size: 18px;
+    transform: rotate(90deg);
+}
+
+
+      img {
+        width: 30px;
+        height: 30px;
+        margin-right: 10px;
+        border-radius: 100%;
+        border: 2px solid @border-color-light;
+      }
+    }
+
+    .dropdown-options {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: none; // Skryté na začiatku
+      position: absolute;
+      width: 100%;
+      border: 1px solid @border-color-light;
+      border-top: 0px;
+      background: #fff;
+      z-index: 10;
+      max-height: 200px;
+      overflow-y: auto;
+      margin-top: -1px;
+
+      .dropdown-option {
+        display: flex;
+        align-items: center;
+        padding: 10px;
+        cursor: pointer;
+        border-bottom: 1px solid @border-color-light;
+
+        img {
+          width: 30px;
+          height: 30px;
+          margin-right: 10px;
+          border-radius: 100%;
+          border: 2px solid @border-color-light;
+        }
+
+        &:hover {
+          background: @border-color-light;
+        }
+
+        &:last-child {
+          border-bottom: none;
+        }
+      }
+    }
+  
+
+}
+
+
+.color_options .field.choice input[type="radio"]:checked + label span {
+  background-color: #F39C12; // Zvýraznenie pre "Hnedá"
+}
+
+
+// Classic radio
+.classic-options, .material-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  .field.choice {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    margin-bottom: 0px !important;
+
+    input[type="radio"] {
+      display: none;
+    }
+    label {
+    	display: flex;
+      border-radius: 3px;  
+    	border: 2px solid @border-color-light;
+    	flex-direction: row;
+    	align-items: center;
+    	padding: 10px 15px;
+    	height: 45px;
+    	font-size: 15px;
+    	cursor: pointer;
+    	gap: 5px;
+    	.price-notice {
+    		font-size: 14px;	
+    	}
+    }
+    input[type="radio"]:checked + label {
+
+ 
+      background: @color_very_light_pastel_blue;
+      
+
+    }
+}
+  
+}

@@ -1,0 +1,267 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2022-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd"
+>
+    <!-- PLUGINS -->
+    <type name="Magento\Checkout\Controller\Index\Index">
+        <!-- Intercept the Magento checkout index controller to point it (optionally) to a different checkout -->
+        <plugin name="Hyva_Checkout_Plugin_Magento_Checkout_Controller_Index_Index"
+                type="Hyva\Checkout\Plugin\Magento\Checkout\Controller\Index\Index"/>
+    </type>
+
+    <type name="Hyva\Checkout\Model\Config">
+        <!-- Developer mode: enable switching checkout (also mobile) via a request query param -->
+        <plugin name="Hyva_Checkout_Plugin_Model_Config"
+                type="Hyva\Checkout\Plugin\Model\Config"/>
+    </type>
+
+    <type name="Magento\Quote\Api\CartRepositoryInterface">
+        <!-- Handle "customer_comment" quote extension attribute -->
+        <plugin name="Hyva_Checkout_Plugin_Magento_Quote_Api_CartRepository"
+                type="Hyva\Checkout\Plugin\Magento\Quote\Api\CartRepository"/>
+    </type>
+
+    <type name="Magento\Framework\App\FrontControllerInterface">
+        <!-- Adds a 'x-built-with: Hyva Checkout' header to frontend requests
+             removing or altering the header message violates the terms of usage -->
+        <plugin name="Hyva_Checkout_Plugin_Magento_Framework_App_FrontControllerInterface"
+                type="Hyva\Checkout\Plugin\Magento\Framework\App\AddHyvaHeaderPlugin"/>
+    </type>
+
+    <type name="Magento\Checkout\CustomerData\Cart">
+        <plugin name="Hyva_Checkout_Plugin_Magento_Checkout_CustomerData_Cart"
+                type="Hyva\Checkout\Plugin\Magento\Checkout\CustomerData\AddHyvaCheckoutPlugin"/>
+    </type>
+
+    <type name="Magento\Quote\Api\PaymentMethodManagementInterface">
+        <plugin name="Hyva_Checkout_Plugin_Magento_Quote_Api_PaymentMethodManagementInterface"
+                type="Hyva\Checkout\Plugin\Magento\Quote\Api\PaymentMethodManagementInterface"/>
+    </type>
+
+    <type name="Hyva\Checkout\ViewModel\Checkout\Formatter">
+        <plugin name="Hyva_Checkout_Plugin_ViewModel\Checkout\Formatter"
+                type="Hyva\Checkout\Plugin\ViewModel\Checkout\Formatter"/>
+    </type>
+
+    <type name="Hyva\ThemeFallback\Config\ThemeFallback">
+        <plugin name="Hyva_Fallback_Plugin_Config\Hyva\Config"
+                type="Hyva\Checkout\Plugin\Hyva\Config\ThemeFallback"/>
+    </type>
+
+    <!-- PROXIES -->
+    <type name="Hyva\Checkout\Model\ConfigData\HyvaThemes\Developer\SystemConfigFixesWorkarounds">
+        <arguments>
+            <argument name="sessionCustomer" xsi:type="object">Magento\Customer\Model\Session\Proxy</argument>
+        </arguments>
+    </type>
+
+    <type name="Hyva\Checkout\Model\Navigation\NavigatorMemory">
+        <arguments>
+            <argument name="sessionCheckout" xsi:type="object">Magento\Checkout\Model\Session\Proxy</argument>
+        </arguments>
+    </type>
+
+    <!-- DI -->
+    <type name="Hyva\Checkout\Model\Layout">
+        <arguments>
+            <!-- Dynamic layout handle update processor mapping -->
+            <argument name="updateHandleProcessors" xsi:type="array">
+                <item name="default" xsi:type="object">Hyva\Checkout\Model\Layout\DefaultUpdateHandleProcessor</item>
+                <item name="custom" xsi:type="object">Hyva\Checkout\Model\Layout\CustomUpdateHandleProcessor</item>
+                <item name="layout" xsi:type="object">Hyva\Checkout\Model\Layout\LayoutUpdateHandleProcessor</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="Hyva\Checkout\Model\CustomConditionFactory">
+        <arguments>
+            <!-- Checkout XML: apply global condition types -->
+            <argument name="customConditionTypes" xsi:type="array">
+                <item name="is_always_allow" xsi:type="string">Hyva\Checkout\Model\CustomCondition\IsAlwaysAllow</item>
+                <item name="is_customer" xsi:type="string">Hyva\Checkout\Model\CustomCondition\IsCustomer</item>
+                <item name="is_guest" xsi:type="string">Hyva\Checkout\Model\CustomCondition\IsGuest</item>
+                <item name="is_physical" xsi:type="string">Hyva\Checkout\Model\CustomCondition\IsPhysical</item>
+                <item name="is_virtual" xsi:type="string">Hyva\Checkout\Model\CustomCondition\IsVirtual</item>
+                <item name="is_device" xsi:type="string">Hyva\Checkout\Model\CustomCondition\IsDevice</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="Hyva\Checkout\Model\Form\AbstractEntityForm">
+        <arguments>
+            <argument name="entityFormModifiers" xsi:type="array">
+                <item name="with_base_attributes" sortOrder="900" xsi:type="object">Hyva\Checkout\Model\Form\EntityFormModifier\WithBaseAttributesModifier</item>
+                <item name="with_base_icons_modifier" sortOrder="910" xsi:type="object">Hyva\Checkout\Model\Form\EntityFormModifier\WithBaseIconsModifier</item>
+                <item name="with_class_attribute" sortOrder="910" xsi:type="object">Hyva\Checkout\Model\Form\EntityFormModifier\WithClassAttributeModifier</item>
+                <item name="with_eav_attribute" sortOrder="920" xsi:type="object">Hyva\Checkout\Model\Form\EntityFormModifier\WithEavAttributeModifier</item>
+                <item name="with_label_element" sortOrder="930" xsi:type="object">Hyva\Checkout\Model\Form\EntityFormModifier\WithLabelElementModifier</item>
+                <item name="with_autocomplete_attributes" sortOrder="940" xsi:type="object">Hyva\Checkout\Model\Form\EntityFormModifier\WithAutoCompleteAttributesModifier</item>
+            </argument>
+
+            <!-- Injecting required factories onto the form to create special items needed within the form or its elements. -->
+            <!-- (The sortOrder is required because otherwise the entityFormModifiers constructor argument will not be sorted) -->
+            <argument name="factories" xsi:type="array">
+                <item name="elements" sortOrder="10" xsi:type="object">Hyva\Checkout\Model\Form\EntityFormFactory</item>
+                <item name="fields" sortOrder="20" xsi:type="object">Hyva\Checkout\Model\Form\EntityFormFieldFactory</item>
+                <item name="eav_fields" sortOrder="30" xsi:type="object">Hyva\Checkout\Model\Form\EntityField\EavAttributeFieldFactory</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="Hyva\Checkout\Model\Form\EntityFormModifier\WithAutoCompleteAttributesModifier">
+        <arguments>
+            <!-- Mapping form field names to autocomplete attributes -->
+            <argument name="autocompleteAttributeFieldsMapping" xsi:type="array">
+                <item name="firstname" xsi:type="string">given-name</item>
+                <item name="prefix" xsi:type="string">honorific-suffix</item>
+                <item name="middlename" xsi:type="string">additional-name</item>
+                <item name="lastname" xsi:type="string">family-name</item>
+                <item name="gender" xsi:type="string">honorific-prefix</item>
+                <item name="telephone" xsi:type="string">tel</item>
+                <item name="company" xsi:type="string">organization</item>
+                <item name="dob" xsi:type="string">bday</item>
+                <item name="postcode" xsi:type="string">postal-code</item>
+                <item name="country_id" xsi:type="string">country-name</item>
+                <item name="region" xsi:type="string">on</item>
+                <item name="city" xsi:type="string">on</item>
+                <item name="street" xsi:type="string">on</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="Hyva\Checkout\Model\Form\EntityForm\EavAttributeShippingAddressForm">
+        <arguments>
+            <!-- Inject default shipping address entity form modifiers -->
+            <argument name="entityFormModifiers" xsi:type="array">
+                <item name="with_region" sortOrder="200" xsi:type="object">Hyva\Checkout\Model\Form\EntityFormModifier\WithRegionModifier</item>
+                <item name="with_postcode" sortOrder="300" xsi:type="object">Hyva\Checkout\Model\Form\EntityFormModifier\WithPostcodeModifier</item>
+                <item name="with_authentication" sortOrder="400" xsi:type="object">Hyva\Checkout\Model\Form\EntityFormModifier\WithAuthenticationModifier</item>
+                <item name="with_street" sortOrder="500" xsi:type="object">Hyva\Checkout\Model\Form\EntityFormModifier\WithStreetModifier</item>
+                <item name="with_telephone" sortOrder="500" xsi:type="object">Hyva\Checkout\Model\Form\EntityFormModifier\WithTelephoneModifier</item>
+                <item name="with_country_id" sortOrder="500" xsi:type="object">Hyva\Checkout\Model\Form\EntityFormModifier\WithCountryModifier</item>
+                <item name="with_company" sortOrder="500" xsi:type="object">Hyva\Checkout\Model\Form\EntityFormModifier\WithCompanyModifier</item>
+
+                <!-- Specific event driven Magewire form modifiers -->
+                <item name="with_magewire_address" sortOrder="500" xsi:type="object">Hyva\Checkout\Model\Form\EntityFormModifier\MagewireAddressModifier</item>
+                <item name="with_magewire_authentication" sortOrder="510" xsi:type="object">Hyva\Checkout\Model\Form\EntityFormModifier\MagewireAuthenticationModifier</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="Hyva\Checkout\Model\Form\EntityForm\EavAttributeBillingAddressForm">
+        <arguments>
+            <!-- Inject default billing address entity form modifiers -->
+            <argument name="entityFormModifiers" xsi:type="array">
+                <item name="with_region" sortOrder="200" xsi:type="object">Hyva\Checkout\Model\Form\EntityFormModifier\WithRegionModifier</item>
+                <item name="with_postcode" sortOrder="300" xsi:type="object">Hyva\Checkout\Model\Form\EntityFormModifier\WithPostcodeModifier</item>
+                <item name="with_authentication" sortOrder="400" xsi:type="object">Hyva\Checkout\Model\Form\EntityFormModifier\WithAuthenticationModifier</item>
+                <item name="with_street" sortOrder="500" xsi:type="object">Hyva\Checkout\Model\Form\EntityFormModifier\WithStreetModifier</item>
+                <item name="with_country_id" sortOrder="500" xsi:type="object">Hyva\Checkout\Model\Form\EntityFormModifier\WithCountryModifier</item>
+                <item name="with_company" sortOrder="500" xsi:type="object">Hyva\Checkout\Model\Form\EntityFormModifier\WithCompanyModifier</item>
+
+                <!-- Specific event driven Magewire form modifiers -->
+                <item name="with_magewire_address" sortOrder="500" xsi:type="object">Hyva\Checkout\Model\Form\EntityFormModifier\MagewireAddressModifier</item>
+                <item name="with_magewire_authentication" sortOrder="510" xsi:type="object">Hyva\Checkout\Model\Form\EntityFormModifier\MagewireAuthenticationModifier</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="Hyva\Checkout\Model\Form\EntityForm\GuestDetailsForm">
+        <arguments>
+            <argument name="entityFormModifiers" xsi:type="array">
+                <item name="with_authentication_feature" xsi:type="object">Hyva\Checkout\Model\Form\EntityFormModifier\GuestDetailsForm\WithAuthenticationModifier</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="Hyva\Checkout\Model\Form\EntityFormProvider">
+        <arguments>
+            <!-- Form API: entity form type registration -->
+            <argument name="entityForms" xsi:type="array">
+                <!-- Inject default shipping address form -->
+                <item name="shipping" xsi:type="object">Hyva\Checkout\Model\Form\EntityForm\EavAttributeShippingAddressForm</item>
+                <!-- Inject default billing address form -->
+                <item name="billing" xsi:type="object">Hyva\Checkout\Model\Form\EntityForm\EavAttributeBillingAddressForm</item>
+                <!-- Inject default guest details address form -->
+                <item name="guest_detail" xsi:type="object">Hyva\Checkout\Model\Form\EntityForm\GuestDetailsForm</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="Hyva\Checkout\Model\Form\EntityFormFactory">
+        <arguments>
+            <argument name="elements" xsi:type="array">
+                <!-- Default EAV fields -->
+                <item name="telephone" xsi:type="string">Hyva\Checkout\Model\Form\EntityField\EavEntityAddress\TelephoneAttributeField</item>
+                <item name="street" xsi:type="string">Hyva\Checkout\Model\Form\EntityField\EavEntityAddress\StreetAttributeField</item>
+                <item name="region" xsi:type="string">Hyva\Checkout\Model\Form\EntityField\EavEntityAddress\RegionAttributeField</item>
+                <item name="country_id" xsi:type="string">Hyva\Checkout\Model\Form\EntityField\EavEntityAddress\CountryAttributeField</item>
+                <item name="postcode" xsi:type="string">Hyva\Checkout\Model\Form\EntityField\EavEntityAddress\PostcodeAttributeField</item>
+                <item name="prefix" xsi:type="string">Hyva\Checkout\Model\Form\EntityField\EavEntityAddress\PrefixAttributeField</item>
+                <item name="gender" xsi:type="string">Hyva\Checkout\Model\Form\EntityField\EavEntityAddress\GenderAttributeField</item>
+
+                <!-- Regular fields -->
+                <item name="id" xsi:type="string">Hyva\Checkout\Model\Form\EntityField\PrimaryKey</item>
+                <item name="save" xsi:type="string">Hyva\Checkout\Model\Form\EntityField\SaveAs</item>
+
+                <!-- Regular Elements -->
+                <item name="submit" xsi:type="string">Hyva\Checkout\Model\Form\EntityFormElement\Submit</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="Hyva\Checkout\Magewire\Main">
+        <arguments>
+            <!-- Apply additional server memo data (will be sent along with each update request) -->
+            <argument name="serverMemoDataConfig" xsi:type="array">
+                <item name="step_history" xsi:type="object">Hyva\Checkout\Model\Magewire\ServerMemoConfig\StepHistory</item>
+                <item name="messenger_api" xsi:type="object">Hyva\Checkout\Model\Magewire\ServerMemoConfig\MessengerApi</item>
+                <item name="navigator" xsi:type="object">Hyva\Checkout\Model\Magewire\ServerMemoConfig\Navigator</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="Hyva\Checkout\Plugin\Magento\Sales\Api\Data\OrderStatusHistoryInterface">
+        <arguments>
+            <!-- Apply the "Me" customer comment when the customer loads -->
+            <argument name="commentPrefixOnCustomerComment" xsi:type="string">Me</argument>
+        </arguments>
+    </type>
+
+    <type name="Magewirephp\Magewire\Model\ComponentResolver">
+        <arguments>
+            <argument name="resolvers" xsi:type="array">
+                <item name="checkout" sortOrder="100" xsi:type="object">Hyva\Checkout\Model\Magewire\Component\Resolver\Checkout</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="Magento\Customer\CustomerData\SectionPoolInterface">
+        <arguments>
+            <argument name="sectionSourceMap" xsi:type="array">
+                <item name="hyva_checkout" xsi:type="string">Hyva\Checkout\CustomerData\HyvaCheckout</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="Hyva\Checkout\Observer\Frontend\HyvaCheckoutSalesModelServiceQuoteSubmitBefore">
+        <arguments>
+            <!-- Guest customer name fields to copy to quote & order -->
+            <argument name="customerNameFields" xsi:type="array">
+                <item name="prefix" xsi:type="const">\Magento\Sales\Api\Data\OrderAddressInterface::PREFIX</item>
+                <item name="firstname" xsi:type="const">\Magento\Sales\Api\Data\OrderAddressInterface::FIRSTNAME</item>
+                <item name="middlename" xsi:type="const">\Magento\Sales\Api\Data\OrderAddressInterface::MIDDLENAME</item>
+                <item name="lastname" xsi:type="const">\Magento\Sales\Api\Data\OrderAddressInterface::LASTNAME</item>
+                <item name="suffix" xsi:type="const">\Magento\Sales\Api\Data\OrderAddressInterface::SUFFIX</item>
+            </argument>
+        </arguments>
+    </type>
+</config>

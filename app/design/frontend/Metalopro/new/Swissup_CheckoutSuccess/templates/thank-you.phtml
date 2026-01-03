@@ -1,0 +1,35 @@
+<?php /** @var $block \Magento\Framework\View\Element\Template */ ?>
+<?php
+    $helper = $this->helper('Swissup\CheckoutSuccess\Helper\Data');
+    $successBlock = $block->getLayout()->getBlock('checkout.success');
+?>
+<div class="block thank-you-note">
+    <svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect width="80" height="80" rx="40" fill="#D3F8E0"/>
+        <path fill-rule="evenodd" clip-rule="evenodd" d="M40 24C31.1634 24 24 31.1634 24 40C24 48.8366 31.1634 56 40 56C48.8366 56 56 48.8366 56 40C56 31.1634 48.8366 24 40 24ZM47.4874 34.0263C48.1356 34.6268 48.1743 35.6392 47.5737 36.2874L38.9468 45.5992C37.9576 46.6669 36.3045 46.6669 35.3153 45.5992L32.4263 42.4808C31.8257 41.8326 31.8644 40.8203 32.5126 40.2197C33.1608 39.6192 34.1732 39.6579 34.7737 40.3061L37.131 42.8505L45.2263 34.1126C45.8268 33.4644 46.8392 33.4257 47.4874 34.0263Z" fill="#1DAF4E"/>
+    </svg>
+
+    <div class="block-title">
+        <strong><?= __('Thank you for your purchase!') ?></strong>
+    </div>
+
+    <div class="block-content">
+        <?php if ($successBlock->getOrderId()):?>
+            <?php if ($successBlock->getCanViewOrder()) :?>
+                <p><?= __('Your order number is: %1.', sprintf('<a href="%s" class="order-number"><strong>%s</strong></a>', $block->escapeHtml($successBlock->getViewOrderUrl()), $block->escapeHtml($successBlock->getOrderId()))) ?></p>
+            <?php  else :?>
+                <p><?= __('Your order # is: <span>%1</span>.', $block->escapeHtml($successBlock->getOrderId())) ?></p>
+            <?php endif;?>
+                <p><?= /* @escapeNotVerified */ __('We\'ll email you an order confirmation with details and tracking info.') ?></p>
+            <?php if ($successBlock->getCanPrintOrder() && $successBlock->getCanViewOrder()) :?>
+                <p><?= /* @escapeNotVerified */ __('Click <a href="%1" onclick="this.target=\'_blank\'">here to print</a> a copy of your order confirmation.', $successBlock->getPrintUrl()) ?></p>
+            <?php endif;?>
+        <?php endif;?>
+
+        <div class="actions-toolbar">
+            <div class="primary">
+                <a class="action primary continue" href="<?= /* @escapeNotVerified */ $successBlock->getContinueUrl() ?>"><span><?= /* @escapeNotVerified */ __('Continue Shopping') ?></span></a>
+            </div>
+        </div>
+    </div>
+</div>

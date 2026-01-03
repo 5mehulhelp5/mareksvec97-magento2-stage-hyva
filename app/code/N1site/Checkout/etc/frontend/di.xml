@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+
+    <type name="Magento\Checkout\CustomerData\Cart">
+        <plugin name="N1siteCartPlugin" type="N1site\Checkout\Plugin\CustomerData\Checkout\Cart"/>
+    </type>
+
+    <!-- <type name="Magento\Checkout\CustomerData\DefaultItem"> -->
+        <!-- <plugin name="N1siteCheckoutDefaultItem" type="N1site\Checkout\Plugin\DefaultItem" disabled="false" sortOrder="10"/> -->
+    <!-- </type> -->
+	
+	<type name="Magento\Checkout\Block\Checkout\LayoutProcessor">
+		<plugin name="N1siteCheckoutLayoutProcessor" type="N1site\Checkout\Plugin\LayoutProcessor" sortOrder="99999"/>
+	</type>
+	
+    <!-- <type name="Magento\Quote\Model\Cart\ShippingMethodConverter"> -->
+        <!-- <plugin name="N1siteCheckoutShippingMethodConverter" type="N1site\Checkout\Plugin\ShippingMethodConverter"/> -->
+    <!-- </type>	 -->
+	
+    <type name="Magento\Checkout\Model\CompositeConfigProvider">
+        <arguments>
+            <argument name="configProviders" xsi:type="array">
+                <item name="N1siteCheckoutConfigProvider" xsi:type="object">N1site\Checkout\Model\configKO</item>
+            </argument>
+        </arguments>
+    </type>
+
+</config>

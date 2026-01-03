@@ -1,0 +1,49 @@
+@layer components {
+  .trustbar {
+    @apply bg-container rounded-2xl mb-5 p-4 sm:p-5 text-center shadow-sm text-primary;
+  }
+
+  .trustbar__thumbs {
+    @apply mx-auto mb-2 flex items-center justify-center -space-x-2;
+  }
+
+  .trustbar__thumb {
+    @apply ring-2 ring-white rounded-full hover:ring-primary transition focus:outline-none focus-visible:ring-2 focus-visible:ring-primary;
+  }
+
+  .trustbar__thumb-image {
+    @apply h-10 w-10 rounded-full object-cover;
+  }
+
+  .trustbar__title {
+    @apply mt-1 text-[22px] sm:text-2xl font-extrabold text-primary-darker;
+  }
+
+  .trustbar__stars {
+    @apply align-middle inline-flex items-center ml-1;
+  }
+
+  .trustbar__meta {
+    @apply mt-1 text-sm font-semibold text-secondary-darker;
+  }
+
+  .trustbar__overlay {
+    @apply fixed inset-0 flex items-center justify-center bg-black/60 z-40;
+  }
+
+  .trustbar__modal {
+    @apply relative max-w-[90vw] max-h-[90vh];
+  }
+
+  .trustbar__modal-image {
+    @apply max-w-[90vw] max-h-[90vh] object-contain rounded-xl shadow-2xl;
+  }
+
+  .trustbar__close {
+    @apply z-[9999] absolute top-3 right-3 rounded-full bg-white/90 hover:bg-white p-2 shadow ring-1 ring-gray-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary;
+  }
+
+  .trustbar__nav {
+    @apply rounded-full bg-white/90 hover:bg-white p-2 shadow ring-1 ring-gray-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary;
+  }
+}

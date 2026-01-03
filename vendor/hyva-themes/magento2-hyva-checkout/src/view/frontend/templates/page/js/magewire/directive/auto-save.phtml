@@ -1,0 +1,95 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2022-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+declare(strict_types=1);
+
+use Hyva\Theme\ViewModel\HyvaCsp;
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Element\Template;
+
+/** @var Escaper $escaper */
+/** @var Template $block */
+/** @var HyvaCsp $hyvaCsp */
+?>
+<script>
+    Magewire.directive('auto-save', (element, directive, component) => {
+        const form = component.el instanceof HTMLFormElement ? component.el : document.getElementById(directive.value);
+
+        if (! (form instanceof HTMLFormElement)) {
+            console.error('Magewire: [wire:auto-save] form not found or invalid.', element);
+            return;
+        }
+        if (! element.hasAttribute('wire:model.defer')) {
+            console.error('Magewire: [wire:model.defer] is required for [wire:auto-save] to function properly.', element);
+            return;
+        }
+        if (! directive.modifiers.includes('self')) {
+            return;
+        }
+
+        let initialValue = element.value;
+
+        const sync = async () => {
+            let elementValue = value(element);
+
+            if (elementValue === initialValue) {
+                return;
+            }
+
+            if (! element.hasAttribute('data-validate')) {
+                component.fireMessage();
+                return;
+            }
+
+            <?php /* Setup advanced form validation. */ ?>
+            const validation = hyva.formValidation(form);
+            validation.setupField(element);
+
+            await validation.validateField(validation.fields[element.name]).then(result => {
+                if (result === true) {
+                    component.fireMessage();
+                    initialValue = elementValue;
+                }
+            });
+        };
+
+        const value = element => {
+            if (element instanceof HTMLInputElement) {
+                if (['checkbox', 'radio'].includes(element.type)) {
+                    return element.checked;
+                }
+                return element.value;
+            }
+
+            if (element instanceof HTMLTextAreaElement || element instanceof HTMLSelectElement) {
+                return element.value;
+            }
+
+            return null;
+        }
+
+        const debounce = (func, delay) => {
+            let timeout;
+
+            return (...args) => {
+                clearTimeout(timeout);
+                timeout = setTimeout(() => func.apply(this, args), delay);
+            };
+        };
+
+        const debounced = debounce(sync, directive.durationOr(1500));
+
+        element.addEventListener('focus', () => {
+            initialValue = value(element);
+        });
+
+        element.addEventListener('keydown', debounced);
+        element.addEventListener('change', debounced);
+    });
+</script>
+<?php $hyvaCsp->registerInlineScript() ?>

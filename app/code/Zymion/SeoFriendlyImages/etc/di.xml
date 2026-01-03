@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Magento\Catalog\Helper\Image" type="Zymion\SeoFriendlyImages\Helper\Catalog\Image" />
+    <preference for="Magento\Catalog\Model\Product\Image" type="Zymion\SeoFriendlyImages\Model\Product\Image" />
+	<preference for="Magento\Sitemap\Model\ResourceModel\Catalog\Product" type="Zymion\SeoFriendlyImages\Model\ResourceModel\Catalog\Product" />
+	<preference for="Magento\Catalog\Model\ResourceModel\Product\Gallery" type="Zymion\SeoFriendlyImages\Model\ResourceModel\Product\Gallery" />
+	<preference for="Magento\Catalog\Block\Product\ImageFactory" type="Zymion\SeoFriendlyImages\Block\Product\ImageFactory" />
+	<preference for="Magento\Swatches\Helper\Data" type="Zymion\SeoFriendlyImages\Helper\Swatches\Data" />
+	<preference for="Magento\CatalogGraphQl\Model\Resolver\Product\MediaGallery\Url" type="Zymion\SeoFriendlyImages\Model\Resolver\Product\MediaGallery\Url" />
+
+	<type name="Magento\Catalog\Model\Product">
+      	<plugin name="Zymion_SeoFriendlyImages_Magento_Catalog_Model_Product_Plugin" type="Zymion\SeoFriendlyImages\Plugin\Magento\Catalog\Model\Product" sortOrder="1" disabled="false" />
+    </type>
+</config>

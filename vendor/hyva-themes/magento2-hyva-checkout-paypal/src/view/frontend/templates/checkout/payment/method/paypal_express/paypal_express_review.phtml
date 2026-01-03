@@ -1,0 +1,53 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2022-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+declare(strict_types=1);
+
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Element\Template;
+use Hyva\CheckoutPayPal\Magewire\Payment\Method\PaypalExpress;
+
+/** @var Escaper $escaper */
+/** @var Template $block */
+/** @var PaypalExpress $magewire */
+
+$magewire = $block->getParentBlock()->getData('magewire');
+$methodCode = $magewire->getMethodCode();
+?>
+<div class="relative z-10 rounded-lg bg-gray-100 md:w-11/12 w-full">
+    <?php if ($magewire->fundingSource): ?>
+        <div class="pp-review-actions flex gap-x-3 p-4 mb-2">
+            <p class="font-bold col-span-2 md:col-span-6">
+                <span><?= $escaper->escapeHtmlAttr(__('Funding:'))?></span>
+            </p>
+            <p class="col-span-4 md:col-span-6">
+                <em class="not-italic"><?= $escaper->escapeHtml(ucfirst($magewire->fundingSource)) ?></em>
+            </p>
+        </div>
+    <?php endif ?>
+
+    <div class="pp-review-actions flex flex-wrap gap-x-4 p-4 md:w-11/12 w-full">
+        <button class="btn btn-secondary justify-center md:w-auto w-full mb-4 md:mb-0"
+                title="<?= $escaper->escapeHtmlAttr(__('Edit')) ?>"
+                wire:click="edit"
+                wire:loading.attr="disabled"
+                wire:loading.class="disabled"
+        >
+            <?= $escaper->escapeHtml(__('Edit Payment Information')) ?>
+        </button>
+        <button class="btn justify-center md:w-auto w-full mb-4 md:mb-0"
+                title="<?= $escaper->escapeHtmlAttr(__('Cancel')) ?>"
+                wire:click="cancel"
+                wire:loading.attr="disabled"
+                wire:loading.class="disabled"
+        >
+            <?= $escaper->escapeHtml(__('Cancel Payment')) ?>
+        </button>
+
+    </div>
+</div>

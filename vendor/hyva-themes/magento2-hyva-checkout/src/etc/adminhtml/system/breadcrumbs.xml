@@ -1,0 +1,91 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2022-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+-->
+<include xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_include.xsd"
+>
+    <group
+        id="breadcrumbs"
+        showInDefault="1"
+        showInStore="1"
+        showInWebsite="1"
+        sortOrder="30"
+    >
+        <label>Breadcrumbs</label>
+
+        <field
+            id="show"
+            showInDefault="1"
+            showInStore="1"
+            showInWebsite="1"
+            sortOrder="10"
+            translate="label"
+            type="select"
+            canRestore="1"
+        >
+            <label>Show</label>
+            <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+        </field>
+
+        <field
+            id="display_type"
+            showInDefault="1"
+            showInStore="1"
+            showInWebsite="1"
+            sortOrder="10"
+            translate="label"
+            type="select"
+            canRestore="1"
+        >
+            <depends>
+                <field id="hyva_themes_checkout/breadcrumbs/show">1</field>
+            </depends>
+            <label>Breadcrumbs display</label>
+            <comment>Classic breadcrumb or progress bar</comment>
+            <source_model>Hyva\Checkout\Model\Config\Source\BreadcrumbRenderStyles</source_model>
+        </field>
+
+        <field
+            id="show_cart_item"
+            showInDefault="1"
+            showInStore="1"
+            showInWebsite="1"
+            sortOrder="10"
+            translate="label"
+            type="select"
+            canRestore="1"
+        >
+            <depends>
+                <field id="hyva_themes_checkout/breadcrumbs/show">1</field>
+            </depends>
+            <label>Show Cart Item</label>
+            <comment>Will show the cart as first step in the breadcrumbs. This item will only be visible on a multistep checkout.</comment>
+            <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+        </field>
+
+        <field
+            id="show_waypoints"
+            showInDefault="1"
+            showInStore="1"
+            showInWebsite="1"
+            sortOrder="10"
+            translate="label"
+            type="select"
+            canRestore="1"
+        >
+            <depends>
+                <field id="hyva_themes_checkout/breadcrumbs/show">1</field>
+                <field id="hyva_themes_checkout/breadcrumbs/display_type">classic</field>
+            </depends>
+            <label>Show Waypoints</label>
+            <comment>Waypoints are the upcoming/next steps. Current and previous will always be shown.</comment>
+            <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+        </field>
+    </group>
+</include>

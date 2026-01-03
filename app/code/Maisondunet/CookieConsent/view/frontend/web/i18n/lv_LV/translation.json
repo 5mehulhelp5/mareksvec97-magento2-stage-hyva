@@ -1,0 +1,59 @@
+{
+  "modal_trigger_title": "Sīkdatņu iestatījumi",
+
+  "consent_modal_title": "Mēs izmantojam sīkdatnes!",
+  "consent_modal_description": "Šī tīmekļa vietne izmanto pamata sīkdatnes, lai nodrošinātu tās pareizu darbību, un izsekošanas sīkdatnes, lai saprastu, kā jūs mijiedarbojaties ar vietni. Šīs sīkdatnes tiks iestatītas tikai ar jūsu piekrišanu.",
+  "consent_modal_primary_btn": "Piekrītu",
+  "consent_modal_secondary_btn_settings": "Pielāgot",
+  "consent_modal_secondary_btn_accept_necessary": "Pieņemt nepieciešamās",
+
+  "settings_modal_title": "Sīkdatņu iestatījumi",
+  "settings_modal_save_settings_btn": "Saglabāt iestatījumus",
+  "settings_modal_accept_all_btn": "Pieņemt visu",
+  "settings_modal_reject_all_btn": "Pieņemt nepieciešamās",
+  "settings_modal_close_btn_label": "Aizvērt",
+
+  "settings_modal_before_consent_title": "Sīkdatņu izmantošana",
+  "settings_modal_before_consent_description": "Mēs izmantojam sīkdatnes, lai nodrošinātu vietnes pamatfunkcijas un uzlabotu jūsu tiešsaistes pieredzi. Jūs varat jebkurā laikā izvēlēties, vai pieņemt vai noraidīt katras kategorijas sīkdatnes.",
+
+  "settings_modal_after_consent_title": "Vairāk informācijas",
+  "settings_modal_after_consent_description": "Ja jums ir jautājumi par mūsu sīkdatņu politiku un jūsu izvēlēm, lūdzu, sazinieties ar mums.",
+
+  "functionality_storage_title": "Funkcionālās sīkdatnes",
+  "functionality_storage_description": "Šīs sīkdatnes ir nepieciešamas, lai nodrošinātu mūsu vietnes pareizu darbību. Bez šīm sīkdatnēm vietne var nedarboties pareizi.",
+
+  "personalization_storage_title": "Personalizācijas sīkdatnes",
+  "personalization_storage_description": "Personalizācijas sīkdatnes var izmantot trešo pušu sīkdatnes, lai palīdzētu personalizēt saturu un izsekot lietotājus dažādās tīmekļa vietnēs un ierīcēs.",
+
+  "security_storage_title": "Drošības sīkdatnes",
+  "security_storage_description": "Drošības sīkdatnes ļauj saglabāt informāciju, kas saistīta ar drošību, piemēram, autentifikāciju, aizsardzību pret krāpšanu un citus lietotāju aizsardzības pasākumus.",
+
+  "ad_storage_title": "Reklāmas sīkdatnes",
+  "ad_storage_description": "Reklāmas sīkdatnes tiek izmantotas gan mums, gan mūsu partneriem, lai parādītu saturu vai reklāmas, kas ir jums atbilstošas mūsu vietnē un trešo pušu vietnēs. Tas ļauj mums veidot profilus, pamatojoties uz jūsu interesēm, kas tiek saukti par pseidonimizētiem profiliem. Pamatojoties uz šo informāciju, parasti nav iespējams tieši identificēt jūs kā personu, jo tiek izmantoti tikai pseidonimizēti dati. Ja jūs nepiekrītat, jūs nesaņemsiet pielāgotu saturu un reklāmas, kas atbilst jūsu interesēm.",
+
+  "analytics_storage_title": "Analītiskās sīkdatnes",
+  "analytics_storage_description": "Analītiskās sīkdatnes ļauj mums novērtēt mūsu tīmekļa vietnes un mūsu reklāmas kampaņu veiktspēju. Mēs tās izmantojam, lai noteiktu apmeklējumu skaitu un avotus mūsu tīmekļa vietnē. Dati, kas iegūti, izmantojot šīs sīkdatnes, tiek apstrādāti apkopotā veidā, neizmantojot identifikatorus, kas norādītu uz konkrētiem mūsu tīmekļa vietnes lietotājiem. Ja deaktivizējat analītiskās sīkdatnes saistībā ar jūsu apmeklējumu, mēs zaudēsim iespēju analizēt veiktspēju un optimizēt mūsu pasākumus.",
+
+  "ad_user_data_title": "Datu koplietošanas sīkdatnes",
+  "ad_user_data_description": "Datu koplietošanas sīkdatne ļauj mūsu tīmekļa vietnei ievērot lietotāju izvēles attiecībā uz reklāmu. Aktivizējot šo sīkdatni, jūs piekrītat, ka mēs nosūtām lietotāja datus, kas saistīti ar reklāmu, mūsu partneriem. Tas ļauj mums pielāgot reklāmas pieredzi atbilstoši jūsu vēlmēm. Ja izvēlaties šo sīkdatni deaktivizēt, mēs nevarēsim pielāgot reklāmas atbilstoši jūsu vēlmēm, taču jūs joprojām redzēsiet reklāmas, kas jums var būt mazāk atbilstošas. Mēs respektējam jūsu izvēli un ņemam vērā jūsu reklāmas preferences.",
+
+  "ad_personalization_title": "Sīkdatnes personalizētam saturam",
+  "ad_personalization_description": "Sīkdatne personalizētam saturam ļauj mūsu tīmekļa vietnei pielāgot reklāmas atbilstoši katra lietotāja vēlmēm. Aktivizējot šo sīkdatni, jūs piekrītat reklāmas personalizācijai, pamatojoties uz jūsu interesēm. Tas ļauj mums nodrošināt atbilstošākas reklāmas, kas ir pielāgotas jūsu vajadzībām. Ja izvēlaties šo sīkdatni deaktivizēt, mēs nevarēsim pielāgot reklāmas atbilstoši jūsu vēlmēm, taču jūs joprojām redzēsiet reklāmas, kas var būt mazāk atbilstošas. Mēs respektējam jūsu izvēli un ņemam vērā jūsu reklāmas preferences.",
+
+  "cookie_table_col_name": "Nosaukums",
+  "cookie_table_col_purpose": "Apraksts",
+  "cookie_table_col_processing_time": "Ilgums",
+  "cookie_table_col_provider": "Avots",
+  "cookie_table_col_type": "Tips",
+  "cookie_table_col_link": "Saite",
+  "cookie_table_col_link_find_out_more": "Uzzināt vairāk",
+  "cookie_table_col_category": "Kategorija",
+
+  "processing_time_session": "Sesija",
+  "processing_time_persistent": "Pastāvīgs",
+
+  "cookie_type_1st_party": "Pirmā puse",
+  "cookie_type_3rd_party": "Trešā puse",
+
+  "find_out_more": "Uzzināt vairāk"
+}

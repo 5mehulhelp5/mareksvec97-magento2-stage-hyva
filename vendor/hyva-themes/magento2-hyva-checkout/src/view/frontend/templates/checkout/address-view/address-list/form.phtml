@@ -1,0 +1,85 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2022-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+declare(strict_types=1);
+
+use Hyva\Checkout\Model\Form\EntityFormInterface;
+use Hyva\Checkout\Magewire\Checkout\AddressView\MagewireAddressFormInterface;
+use Hyva\Theme\Model\ViewModelRegistry;
+use Magento\Directory\Model\Country as CountryModel;
+use Magento\Directory\Model\Region as RegionModel;
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Element\Template;
+
+/** @var Template $block */
+/** @var ViewModelRegistry $viewModels */
+/** @var MagewireAddressFormInterface $magewire */
+/** @var CountryModel $country */
+/** @var RegionModel $region */
+/** @var Escaper $escaper */
+/** @var EntityFormInterface $form */
+
+$form = $magewire->getPublicForm();
+$namespace = $form->getNamespace();
+?>
+<div>
+    <div class="section-title w-full border-b border-slate-300 pb-2 mb-6">
+        <h2 class="text-gray-800 text-xl font-medium">
+            <?= $escaper->escapeHtml(__('New Address')) ?>
+        </h2>
+    </div>
+
+    <form
+        <?= /* @noEscape */ $form->renderAttributes($escaper) ?>
+        class="space-y-6 address-form"
+        x-data="hyvaCheckoutAddressListForm"
+        novalidate
+    >
+        <div class="grid grid-cols-12 gap-x-3">
+            <?= /** @noEscape */ $block->getChildHtml('address-form.before') ?>
+
+            <?php if ($form->hasFields()): ?>
+                <?php foreach ($form->getFields() as $field): ?>
+                    <?php if ($field->canRender()): ?>
+                        <?php /** @purge: md:col-span-3 md:col-span-6 md:col-span-9 md:col-span-12 */ ?>
+                        <div class="<?= $escaper->escapeHtmlAttr($field->renderWrapperClass(['col-span-12'])) ?>"
+                             <?= /* @noEscape */ $field->renderAttributes($escaper, 'wrapper') ?>
+                        >
+                            <?= /* @noEscape */ $field->render() ?>
+
+                            <?php if ($magewire->hasError($field->getId())): ?>
+                                <?= /** @noEscape */ $magewire->getError($field->getId()) ?>
+                            <?php endif ?>
+                        </div>
+                    <?php endif ?>
+                <?php endforeach ?>
+            <?php endif ?>
+
+            <?= /** @noEscape */ $block->getChildHtml('address-form.after') ?>
+        </div>
+
+        <div class="flex space-x-4 items-center">
+            <button
+                type="button"
+                class="btn btn-primary"
+                x-on:click="saveForm"
+                wire:loading.attr="disabled"
+            >
+                <?= $escaper->escapeHtml(__('Save')) ?>
+            </button>
+
+            <button
+                type="button"
+                class="btn btn-secondary"
+                x-on:click="cancelForm"
+            >
+                <?= $escaper->escapeHtml(__('Cancel')) ?>
+            </button>
+        </div>
+    </form>
+</div>

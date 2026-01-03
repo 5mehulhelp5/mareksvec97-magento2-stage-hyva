@@ -1,0 +1,136 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2022-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+declare(strict_types=1);
+
+use Hyva\Checkout\Magewire\Checkout\TermsConditions;
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Element\Template;
+use Hyva\Theme\ViewModel\HeroiconsSolid;
+use Hyva\Theme\Model\ViewModelRegistry;
+
+/** @var Template $block */
+/** @var TermsConditions $magewire */
+/** @var ViewModelRegistry $viewModels */
+/** @var Escaper $escaper */
+
+/** @var HeroiconsSolid $heroiconsSolid */
+$heroiconsSolid = $viewModels->require(HeroiconsSolid::class);
+
+$availableTerms = $block->getData('terms');
+?>
+<?php if (is_array($availableTerms) && count($availableTerms) !== 0): ?>
+<div class="space-y-4">
+    <?php foreach ($availableTerms as $agreement): ?>
+        <div x-data="hyvaCheckoutTermsAndConditions"
+             data-agreement-id="<?= $escaper->escapeHtmlAttr($agreement->getAgreementId()) ?>"
+             x-on:terms-conditions:details:error.window="updateErrorMessage"
+        >
+            <div class="flex gap-x-4">
+                <div class="flex items-center">
+                    <input type="checkbox"
+                           class="form-checkbox flex-none"
+                           id="agreement_<?= $escaper->escapeHtmlAttr($agreement->getAgreementId()) ?>"
+                           value="<?= $escaper->escapeHtmlAttr($agreement->getMode()) ?>"
+                           wire:model="termAcceptance.<?= $escaper->escapeHtmlAttr($agreement->getAgreementId()) ?>"
+                           required
+                           x-on:input="updateErrorIfNotAccepted"
+                    />
+                </div>
+
+                <div class="flex-1 gap-y-2">
+                    <div class="flex justify-between items-center gap-x-4">
+                        <label
+                            for="agreement_<?= $escaper->escapeHtmlAttr($agreement->getAgreementId()) ?>"
+                            class="mb-0 font-medium cursor-pointer"
+                        >
+                            <span x-bind:class="errorClasses">
+                                <?= /* @noEscape */ $agreement->getCheckboxText() ?>
+                            </span>
+                        </label>
+
+                        <button
+                            class="text-right max-w-fit p-1"
+                            type="button"
+                            title="<?= $escaper->escapeHtmlAttr(__('Read Details')) ?>"
+                            x-on:click.prevent="setVisibleTrue"
+                        >
+                            <span class="sr-only"><?= $escaper->escapeHtml(__('Read Details')) ?></span>
+                            <?= $heroiconsSolid->informationCircleHtml('text-slate-700', 24, 24, ['aria-hidden' => 'true']) ?>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="backdrop z-30"
+                 x-transition:enter="ease-in-out duration-500"
+                 x-transition:enter-start="opacity-0"
+                 x-transition:enter-end="opacity-100"
+                 x-transition:leave="ease-in-out duration-500"
+                 x-transition:leave-start="opacity-100"
+                 x-transition:leave-end="opacity-0"
+                 x-on:click="setVisibleFalse"
+                 x-show="visible"
+                 x-cloak></div>
+
+            <div role="dialog"
+                 aria-modal="true"
+                 x-on:click.outside.away="setVisibleFalse"
+                 x-show="visible"
+                 class="fixed inset-y-0 right-0 z-30 flex max-w-full"
+                 x-cloak
+            >
+                <div class="relative w-screen max-w-md shadow-2xl pb-6 bg-white overflow-auto"
+                     x-transition:enter="transform transition ease-in-out duration-500 sm:duration-700"
+                     x-transition:enter-start="translate-x-full"
+                     x-transition:enter-end="translate-x-0"
+                     x-transition:leave="transform transition ease-in-out duration-500 sm:duration-700"
+                     x-transition:leave-start="translate-x-0"
+                     x-transition:leave-end="translate-x-full"
+                     x-show="visible"
+                     x-cloak
+                >
+                    <div class="flex flex-col p-6 space-y-6">
+                        <h2 class="text-gray-800 text-xl font-medium">
+                            <?php if ($agreement->getIsHtml()): ?>
+                                <?= /** @noEscape */ $agreement->getCheckboxText(); ?>
+                            <?php else: ?>
+                                <?= $escaper->escapeHtml($agreement->getCheckboxText()) ?>
+                            <?php endif; ?>
+                        </h2>
+
+                        <?php if ($agreement->getIsHtml()): ?>
+                            <?= /* @noEscape */ $agreement->getContent() ?>
+                        <?php else: ?>
+                            <p>
+                                <?= $escaper->escapeHtml($agreement->getContent()) ?>
+                            </p>
+                        <?php endif ?>
+
+                        <div class="flex justify-between">
+                            <button type="button"
+                                    x-on:click="acceptTerms"
+                                    class="btn btn-primary"
+                            >
+                                <?= $escaper->escapeHtml(__('Accept Terms')) ?>
+                            </button>
+
+                            <button type="button"
+                                    x-on:click="denyTerms"
+                                    class="btn btn-secondary"
+                            >
+                                <?= $escaper->escapeHtml(__('Deny Terms')) ?>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <?php endforeach ?>
+</div>
+<?php endif ?>

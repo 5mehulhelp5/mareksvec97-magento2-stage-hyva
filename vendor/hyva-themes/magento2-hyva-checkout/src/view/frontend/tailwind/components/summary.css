@@ -1,0 +1,9 @@
+.checkout-summary {
+    @apply p-6 bg-container-darker space-y-6;
+
+    & .checkout-nav {
+        & .btn {
+            @apply w-full;
+        }
+    }
+}

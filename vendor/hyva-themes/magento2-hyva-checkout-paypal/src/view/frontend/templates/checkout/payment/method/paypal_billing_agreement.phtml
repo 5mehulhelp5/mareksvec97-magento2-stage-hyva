@@ -1,0 +1,43 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2022-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+declare(strict_types=1);
+
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Element\Template;
+use Hyva\CheckoutPayPal\Magewire\Payment\Method\PaypalBillingAgreement;
+
+/** @var Escaper $escaper */
+/** @var Template $block */
+/** @var PaypalBillingAgreement $magewire */
+
+$magewire = $block->getData('magewire');
+$methodCode = $magewire->getMethodCode();
+$billingAgreements = $magewire->getAgreements();
+?>
+<div id="paypal-button-<?= $escaper->escapeHtmlAttr($methodCode) ?>" class="relative z-10">
+    <?php if ($billingAgreements): ?>
+
+        <select id="<?= $escaper->escapeHtmlAttr($methodCode) ?>_ba_agreement_id"
+                class="pp-select form-input mb-4"
+                wire:model="agreementId" >
+            <option value=""><?= $escaper->escapeHtml(__('-- Please Select Billing Agreement --')) ?></option>
+
+            <?php foreach ($billingAgreements as $billingAgreement): ?>
+                <option value="<?= $escaper->escapeHtmlAttr($billingAgreement->getId()) ?>">
+                    <?= $escaper->escapeHtml($billingAgreement->getData('reference_id')) ?>
+                </option>
+            <?php endforeach; ?>
+        </select>
+
+    <?php else: ?>
+
+        <p><?= $escaper->escapeHtml(__('You don\'t have active paypal billing agreements')) ?></p>
+
+    <?php endif; ?>
+</div>

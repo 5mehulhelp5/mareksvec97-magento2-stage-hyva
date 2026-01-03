@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2022-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Api/etc/extension_attributes.xsd"
+>
+    <extension_attributes for="Magento\Quote\Api\Data\CartInterface">
+        <!-- Adds the customer comment as an extension attribute to the cart. -->
+        <attribute code="customer_comment" type="string"/>
+    </extension_attributes>
+
+    <extension_attributes for="Magento\Sales\Api\Data\OrderStatusHistoryInterface">
+        <!-- Flags the current history item to indicate whether it originated from the customer or not. -->
+        <attribute code="is_customer_comment" type="boolean"/>
+    </extension_attributes>
+
+    <extension_attributes for="Magento\Quote\Api\Data\TotalSegmentInterface">
+        <!-- Generate tax segment items for each cart total segment, providing both incl. and excl. details. -->
+        <attribute code="tax_details" type="Hyva\Checkout\Api\Data\Quote\TaxDetailsExtensionAttributeInterface[]"/>
+    </extension_attributes>
+</config>

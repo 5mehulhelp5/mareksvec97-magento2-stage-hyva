@@ -1,0 +1,419 @@
+// Gobal style
+@fc-form-field__gap: 8px;
+& when (@media-common =true) {
+	.checkout-index-index {
+		.opc-sidebar {
+			tr.totals.charge {
+				display: none;
+			}
+		}
+		.page-footer {
+			margin-top: 0px;
+		}
+		#maincontent {
+			padding-bottom: 80px;
+		}
+		.opc-sidebar.modal-custom {
+			background: none !important;
+			.minicart-items-wrapper {
+				&:after {
+					display: none !important;
+				}
+			}
+		}
+		.checkout-shipping-address {
+		.fieldset {
+			legend.label {
+				display: none !important;
+			}
+			.field>.label {
+					display: block;
+			}
+		}
+		}
+		.authentication-wrapper {
+			display: none !important;
+		}
+		.admin__scope-old {
+			display: none !important;
+		}
+	}
+}
+// Payment and shipping
+.firecheckout #checkout #customer-email-fieldset .note, .firecheckout .modal-custom #customer-email-fieldset .note, .firecheckout .modal-popup #customer-email-fieldset .note {
+    display: none !important;
+}
+.firecheckout .form-shipping-address input[type=checkbox]:checked, .firecheckout #checkout input[type=checkbox]:checked, .firecheckout .form-shipping-address input[type=radio]:checked, .firecheckout #checkout input[type=radio]:checked {
+    box-shadow: 0 0 0 10px #adc4af inset; }
+.firecheckout {
+	.payment-methods {
+		.payment-method {
+			&:last-child {
+				.bottom-shipping {
+					border-bottom: 1px solid #ddd;
+				}
+			}
+			&.stripe-payments {
+				.payment-method-content {
+					border: none !important;
+					background: none !important;
+				}
+			}
+			.payment-method-title {
+				gap: 0px;
+				.top-shipping {
+					.radio {
+						margin: 0 10px 0 0 !important;
+					}
+				}
+			}
+			.amcheckout-label {
+				padding: 15px !important;
+			}
+			&._active {
+				.bottom-shipping {
+					display: block;
+					height: auto;
+					border-top: 1px solid #adc4af !important;
+				}
+				.amcheckout-label {
+					background: #f3f8f4;
+					border-color: #adc4af !important;
+				}
+			}
+			.bottom-shipping {
+				display: none;
+				padding: 20px;
+				background: #f5f5f5;
+				width: 100%;
+				border-left: 1px solid #ddd;
+				border-right: 1px solid #ddd;
+				font-size: 14px;
+				height: 0;
+			}
+		}
+	}
+	.page-wrapper {
+		overflow-x: hidden;
+	}
+  .checkout-billing-address {
+  	    display: flex;
+  	    flex-direction: column;
+  	    .billing-address-same-as-shipping-block {
+  	    	order: 2;
+  	    }
+   }
+  .methods-shipping,
+  .payment-methods,
+  .checkout-shipping-method {
+
+    .shipping-block .row.-selected,
+    .payment-method .row.-selected,
+    .methods-shipping tbody .row.-selected {
+     border-bottom: 1px solid #ddd;
+     background: #f3f8f4;
+     border-color: #adc4af !important;
+    }
+    .methods-shipping {
+    	.table-checkout-shipping-method {
+    		tbody {
+    			.row {
+    				    border: 1px solid #ddd;
+    				        font-size: 14px;
+    				            position: relative;
+    				            .col-price {
+    				            	.price {
+    				            		    font-weight: 600;
+    				            	}
+    				            }
+    				.col-method.radio-button {
+    					width: max-content;
+    					padding: 0;
+    					padding-left: 15px;
+    					text-align: left;
+    					height: 100%;
+    					width: 20px;
+    				}
+    				.col-method {
+    					&:last-child {
+    						float: right;
+    						padding-right: 15px;
+    						min-width: max-content;
+    						img {
+    							    min-height: 26px !important;
+    							    min-width: auto;
+    							    max-height: 26px !important;
+    							    width: auto;
+    							    object-fit: contain;
+    							
+    						}
+    					}
+    				}
+    			}
+    		}
+    	}
+    }
+  }
+}
+
+
+.firecheckout .items-in-cart>.minicart-items:after {
+	display: none;
+}
+.firecheckout {
+	overflow-x: hidden;
+	.page-title-wrapper {
+				display: none !important;
+			}
+		#checkout { 
+			.opc-block-summary > .title,
+			.opc-sidebar .step-title {
+			display: flex;
+			    align-items: center;
+			    border: 0;
+			    margin-bottom: 25px;
+			    padding: 0;
+			    font-size: 20px;
+			    font-weight: 600;
+			}
+			.opc-wrapper {
+				width: 58% !important;
+				.step-title {
+					    display: flex;
+					    align-items: center;
+					    border: 0;
+					    margin-bottom: 25px;
+					    padding: 0;
+					    font-size: 20px;
+					    font-weight: 600;
+				}
+				.opc {
+					&>li {
+						border: none;
+					}
+				}
+			}
+			button.action.primary.checkout {
+				height: 65px;
+				font-size: 18px;
+				width: 100%;
+			}
+		}
+	&.firecheckout-col1-set #checkout .opc-sidebar {
+        width: 42% !important;
+        padding: 35px !important;
+        border: none;
+    	}
+	
+	.checkout-payment-method {
+		.payment-method-title {
+			padding: 0px !important;
+		}
+	}
+	.payment-method-content {
+		display: none !important;
+	}
+	.shipping-method, .shipping-block {
+		padding: 8px 0px;
+		position: relative;
+		.shipping-method-title {
+			position: unset !important;
+		}
+	}
+
+	.payment-method, .shipping-method, .shipping-block {
+		&-title {
+			position: relative;
+		}
+		.method-description {
+			display: none;
+		}
+		&.stripe-payments {
+			.payment-method-title {
+				position: relative;
+				.payment-logo {
+					position: absolute;
+					z-index: 1;
+					right: 25px;
+					top: 25px;
+					height: 28px;
+				}
+			}
+			&._active {
+				.payment-method-title {
+					padding-bottom: 0px;
+				}
+				.stripe-payments-billing-address-warning {
+					margin-bottom: 0px;
+				}
+				.payment-method-content {
+					background: #f2f2f2;
+					border-left: 1px solid #E6E6E6;
+					border-right: 1px solid #E6E6E6;
+					.actions-toolbar {
+						display: none;
+					}
+					&.stripe-payments-card-form {
+						padding: 0px 25px 5px 25px;
+						border: 1px solid #E6E6E6;
+						border-top: none;
+					}
+				}
+				.amcheckout-label {
+					border-bottom: none;
+				}
+				.payment-method-content {
+					display: block !important;
+					padding: 0px 15px;
+				}
+			}
+		}
+		&._active, &.active {
+			.amcheckout-label {
+				background: #f2f2f2;
+			}
+			.method-description {
+					display: block;
+						}
+
+		}
+		.method-description {
+			margin-top: 15px;
+			display: none;
+			ul {
+				padding: 0px;
+    			margin: 0px;
+				li {
+					    list-style: none;
+					    margin-bottom: 3px;
+				}
+			}
+		}
+
+		.amcheckout-label {
+			border: 1px solid #E6E6E6;
+			padding: 25px;
+			padding-left: 50px;
+			display: block;
+			width: 100%;
+
+
+			&:before, &:after {
+				left: 25px;
+				transform: translate(-50%, -50%);
+				top: 35px;
+			}
+
+			.carrier {
+				font-weight: 600;
+				font-size: 14px;
+			}
+
+			.method-logo {
+				float: right;
+
+				img {
+					max-height: 30px;
+				}
+
+			}
+			.shipping-block__wrapp {
+				display: flex;
+				justify-content: space-between;
+				.shipping-block__icon {
+					img {
+						display: block;
+						max-height: 25px;
+						max-width: 100px;
+					}
+				}
+				.shipping-block__name {
+					.method {
+						font-weight: 600;
+						margin-left: 8px;
+					}
+					.price {
+						.price {
+							color: #7A7A7A;
+							font-weight: 500;
+							font-size: 13px;
+						}
+					}
+				}
+			}
+
+		}
+
+	}
+
+}
+.checkout-shipping-method {
+	.step-title {
+		    margin-bottom: 38px;
+	}
+}
+
+
+//
+//  Mobile
+//  _____________________________________________
+
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
+	.firecheckout.checkout-index-index {
+		.page-header {
+			.c-header__exit {
+			    font-size: 14px;
+			}
+			.header.content {
+				padding-left: 15px;
+				padding-right: 15px;
+			}
+			.nav-toggle {
+				display: none;
+			}
+		}
+				#checkout  {
+					.opc-wrapper {
+						width: 100% !important;
+					}
+				}
+		}
+	.firecheckout.checkout-index-index.firecheckout-col1-set #checkout .opc-sidebar {
+		width: 100% !important;
+		padding: 20px !important;
+	}
+	.checkout-shipping-method {
+		margin-top: 50px;
+	}
+	.checkout-payment-method {
+		margin-top: 30px;
+		margin-bottom: 35px;
+	}
+
+	
+}
+
+//
+//  Desktop
+//  _____________________________________________
+
+@media (min-width: 768px) {
+
+	.firecheckout {
+		#maincontent {
+					&:after {
+					display: block !important;
+			        width: 100vw;
+			        top: 0;
+			        z-index: -1;
+			        background: #f5f5f5 !important;
+			        background-color: #f5f5f5 !important;
+			        height: 100%;
+			        left: ~"calc(58% - 1px)";
+			        transform: unset;
+			        border-left: 1px solid #dedede !important;
+			    }
+		}
+	  } 
+			
+	}

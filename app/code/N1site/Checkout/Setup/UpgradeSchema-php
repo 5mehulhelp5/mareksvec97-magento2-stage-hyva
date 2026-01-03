@@ -1,0 +1,91 @@
+<?php
+namespace N1site\Views\Setup;
+ 
+use Magento\Framework\Setup\UpgradeSchemaInterface;
+use Magento\Framework\Setup\ModuleContextInterface;
+use Magento\Framework\Setup\SchemaSetupInterface;
+ 
+class UpgradeSchema implements UpgradeSchemaInterface
+{
+	
+	public function upgrade(SchemaSetupInterface $setup, ModuleContextInterface $context) {
+		$installer = $setup;
+		$installer->startSetup();
+		
+        if (version_compare($context->getVersion(), "1.0.0", "<")) {
+			//Your upgrade script
+        }
+
+		if (version_compare($context->getVersion(), "1.0.1", "<")) {
+			
+			$installer->getConnection()->addColumn(
+                $installer->getTable('quote'),
+                'company_id',
+                [
+                    'type' => \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+					'length' => 255,
+                    'nullable' => true,
+                    'comment' => 'Company ID'
+                ]
+            );
+			$installer->getConnection()->addColumn(
+                $installer->getTable('quote'),
+                'tax_id',
+                [
+                    'type' => \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+					'length' => 255,
+                    'nullable' => true,
+                    'comment' => 'Tax ID'
+                ]
+            );
+			$installer->getConnection()->addColumn(
+                $installer->getTable('sales_order'),
+                'company_id',
+                [
+                    'type' => \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+					'length' => 255,
+                    'nullable' => true,
+                    'comment' => 'Company ID'
+                ]
+            );
+			$installer->getConnection()->addColumn(
+                $installer->getTable('sales_order'),
+                'tax_id',
+                [
+                    'type' => \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+					'length' => 255,
+                    'nullable' => true,
+                    'comment' => 'Tax ID'
+                ]
+            );
+			
+			// $quoteTable = $installer->getTable('quote');
+			// $salesTable = $installer->getTable('sales_order');
+
+			// $columns = [
+				// 'company_id' => [
+					// 'type' => \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+					// 'length' => 255,
+					// 'nullable' => true,
+					// 'comment' => 'Company ID'
+				// ],
+				// 'tax_id' => [
+					// 'type' => \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+					// 'length' => 255,
+					// 'nullable' => true,
+					// 'comment' => 'Tax ID'
+				// ]
+			// ];
+
+			// $connection = $installer->getConnection();
+
+			// foreach($columns as $name=>$definition) {
+				// $connection->addColumn($quoteTable, $name, $definition);
+				// $connection->addColumn($salesTable, $name, $definition);
+			// }
+        }
+		
+		$installer->endSetup();
+	}
+ 
+}

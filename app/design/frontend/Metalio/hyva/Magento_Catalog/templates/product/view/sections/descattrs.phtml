@@ -1,0 +1,22 @@
+<?php
+/** @var \Magento\Catalog\Block\Product\View $block */
+$product = $block->getProduct();
+/** @var \Magento\Catalog\Helper\Output $outputHelper */
+$outputHelper = $this->helper(\Magento\Catalog\Helper\Output::class);
+
+$descriptionHtml = $outputHelper->productAttribute(
+    $product,
+    (string) $product->getDescription(),
+    'description'
+);
+?>
+
+<?php if (trim((string)$descriptionHtml) !== ''): ?>
+  <div class="leading-relaxed text-slate-700">
+    <?= /* @noEscape */ $descriptionHtml ?>
+  </div>
+<?php endif; ?>
+
+<div class="mt-6">
+  <?= $block->getChildHtml('product.attributes.embedded'); ?>
+</div>

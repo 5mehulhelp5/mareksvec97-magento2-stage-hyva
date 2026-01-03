@@ -1,0 +1,532 @@
+<?xml version="1.0"?>
+<config
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+<system>
+<tab id="metalio" translate="label" sortOrder="400">
+<label>Metalio</label>
+</tab>
+<section id="metalio" translate="label" type="text" sortOrder="900" showInDefault="1" showInWebsite="1" showInStore="1">
+    <label>Metalio</label>
+    <tab>metalio</tab>
+    <resource>Metalio_Settings::config</resource>
+    <group id="footer" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+        <label>Footer</label>
+        <!-- Column 1 (About Us + Socials) -->
+        <field id="about_us" translate="label" type="textarea" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+        <label>Footer About Us Text (HTML)</label>
+        <comment>Krátky HTML text do stĺpca 1.</comment>
+        <config_path>metalio/footer/about_us</config_path>
+        </field>
+        <field id="instagram" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+        <label>Instagram URL</label>
+        <config_path>metalio/footer/instagram</config_path>
+        </field>
+        <field id="facebook" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+        <label>Facebook URL</label>
+        <config_path>metalio/footer/facebook</config_path>
+        </field>
+        <field id="youtube" translate="label" type="text" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
+        <label>YouTube URL</label>
+        <config_path>metalio/footer/youtube</config_path>
+        </field>
+        <!-- Column 2 -->
+        <field id="col2_title" translate="label" type="text" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
+        <label>Nadpis stĺpca 2</label>
+        <config_path>metalio/footer/col2_title</config_path>
+        </field>
+        <field id="col2_html" translate="label" type="textarea" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="1">
+        <label>Obsah stĺpca 2 (HTML)</label>
+        <comment>Napr. zoznam odkazov.</comment>
+        <config_path>metalio/footer/col2_html</config_path>
+        </field>
+        <!-- Column 3 -->
+        <field id="col3_title" translate="label" type="text" sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="1">
+        <label>Nadpis stĺpca 3</label>
+        <config_path>metalio/footer/col3_title</config_path>
+        </field>
+        <field id="col3_html" translate="label" type="textarea" sortOrder="80" showInDefault="1" showInWebsite="1" showInStore="1">
+        <label>Obsah stĺpca 3 (HTML)</label>
+        <comment>Napr. zoznam odkazov v &lt;ul&gt;.&lt;/ul&gt;</comment>
+        <config_path>metalio/footer/col3_html</config_path>
+        </field>
+        <!-- Column 4 (Kontakt) -->
+        <field id="col4_title" translate="label" type="text" sortOrder="90" showInDefault="1" showInWebsite="1" showInStore="1">
+        <label>Nadpis stĺpca 4</label>
+        <config_path>metalio/footer/col4_title</config_path>
+        </field>
+        <field id="col4_html" translate="label" type="textarea" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
+        <label>Obsah stĺpca 4 (HTML)</label>
+        <comment>Voliteľný popis pod nadpisom – podporuje HTML.</comment>
+        <config_path>metalio/footer/col4_html</config_path>
+        </field>
+        <!-- Kontakt – e-mail a telefón -->
+        <field id="show_phone" translate="label" type="select" sortOrder="120" showInDefault="1" showInWebsite="1" showInStore="1">
+        <label>Zobraziť telefónne číslo</label>
+        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+        <config_path>metalio/footer/show_phone</config_path>
+        </field>
+    </group>
+    <group id="header" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+        <label>Header</label>
+        <field id="enabled" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+        <label>Zobraziť header badge</label>
+        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+        <config_path>metalio/header/enabled</config_path>
+        </field>
+        <!-- Nové: textarea s priamym SVG -->
+        <field id="badge_svg" translate="label" type="textarea" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+        <label>Header badge (SVG kód)</label>
+        <comment>Vlož priamo svg code. Môžeš použiť aj inline fill/stroke.</comment>
+        <config_path>metalio/header/badge_svg</config_path>
+        </field>
+    </group>
+    <group id="quick_quote" translate="label" type="text" sortOrder="25"
+        showInDefault="1" showInWebsite="1" showInStore="1">
+        <label>Rýchla cenová ponuka (popup)</label>
+        <field id="enabled" translate="label" type="select" sortOrder="10"
+        showInDefault="1" showInWebsite="1" showInStore="1">
+        <label>Zapnúť tlačidlo + popup</label>
+        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+        <config_path>metalio/quick_quote/enabled</config_path>
+        </field>
+        <field id="form_id" translate="label" type="text" sortOrder="20"
+        showInDefault="1" showInWebsite="1" showInStore="1">
+        <label>ID Amasty Custom Form</label>
+        <comment>Zadaj číselné ID (napr. 3).</comment>
+        <config_path>metalio/quick_quote/form_id</config_path>
+        </field>
+        <field id="button_label" translate="label" type="text" sortOrder="30"
+        showInDefault="1" showInWebsite="1" showInStore="1">
+        <label>Text tlačidla (desktop)</label>
+        <config_path>metalio/quick_quote/button_label</config_path>
+        </field>
+    </group>
+    <group id="topbar" translate="label" type="text" sortOrder="15" showInDefault="1" showInWebsite="1" showInStore="1">
+        <label>Top bar benefity</label>
+        <field id="benefit_1" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+        <label>Benefit 1</label>
+        <config_path>metalio/topbar/benefit_1</config_path>
+        </field>
+        <field id="benefit_2" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+        <label>Benefit 2</label>
+        <config_path>metalio/topbar/benefit_2</config_path>
+        </field>
+        <field id="benefit_3" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+        <label>Benefit 3</label>
+        <config_path>metalio/topbar/benefit_3</config_path>
+        </field>
+        <field id="benefit_4" translate="label" type="text" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
+        <label>Benefit 4</label>
+        <config_path>metalio/topbar/benefit_4</config_path>
+        </field>
+        <field id="cta_text" translate="label" type="text" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
+        <label>CTA text</label>
+        <config_path>metalio/topbar/cta_text</config_path>
+        </field>
+        <field id="cta_url" translate="label" type="text" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="1">
+        <label>CTA URL</label>
+        <config_path>metalio/topbar/cta_url</config_path>
+        </field>
+    </group>
+    <group id="store_benefits" translate="label" type="text" sortOrder="16" showInDefault="1" showInWebsite="1" showInStore="1">
+        <label>Store benefity (ikona + text)</label>
+        <!-- Ikony: shield-check, globe-alt, badge-check, thumb-up, phone -->
+        <!-- Benefit 1 -->
+        <field id="b1_icon" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+        <label>Benefit 1 – ikona</label>
+        <comment>Povolené: shield-check, globe-alt, badge-check, thumb-up, phone</comment>
+        <config_path>metalio/store_benefits/b1_icon</config_path>
+        </field>
+        <field id="b1_title" translate="label" type="text" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="1">
+        <label>Benefit 1 – nadpis</label>
+        <config_path>metalio/store_benefits/b1_title</config_path>
+        </field>
+        <field id="b1_text" translate="label" type="text" sortOrder="12" showInDefault="1" showInWebsite="1" showInStore="1">
+        <label>Benefit 1 – podtext</label>
+        <config_path>metalio/store_benefits/b1_text</config_path>
+        </field>
+        <!-- Benefit 2 -->
+        <field id="b2_icon" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+        <label>Benefit 2 – ikona</label>
+        <comment>Povolené: shield-check, globe-alt, badge-check, thumb-up, phone</comment>
+        <config_path>metalio/store_benefits/b2_icon</config_path>
+        </field>
+        <field id="b2_title" translate="label" type="text" sortOrder="21" showInDefault="1" showInWebsite="1" showInStore="1">
+        <label>Benefit 2 – nadpis</label>
+        <config_path>metalio/store_benefits/b2_title</config_path>
+        </field>
+        <field id="b2_text" translate="label" type="text" sortOrder="22" showInDefault="1" showInWebsite="1" showInStore="1">
+        <label>Benefit 2 – podtext</label>
+        <config_path>metalio/store_benefits/b2_text</config_path>
+        </field>
+        <!-- Benefit 3 -->
+        <field id="b3_icon" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+        <label>Benefit 3 – ikona</label>
+        <comment>Povolené: shield-check, globe-alt, badge-check, thumb-up, phone</comment>
+        <config_path>metalio/store_benefits/b3_icon</config_path>
+        </field>
+        <field id="b3_title" translate="label" type="text" sortOrder="31" showInDefault="1" showInWebsite="1" showInStore="1">
+        <label>Benefit 3 – nadpis</label>
+        <config_path>metalio/store_benefits/b3_title</config_path>
+        </field>
+        <field id="b3_text" translate="label" type="text" sortOrder="32" showInDefault="1" showInWebsite="1" showInStore="1">
+        <label>Benefit 3 – podtext</label>
+        <config_path>metalio/store_benefits/b3_text</config_path>
+        </field>
+        <!-- Benefit 4 -->
+        <field id="b4_icon" translate="label" type="text" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
+        <label>Benefit 4 – ikona</label>
+        <comment>Povolené: shield-check, globe-alt, badge-check, thumb-up, phone</comment>
+        <config_path>metalio/store_benefits/b4_icon</config_path>
+        </field>
+        <field id="b4_title" translate="label" type="text" sortOrder="41" showInDefault="1" showInWebsite="1" showInStore="1">
+        <label>Benefit 4 – nadpis</label>
+        <config_path>metalio/store_benefits/b4_title</config_path>
+        </field>
+        <field id="b4_text" translate="label" type="text" sortOrder="42" showInDefault="1" showInWebsite="1" showInStore="1">
+        <label>Benefit 4 – podtext</label>
+        <config_path>metalio/store_benefits/b4_text</config_path>
+        </field>
+        <!-- Benefit 5 (voliteľný) -->
+        <field id="b5_icon" translate="label" type="text" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
+        <label>Benefit 5 – ikona</label>
+        <comment>Povolené: shield-check, globe-alt, badge-check, thumb-up, phone</comment>
+        <config_path>metalio/store_benefits/b5_icon</config_path>
+        </field>
+        <field id="b5_title" translate="label" type="text" sortOrder="51" showInDefault="1" showInWebsite="1" showInStore="1">
+        <label>Benefit 5 – nadpis</label>
+        <config_path>metalio/store_benefits/b5_title</config_path>
+        </field>
+        <field id="b5_text" translate="label" type="text" sortOrder="52" showInDefault="1" showInWebsite="1" showInStore="1">
+        <label>Benefit 5 – podtext</label>
+        <config_path>metalio/store_benefits/b5_text</config_path>
+        </field>
+    </group>
+    <group id="reviews" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+        <label>Hodnotenia (Store rating)</label>
+        <field id="enabled" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+        <label>Zapnúť sekciu hodnotení</label>
+        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+        <config_path>metalio/reviews/enabled</config_path>
+        </field>
+        <field id="avg" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+        <label>Priemerné hodnotenie (napr. 4.68)</label>
+        <config_path>metalio/reviews/avg</config_path>
+        </field>
+        <field id="label" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+        <label>Slovný popis (napr. Super)</label>
+        <config_path>metalio/reviews/label</config_path>
+        </field>
+        <field id="items_json" translate="label" type="textarea" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
+        <label>Recenzie (JSON)</label>
+        <comment>Formát: [{"stars":5,"date":"3.1.2025","text":"..."}]</comment>
+        <config_path>metalio/reviews/items_json</config_path>
+        </field>
+        <field id="limit" translate="label" type="text" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
+        <label>Max. počet recenzií (voliteľné)</label>
+        <config_path>metalio/reviews/limit</config_path>
+        </field>
+    </group>
+</section>
+<section id="metalio_cms" translate="label" type="text"
+    sortOrder="910" showInDefault="1" showInWebsite="1" showInStore="1">
+    <label>CMS Pages</label>
+    <tab>metalio</tab>
+    <resource>Metalio_Settings::config</resource>
+    <!-- Skupina: FAQ -->
+    <group id="faq" translate="label" type="text" sortOrder="10"
+        showInDefault="1" showInWebsite="1" showInStore="1">
+        <label>FAQ</label>
+        <field id="items_json" translate="label" type="textarea" sortOrder="10"
+        showInDefault="1" showInWebsite="1" showInStore="1">
+        <label>FAQ položky (JSON)</label>
+        <comment>
+        Formát: [{"q":"Otázka","a":"Odpoveď","cat":"(voliteľne) kategória"}]
+        </comment>
+        <config_path>metalio_cms/faq/items_json</config_path>
+        </field>
+    </group>
+    <!-- Skupina: O nás (HTML obsah) -->
+    <group id="about" translate="label" type="text" sortOrder="20"
+        showInDefault="1" showInWebsite="1" showInStore="1">
+        <label>O nás (HTML obsah)</label>
+        <!-- Sekcia 1: Všetko pod jednou strechou -->
+        <field id="s1_title" translate="label" type="text" sortOrder="10"
+        showInDefault="1" showInWebsite="1" showInStore="1">
+        <label>Nadpis sekcie 1</label>
+        <config_path>metalio_cms/about/s1_title</config_path>
+        </field>
+        <field id="s1_html" translate="label" type="textarea" sortOrder="11"
+        showInDefault="1" showInWebsite="1" showInStore="1">
+        <label>Obsah sekcie 1 (HTML)</label>
+        <config_path>metalio_cms/about/s1_html</config_path>
+        </field>
+        <!-- Sekcia 2: Vlastný vývoj produktov -->
+        <field id="s2_title" translate="label" type="text" sortOrder="20"
+        showInDefault="1" showInWebsite="1" showInStore="1">
+        <label>Nadpis sekcie 2</label>
+        <config_path>metalio_cms/about/s2_title</config_path>
+        </field>
+        <field id="s2_html" translate="label" type="textarea" sortOrder="21"
+        showInDefault="1" showInWebsite="1" showInStore="1">
+        <label>Obsah sekcie 2 (HTML)</label>
+        <config_path>metalio_cms/about/s2_html</config_path>
+        </field>
+        <!-- Sekcia 3: Bezpečné doručenie -->
+        <field id="s3_title" translate="label" type="text" sortOrder="30"
+        showInDefault="1" showInWebsite="1" showInStore="1">
+        <label>Nadpis sekcie 3</label>
+        <config_path>metalio_cms/about/s3_title</config_path>
+        </field>
+        <field id="s3_html" translate="label" type="textarea" sortOrder="31"
+        showInDefault="1" showInWebsite="1" showInStore="1">
+        <label>Obsah sekcie 3 (HTML)</label>
+        <config_path>metalio_cms/about/s3_html</config_path>
+        </field>
+        <!-- Sekcia 4: Poslanie a história -->
+        <field id="s4_title" translate="label" type="text" sortOrder="40"
+        showInDefault="1" showInWebsite="1" showInStore="1">
+        <label>Nadpis sekcie 4</label>
+        <config_path>metalio_cms/about/s4_title</config_path>
+        </field>
+        <field id="s4_html" translate="label" type="textarea" sortOrder="41"
+        showInDefault="1" showInWebsite="1" showInStore="1">
+        <label>Obsah sekcie 4 (HTML)</label>
+        <config_path>metalio_cms/about/s4_html</config_path>
+        </field>
+        <!-- Medzititulok blok „stroje“ -->
+        <field id="machines_heading" translate="label" type="text" sortOrder="50"
+        showInDefault="1" showInWebsite="1" showInStore="1">
+        <label>Nadpis bloku Strojov</label>
+        <config_path>metalio_cms/about/machines_heading</config_path>
+        </field>
+        <!-- Laser na plechy -->
+        <field id="m1_title" translate="label" type="text" sortOrder="60"
+        showInDefault="1" showInWebsite="1" showInStore="1">
+        <label>Laser na plechy – nadpis</label>
+        <config_path>metalio_cms/about/m1_title</config_path>
+        </field>
+        <field id="m1_html" translate="label" type="textarea" sortOrder="61"
+        showInDefault="1" showInWebsite="1" showInStore="1">
+        <label>Laser na plechy – obsah (HTML)</label>
+        <config_path>metalio_cms/about/m1_html</config_path>
+        </field>
+        <!-- Trubkový laser -->
+        <field id="m2_title" translate="label" type="text" sortOrder="70"
+        showInDefault="1" showInWebsite="1" showInStore="1">
+        <label>Trubkový laser – nadpis</label>
+        <config_path>metalio_cms/about/m2_title</config_path>
+        </field>
+        <field id="m2_html" translate="label" type="textarea" sortOrder="71"
+        showInDefault="1" showInWebsite="1" showInStore="1">
+        <label>Trubkový laser – obsah (HTML)</label>
+        <config_path>metalio_cms/about/m2_html</config_path>
+        </field>
+        <!-- Ohraňovací lis -->
+        <field id="m3_title" translate="label" type="text" sortOrder="80"
+        showInDefault="1" showInWebsite="1" showInStore="1">
+        <label>Ohraňovací lis – nadpis</label>
+        <config_path>metalio_cms/about/m3_title</config_path>
+        </field>
+        <field id="m3_html" translate="label" type="textarea" sortOrder="81"
+        showInDefault="1" showInWebsite="1" showInStore="1">
+        <label>Ohraňovací lis – obsah (HTML)</label>
+        <config_path>metalio_cms/about/m3_html</config_path>
+        </field>
+    </group>
+    <!-- Skupina: Kontakt (len URL na reklamácie) -->
+    <group id="contact" translate="label" type="text" sortOrder="15"
+        showInDefault="1" showInWebsite="1" showInStore="1">
+        <label>Kontakt</label>
+        <field id="complaints_url" translate="label" type="text" sortOrder="10"
+        showInDefault="1" showInWebsite="1" showInStore="1">
+        <label>URL na Reklamácie</label>
+        <comment>Zadaj absolútnu URL (napr. /reklamacie-a-vratenie).</comment>
+        <config_path>metalio_cms/contact/complaints_url</config_path>
+        </field>
+    </group>
+</section>
+<section id="metalio_homepage" translate="label" type="text" sortOrder="905"
+    showInDefault="1" showInWebsite="1" showInStore="1">
+    <label>Homepage</label>
+    <tab>metalio</tab>
+    <resource>Metalio_Settings::config</resource>
+    <!-- Skupina: Hero (sem môžeš pridávať ďalšie skupiny: featured, promo, atď.) -->
+    <group id="hero" translate="label" type="text" sortOrder="10"
+        showInDefault="1" showInWebsite="1" showInStore="1">
+        <label>Hero</label>
+        <field id="enabled" translate="label" type="select" sortOrder="10"
+        showInDefault="1" showInWebsite="1" showInStore="1">
+        <label>Zapnúť Hero</label>
+        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+        </field>
+        <field id="title" translate="label" type="text" sortOrder="20"
+        showInDefault="1" showInWebsite="1" showInStore="1">
+        <label>Nadpis</label>
+        </field>
+        <field id="subtitle" translate="label" type="text" sortOrder="30"
+        showInDefault="1" showInWebsite="1" showInStore="1">
+        <label>Podnadpis (voliteľné)</label>
+        </field>
+        <field id="text_html" translate="label" type="textarea" sortOrder="40"
+        showInDefault="1" showInWebsite="1" showInStore="1">
+        <label>Popis (HTML)</label>
+        <comment>Podporuje základné HTML (p, a, br, strong…)</comment>
+        </field>
+        <field id="cta_label" translate="label" type="text" sortOrder="50"
+        showInDefault="1" showInWebsite="1" showInStore="1">
+        <label>CTA text</label>
+        </field>
+        <field id="cta_url" translate="label" type="text" sortOrder="60"
+        showInDefault="1" showInWebsite="1" showInStore="1">
+        <label>CTA URL (statická)</label>
+        <comment>Relatívna alebo plná URL (napr. /popisne-cisla alebo https://…)</comment>
+        </field>
+        <!-- Upload do pub/media/metalio/hero -->
+        <field id="hero_image" translate="label" type="image" sortOrder="70"
+        showInDefault="1" showInWebsite="1" showInStore="1">
+        <label>Hero obrázok (upload)</label>
+        <backend_model>Magento\Config\Model\Config\Backend\Image</backend_model>
+        <upload_dir config="system" scope_info="1">metalio/hero</upload_dir>
+        <base_url type="media" scope_info="1">metalio/hero</base_url>
+        <comment>Odporúčané ~1600×900px (webp/png/jpg)</comment>
+        </field>
+        <field id="image_alt" translate="label" type="text" sortOrder="80"
+        showInDefault="1" showInWebsite="1" showInStore="1">
+        <label>ALT text obrázka</label>
+        </field>
+    </group>
+    <group id="topcats" translate="label" type="text" sortOrder="20"
+        showInDefault="1" showInWebsite="1" showInStore="1">
+        <label>Top kategórie</label>
+        <field id="enabled" translate="label" type="select" sortOrder="5"
+        showInDefault="1" showInWebsite="1" showInStore="1">
+        <label>Zapnúť sekciu</label>
+        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+        </field>
+        <field id="title" translate="label" type="text" sortOrder="10"
+        showInDefault="1" showInWebsite="1" showInStore="1">
+        <label>Nadpis sekcie</label>
+        <comment>Napr. „Top kategórie“</comment>
+        </field>
+        <field id="show_desc" translate="label" type="select" sortOrder="11"
+        showInDefault="1" showInWebsite="1" showInStore="1">
+        <label>Zobraziť popis kategórie</label>
+        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+        </field>
+        <field id="desc_maxlen" translate="label" type="text" sortOrder="12"
+        showInDefault="1" showInWebsite="1" showInStore="1">
+        <label>Max. dĺžka popisu (znaky)</label>
+        <comment>Napr. 140. Skráti sa na najbližšie celé slovo.</comment>
+        </field>
+        <!-- Jedno pole pre všetky ID, oddelené čiarkou alebo medzerou -->
+        <field id="ids" translate="label" type="text" sortOrder="20"
+        showInDefault="1" showInWebsite="1" showInStore="1">
+        <label>ID kategórií</label>
+        <comment>Pr.: 83, 15, 27, 102 (čiarky alebo medzery)</comment>
+        </field>
+    </group>
+    <group id="cta" translate="label" type="text" sortOrder="30"
+        showInDefault="1" showInWebsite="1" showInStore="1">
+        <label>Homepage – Výroba na mieru (CTA)</label>
+        <field id="enabled" translate="label" type="select" sortOrder="10"
+        showInDefault="1" showInWebsite="1" showInStore="1">
+        <label>Zapnúť sekciu</label>
+        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+        </field>
+        <field id="title" translate="label" type="text" sortOrder="20"
+        showInDefault="1" showInWebsite="1" showInStore="1">
+        <label>Nadpis</label>
+        <comment>Napr. „Potrebujete vypáliť niečo na mieru?“</comment>
+        </field>
+        <field id="text_html" translate="label" type="textarea" sortOrder="30"
+        showInDefault="1" showInWebsite="1" showInStore="1">
+        <label>Popis (HTML)</label>
+        <comment>Podporuje HTML (p, br, strong, a...).</comment>
+        </field>
+        <field id="benefits" translate="label" type="textarea" sortOrder="40"
+        showInDefault="1" showInWebsite="1" showInStore="1">
+        <label>Benefity – 1 na riadok</label>
+        <comment>Každý riadok = 1 benefit. Ikony sa doplnia automaticky.</comment>
+        </field>
+        <field id="cta_label" translate="label" type="text" sortOrder="50"
+        showInDefault="1" showInWebsite="1" showInStore="1">
+        <label>Text tlačidla (CTA)</label>
+        <comment>Napr. „Kontaktovať“</comment>
+        </field>
+        <field id="cta_url" translate="label" type="text" sortOrder="60"
+        showInDefault="1" showInWebsite="1" showInStore="1">
+        <label>CTA URL</label>
+        <comment>Relatívna alebo plná URL (napr. /vyroba-na-mieru alebo https://...)</comment>
+        </field>
+        <field id="photo_caption" translate="label" type="text" sortOrder="90"
+        showInDefault="1" showInWebsite="1" showInStore="1">
+        <label>Podpis pod fotkou</label>
+        <comment>Napr. „Martin • CNC špecialista“</comment>
+        </field>
+    </group>
+    <group id="textbanner" translate="label" type="text" sortOrder="40"
+        showInDefault="1" showInWebsite="1" showInStore="1">
+        <label>Homepage – Textový banner (bez obrázka)</label>
+        <field id="enabled" translate="label" type="select" sortOrder="10"
+        showInDefault="1" showInWebsite="1" showInStore="1">
+        <label>Zapnúť sekciu</label>
+        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+        </field>
+        <field id="title" translate="label" type="text" sortOrder="20"
+        showInDefault="1" showInWebsite="1" showInStore="1">
+        <label>Nadpis</label>
+        <comment>Napr. „Plechy pálime na moderných strojoch“</comment>
+        </field>
+        <field id="text_html" translate="label" type="textarea" sortOrder="30"
+        showInDefault="1" showInWebsite="1" showInStore="1">
+        <label>Popis (HTML)</label>
+        <comment>Podporuje základné HTML (p, br, strong, a…)</comment>
+        </field>
+        <field id="cta_label" translate="label" type="text" sortOrder="40"
+        showInDefault="1" showInWebsite="1" showInStore="1">
+        <label>CTA text</label>
+        <comment>Napr. „Čítať viac“</comment>
+        </field>
+        <field id="cta_url" translate="label" type="text" sortOrder="50"
+        showInDefault="1" showInWebsite="1" showInStore="1">
+        <label>CTA URL</label>
+        <comment>Relatívna alebo plná URL (napr. /o-nas)</comment>
+        </field>
+    </group>
+</section>
+<section id="metalio_product" translate="label" type="text"
+    sortOrder="910" showInDefault="1" showInWebsite="1" showInStore="1">
+    <label>Product Page</label>
+    <tab>metalio</tab>
+    <resource>Metalio_Settings::config</resource>
+    <!-- Skupina: Contact Bar -->
+    <group id="contact_bar" translate="label" type="text" sortOrder="10"
+        showInDefault="1" showInWebsite="1" showInStore="1">
+        <label>Contact Bar</label>
+        <field id="title" translate="label" type="text" sortOrder="20"
+        showInDefault="1" showInWebsite="1" showInStore="1">
+        <label>Nadpis</label>
+        <config_path>metalio_product/contact_bar/title</config_path>
+        </field>
+        <field id="description" translate="label" type="textarea" sortOrder="30"
+        showInDefault="1" showInWebsite="1" showInStore="1">
+        <label>Popis (HTML)</label>
+        <comment>Text pod nadpisom – môže obsahovať aj HTML</comment>
+        <config_path>metalio_product/contact_bar/description</config_path>
+        </field>
+        <field id="form_id" translate="label" type="text" sortOrder="40"
+        showInDefault="1" showInWebsite="1" showInStore="1">
+        <label>ID formulára</label>
+        <config_path>metalio_product/contact_bar/form_id</config_path>
+        </field>
+        <field id="button_label" translate="label" type="text" sortOrder="40"
+        showInDefault="1" showInWebsite="1" showInStore="1">
+        <label>Text tlačidla</label>
+        <config_path>metalio_product/contact_bar/button_label</config_path>
+        </field>
+    </group>
+</section>
+</system>
+</config>

@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <update handle="checkout_index_index"/>
+    <body>
+        <referenceContainer name="page.main.title" remove="true"/>
+        <referenceBlock name="checkout.root">
+                    <arguments>
+                        <argument name="jsLayout" xsi:type="array">
+                            <item name="components" xsi:type="array">
+                                <item name="checkout" xsi:type="array">
+                                    <item name="children" xsi:type="array">
+                                        <item name="firecheckout" xsi:type="array">
+                                            <item name="config" xsi:type="array">
+                                                <item name="plugins" xsi:type="array">
+                                                    <item name="field_tooltip" xsi:type="array">
+                                                        <item name="plugin" xsi:type="string">Swissup_Firecheckout/js/plugin/form/field-tooltip</item>
+                                                        <item name="pluginDisabled" xsi:type="string">true</item>
+                                                    </item>
+                                                </item>
+                                            </item>
+                                        </item>
+                                    </item>
+                                </item>
+                            </item>
+                        </argument>
+                    </arguments>
+                </referenceBlock>
+              
+    </body>
+</page>

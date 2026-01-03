@@ -1,0 +1,109 @@
+<?php
+/** @var \Magento\Framework\View\Element\Template $block */
+
+use Magento\Store\Model\ScopeInterface;
+use Magento\Framework\UrlInterface;
+
+$om             = \Magento\Framework\App\ObjectManager::getInstance();
+/** @var \Magento\Framework\App\Config\ScopeConfigInterface $cfg */
+$cfg            = $om->get(\Magento\Framework\App\Config\ScopeConfigInterface::class);
+/** @var \Magento\Store\Model\StoreManagerInterface $storeManager */
+$storeManager   = $om->get(\Magento\Store\Model\StoreManagerInterface::class);
+/** @var \Magento\Catalog\Api\CategoryRepositoryInterface $categoryRepo */
+$categoryRepo   = $om->get(\Magento\Catalog\Api\CategoryRepositoryInterface::class);
+/** @var \Magento\Catalog\Helper\Category $categoryHelper */
+$categoryHelper = $om->get(\Magento\Catalog\Helper\Category::class);
+
+$basePath   = 'metalio_homepage/topcats/';
+$enabled    = (bool) $cfg->getValue($basePath . 'enabled', ScopeInterface::SCOPE_STORE);
+if (!$enabled) return;
+
+$title      = (string) ($cfg->getValue($basePath . 'title',     ScopeInterface::SCOPE_STORE) ?: __('Top kategórie'));
+$showDesc   = (bool)   $cfg->getValue($basePath . 'show_desc',  ScopeInterface::SCOPE_STORE);
+$descMaxLen = (int)   ($cfg->getValue($basePath . 'desc_maxlen',ScopeInterface::SCOPE_STORE) ?: 140);
+
+$rawIds = (string) $cfg->getValue($basePath . 'ids', ScopeInterface::SCOPE_STORE);
+$parts  = preg_split('/[,\s]+/', trim($rawIds), -1, PREG_SPLIT_NO_EMPTY);
+$ids    = [];
+foreach ($parts as $p) if (ctype_digit($p)) $ids[] = (int) $p;
+$ids = array_values(array_unique($ids));
+if (!$ids) return;
+
+$storeId   = (int) $storeManager->getStore()->getId();
+$mediaBase = rtrim($storeManager->getStore()->getBaseUrl(UrlInterface::URL_TYPE_MEDIA), '/');
+
+$excerpt = static function (?string $html, int $limit) {
+    $text = trim(html_entity_decode(strip_tags((string)$html), ENT_QUOTES | ENT_HTML5, 'UTF-8'));
+    if ($limit <= 0 || mb_strlen($text, 'UTF-8') <= $limit) return $text;
+    $cut = mb_substr($text, 0, $limit, 'UTF-8');
+    $pos = mb_strrpos($cut, ' ', 0, 'UTF-8');
+    if ($pos !== false) $cut = mb_substr($cut, 0, $pos, 'UTF-8');
+    return rtrim($cut, ',.;:!?') . '…';
+};
+
+$buildCatImageUrl = static function (?string $file) use ($mediaBase) {
+    $file = trim((string)$file);
+    if ($file === '') return '';
+    if (preg_match('#^https?://#i', $file)) return $file;
+    $rel = ltrim($file, '/');
+    if (stripos($rel, 'media/') === 0) $rel = substr($rel, 6);
+    if (stripos($rel, 'catalog/category/') !== 0) $rel = 'catalog/category/' . $rel;
+    return $mediaBase . '/' . $rel;
+};
+
+$items = [];
+foreach ($ids as $id) {
+    try {
+        $cat = $categoryRepo->get($id, $storeId);
+        if (!$cat->getIsActive()) continue;
+
+        $name = (string) $cat->getName();
+        $url  = $categoryHelper->getCategoryUrl($cat);
+        $thumb= (string) ($cat->getData('thumbnail') ?: $cat->getImage());
+        $img  = $buildCatImageUrl($thumb);
+        $desc = $showDesc ? $excerpt($cat->getDescription(), $descMaxLen) : '';
+
+        $items[] = ['id'=>$id,'name'=>$name,'url'=>$url,'img'=>$img,'desc'=>$desc];
+    } catch (\Throwable $e) {}
+}
+if (!$items) return;
+?>
+
+<section class="py-12 lg:py-16">
+  <div class="mx-auto">
+    <h2 class="text-2xl sm:text-3xl font-extrabold text-center text-primary mb-8 sm:mb-10">
+      <?= $block->escapeHtml($title) ?>
+    </h2>
+
+    <div class="grid grid-cols-2 md:grid-cols-3 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 sm:gap-4 justify-items-center">
+      <?php foreach ($items as $it): ?>
+        <a href="<?= $block->escapeUrl($it['url']) ?>"
+           class="group inline-flex flex-col items-center justify-center gap-2 rounded-lg border px-4 py-3 transition text-center
+                  border-slate-200 text-slate-800 hover:border-primary hover:bg-primary/5 w-full">
+
+          <div class="relative w-24 h-24 sm:w-24 sm:h-24 bg-slate-50 
+                      flex items-center justify-center overflow-hidden">
+            <?php if ($it['img']): ?>
+              <img src="<?= $block->escapeUrl($it['img']) ?>"
+                   alt="<?= $block->escapeHtmlAttr($it['name']) ?>"
+                   loading="lazy" decoding="async"
+                   class="object-contain transition-transform duration-200 group-hover:scale-[1.05]" />
+            <?php else: ?>
+              <span class="text-slate-300 text-3xl">◎</span>
+            <?php endif; ?>
+          </div>
+
+          <span class="mt-1 text-sm sm:text-base font-semibold transition-colors group-hover:text-primary">
+            <?= $block->escapeHtml($it['name']) ?>
+          </span>
+
+          <?php if (!empty($it['desc'])): ?>
+            <span class="text-xs text-slate-600 line-clamp-2">
+              <?= $block->escapeHtml($it['desc']) ?>
+            </span>
+          <?php endif; ?>
+        </a>
+      <?php endforeach; ?>
+    </div>
+  </div>
+</section>

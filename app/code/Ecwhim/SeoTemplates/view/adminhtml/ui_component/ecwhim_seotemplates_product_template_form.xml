@@ -1,0 +1,290 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Ecwhim. All rights reserved.
+ */
+-->
+<form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <argument name="data" xsi:type="array">
+        <item name="js_config" xsi:type="array">
+            <item name="provider"
+                  xsi:type="string">ecwhim_seotemplates_product_template_form.ecwhim_seotemplates_product_template_form_data_source
+            </item>
+        </item>
+        <item name="label" xsi:type="string" translate="true">Template Information</item>
+        <item name="template" xsi:type="string">templates/form/collapsible</item>
+    </argument>
+    <settings>
+        <buttons>
+            <button name="back">
+                <url path="*/*/"/>
+                <class>back</class>
+                <label translate="true">Back</label>
+            </button>
+            <button name="delete" class="Ecwhim\SeoTemplates\Block\Adminhtml\Edit\ProductTemplate\DeleteButton"/>
+            <button name="reset" class="Ecwhim\SeoTemplates\Block\Adminhtml\Edit\ResetButton"/>
+            <button name="save_and_continue" class="Ecwhim\SeoTemplates\Block\Adminhtml\Edit\SaveAndContinueButton"/>
+            <button name="save" class="Ecwhim\SeoTemplates\Block\Adminhtml\Edit\SaveButton"/>
+        </buttons>
+        <namespace>ecwhim_seotemplates_product_template_form</namespace>
+        <dataScope>data</dataScope>
+        <deps>
+            <dep>ecwhim_seotemplates_product_template_form.ecwhim_seotemplates_product_template_form_data_source</dep>
+        </deps>
+    </settings>
+    <dataSource name="ecwhim_seotemplates_product_template_form_data_source">
+        <argument name="data" xsi:type="array">
+            <item name="js_config" xsi:type="array">
+                <item name="component" xsi:type="string">Magento_Ui/js/form/provider</item>
+            </item>
+        </argument>
+        <settings>
+            <submitUrl path="ecwhim_seotemplates/productTemplate/save"/>
+        </settings>
+        <dataProvider class="Ecwhim\SeoTemplates\Ui\DataProvider\ProductTemplate\FormDataProvider"
+                      name="ecwhim_seotemplates_product_template_form_data_source">
+            <settings>
+                <primaryFieldName>template_id</primaryFieldName>
+                <requestFieldName>template_id</requestFieldName>
+            </settings>
+        </dataProvider>
+    </dataSource>
+    <fieldset name="template_information" sortOrder="10">
+        <settings>
+            <label translate="true">Template Information</label>
+        </settings>
+        <field name="name" sortOrder="10" formElement="input">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">template</item>
+                </item>
+            </argument>
+            <settings>
+                <label translate="true">Name</label>
+                <dataType>text</dataType>
+                <validation>
+                    <rule name="required-entry" xsi:type="boolean">true</rule>
+                    <rule name="max_text_length" xsi:type="number">255</rule>
+                </validation>
+            </settings>
+        </field>
+        <field name="is_active" sortOrder="20" formElement="checkbox">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">template</item>
+                    <item name="default" xsi:type="number">0</item>
+                </item>
+            </argument>
+            <settings>
+                <validation>
+                    <rule name="required-entry" xsi:type="boolean">true</rule>
+                </validation>
+                <dataType>boolean</dataType>
+                <label translate="true">Active</label>
+            </settings>
+            <formElements>
+                <checkbox>
+                    <settings>
+                        <valueMap>
+                            <map name="false" xsi:type="number">0</map>
+                            <map name="true" xsi:type="number">1</map>
+                        </valueMap>
+                        <prefer>toggle</prefer>
+                    </settings>
+                </checkbox>
+            </formElements>
+        </field>
+        <field name="scope" sortOrder="30" formElement="select">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">template</item>
+                </item>
+            </argument>
+            <settings>
+                <dataType>text</dataType>
+                <label translate="true">Scope</label>
+                <switcherConfig>
+                    <rules>
+                        <rule name="0">
+                            <value>store</value>
+                            <actions>
+                                <action name="0">
+                                    <target>ecwhim_seotemplates_product_template_form.ecwhim_seotemplates_product_template_form.template_information.store_ids</target>
+                                    <callback>show</callback>
+                                </action>
+                            </actions>
+                        </rule>
+                        <rule name="1">
+                            <value>global</value>
+                            <actions>
+                                <action name="0">
+                                    <target>ecwhim_seotemplates_product_template_form.ecwhim_seotemplates_product_template_form.template_information.store_ids</target>
+                                    <callback>hide</callback>
+                                </action>
+                            </actions>
+                        </rule>
+                    </rules>
+                    <enabled>true</enabled>
+                </switcherConfig>
+                <validation>
+                    <rule name="required-entry" xsi:type="boolean">true</rule>
+                </validation>
+            </settings>
+            <formElements>
+                <select>
+                    <settings>
+                        <options class="Ecwhim\SeoTemplates\Model\Source\Scope"/>
+                    </settings>
+                </select>
+            </formElements>
+        </field>
+        <field name="store_ids" sortOrder="40" formElement="multiselect">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">template</item>
+                    <item name="default" xsi:type="number">0</item>
+                </item>
+            </argument>
+            <settings>
+                <dataType>int</dataType>
+                <label translate="true">Store View</label>
+                <validation>
+                    <rule name="required-entry" xsi:type="boolean">true</rule>
+                </validation>
+            </settings>
+            <formElements>
+                <multiselect>
+                    <settings>
+                        <options class="Magento\Cms\Ui\Component\Listing\Column\Cms\Options"/>
+                    </settings>
+                </multiselect>
+            </formElements>
+        </field>
+        <field name="type" sortOrder="50" formElement="select">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">template</item>
+                </item>
+            </argument>
+            <settings>
+                <dataType>text</dataType>
+                <label translate="true">Type</label>
+                <validation>
+                    <rule name="required-entry" xsi:type="boolean">true</rule>
+                </validation>
+            </settings>
+            <formElements>
+                <select>
+                    <settings>
+                        <options class="Ecwhim\SeoTemplates\Model\Source\ProductTemplate\Type"/>
+                    </settings>
+                </select>
+            </formElements>
+        </field>
+        <field name="content" sortOrder="60" formElement="textarea">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">template</item>
+                    <item name="rows" xsi:type="number">5</item>
+                    <item name="additionalInfo" xsi:type="string">
+                        <![CDATA[
+<p><b>Template variables</b></p>
+<p>
+    <code>{{attr ATTRIBUTE_CODE}}</code><br>
+    <span>Example: <code>{{attr name}}</code>, <code>{{attr short_description}}</code>, <code>{{attr color}}</code></span>
+</p>
+<p>
+    <code>{{config path="CONFIG_PATH"}}</code><br>
+    <span>Example: <code>{{config path="general/store_information/name"}}</code></span>
+</p>
+<p>
+    <span>Available <code>CONFIG_PATH</code>s:</span><br>
+    <span><code>general/store_information/name</code></span><br>
+    <span><code>general/store_information/phone</code></span><br>
+    <span><code>general/store_information/hours</code></span><br>
+    <span><code>general/store_information/country_id</code></span><br>
+    <span><code>general/store_information/region_id</code></span><br>
+    <span><code>general/store_information/postcode</code></span><br>
+    <span><code>general/store_information/city</code></span><br>
+    <span><code>general/store_information/street_line1</code></span><br>
+    <span><code>general/store_information/street_line2</code></span><br>
+</p>
+<p><b>Template expressions</b></p>
+<p>
+    <code>[[if EXP_1||EXP_2||...||EXP_N]]</code><br>
+    <span>Example: <code>[[if by {{attr brand}}]]</code>, <code>[[if by {{attr brand}}||by {{attr manufacturer}}]]</code></span>
+</p>
+<p>
+    <code>[[random VAR_1||VAR_2||...||VAR_N]]</code><br>
+    <span>Example: <code>[[random Buy||Order||Buy for {{attr price}}]]</code></span>
+</p>
+]]>
+                    </item>
+                </item>
+            </argument>
+            <settings>
+                <label translate="true">Content</label>
+                <dataType>text</dataType>
+                <validation>
+                    <rule name="required-entry" xsi:type="boolean">true</rule>
+                </validation>
+            </settings>
+        </field>
+        <field name="apply_by_cron" sortOrder="70" formElement="checkbox">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">template</item>
+                    <item name="default" xsi:type="number">0</item>
+                </item>
+            </argument>
+            <settings>
+                <dataType>boolean</dataType>
+                <label translate="true">Apply by Cron</label>
+            </settings>
+            <formElements>
+                <checkbox>
+                    <settings>
+                        <valueMap>
+                            <map name="false" xsi:type="number">0</map>
+                            <map name="true" xsi:type="number">1</map>
+                        </valueMap>
+                        <prefer>toggle</prefer>
+                    </settings>
+                </checkbox>
+            </formElements>
+        </field>
+        <field name="priority" sortOrder="80" formElement="input">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">template</item>
+                </item>
+            </argument>
+            <settings>
+                <label translate="true">Priority</label>
+                <dataType>text</dataType>
+                <validation>
+                    <rule name="less-than-equals-to" xsi:type="number">4294967295</rule>
+                    <rule name="validate-digits" xsi:type="boolean">true</rule>
+                </validation>
+            </settings>
+        </field>
+    </fieldset>
+    <htmlContent name="block_product_template_edit_tab_conditions" sortOrder="20">
+        <argument name="data" xsi:type="array">
+            <item name="wrapper" xsi:type="array">
+                <item name="label" xsi:type="string" translate="true">Conditions</item>
+                <item name="collapsible" xsi:type="boolean">true</item>
+                <item name="opened" xsi:type="boolean">false</item>
+            </item>
+        </argument>
+        <settings>
+            <wrapper>
+                <canShow>true</canShow>
+                <componentType>fieldset</componentType>
+            </wrapper>
+        </settings>
+        <block class="Ecwhim\SeoTemplates\Block\Adminhtml\ProductTemplate\Edit\Tab\Conditions"
+               name="product_template_edit_tab"/>
+    </htmlContent>
+</form>

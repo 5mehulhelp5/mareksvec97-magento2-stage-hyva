@@ -1,0 +1,34 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2022-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+declare(strict_types=1);
+
+namespace Hyva\Checkout\Model\Form;
+
+interface EntityFormProviderInterface
+{
+    /**
+     * @param string $name
+     * @return EntityFormInterface|null
+     */
+    public function getByName(string $name): ?EntityFormInterface;
+
+    /**
+     * Get shipping address form.
+     *
+     * @return EntityFormInterface
+     */
+    public function getShippingAddressForm(): EntityFormInterface;
+
+    /**
+     * Get billing address form.
+     *
+     * @return EntityFormInterface
+     */
+    public function getBillingAddressForm(): EntityFormInterface;
+}

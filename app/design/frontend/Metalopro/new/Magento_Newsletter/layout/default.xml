@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceBlock name="head.components">
+            <block class="Magento\Framework\View\Element\Js\Components" name="newsletter_head_components" template="Magento_Newsletter::js/components.phtml" ifconfig="newsletter/general/active"/>
+        </referenceBlock>
+        <referenceContainer name="footer">
+        	<container name="footer.newsletter.col" htmlTag="div" htmlClass="footer-col newsletter-col" after="-">
+        		<container name="newsletter.group" htmlTag="div" htmlClass="newsletter-footer d-flex flex-column gap-5">
+            <block class="Magento\Newsletter\Block\Subscribe" name="form.subscribe" as="subscribe" template="Magento_Newsletter::subscribe.phtml" ifconfig="newsletter/general/active"/>
+             <block class="Magento\Cms\Block\Block" name="footer.payment" after="-">
+            <arguments>
+                <argument name="block_id" xsi:type="string">footer-payment-icon</argument>
+            </arguments>
+        </block>
+         </container>
+        </container>
+        </referenceContainer>
+        <referenceBlock name="footer.newsletter.col" remove="true"/>
+    </body>
+</page>

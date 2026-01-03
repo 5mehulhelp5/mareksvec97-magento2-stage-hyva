@@ -1,0 +1,48 @@
+<?php if ($block->getGeneralSettings('active_product')) { ?>
+<div class="contact_us_bar_widget">
+	<img class="contact-us-image" src="<?= $block->getAvatar(); ?>" alt="avatar">
+	<div class="contact-us-text">
+		<p class="main_text"><b><?= $block->getBlockTitle(); ?></b></p>
+		<p class="long_text"><?= $block->getBlockMessage(); ?></p>
+		<a href="tel:<?= $block->getStorePhone(); ?>" class="phone_number">
+			<img src="/pub/media/wysiwyg/steelbro/phone_white.svg" alt="phone-icon">
+			<strong><?= $block->getStorePhone(); ?></strong></a>
+		<div class="cta-block">
+			<div class="actions">
+				<button id="click-me" class="action primary">
+					<span><?= $block->escapeHtml(__('Write us a message')) ?></span>
+				</button>
+			</div>
+		</div>
+	</div>
+</div>
+<div id="popup-modal-contact" style="display: none;">
+    <?php include("forms/form_product.phtml"); ?>
+</div>
+<script>
+    require(
+        [
+            'jquery',
+            'Magento_Ui/js/modal/modal'
+        ],
+        function(
+            $,
+            modal
+        ) {
+            var options = {
+                type: 'popup',
+                responsive: true,
+                innerScroll: true,
+                modalClass: 'bigconnect_form',
+                title: "<?php echo __('Contact Form')?>",
+                buttons: false
+            };
+ 
+             var popup = modal(options, $('#popup-modal-contact'));
+            $("#click-me").on('click',function(){
+                $("#popup-modal-contact").modal("openModal");
+            });
+        }
+    );
+</script>
+<?php } ?>

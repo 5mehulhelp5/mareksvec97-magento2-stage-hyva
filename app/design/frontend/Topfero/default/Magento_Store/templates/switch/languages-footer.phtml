@@ -1,0 +1,67 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+/** @var \Magento\Store\Block\Switcher $block */
+?>
+<?php if (count($block->getStores())>1) : ?>
+    <?php 
+      $id = $block->getIdModifier() ? '-' . $block->getIdModifier() : '';
+      $currentLanguageFlag = substr($block->getCurrentStoreCode(), -2);
+      $currentImageUrl = $this->getViewFileUrl('Magento_Store::img/circle/' . $currentLanguageFlag . '.png');
+
+      // Funkce pro mapování kódu na lokaci
+      $countryNames = [
+          'at' => 'Austria',
+          'be' => 'Belgium',
+          'bg' => 'Bulgaria',
+          'hr' => 'Croatia',
+          'cy' => 'Cyprus',
+          'cz' => 'Czech Republic',
+          'dk' => 'Denmark',
+          'ee' => 'Estonia',
+          'fi' => 'Finland',
+          'fr' => 'France',
+          'de' => 'Germany',
+          'gr' => 'Greece',
+          'hu' => 'Hungary',
+          'ie' => 'Ireland',
+          'it' => 'Italy',
+          'lv' => 'Latvia',
+          'lt' => 'Lithuania',
+          'lu' => 'Luxembourg',
+          'mt' => 'Malta',
+          'nl' => 'Netherlands',
+          'pl' => 'Poland',
+          'pt' => 'Portugal',
+          'ro' => 'Romania',
+          'sk' => 'Slovakia',
+          'si' => 'Slovenia',
+          'es' => 'Spain',
+          'se' => 'Sweden'
+      ];
+      ?>
+    <div class="switcher language switcher-language" data-ui-id="language-switcher" id="switcher-language<?= $block->escapeHtmlAttr($id) ?>">
+        <div class="options switcher-options">
+            <ul class="d-flex gap-4 flex-wrap justify-center">
+                <?php foreach ($block->getStores() as $_lang) : ?>
+                  <?php 
+                            $languageFlag = $block->escapeHtml(substr($_lang->getCode(), -2)); 
+                            $imageUrl = $this->getViewFileUrl('Magento_Store::img/circle/' . $languageFlag . '.png');
+                            $altText = isset($countryNames[$languageFlag]) ? $countryNames[$languageFlag] : $_lang->getName();
+                            ?>
+                    <li class="language d-flex <?= $block->escapeHtml(substr($_lang->getCode(), -2)) ?> switcher-option">
+                        <a href="<?= $block->escapeUrl($_lang->getBaseUrl()) ?>" aria-label="<?= $block->escapeHtml($_lang->getName()) ?>" class="d-flex items-center gap-1">
+                            
+                            
+                            <img src="<?= $block->escapeUrl($imageUrl) ?>" alt="<?= $block->escapeHtmlAttr($altText) ?>" />
+                            <span><?= $block->escapeHtml($_lang->getName()) ?></span>
+                        </a>
+                    </li>
+                <?php endforeach; ?>
+            </ul>
+        </div>
+    </div>
+<?php endif; ?>

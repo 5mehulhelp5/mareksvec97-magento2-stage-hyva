@@ -1,0 +1,32 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2020-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+declare(strict_types=1);
+
+use Hyva\Theme\ViewModel\HyvaCsp;
+
+// phpcs:disable Magento2.Templates.ThisInTemplate.FoundHelper
+/** @var HyvaCsp $hyvaCsp */
+
+?>
+<script>
+    function hyvaCheckoutPriceSummaryCartItems() {
+        return hyva.createBooleanObject('visible', this.$wire.expand, {
+            applyDownRotateClass() {
+                return {
+                    'transform rotate-180': this.visible()
+                }
+            }
+        })
+    }
+
+    window.addEventListener('alpine:init', () => {
+        Alpine.data('hyvaCheckoutPriceSummaryCartItems', hyvaCheckoutPriceSummaryCartItems)
+    }, { once: true })
+</script>
+<?php $hyvaCsp->registerInlineScript() ?>

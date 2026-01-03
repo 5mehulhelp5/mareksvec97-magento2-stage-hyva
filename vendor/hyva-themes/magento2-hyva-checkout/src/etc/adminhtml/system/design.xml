@@ -1,0 +1,149 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2022-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+-->
+<include xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_include.xsd"
+>
+    <group id="design"
+           showInDefault="1"
+           showInStore="1"
+           showInWebsite="1"
+           sortOrder="80"
+           translate="label"
+    >
+        <label>Design</label>
+        <comment>These design setting will definitely apply to the default (plain) checkout experience. However, if your store includes modifications or third-party extensions, these settings may not be automatically be applied. Custom developments may override or bypass certain default configurations.</comment>
+
+        <group id="shipping_payment_methods"
+               showInDefault="1"
+               showInStore="1"
+               showInWebsite="1"
+               sortOrder="10"
+               translate="label"
+        >
+            <label>Shipping- &amp; Payment Method</label>
+
+            <field id="universal_icon_width"
+                   translate="label comment"
+                   type="text"
+                   sortOrder="10"
+                   showInDefault="1"
+                   showInWebsite="1"
+                   showInStore="1"
+                   canRestore="1"
+            >
+                <label>Universal Icon Width</label>
+                <comment>This value serves as a universal standard for all icons but can be overridden as needed. It is typically applicable when a particular icon maintains a consistent width and doesn't require individual adjustment.</comment>
+            </field>
+
+            <field id="universal_icon_height"
+                   translate="label comment"
+                   type="text"
+                   sortOrder="20"
+                   showInDefault="1"
+                   showInWebsite="1"
+                   showInStore="1"
+                   canRestore="1"
+            >
+                <label>Universal Icon Height</label>
+                <comment>This value serves as a universal standard for all icons but can be overridden as needed. It is typically applicable when a particular icon maintains a consistent height and doesn't require individual adjustment.</comment>
+                <validate>required-entry validate-digits validate-zero-or-greater </validate>
+            </field>
+
+            <field id="combine_shipping_method_name"
+                   translate="label comment"
+                   type="select"
+                   sortOrder="30"
+                   showInDefault="1"
+                   showInWebsite="1"
+                   showInStore="1"
+                   canRestore="1"
+            >
+                <label>Combine Shipping Title and Method Name</label>
+                <comment>When enabled, displays shipping method as "Method Name - Title" format (e.g., "Fixed - Flat Rate") instead of showing them separately.</comment>
+                <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+            </field>
+        </group>
+
+        <group id="form_fields"
+               showInDefault="1"
+               showInStore="1"
+               showInWebsite="1"
+               sortOrder="10"
+               translate="label"
+        >
+            <label>Forms Fields</label>
+
+            <field
+                id="show_password_visibility_toggle"
+                translate="label"
+                type="select"
+                sortOrder="10"
+                showInDefault="1"
+                showInWebsite="1"
+                showInStore="1"
+                canRestore="1"
+            >
+                <label>Show password visibility toggle</label>
+                <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                <comment>Allows users to show or hide the password they are entering by toggling a visibility button in the password field.</comment>
+            </field>
+
+            <field
+                id="tooltip_style"
+                translate="label"
+                type="select"
+                sortOrder="20"
+                showInDefault="1"
+                showInWebsite="1"
+                showInStore="1"
+                canRestore="1"
+            >
+                <label>Tooltip Style</label>
+                <source_model>Hyva\Checkout\Model\Config\Source\TooltipRenderStyles</source_model>
+                <comment>Defines the appearance and behavior of tooltips displayed.</comment>
+            </field>
+        </group>
+
+        <group id="formatting"
+               showInDefault="1"
+               showInStore="1"
+               showInWebsite="1"
+               sortOrder="30"
+               translate="label"
+        >
+            <label>Formatting</label>
+
+            <field id="show_zero_price_free_label"
+                   translate="label comment"
+                   type="select"
+                   sortOrder="20"
+                   showInDefault="1"
+                   showInWebsite="1"
+                   showInStore="1"
+            >
+                <label>Show "Free" when price is 0.00</label>
+                <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+            </field>
+
+            <field id="show_shipping_method_total_if_none_selected"
+                   translate="label comment"
+                   type="select"
+                   sortOrder="30"
+                   showInDefault="1"
+                   showInWebsite="1"
+                   showInStore="1"
+            >
+                <label>Show shipping total when no method selected</label>
+                <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                <comment>When enabled, displays the shipping total when no shipping method has been selected by the customer.</comment>
+            </field>
+        </group>
+    </group>
+</include>

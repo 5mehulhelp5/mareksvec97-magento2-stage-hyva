@@ -1,0 +1,81 @@
+<?php
+use Magento\Framework\App\ObjectManager;
+use Magento\Catalog\Model\Product\Visibility;
+
+$objectManager = ObjectManager::getInstance();
+
+$registry = $objectManager->get(\Magento\Framework\Registry::class);
+$currentProduct = $registry->registry('current_product');
+
+if (!$currentProduct || !$currentProduct->getData('design_series')) {
+    return;
+}
+
+$currentDesignSeries = $currentProduct->getData('design_series');
+
+$collection = $objectManager->get(\Magento\Catalog\Model\ResourceModel\Product\CollectionFactory::class)->create();
+$collection->addAttributeToSelect(['name', 'small_image', 'price', 'design_series']);
+$collection->addAttributeToFilter('entity_id', ['neq' => $currentProduct->getId()]);
+$collection->addAttributeToFilter('design_series', $currentDesignSeries);
+$collection->addAttributeToFilter('visibility', ['in' => [
+    Visibility::VISIBILITY_IN_CATALOG,
+    Visibility::VISIBILITY_BOTH
+]]);
+$collection->setPageSize(10);
+
+if (!$collection->getSize()) {
+    return;
+}
+$eavConfig = $objectManager->get(\Magento\Eav\Model\Config::class);
+$attribute = $eavConfig->getAttribute(\Magento\Catalog\Model\Product::ENTITY, 'design_series');
+$label = $attribute->getSource()->getOptionText($currentDesignSeries);
+
+$imageHelper = $objectManager->get(\Magento\Catalog\Helper\Image::class);
+$block_badge = $block->getLayout()->createBlock(\BigConnect\Badges\Block\Product\ListProduct::class);
+?>
+
+<div class="block amrelated-grid-wrapper block-products-list grid block widget design-products-widget">
+    <div class="block-title">
+        <div class="decorated-title"><strong><?= __('Ďalšie produkty z dizajnu %1', $label) ?></strong></div>
+    </div>
+    <div class="block-content">
+        <div class="products-grid">
+            <?php foreach ($collection as $_product): ?>
+                <div class="product-item">
+                    <div class="product-item-info">
+                        <a href="<?= $_product->getProductUrl() ?>" class="product-item-photo">
+                            <img src="<?= $imageHelper->init($_product, 'category_page_grid')->getUrl() ?>"
+                                 alt="<?= $_product->getName() ?>"/>
+                        </a>
+
+                        <div class="badge-wrapper">
+                            <?php if ($discount = $block_badge->getDiscountPercent($_product)): ?>
+                                <div class="single-badge"><div class="discount-badge">-<?= $discount ?></div></div>
+                            <?php endif; ?>
+
+                            <?php if ($stock = $block_badge->isInStock($_product)): ?>
+                                <div class="single-badge"><div class="instock-badge"><?= $stock ?></div></div>
+                            <?php endif; ?>
+
+                            <?php if ($bestseller = $block_badge->isProductBestseller($_product)): ?>
+                                <div class="single-badge"><div class="bestseller-badge"><?= $bestseller ?></div></div>
+                            <?php endif; ?>
+
+                            <?= $block_badge->getPersonalizeBadge($_product) ?>
+                        </div>
+
+                        <div class="product-item-details">
+                            <strong class="product-item-name">
+                                <a href="<?= $_product->getProductUrl() ?>" class="product-item-link">
+                                    <?= $_product->getName() ?>
+                                </a>
+                            </strong>
+
+                            <?= $block->getProductPriceHtml($_product, \Magento\Catalog\Pricing\Price\FinalPrice::PRICE_CODE) ?>
+                        </div>
+                    </div>
+                </div>
+            <?php endforeach; ?>
+        </div>
+    </div>
+</div>

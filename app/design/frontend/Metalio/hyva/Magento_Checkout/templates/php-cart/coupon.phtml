@@ -1,0 +1,150 @@
+<?php
+declare(strict_types=1);
+
+use Hyva\Theme\ViewModel\ReCaptcha;
+use Magento\Checkout\Block\Cart\Coupon;
+use Magento\Framework\Escaper;
+
+/** @var Coupon $block */
+/** @var Escaper $escaper */
+/** @var ReCaptcha $recaptcha */
+
+$hasCouponCode = (bool) strlen($block->getCouponCode() ?: "");
+$recaptcha = $block->getData('viewModelRecaptcha');
+?>
+<script>
+    function initCouponForm() {
+        return {
+            errors: 0,
+            hasCaptchaToken: 0,
+            showCouponForm: <?= $hasCouponCode ? 1 : 0 ?>,
+            formData: {
+                coupon_code: '<?= $escaper->escapeJs($block->getCouponCode()) ?>',
+                remove: '<?= (int) $hasCouponCode ?>'
+            },
+            init() {
+                const stored = hyva.getBrowserStorage().getItem('hyva.showCouponForm');
+                this.showCouponForm = stored !== null ? JSON.parse(stored) : this.showCouponForm;
+            },
+            toggleShowCoupon() {
+                this.showCouponForm = !this.showCouponForm;
+                hyva.getBrowserStorage().setItem('hyva.showCouponForm', this.showCouponForm);
+                this.$nextTick(() => this.$refs.couponInput?.focus());
+            },
+            submitForm() {
+                const $form = document.querySelector('#discount-coupon-form');
+                <?= $recaptcha ? $recaptcha->getValidationJsHtml(ReCaptcha::RECAPTCHA_FORM_ID_COUPON_CODE) : '' ?>
+                if (this.errors === 0) hyva.postCart($form);
+            }
+        }
+    }
+</script>
+
+<div class="coupon-form pt-6" x-data="initCouponForm()">
+   
+   
+    <!-- TOGGLE: linkový štýl s ikonou a chevronom -->
+    <div class="text-left">
+      <button
+        @click="toggleShowCoupon()"
+        :aria-expanded="showCouponForm"
+        :aria-controls="'discount-coupon-form'"
+        type="button"
+        class="group inline-flex items-center gap-2 select-none 
+               focus:outline-none "
+        id="discount-form-toggle"
+      >
+        <!-- ikona „tag“ -->
+        <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M7 7h.01M3 11.5l7.879 7.879a3 3 0 004.243 0L21 13.5a3 3 0 000-4.243L13.743 2H7a4 4 0 00-4 4v5.5z"/>
+        </svg>
+
+        <span class="text-sm font-medium underline underline-offset-2 group-hover:decoration-2">
+          <?= $escaper->escapeHtml(__('Použiť zľavový kód')) ?>
+        </span>
+
+        <!-- chevron -->
+        <svg xmlns="http://www.w3.org/2000/svg"
+             class="h-4 w-4 transition-transform duration-200"
+             :class="showCouponForm ? 'rotate-180' : 'rotate-0'"
+             viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M19 9l-7 7-7-7"/>
+        </svg>
+      </button>
+    </div>
+
+    <form id="discount-coupon-form"
+          class="my-4"
+          x-show="showCouponForm"
+          x-cloak
+          action="<?= $escaper->escapeUrl($block->getUrl('checkout/cart/couponPost')) ?>"
+          method="post"
+          @submit.prevent="submitForm()"
+    >
+        <?= $block->getBlockHtml('formkey') ?>
+
+        <div class="fieldset coupon space-y-3">
+            <label for="coupon_code" class="sr-only">
+                <?= $escaper->escapeHtmlAttr(__('Enter discount code')) ?>
+            </label>
+
+            <!-- INPUT-GROUP „PILL“ -->
+            <div class="w-full max-w-xl">
+                <div class="flex items-stretch w-full rounded-full ring-1 ring-slate-300 bg-white overflow-hidden shadow-sm
+                            focus-within:ring-2 focus-within:ring-slate-400 transition">
+                    <input
+                        type="text"
+                        id="coupon_code"
+                        name="coupon_code"
+                        x-model="formData.coupon_code"
+                        x-ref="couponInput"
+                        value="<?= $escaper->escapeHtmlAttr($block->getCouponCode()) ?>"
+                        placeholder="<?= $escaper->escapeHtml(__('Enter discount code')) ?>"
+                        class="form-input flex-1 bg-transparent border-0 focus:ring-0 focus:outline-none
+                               px-4 sm:px-5 py-2.5 text-[15px] placeholder-slate-400
+                               disabled:opacity-70 disabled:cursor-not-allowed"
+                        <?php if ($hasCouponCode): ?>disabled<?php else: ?>required<?php endif; ?>
+                    />
+
+                    <!-- deliaca čiara medzi inputom a tlačidlom -->
+                    <div class="self-center h-6 w-px bg-slate-200"></div>
+
+                    <?php if (!$hasCouponCode): ?>
+                        <button type="submit"
+                                class="inline-flex items-center justify-center px-5 py-2.5 text-sm font-semibold
+                                       text-slate-800 bg-slate-50 hover:bg-slate-100
+                                       focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400
+                                       focus-visible:ring-offset-2">
+                            <?= $escaper->escapeHtml(__('Apply')) ?>
+                        </button>
+                    <?php else: ?>
+                        <input type="hidden" name="remove" id="remove-coupon" value="1"/>
+                        <button type="submit"
+                                class="inline-flex items-center justify-center px-5 py-2.5 text-sm font-semibold
+                                       text-rose-700 bg-rose-50 hover:bg-rose-100
+                                       focus:outline-none focus-visible:ring-2 focus-visible:ring-rose-400
+                                       focus-visible:ring-offset-2">
+                            <?= $escaper->escapeHtml(__('Cancel')) ?>
+                        </button>
+                    <?php endif; ?>
+                </div>
+
+                <!-- pomocný text -->
+                <?php if (!$hasCouponCode): ?>
+                    <?php else: ?>
+                    <p class="mt-1.5 text-xs text-emerald-700">
+                        <?= $escaper->escapeHtml(__('Kód je uplatnený. Môžeš ho zrušiť tlačidlom „Zrušiť“.')) ?>
+                    </p>
+                    <?php endif; ?>
+            </div>
+
+            <!-- reCAPTCHA -->
+            <?= $recaptcha ? $recaptcha->getInputHtml(ReCaptcha::RECAPTCHA_FORM_ID_COUPON_CODE) : '' ?>
+            <?php if ($recaptcha && $recaptcha->getLegalNoticeHtml(ReCaptcha::RECAPTCHA_FORM_ID_COUPON_CODE)): ?>
+                <?= $recaptcha->getLegalNoticeHtml(ReCaptcha::RECAPTCHA_FORM_ID_COUPON_CODE) ?>
+            <?php endif; ?>
+        </div>
+    </form>
+</div>

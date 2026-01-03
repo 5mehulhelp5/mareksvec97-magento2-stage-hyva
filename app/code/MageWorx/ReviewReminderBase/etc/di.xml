@@ -1,0 +1,92 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © MageWorx. All rights reserved.
+ * See LICENSE.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="MageWorx\ReviewReminderBase\Api\ReminderRepositoryInterface" type="MageWorx\ReviewReminderBase\Model\ReminderRepository"/>
+    <preference for="MageWorx\ReviewReminderBase\Api\Data\ReminderInterface" type="MageWorx\ReviewReminderBase\Model\Reminder"/>
+    <preference for="MageWorx\ReviewReminderBase\Api\Data\ReminderSearchResultInterface" type="Magento\Framework\Api\SearchResults"/>
+    <preference for="MageWorx\ReviewReminderBase\Api\LogRecordRepositoryInterface" type="MageWorx\ReviewReminderBase\Model\LogRecordRepository"/>
+    <preference for="MageWorx\ReviewReminderBase\Api\Data\LogRecordInterface" type="MageWorx\ReviewReminderBase\Model\LogRecord"/>
+    <preference for="MageWorx\ReviewReminderBase\Api\Data\LogRecordSearchResultInterface" type="Magento\Framework\Api\SearchResults"/>
+    <preference for="MageWorx\ReviewReminderBase\Api\UnsubscribedRepositoryInterface" type="MageWorx\ReviewReminderBase\Model\UnsubscribedRepository"/>
+    <preference for="MageWorx\ReviewReminderBase\Api\Data\UnsubscribedInterface" type="MageWorx\ReviewReminderBase\Model\Unsubscribed"/>
+    <preference for="MageWorx\ReviewReminderBase\Api\Data\UnsubscribedSearchResultInterface" type="Magento\Framework\Api\SearchResults"/>
+    <preference for="MageWorx\ReviewReminderBase\Api\MobileDetectorAdapterInterface" type="MageWorx\ReviewReminderBase\Model\MobileDetectorAdapter"/>
+    <type name="MageWorx\ReviewReminderBase\Model\ResourceModel\Reminder\Grid\Collection">
+        <arguments>
+            <argument name="mainTable" xsi:type="string">mageworx_reviewreminderbase_reminder</argument>
+            <argument name="eventPrefix" xsi:type="string">mageworx_reviewreminderbase_reminder_grid_collection</argument>
+            <argument name="eventObject" xsi:type="string">reminder_grid_collection</argument>
+            <argument name="resourceModel" xsi:type="string">MageWorx\ReviewReminderBase\Model\ResourceModel\Reminder</argument>
+        </arguments>
+    </type>
+    <type name="MageWorx\ReviewReminderBase\Controller\Adminhtml\Log\MassDelete">
+        <arguments>
+            <argument name="successMessage" xsi:type="string">A total of %1 Log have been deleted.</argument>
+            <argument name="errorMessage" xsi:type="string" translate="true">An error occurred while deleting Log.</argument>
+        </arguments>
+    </type>
+    <type name="MageWorx\ReviewReminderBase\Controller\Adminhtml\Unsubscribed\MassDelete">
+        <arguments>
+            <argument name="successMessage" xsi:type="string">A total of %1 Unsubscribed Clients have been deleted.</argument>
+            <argument name="errorMessage" xsi:type="string" translate="true">An error occurred while deleting Unsubscribed Clients.</argument>
+        </arguments>
+    </type>
+    <type name="MageWorx\ReviewReminderBase\Model\ResourceModel\LogRecord\Grid\Collection">
+        <arguments>
+            <argument name="mainTable" xsi:type="string">mageworx_reviewreminderbase_log</argument>
+            <argument name="eventPrefix" xsi:type="string">mageworx_reviewreminderbase_logRecord_grid_collection</argument>
+            <argument name="eventObject" xsi:type="string">logRecord_grid_collection</argument>
+            <argument name="resourceModel" xsi:type="string">MageWorx\ReviewReminderBase\Model\ResourceModel\LogRecord</argument>
+        </arguments>
+    </type>
+    <type name="MageWorx\ReviewReminderBase\Model\ResourceModel\Unsubscribed\Grid\Collection">
+        <arguments>
+            <argument name="mainTable" xsi:type="string">mageworx_reviewreminderbase_unsubscribed</argument>
+            <argument name="eventPrefix" xsi:type="string">mageworx_reviewreminderbase_unsubscribed_grid_collection</argument>
+            <argument name="eventObject" xsi:type="string">unsubscribed_grid_collection</argument>
+            <argument name="resourceModel" xsi:type="string">MageWorx\ReviewReminderBase\Model\ResourceModel\Unsubscribed</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
+        <arguments>
+            <argument name="collections" xsi:type="array">
+                <item name="mageworx_reviewreminderbase_reminder_listing_data_source" xsi:type="string">MageWorx\ReviewReminderBase\Model\ResourceModel\Reminder\Grid\Collection</item>
+                <item name="mageworx_reviewreminderbase_log_listing_data_source" xsi:type="string">MageWorx\ReviewReminderBase\Model\ResourceModel\LogRecord\Grid\Collection</item>
+                <item name="mageworx_reviewreminderbase_unsubscribed_listing_data_source" xsi:type="string">MageWorx\ReviewReminderBase\Model\ResourceModel\Unsubscribed\Grid\Collection</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="MageWorx\ReviewReminderBase\Model\Content\DataContainerFactory">
+        <arguments>
+            <argument name="map" xsi:type="array">
+                <item name="popup" xsi:type="string">MageWorx\ReviewReminderBase\Model\Content\DataContainer\PopupDataContainer</item>
+                <item name="email" xsi:type="string">MageWorx\ReviewReminderBase\Model\Content\DataContainer\EmailDataContainer</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="MageWorx\ReviewReminderBase\Model\Content\ContainerManager\EmailContainerManager">
+        <arguments>
+            <argument name="modifiers" xsi:type="array">
+                <item name="unavailable_products_remover" xsi:type="object">MageWorx\ReviewReminderBase\Model\Content\DataModifier\UnavailableProductsRemover</item>
+                <item name="already_reviewed_products_remover" xsi:type="object">MageWorx\ReviewReminderBase\Model\Content\DataModifier\AlreadyReviewedProductsRemover</item>
+                <item name="additional_product_data_filler" xsi:type="object">MageWorx\ReviewReminderBase\Model\Content\DataModifier\AdditionalProductDataFiller</item>
+                <item name="example_review_filler" xsi:type="object">MageWorx\ReviewReminderBase\Model\Content\DataModifier\Email\ExampleReviewFiller</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="MageWorx\ReviewReminderBase\Model\Content\ContainerManager\PopupContainerManager">
+        <arguments>
+            <argument name="modifiers" xsi:type="array">
+                <item name="unavailable_products_remover" xsi:type="object">MageWorx\ReviewReminderBase\Model\Content\DataModifier\UnavailableProductsRemover</item>
+                <item name="already_reviewed_products_remover" xsi:type="object">MageWorx\ReviewReminderBase\Model\Content\DataModifier\AlreadyReviewedProductsRemover</item>
+                <item name="additional_product_data_filler" xsi:type="object">MageWorx\ReviewReminderBase\Model\Content\DataModifier\AdditionalProductDataFiller</item>
+                <item name="needless_products_remover" xsi:type="object">MageWorx\ReviewReminderBase\Model\Content\DataModifier\Popup\NeedlessProductsRemover</item>
+            </argument>
+        </arguments>
+    </type>
+</config>

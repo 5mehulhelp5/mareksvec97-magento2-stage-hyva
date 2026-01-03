@@ -1,0 +1,130 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2022-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+declare(strict_types=1);
+
+use Hyva\Theme\ViewModel\HyvaCsp;
+
+/** @var HyvaCsp $hyvaCsp */
+
+/**
+ * @Internal
+ *
+ * Note: A better name for this file would be alpinejs/navigation-component.phtml,
+ *       but keeping the existing name for backwards compatibility.
+ */
+?>
+<script>
+    (() => {
+        const BTN_PREVIOUS = 'previous',
+              BTN_NEXT = 'next',
+              BTN_PLACE_ORDER = 'place-order'
+
+        window.initCheckoutNavigation = function() {
+            return {
+                disabled: {
+                    [BTN_PREVIOUS]: false,
+                    [BTN_NEXT]: false,
+                    [BTN_PLACE_ORDER]: false
+                },
+
+                async onClick(event) {
+                    const button = this.getButton(event);
+                    const stepData = JSON.parse(button && button.dataset && button.dataset.step || '{}')
+
+                    if (stepData.place) {
+                        await hyvaCheckout.order.place()
+                    } else {
+                        await hyvaCheckout.navigation.stepTo(stepData.route, stepData.validate)
+                    }
+                },
+
+                buttonAttributes(name) {
+                    return {
+                        ['x-bind:class']() {
+                            let classes = {}
+                            classes['btn-' + name] = true;
+
+                            return classes
+                        },
+
+                        ['x-on:click'](event) {
+                            this.$el.setAttribute('disabled', '')
+
+                            return this.onClick(event, name).finally(() => {
+                                this.$el.removeAttribute('disabled')
+                            })
+                        }
+                    }
+                },
+
+                buttonPrevious(route) {
+                    return this.buttonStepTo(BTN_PREVIOUS, route || this.$el.dataset.route, false)
+                },
+
+                buttonNext(route) {
+                    return this.buttonStepTo(BTN_NEXT, route || this.$el.dataset.route)
+                },
+
+                buttonStepTo(namespace, route, validate = true) {
+                    return Object.assign(this.buttonAttributes(namespace), {
+                        ['x-bind:data-step']() {
+                            return JSON.stringify({route, validate})
+                        }
+                    })
+                },
+
+                buttonPlaceOrder() {
+                    return Object.assign(this.buttonAttributes(BTN_PLACE_ORDER), {
+                        ['x-bind:data-step']() {
+                            return JSON.stringify({ place: true })
+                        }
+                    })
+                },
+
+                getButton(event) {
+                    return event && event.target && event.target.dataset && event.target.dataset.step
+                        ? event.target
+                        : event.target.closest('[data-step]')
+                }
+            }
+        }
+
+    <?php /* @deprecated Blocking and unblocking are no longer supported, please use a UX-friendly alternative instead. */ ?>
+        <?php /* @deprecated Navigational disable/enable events are no longer supported or used by the core. */ ?>
+        window.addEventListener('checkout:init:navigation', () => {
+            hyvaCheckout.navigation.disableButtonPrevious = function() {
+                window.dispatchEvent(new CustomEvent('checkout:navigate:disable-button', { detail: { name: BTN_PREVIOUS } }))
+            }
+            hyvaCheckout.navigation.enableButtonPrevious = function() {
+                window.dispatchEvent(new CustomEvent('checkout:navigate:enable-button', { detail: { name: BTN_PREVIOUS } }))
+            }
+            hyvaCheckout.navigation.disableButtonNext = function() {
+                window.dispatchEvent(new CustomEvent('checkout:navigate:disable-button', { detail: { name: BTN_NEXT } }))
+            }
+            hyvaCheckout.navigation.enableButtonNext = function() {
+                window.dispatchEvent(new CustomEvent('checkout:navigate:enable-button', { detail: { name: BTN_NEXT } }))
+            }
+            hyvaCheckout.navigation.disableButtonPlaceOrder = function() {
+                window.dispatchEvent(new CustomEvent('checkout:navigate:disable-button', { detail: { name: BTN_PLACE_ORDER } }))
+            }
+            hyvaCheckout.navigation.enableButtonPlaceOrder = function() {
+                window.dispatchEvent(new CustomEvent('checkout:navigate:enable-button', { detail: { name: BTN_PLACE_ORDER } }))
+            }
+            hyvaCheckout.navigation.disableButtonPrimary = function() {
+                console.log('Checkout: Disabling the primary navigation button is no longer supported.');
+            }
+            hyvaCheckout.navigation.enableButtonPrimary = function() {
+                console.log('Checkout: Enabling the primary navigation button is no longer supported.');
+            }
+        })
+    })();
+
+    window.addEventListener('alpine:init', () => Alpine.data('initCheckoutNavigation', window.initCheckoutNavigation), {once: true});
+</script>
+<?php $hyvaCsp->registerInlineScript() ?>

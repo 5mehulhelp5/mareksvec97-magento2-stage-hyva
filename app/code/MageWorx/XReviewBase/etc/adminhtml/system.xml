@@ -1,0 +1,137 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © MageWorx. All rights reserved.
+ * See LICENSE.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <tab id="mageworx" sortOrder="2001">
+            <label>MageWorx</label>
+        </tab>
+        <!-- The config paths has additional dependence with etc/email_templates.xml -->
+        <section id="mageworx_xreview" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+            <label>Extended Review</label>
+            <tab>mageworx</tab>
+            <resource>MageWorx_XReviewBase::xreviewbase_config</resource>
+            <group id="main" translate="label comment" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Review Settings</label>
+                <field id="is_display_images_in_review" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label><![CDATA[Display Images]]></label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="is_allow_images_uploading" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label><![CDATA[Allow Images Uploading]]></label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment><![CDATA[This setting allows your customers to add their images to the reviews.]]></comment>
+                </field>
+                <field id="image_size" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label><![CDATA[Image Size, px]]></label>
+                    <validate>validate-number validate-zero-or-greater</validate>
+                    <comment><![CDATA[This setting sets the width size of the thumbnails related to the review images.]]></comment>
+                </field>
+                <field id="is_display_location" translate="label" type="select" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label><![CDATA[Display Location]]></label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment><![CDATA[This setting allows you to display a customer location for the reviews.]]></comment>
+                </field>
+                <field id="location_template" translate="label" type="text" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label><![CDATA[Location Template]]></label>
+                    <comment><![CDATA[This setting defines how the location is shown on the front-end. Available variables: [flag] - outputs a country flag; [country] - outputs a full country name; [country_code] - outputs a country code (US); [state] - outputs a state/region.]]></comment>
+                    <frontend_class>required-entry</frontend_class>
+                    <depends>
+                        <field id="is_display_location">1</field>
+                    </depends>
+                </field>
+                <field id="display_helpful_label" translate="label" type="select" sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label><![CDATA[Enable "Helpful"]]></label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment><![CDATA[This setting adds the "Helpful" option for each review.]]></comment>
+                </field>
+                <field id="display_recommend_label" translate="label" type="select" sortOrder="80" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label><![CDATA[Enable Recommend Option]]></label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment><![CDATA[This setting enables "I recommend this product" feature for the reviews. Your customers will be able to add the "I recommend" option, when submitting a review.]]></comment>
+                </field>
+                <field id="display_pros_cons" translate="label" type="select" sortOrder="90" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label><![CDATA[Enable Pros & Cons]]></label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment><![CDATA[This setting enables the functionality to highlight the main product advantages and disadvantages, when submitting the reviews.]]></comment>
+                </field>
+                <field id="display_verified_label" translate="label" type="select" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label><![CDATA[Enable "Verified customer"]]></label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment><![CDATA[This setting enables the functionality to add "Verified customer" label to the reviews. The verified customer is determined by the purchases of the current product.]]></comment>
+                </field>
+                <field id="display_privacy_toggle" translate="label" type="select" sortOrder="110" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label><![CDATA[Add privacy check-box]]></label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment><![CDATA[This setting allows you to add the required consent check-box to adding new review flow.]]></comment>
+                </field>
+                <field id="privacy_message" translate="label" type="textarea" sortOrder="120" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label><![CDATA[Message]]></label>
+                    <comment><![CDATA[This setting allows you to specify a text, which should appear near the consent check-box.]]></comment>
+                    <depends>
+                        <field id="display_privacy_toggle">1</field>
+                    </depends>
+                </field>
+                <field id="display_reward_message" translate="label" type="select" sortOrder="140" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label><![CDATA[Add points message]]></label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment><![CDATA[This setting allows you to add a reward message for "add new review" if you have this rule in the "Reward Points" extension (should be installed in your store).]]></comment>
+                </field>
+                <field id="reward_message" translate="label" type="textarea" sortOrder="150" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label><![CDATA[Reward Message]]></label>
+                    <comment><![CDATA[This setting allows you to specify a text, which should appear near the "Add review" button.]]></comment>
+                    <depends>
+                        <field id="display_reward_message">1</field>
+                    </depends>
+                </field>
+                <field id="review_characters_limit" translate="label" type="text" sortOrder="160" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label><![CDATA[Characters limit in reviews]]></label>
+                    <validate>validate-digits validate-greater-than-zero</validate>
+                    <comment><![CDATA[This setting limits the number of characters of the text in the review on the product page visible by default. If the number of characters of the review exceeds this value, 'Show more' / 'Show less' links will appear.]]></comment>
+                </field>
+                <field id="widget_review_characters_limit" translate="label" type="text" sortOrder="170" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label><![CDATA[Characters limit in reviews widget]]></label>
+                    <validate>validate-digits validate-greater-than-zero</validate>
+                    <comment><![CDATA[This setting limits the number of characters of the review visible in the widget by default.]]></comment>
+                </field>
+                <group id="toolbar" translate="label comment" type="text" sortOrder="300" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Toolbar Settings</label>
+                    <field id="toolbar_filters" translate="label" type="multiselect" sortOrder="140" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Filter Options</label>
+                        <source_model>MageWorx\XReviewBase\Model\Source\Filter</source_model>
+                        <can_be_empty>1</can_be_empty>
+                        <comment><![CDATA[This setting allows you to choose the available filters for your customers. Please note that the "Allow images" setting should be enabled to use the "With images" option.]]></comment>
+                    </field>
+                    <field id="default_sort_field" translate="label" type="select" sortOrder="170" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label><![CDATA[Default Sort By]]></label>
+                        <source_model>MageWorx\XReviewBase\Model\Source\Sorting</source_model>
+                    </field>
+                    <field id="toolbar_sorting" translate="label" type="multiselect" sortOrder="160" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Sorting Options</label>
+                        <source_model>MageWorx\XReviewBase\Model\Source\Sorting</source_model>
+                        <comment><![CDATA[This setting allows you to choose the available sorting for your customers.]]></comment>
+                        <depends>
+                            <field id="display_toolbar_sorting">1</field>
+                        </depends>
+                    </field>
+                    <field id="default_sort_direction" translate="label" type="select" sortOrder="170" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label><![CDATA[Default Sort Direction]]></label>
+                        <source_model>MageWorx\XReviewBase\Model\Source\SortDirection</source_model>
+                    </field>
+                    <field id="default_toolbar_limit" translate="label" type="text" sortOrder="180" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label><![CDATA[Reviews per Page]]></label>
+                    </field>
+                    <!--                    <field id="remember_pagination" translate="label comment" type="select" sortOrder="200" showInDefault="1" showInWebsite="0" showInStore="0">-->
+                    <!--                        <label><![CDATA[Remember Review List Pagination]]></label>-->
+                    <!--                        <comment><![CDATA[Changing may affect SEO and cache storage consumption.]]></comment>-->
+                    <!--                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>-->
+                    <!--                    </field>-->
+                </group>
+            </group>
+        </section>
+    </system>
+</config>

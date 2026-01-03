@@ -1,0 +1,156 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2020-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+declare(strict_types=1);
+
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\HeroiconsOutline;
+use Hyva\Theme\ViewModel\HeroiconsSolid;
+use Hyva\Theme\ViewModel\ProductAttributes;
+use Hyva\Theme\ViewModel\ProductCompare;
+use Hyva\Theme\ViewModel\ProductPage;
+use Hyva\Theme\ViewModel\Wishlist;
+use Magento\Catalog\Model\Product;
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Element\Template;
+
+/** @var Template $block */
+/** @var Escaper $escaper */
+/** @var ViewModelRegistry $viewModels */
+
+$heroIcons = $viewModels->require(HeroiconsOutline::class);
+/** @var HeroiconsSolid $heroiconsSolid */
+$heroiconsSolid = $viewModels->require(HeroiconsSolid::class);
+
+/** @var ProductPage $productViewModel */
+$productViewModel = $viewModels->require(ProductPage::class);
+/** @var ProductAttributes $attributesViewModel */
+$attributesViewModel = $viewModels->require(ProductAttributes::class);
+/** @var Product $product */
+$product = $productViewModel->getProduct();
+
+$productType   = $product->getTypeId();
+$shipTomorrow  = (new \DateTime('tomorrow'))->format('d.m.Y');
+$eta           = (new \DateTime('tomorrow +3 days'))->format('d.m.Y');
+
+/**
+ * Hodnota z atribútu "dostupnost"
+ * - ak je atribút typu select/multiselect použijeme getAttributeText (vracia label)
+ * - ak je textový, použijeme priamo getData('dostupnost')
+ */
+$availabilityText = '';
+$attrText = $product->getAttributeText('dostupnost'); // môže byť string alebo array
+if (is_array($attrText)) {
+    $attrText = implode(', ', $attrText);
+}
+$availabilityText = trim((string)($attrText ?: $product->getData('dostupnost')));
+?>
+<div class="w-full mt-8 lg:mt-0">
+    <?= $block->getChildHtml('page.main.title') ?>
+
+    <div class="my-2 flex">
+        <?= $block->getChildHtml('product.info.review') ?>
+    </div>
+
+    <?php if ($shortDescription = $productViewModel->getShortDescription()) : ?>
+        <div class="mb-2 leading-relaxed product-description prose" x-data>
+            <div class="read-more-clamp read-more-fade">
+                <?= /* @noEscape */ $shortDescription ?>
+            </div>
+
+            <a href="#product-long-description"
+               class="inline-flex items-center mt-2 text-primary hover:underline font-bold"
+               @click.prevent.stop="
+                  setTimeout(() => document.getElementById('product-long-description')
+                    ?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 200)
+               ">
+                <?= $escaper->escapeHtml(__('Čítať viac')) ?>
+                <?= /* @noEscape */ $heroIcons->chevronDownHtml('ml-1 w-4 h-4') ?>
+            </a>
+        </div>
+    <?php endif; ?>
+
+    <div class="flex flex-col sm:flex-row justify-between my-4">
+        <?= $block->getChildHtml('alert.urls') ?>
+    </div>
+
+    <?= $block->getChildHtml('product.info.form') ?>
+
+    <!-- INFO KARTA -->
+    <div class="rounded-2xl border border-slate-200 p-5 sm:p-6 mb-6">
+        <!-- Sklad -->
+        <div class="font-semibold mb-3 sm:mb-4">
+            <?= $block->getChildHtml('product.info.stockstatus') ?>
+            <!-- Prípadne aj množstvo:
+                 <?= $block->getChildHtml('product.info.stockqty') ?> -->
+        </div>
+
+        <!-- Logistika (ikony + texty) -->
+        <ul class="space-y-2 text-slate-700 mb-4 sm:mb-6">
+            <li class="flex items-start gap-2">
+                <span class="mt-0.5 text-slate-500" aria-hidden="true">
+                    <?= $heroIcons->truckHtml('', 20, 20); ?>
+                </span>
+                <span>
+                    <?= $escaper->escapeHtml(__('Delivery time')) ?>:
+                    <span class="font-semibold">
+                        <?php if ($availabilityText): ?>
+                            <?= $escaper->escapeHtml($availabilityText) ?>
+                        <?php else: ?>
+                            <?= $escaper->escapeHtml(__('Predbežné doručenie %1', $eta)) ?>
+                        <?php endif; ?>
+                    </span>
+                </span>
+            </li>
+        </ul>
+
+        <!-- Cena -->
+        <div class="mb-4 sm:mb-6">
+            <?= $block->getChildHtml('product.info.price') ?>
+        </div>
+
+        <!-- Akčný riadok: Kúpiť + shortcut platby -->
+        <div class="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4">
+            <div class="flex items-center gap-3 sm:gap-4">
+                <?php if ($product->isSaleable()): ?>
+                    <!-- Qty -->
+                    <div class="shrink-0">
+                        <?= $block->getChildHtml('product.info.quantity') ?>
+                    </div>
+
+                    <!-- Add to cart -->
+                    <div class="shrink-0">
+                        <?= $block->getChildHtml('product.info.addtocart') ?>
+                    </div>
+                <?php endif; ?>
+            </div>
+
+            <!-- Shortcut buttons (PayPal / GPay) -->
+            <?php if ($product->isSaleable() && $block->getChildHtml('addtocart.shortcut.buttons')): ?>
+                <div class="flex items-center gap-2 sm:ml-2">
+                    <div class="flex gap-2
+                                [&_button]:rounded-full [&_button]:px-4 [&_button]:py-2
+                                [&_button]:bg-slate-100 [&_button]:text-slate-700
+                                hover:[&_button]:bg-slate-200
+                                [&_img]:h-5 [&_img]:w-auto">
+                        <?= $block->getChildHtml('addtocart.shortcut.buttons') ?>
+                    </div>
+                </div>
+            <?php endif; ?>
+        </div>
+    </div>
+
+    <?php if ($tierPriceBlock = $block->getChildHtml('product.price.tier')): ?>
+        <div class="py-4 my-2 tier-price-container">
+            <?= /** @noEscape */ $tierPriceBlock ?>
+        </div>
+    <?php endif; ?>
+
+    <?= $block->getChildHtml('product.info.additional') ?>
+    <?= $block->getChildHtml('product.contact.form') ?>
+</div>

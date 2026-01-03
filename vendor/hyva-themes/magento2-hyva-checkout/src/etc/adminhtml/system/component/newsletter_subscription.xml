@@ -1,0 +1,88 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2022-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+-->
+<include xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_include.xsd"
+>
+    <!-- @OSCMAP: onestepcheckout_iosc/subscribe -->
+    <!-- @TO: hyva_themes_checkout/component/newsletter_subscription -->
+    <group id="newsletter_subscription"
+           translate="label"
+           showInDefault="1"
+           showInWebsite="1"
+           showInStore="1"
+    >
+        <label>Newsletter Subscription</label>
+
+        <!-- @OSCMAP: onestepcheckout_iosc/subscribe/enable -->
+        <!-- @TO: hyva_themes_checkout/component/newsletter_subscription/enable -->
+        <field id="enable"
+               translate="label"
+               type="select"
+               sortOrder="10"
+               showInDefault="1"
+               showInWebsite="1"
+               showInStore="1"
+        >
+            <label>Enable</label>
+            <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+        </field>
+
+        <!-- @OSCMAP: onestepcheckout_iosc/subscribe/autoselect -->
+        <!-- @TO: hyva_themes_checkout/component/newsletter_subscription/autoselect -->
+        <field id="autoselect"
+               translate="label"
+               type="select"
+               sortOrder="20"
+               showInDefault="1"
+               showInWebsite="1"
+               showInStore="1"
+        >
+            <depends>
+                <field id="hyva_themes_checkout/newsletter_subscription/enable">1</field>
+            </depends>
+            <label>Checkbox selected by default</label>
+            <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+        </field>
+
+        <!-- @OSCMAP: onestepcheckout_iosc/subscribe/enableforreg -->
+        <!-- @OSCMAP: hyva_themes_checkout/component/newsletter_subscription/enable_for_reg -->
+        <field id="enable_for_reg"
+               translate="label"
+               type="select"
+               sortOrder="30"
+               showInDefault="1"
+               showInWebsite="1"
+               showInStore="1"
+        >
+            <depends>
+                <field id="hyva_themes_checkout/newsletter_subscription/enable">1</field>
+            </depends>
+            <label>Enable for logged in users</label>
+            <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+        </field>
+
+        <!-- @OSCMAP: onestepcheckout_iosc/subscribe/hidefromregandsubscribed -->
+        <!-- @TO: hyva_themes_checkout/component/newsletter_subscription/hide_from_reg_and_subscribed -->
+        <field id="hide_from_reg_and_subscribed"
+               translate="label"
+               type="select"
+               sortOrder="40"
+               showInDefault="1"
+               showInWebsite="1"
+               showInStore="1"
+        >
+            <depends>
+                <field id="hyva_themes_checkout/newsletter_subscription/enable">1</field>
+            </depends>
+            <label>Hide from logged in user if e-mail is already subscribed</label>
+            <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+        </field>
+    </group>
+</include>

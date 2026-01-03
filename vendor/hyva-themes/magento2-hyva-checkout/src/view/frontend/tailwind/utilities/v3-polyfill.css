@@ -1,0 +1,13 @@
+/**
+ * ! Not intended for use in the HTML
+ * This only intended to add support for TailwindCSS v3 colors to TailwindCSS v2
+ */
+@layer utilities {
+    .hyva-checkout-text-slate-700 {
+        color: #334155;
+    }
+
+    .hyva-checkout-border-slate-300 {
+        border-color: #cbd5e1;
+    }
+}

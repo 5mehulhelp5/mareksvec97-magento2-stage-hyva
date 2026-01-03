@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2022-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd"
+>
+    <body>
+        <block class="StripeIntegration\Payments\Block\Minicart\Shortcut"
+               name="stripe-payments.cart.shortcut"
+        >
+            <block name="stripe-cart-loader" as="loading" template="Hyva_Theme::ui/loading.phtml"/>
+
+            <arguments>
+                <argument name="magewire" xsi:type="object">Hyva\CheckoutStripe\Magewire\View\PaymentRequestButtonCart</argument>
+            </arguments>
+
+            <action method="setData">
+                <argument name="key" xsi:type="string">is_cart</argument>
+                <argument name="value" xsi:type="boolean">true</argument>
+            </action>
+
+            <action method="setIsShoppingCart">
+                <argument name="isShoppingCart" xsi:type="boolean">true</argument>
+            </action>
+        </block>
+
+        <!-- Adding the block directly changes the order of the parent block's children, this way not -->
+        <move element="stripe-payments.cart.shortcut"
+              destination="checkout.cart.methods"
+        />
+    </body>
+</page>

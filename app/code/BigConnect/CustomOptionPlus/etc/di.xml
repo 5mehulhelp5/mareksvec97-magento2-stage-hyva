@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\Catalog\Block\Product\View\Options\Type\Select">
+        <plugin name="bigconnect_customoptionplus_product_option" type="BigConnect\CustomOptionPlus\Plugin\Product\Option" sortOrder="4"/>
+    </type>
+    <type name="Magento\Catalog\Model\Product\Option">
+        <plugin name="bigconnect_customoptiontranslation_product_option" type="BigConnect\CustomOptionPlus\Plugin\Product\Translation" sortOrder="6"/>
+    </type>
+    <type name="Magento\Catalog\Model\Product\Option\Value">
+        <plugin name="bigconnect_customoptiontranslation_product_option_value" type="BigConnect\CustomOptionPlus\Plugin\Product\Translation" sortOrder="5"/>
+    </type>
+</config>

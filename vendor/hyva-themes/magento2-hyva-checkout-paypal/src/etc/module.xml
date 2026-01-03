@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2022-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Module/etc/module.xsd">
+    <module name="Hyva_CheckoutPayPal">
+        <sequence>
+            <module name="Hyva_Checkout"/>
+            <module name="Hyva_Theme"/>
+            <module name="Magento_Checkout"/>
+            <module name="Magento_Payment"/>
+            <module name="Magento_Paypal"/>
+            <module name="Magento_Quote"/>
+            <module name="Magento_ReCaptchaUi"/>
+            <module name="Magento_ReCaptchaValidationApi"/>
+            <module name="Magento_Sales"/>
+            <module name="Magento_Store"/>
+            <module name="Magento_Vault"/>
+            <module name="Magewirephp_Magewire"/>
+        </sequence>
+    </module>
+</config>

@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © MagePal LLC. All rights reserved.
+ * See COPYING.txt for license details.
+ * https://www.magepal.com | support@magepal.com
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
+    <event name="order_cancel_after">
+        <observer name="magepal_google_analytics4_order_cancel_after"
+                  instance="MagePal\GoogleAnalytics4\Observer\Adminhtml\OrderCancelAfterObserver" />
+    </event>
+    <event name="sales_order_creditmemo_save_before">
+        <observer name="magepal_google_analytics4_sales_order_creditmemo_save_before"
+                  instance="MagePal\GoogleAnalytics4\Observer\Adminhtml\SalesOrderCreditmemoSaveBeforeObserver" />
+    </event>
+    <event name="checkout_submit_all_after">
+        <observer name="magepal_google_analytics4_checkout_submit_all_after"
+                  instance="MagePal\GoogleAnalytics4\Observer\Adminhtml\CheckoutSubmitAllAfterObserver" />
+    </event>
+</config>

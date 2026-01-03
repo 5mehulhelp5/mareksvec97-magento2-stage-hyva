@@ -1,0 +1,92 @@
+<?php
+/**
+ * @category  Apptrian
+ * @package   Apptrian_Subcategories
+ * @author    Apptrian
+ * @copyright Copyright (c) Apptrian (http://www.apptrian.com)
+ * @license   http://www.apptrian.com/license Proprietary Software License EULA
+ */
+
+/**
+ * Subcategories block
+ *
+ * @var $block \Apptrian\Subcategories\Block\GridList
+ */
+
+    $data       = $block->getSubcategoriesData();
+    $categories = $data['categories'];
+    $options    = $data['options'];
+    $elements   = $options['sort_order'];
+    $heading    = $options['heading'];
+    $singleLink = $options['single_link'];
+    
+    $imageAttributes = '';
+    
+if (isset($options['image_width'])) {
+    $imageAttributes .= ' width="' . $options['image_width'] . '"';
+}
+
+if (isset($options['image_height'])) {
+    $imageAttributes .= ' height="' . $options['image_height'] . '"';
+}
+?>
+
+<?php if ($options['enabled']): ?>
+    <?php if (!empty($categories)): ?>
+     
+<ul class="apptrian-subcategories-<?= /* @noEscape */ $options['layout'] ?> scroll-reveal"><?php
+foreach ($categories as $c): ?><li class="apptrian-subcategories-category-wrapper<?php if ($data['current']==$c['id']) { ?> current-category<?php } ?>"><?php
+
+// Above line with opening <ul> tag and below line with closing </ul> tag
+// must be written like this so there are no spaces between <li> tags.
+
+$info        = '';
+$image       = $c['image'];
+$name        = $c['name'];
+$description = $c['description'];
+$url         = $c['url'];
+
+if ($singleLink) {
+    $info .= '<a class="apptrian-subcategories-category" href="' . $url . '">';
+    
+    foreach ($elements as $el) {
+        switch ($el) {
+            case 'image':
+                $info .= '<div class="apptrian-subcategories-category-image"><img src="' . $image . '" alt="Image '
+                    . $name . '"' . $imageAttributes . '/></div>';
+                break;
+            case 'name':
+                if ($name) {
+                    $info .= '<div class="apptrian-subcategories-category-name"><span>' . $name . '</span></div>';
+                }
+                break;
+            
+            default:
+                break;
+        }
+    }
+    
+    $info .= '</a>';
+} else {
+    $info .= '<div class="apptrian-subcategories-category">';
+    
+    foreach ($elements as $el) {
+        switch ($el) {
+            case 'image':
+                $info .= '<div class="apptrian-subcategories-category-image"><a href="' . $url . '"><img src="'
+                    . $image . '" alt="Image ' . $name . '"' . $imageAttributes . '/><span>'. $name . '</span></a></div>';
+                break;
+           
+            default:
+                break;
+        }
+    }
+    
+    $info .= '</div>';
+}
+    
+/* @noEscape */ echo $info; ?></li><?php
+endforeach; ?></ul>
+
+    <?php endif; ?>
+<?php endif; ?>

@@ -1,0 +1,85 @@
+& when (@critical) {
+	.store-review {
+		.user-review {
+			background: @color_light_gray;
+			padding: 13px 15px;
+			border-radius: 8px;
+			.user {
+				.name {
+					font-size: 15px;
+				}
+				.country {
+					img {
+						height: 14px;
+						width: auto;
+					}
+				}
+			}
+			.stars-text {
+				margin-top: 6px;
+				margin-bottom: 8px;
+			}
+			.stars {
+				margin-right: 8px;
+				.fa-star {
+					font-size: 20px;
+				}
+			}
+			.stars-text {
+				.text {
+					font-weight: 600;
+					font-size: 14px;
+				}
+			}
+			.review-text {
+				font-size: 14px;
+				line-height: normal;
+			}
+			.review-image {
+				margin-top: 12px;
+				img {
+					width: 100px;
+				}
+			}
+		}
+	}
+	.catalog-product-view {
+			.store-review { 
+				margin-top: 80px;
+			}
+	}
+	.cms-index-index {
+		.store-review {
+			.block-title {
+				margin-bottom: 35px;
+				strong {
+					font-size: 1.875rem;
+					font-weight: 700;
+					line-height: 2.25rem;
+				}
+			}
+		}
+	}
+	//
+	//  Mobile
+	//  _____________________________________________
+
+	@media @media-md-down {
+      .store-review { 
+      	.stars-text {
+      		margin-top: 7px;
+      		margin-bottom: 7px;
+      	}
+      	.user-review {
+      		.stars {
+      			.fa-star {
+      				font-size: 16px;
+      				line-height: 20px;
+      			}
+      		}
+      	}
+      }
+      
+
+	}
+}

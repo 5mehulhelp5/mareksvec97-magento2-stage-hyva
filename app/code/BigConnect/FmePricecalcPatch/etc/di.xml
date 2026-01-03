@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+
+    <preference for="FME\Pricecalculator\Block\Product\Pricecalculator"
+                type="BigConnect\FmePricecalcPatch\Block\Product\Pricecalculator"/>
+    <!-- 2) prebij observer výpočtu v košíku -->
+    <preference for="FME\Pricecalculator\Observer\UpdatePriceCart"
+                type="BigConnect\FmePricecalcPatch\Observer\UpdatePriceCart"/>
+</config>

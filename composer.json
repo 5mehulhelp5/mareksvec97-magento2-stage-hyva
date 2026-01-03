@@ -1,0 +1,151 @@
+{
+  "name": "magento/project-community-edition",
+  "description": "eCommerce Platform for Growth (Community Edition)",
+  "type": "project",
+  "license": ["OSL-3.0", "AFL-3.0"],
+  "config": {
+    "allow-plugins": {
+      "dealerdirect/phpcodesniffer-composer-installer": true,
+      "laminas/laminas-dependency-plugin": true,
+      "magento/*": true,
+      "php-http/discovery": true
+    },
+    "preferred-install": "dist",
+    "sort-packages": true
+  },
+  "require": {
+    "amasty/base": "^1.17.0",
+    "amasty/blog": "*",
+    "amasty/module-ajax-scroll-subscription-package": "^1.6",
+    "amasty/module-automatic-related-products-subscription-package": "^2.18",
+    "amasty/module-blog-hyva": "^1.3",
+    "amasty/module-blog-pro-subscription-package": "^2.14.0",
+    "amasty/module-custom-form-hyva": "^1.1",
+    "amasty/module-custom-forms-pro-subscription-package": "^1.3",
+    "amasty/module-facebook-pixel-pro-package": "^1.0",
+    "amasty/module-mega-menu-subscription-package-pro": "^2.6",
+    "amasty/module-regenerate-url-rewrites": "*",
+    "amasty/module-scroll-hyva": "^1.1",
+    "amasty/module-seo-rich-data-subscription-package": "*",
+    "amasty/payrestriction": "*",
+    "amasty/smtp": "^2.1",
+    "apptrian/minify": "*",
+    "benabee/product-manager-connector": "^1.2",
+    "devbera/module-cmslinktomenu": "*",
+    "fme/hyvapricecalculator": "^1.0",
+    "fme/pricecalculator": "^1.2",
+    "geissweb/module-euvat": "^1.25",
+    "hyva-themes/magento2-default-theme": "^1.3",
+    "hyva-themes/magento2-geissweb-euvat": "^1.0",
+    "hyva-themes/magento2-hyva-checkout": "^1.3",
+    "hyva-themes/magento2-hyva-checkout-geissweb-euvat": "^1.1",
+    "hyva-themes/magento2-hyva-checkout-paypal": "^1.2",
+    "hyva-themes/magento2-hyva-checkout-stripe": "*",
+    "hyva-themes/magento2-payment-icons": "^2.0",
+    "ict/orderdelete": "^3.1",
+    "laminas/laminas-mail": "^2.25",
+    "magegadgets/svg-web-images": "^1.0",
+    "magento/composer-dependency-version-audit-plugin": "~0.1",
+    "magento/product-community-edition": "2.4.8",
+    "mageplaza/magento-2-blog-extension": "^4.2",
+    "mageplaza/module-better-popup": "^4.1",
+    "mageplaza/module-currency-formatter": "^4.0",
+    "mageplaza/module-smtp": "^4.7",
+    "mageplaza/module-table-rate-shipping": "^4.0",
+    "magestyapps/module-web-images": "^1.2",
+    "magmodules/m2-alternate-hreflang": "*",
+    "mirasvit/module-feed": "*",
+    "scommerce/breeze-googletagmanagerpro": "*",
+    "scommerce/googletagmanagerpro": "~3.0.33",
+    "setasign/fpdf": "^1.8",
+    "setasign/fpdi": "^2.0",
+    "sparsh/magento-2-banner-extension": "^1.3",
+    "stripe/stripe-payments": "^4.1",
+    "swissup/breeze-evolution": "^2.2",
+    "swissup/firecheckout": "1.33.10",
+    "swissup/module-marketplace": "^1.10",
+    "swissup/pagespeed": "*",
+    "sybio/image-workshop": "^2.2",
+    "trustedshops/easy_integration": "*",
+    "ulmod/module-canonicalurl": "*",
+    "zf1/zend-reflection": "^1.12"
+  },
+  "autoload": {
+    "exclude-from-classmap": [
+      "**/dev/**",
+      "**/update/**",
+      "**/Test/**"
+    ],
+    "files": ["app/etc/NonComposerComponentRegistration.php"],
+    "psr-0": {
+      "": ["app/code/", "generated/code/"]
+    },
+    "psr-4": {
+      "Magento\\": "app/code/Magento/",
+      "Magento\\Framework\\": "lib/internal/Magento/Framework/",
+      "Magento\\Setup\\": "setup/src/Magento/Setup/"
+    }
+  },
+  "require-dev": {
+    "dealerdirect/phpcodesniffer-composer-installer": "^0.7.0",
+    "dg/bypass-finals": "^1.4",
+    "lusitanian/oauth": "^0.8",
+    "magento/magento-coding-standard": "*",
+    "pdepend/pdepend": "^2.10",
+    "phpmd/phpmd": "^2.9.1",
+    "phpstan/phpstan": "~1.2.0",
+    "phpunit/phpunit": "~9.5.0"
+  },
+  "conflict": {
+    "gene/bluefoot": "*"
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Magento\\PhpStan\\": "dev/tests/static/framework/Magento/PhpStan/",
+      "Magento\\Sniffs\\": "dev/tests/static/framework/Magento/Sniffs/",
+      "Magento\\TestFramework\\Inspection\\": "dev/tests/static/framework/Magento/TestFramework/Inspection/",
+      "Magento\\TestFramework\\Utility\\": "dev/tests/static/framework/Magento/TestFramework/Utility/",
+      "Magento\\Tools\\": "dev/tools/Magento/Tools/",
+      "Magento\\Tools\\Sanity\\": "dev/build/publication/sanity/Magento/Tools/Sanity/"
+    }
+  },
+  "minimum-stability": "stable",
+  "prefer-stable": true,
+  "repositories": {
+    "private-packagist": {
+      "type": "composer",
+      "url": "https://hyva-themes.repo.packagist.com/metalopro-com-qj02o5"
+    },
+    "scommerce": {
+      "type": "composer",
+      "url": "https://packeton.scommerce-mage.com/"
+    },
+    "geissweb": {
+      "type": "composer",
+      "url": "https://packages.geissweb.de"
+    },
+    "amasty": {
+      "type": "composer",
+      "url": "https://composer.amasty.com/community/"
+    },
+    "mageplaza": {
+      "type": "composer",
+      "url": "https://repo.mageplaza.com"
+    },
+    "mirasvit-pfe2": {
+      "type": "composer",
+      "url": "https://62958:E5V47J93AD@packages.mirasvit.com/62958:E5V47J93AD/"
+    },
+    "swissuplabs": {
+      "type": "composer",
+      "url": "https://ci.swissuplabs.com/api/packages.json"
+    },
+    "0": {
+      "type": "composer",
+      "url": "https://repo.magento.com/"
+    }
+  },
+  "extra": {
+    "magento-force": "override"
+  }
+}

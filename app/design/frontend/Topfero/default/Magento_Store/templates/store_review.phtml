@@ -1,0 +1,130 @@
+<!-- Pridanie Fancybox cez CDN -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.css" />
+<script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.js"></script>
+
+<div class="store-review block" data-appearance="carousel" data-show-arrows="true" data-show-dots="true" data-content-type="products" data-mage-init='{"Magento_PageBuilder/js/content-type/slider/appearance/default/widget":{"arrows":true,"dots":true, "slidesToShow": 4}}'>
+    
+    <div class="block-title">
+        <strong><?= $block->escapeHtml(__('Customer rating')) ?></strong>
+    </div>
+    
+    <div class="product-items widget-product-carousel slick-list">
+        <?php
+        // Funkcia na skrátenie textu
+        function truncateText($text, $maxLength = 110) {
+            if (mb_strlen($text, 'UTF-8') > $maxLength) {
+                return mb_substr($text, 0, $maxLength, 'UTF-8') . '...';
+            }
+            return $text;
+        }
+
+        $reviews = [
+            [
+                'name' => 'Luca Gobbi',
+                'country' => 'it.png',
+                'text' => 'Ottima stabilità!',
+                'review' => 'Stabilità superiore alle aspettative, molto soddisfatto con piano in legno.',
+                'image' => '/store-review/luca-min.jpg',
+            ],
+            [
+                'name' => 'Deprez',
+                'country' => 'fr.png',
+                'text' => 'Pieds de table en métal',
+                'review' => 'magnifique avec ma table en bois massif.',
+                'image' => '/store-review/deprez-min.jpg',
+            ],
+            [
+                'name' => 'Enrico Nascimben',
+                'country' => 'it.png',
+                'text' => 'Bello',
+                'review' => 'Il telaio è fatto molto bene ed è molto stabile. Facilissimo il montaggio. Nessun segno sulla verniciatura.',
+                'image' => '/store-review/enrico-min.jpg',
+            ],
+            [
+                'name' => 'sgnao',
+                'country' => 'it.png',
+                'text' => 'Ottime gambe del tavolo robuste e ben fatte!',
+                'review' => 'Un plauso e correttezza va al venditore che con me si è comportato in maniera esemplare nel gestire un piccolo problema che ho avuto. Le gambe sono di ottima fattura, verniciatura a polveri di color nero opaco, la finitura è ottima e senza sbavature le viti sono studiate bene e difatti non si vedono, sotto le gambe ci sono dei piedini regolabili per ovviare se il pavimento avesse delle irregolarità.',
+                'image' => '/store-review/acamar-it-1-min.jpg',
+            ],
+            [
+                'name' => 'Marc aus salzburg',
+                'country' => 'de.png',
+                'text' => 'Tischbeine Deluxe !!!',
+                'review' => 'Sehr schöne, stabile und gut verarbeitete Tischbeine in schwarz. Innerhalb weniger Tage kam die Lieferung sehr gut verpackt und unbeschädigt an! Wir sind sehr zufrieden. Würde den Hersteller auf alle Fälle empfehlen.',
+                'image' => '/store-review/marc-min.jpg',
+            ],
+            [
+                'name' => 'Maik Lippoldt',
+                'country' => 'de.png',
+                'text' => 'Alles bestens',
+                'review' => 'Top Qualität. Super Service. Die Löcher könnten etwas größer sein, damit man die Tischplatten mit größeren Schrauben festmachen kann.',
+                'image' => '/store-review/lippoldt-min.webp',
+            ],
+            [
+                'name' => 'Benj',
+                'country' => 'fr.png',
+                'text' => 'Parfait, pieds de bonne qualité et livraison plus rapide que prévu',
+                'review' => 'Les pieds sont conformes à la description. Ils semblent solides (à voir dans le temps). L’expédition et la livraison ont été fait plus rapidement que prévu (2 semaines de délai annoncés mais livrés en 1)
+Parfait!',
+                'image' => '/store-review/benj1-min.jpg',
+            ],
+            [
+                'name' => 'Natalie',
+                'country' => 'de.png',
+                'text' => 'Entspricht meinen Erwartungen',
+                'review' => 'Stabiles Tischgestell für große Tischplatte von Küchentisch. Saubere Verarbeitung und problemlose Montage.',
+                'image' => '/store-review/natalie-min.jpg',
+            ],
+            [
+                'name' => 'Petr',
+                'country' => 'cz.png',
+                'text' => '100% Super kvalita',
+                'review' => 'Zboží přišlo rychle, kvalitně zabalené a bez problémů. Nohy od stolu jsou bezchybně, vše dobře sedí.',
+                'image' => '/store-review/table-min.jpg',
+            ],
+            // Add more reviews as needed
+        ];
+
+        $mediaUrl = $block->getViewFileUrl('Magento_Store::img'); // Adjust path for media files
+
+        foreach ($reviews as $review) : ?>
+            <div class="user-review product-item product-item">
+                <div class="user d-flex gap-2 items-center">
+                    <div class="avatar">
+                        <img src="<?= htmlspecialchars($mediaUrl) ?>/avatar.svg" alt="avatar">
+                    </div>
+                    <div class="name"><?= htmlspecialchars($block->escapeHtml($review['name'])) ?></div>
+                    <div class="country">
+                        <img src="<?= htmlspecialchars($mediaUrl) ?>/<?= htmlspecialchars($review['country']) ?>" alt="<?= htmlspecialchars($review['name']) ?>'s country">
+                    </div>
+                </div>
+                <div class="stars-text d-flex flex-wrap">
+                    <div class="stars d-flex  items-center">
+                        <?php for ($i = 0; $i < 5; $i++) : ?>
+                            <span class="fa fa-star" style="color: #f8a300;">★</span>
+                        <?php endfor; ?>
+                    </div>
+                    <div class="text"><?= htmlspecialchars($block->escapeHtml($review['text'])) ?></div>
+                </div>
+                <div class="review-text"><?= htmlspecialchars($block->escapeHtml(truncateText($review['review']))) ?></div>
+                <div class="review-image">
+                    <?php if (!empty($review['image'])) : ?>
+                        <a data-fancybox="gallery" href="<?= htmlspecialchars($mediaUrl) ?>/<?= htmlspecialchars($review['image']) ?>">
+                            <img src="<?= htmlspecialchars($mediaUrl) ?>/<?= htmlspecialchars($review['image']) ?>" alt="review image">
+                        </a>
+                    <?php endif; ?>
+                </div>
+            </div>
+        <?php endforeach; ?>
+    </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    Fancybox.bind("[data-fancybox]", {
+      // Optional configurations, such as loop or zoom
+      loop: true,
+    });
+  });
+</script>

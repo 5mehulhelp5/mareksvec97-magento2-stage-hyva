@@ -1,0 +1,13 @@
+<?php
+/**
+ * Copyright © MageWorx. All rights reserved.
+ * See LICENSE.txt for license details.
+ */
+
+/** @var \MageWorx\ReviewReminderBase\Block\Reminder\Popup $block */
+?>
+<?php if ($block->isCanBeDisplayed()): ?>
+    <div id="mwrv" role="dialog" tabindex="-1" style="display: none"
+         data-mage-init='{ "reminder-popup": <?= /* @noEscape */ $block->getJsonConfig() ?> }'>
+    </div>
+<?php endif; ?>

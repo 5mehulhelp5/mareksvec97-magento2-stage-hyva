@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © MageWorx. All rights reserved.
+ * See LICENSE.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="MageWorx\XReviewBase\Api\Data\Media" type="MageWorx\XReviewBase\Model\Media"/>
+    <preference for="MageWorx\XReviewBase\Api\Data\Vote" type="MageWorx\XReviewBase\Model\Vote"/>
+
+    <!-- Extend filter for using own additional properties -->
+    <type name="Magento\Review\Model\ResourceModel\Review\Product\Collection">
+        <plugin name="mageworx_xreviewbase_extend_filter_product_review_collection"
+                type="MageWorx\XReviewBase\Plugin\ProductReviewCollection\ExtendFilterPlugin"
+                sortOrder="1"
+        />
+    </type>
+    <type name="Magento\Review\Model\ResourceModel\Review\Collection">
+        <plugin name="mageworx_xreviewbase_extend_filter_review_collection"
+                type="MageWorx\XReviewBase\Plugin\ReviewCollection\ExtendFilterPlugin"
+                sortOrder="1"
+        />
+    </type>
+</config>

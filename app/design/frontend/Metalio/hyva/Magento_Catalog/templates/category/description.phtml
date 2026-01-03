@@ -1,0 +1,71 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2020-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+declare(strict_types=1);
+
+use Hyva\Theme\Model\ViewModelRegistry;
+use Magento\Catalog\Block\Category\View;
+use Magento\Catalog\ViewModel\Category\Output as CategoryOutput;
+use Magento\Framework\Escaper;
+
+/** @var View $block */
+/** @var Escaper $escaper */
+/** @var ViewModelRegistry $viewModels */
+
+/** @var CategoryOutput $categoryOutput */
+$categoryOutput = $viewModels->require(CategoryOutput::class);
+
+$description = $block->getCurrentCategory()->getDescription();
+$showMoreLabel = __('Show more');
+$showLessLabel = __('Show less');
+$expandedHelperLabel = __('You are viewing the full description');
+$collapsedHelperLabel = __('The description has been shortened');
+?>
+test
+<?php if ($description): ?>
+    <div
+        class="category-description-wrapper"
+        x-data="{
+            expanded: false,
+            expandable: false,
+            maxCollapsedHeight: 480,
+            init() {
+                this.$nextTick(() => {
+                    const contentHeight = this.$refs.description?.scrollHeight ?? 0;
+                    this.expandable = contentHeight > this.maxCollapsedHeight;
+                });
+            }
+        }"
+    >
+        <div
+            class="category-description"
+            :class="expanded ? 'category-description--expanded' : 'category-description--collapsed'"
+            x-ref="description"
+        >
+            <?= /* @noEscape */ $categoryOutput->categoryAttribute($block->getCurrentCategory(), $description, 'description') ?>
+            <div
+                class="category-description__gradient"
+                x-show="expandable"
+                x-cloak
+                :class="expanded ? 'hidden' : 'block'"
+                aria-hidden="true"
+            ></div>
+        </div>
+
+        <div class="category-description__actions" x-show="expandable" x-cloak>
+            <span class="category-description__status" x-text="expanded ? '<?= $escaper->escapeHtml($expandedHelperLabel) ?>' : '<?= $escaper->escapeHtml($collapsedHelperLabel) ?>'"></span>
+            <button
+                type="button"
+                class="category-description__toggle"
+                @click="expanded = !expanded"
+                :aria-expanded="expanded.toString()"
+                x-text="expanded ? '<?= $escaper->escapeHtml($showLessLabel) ?>' : '<?= $escaper->escapeHtml($showMoreLabel) ?>'"
+            ></button>
+        </div>
+    </div>
+<?php endif; ?>

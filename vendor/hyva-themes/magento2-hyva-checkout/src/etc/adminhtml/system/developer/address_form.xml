@@ -1,0 +1,35 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2022-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+-->
+<include xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_include.xsd"
+>
+    <group id="address_form"
+           showInDefault="1"
+           showInStore="1"
+           showInWebsite="1"
+           sortOrder="30"
+           translate="label"
+    >
+        <label>Address Forms</label>
+
+        <field id="use_street_renderer"
+               translate="label comment"
+               type="select"
+               sortOrder="10"
+               showInDefault="1"
+               showInWebsite="1"
+               showInStore="1"
+        >
+            <label>Street Renderer</label>
+            <comment>By default, fields are rendered one below the other. When enabled the renderer switches the street field aspect, depending on the amount of lines configured, into a selected street renderer depending on the width of the street field parent (alias: 0).</comment>
+            <source_model>Hyva\Checkout\Model\Config\Source\StreetRendererType</source_model>
+        </field>
+    </group>
+</include>

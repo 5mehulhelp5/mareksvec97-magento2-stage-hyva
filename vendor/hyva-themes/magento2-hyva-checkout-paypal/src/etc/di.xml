@@ -1,0 +1,87 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2022-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <virtualType name="Hyva\CheckoutPayPal\Model\Magewire\Payment\PayflowExpressPlaceOrderService"
+                 type="Hyva\CheckoutPayPal\Model\Magewire\Payment\PaypalExpressPlaceOrderService">
+        <arguments>
+            <argument name="redirectPath" xsi:type="string">paypal/payflowexpress/start</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Hyva\CheckoutPayPal\Model\Magewire\Payment\PayflowExpressBmlPlaceOrderService"
+                 type="Hyva\CheckoutPayPal\Model\Magewire\Payment\PaypalExpressPlaceOrderService">
+        <arguments>
+            <argument name="redirectPath" xsi:type="string">paypal/payflowbml/start</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Hyva\CheckoutPayPal\Magewire\Payment\Method\PayflowExpress"
+                 type="Hyva\CheckoutPayPal\Magewire\Payment\Method\PaypalExpress">
+        <arguments>
+            <argument name="methodCode" xsi:type="const">Magento\Paypal\Model\Config::METHOD_WPP_PE_EXPRESS</argument>
+            <argument name="cancelPath" xsi:type="string">paypal/payflowexpress/cancel</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Hyva\CheckoutPayPal\Magewire\Payment\Method\PayflowExpressBml"
+                 type="Hyva\CheckoutPayPal\Magewire\Payment\Method\PaypalExpress">
+        <arguments>
+            <argument name="methodCode" xsi:type="const">Magento\Paypal\Model\Config::METHOD_WPP_PE_BML</argument>
+            <argument name="cancelPath" xsi:type="string">paypal/payflowexpress/cancel</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Hyva\CheckoutPayPal\Magewire\Payment\Method\PayflowAdvanced"
+                 type="Hyva\CheckoutPayPal\Magewire\Payment\Method\PayflowIframe">
+        <arguments>
+            <argument name="methodCode" xsi:type="const">Magento\Paypal\Model\Config::METHOD_PAYFLOWADVANCED</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Hyva\CheckoutPayPal\Magewire\Payment\Method\PayflowLink"
+                 type="Hyva\CheckoutPayPal\Magewire\Payment\Method\PayflowIframe">
+        <arguments>
+            <argument name="methodCode" xsi:type="const">Magento\Paypal\Model\Config::METHOD_PAYFLOWLINK</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Hyva\CheckoutPayPal\Magewire\Payment\Method\HostedPro"
+                 type="Hyva\CheckoutPayPal\Magewire\Payment\Method\PayflowIframe">
+        <arguments>
+            <argument name="methodCode" xsi:type="const">Magento\Paypal\Model\Config::METHOD_HOSTEDPRO</argument>
+        </arguments>
+    </virtualType>
+    <type name="Hyva\CheckoutPayPal\Model\Payment\PaypalPaymentInformation">
+        <arguments>
+            <argument name="methodPaymentFields" xsi:type="array">
+                <item name="payflow_link" xsi:type="array"/>
+                <item name="payflow_advanced" xsi:type="array"/>
+                <item name="hosted_pro" xsi:type="array"/>
+                <item name="payflowpro" xsi:type="array">
+                    <item name="is_active_payment_token_enabler" xsi:type="string">is_active_payment_token_enabler</item>
+                    <item name="cc_details" xsi:type="string">cc_details</item>
+                    <item name="pnref" xsi:type="string">pnref</item>
+                    <item name="result_code" xsi:type="string">result_code</item>
+                    <item name="avsaddr" xsi:type="string">avsaddr</item>
+                    <item name="avszip" xsi:type="string">avszip</item>
+                    <item name="iavs" xsi:type="string">iavs</item>
+                    <item name="cvv2match" xsi:type="string">cvv2match</item>
+                    <item name="cc_type" xsi:type="string">cc_type</item>
+                    <item name="cc_exp_year" xsi:type="string">cc_exp_year</item>
+                    <item name="cc_exp_month" xsi:type="string">cc_exp_month</item>
+                    <item name="cc_last_4" xsi:type="string">cc_last_4</item>
+                </item>
+                <item name="payflowpro_cc_vault" xsi:type="array">
+                    <item name="customer_id" xsi:type="string">customer_id</item>
+                    <item name="public_hash" xsi:type="string">public_hash</item>
+                </item>
+                <item name="paypal_billing_agreement" xsi:type="array">
+                    <item name="ba_agreement_id" xsi:type="string">ba_agreement_id</item>
+                    <item name="ba_reference_id" xsi:type="string">ba_reference_id</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+</config>

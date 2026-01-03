@@ -1,0 +1,38 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2022-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+declare(strict_types=1);
+
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Element\Template;
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\CheckoutPayPal\ViewModel\Payment\Method\PayflowIframe as ViewModel;
+
+/** @var Escaper $escaper */
+/** @var Template $block */
+/** @var ViewModelRegistry $viewModels */
+/** @var ViewModel $viewModel */
+
+$viewModel = $viewModels->require(ViewModel::class);
+$methodCode = $viewModel->getMethodCode();
+$iframeUrl = $viewModel->getIframeUrl();
+?>
+<div class="message notice">
+    <div>
+        <?= $escaper->escapeHtml(__('Please do not refresh the page until you complete payment.')) ?>
+    </div>
+</div>
+<iframe id="<?= $escaper->escapeHtmlAttr($methodCode) . '-iframe' ?>"
+        src="<?= $escaper->escapeUrl($iframeUrl) ?>"
+        class="paypal iframe"
+        border="0"
+        height="1000"
+        width="100%"></iframe>
+<div x-data="PaymentMethodPayflowIframe"
+     data-method-code="<?= /** noEscape */ $methodCode . '-iframe' ?>">
+</div>

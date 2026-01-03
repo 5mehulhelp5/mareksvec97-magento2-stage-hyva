@@ -1,0 +1,28 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2022-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+declare(strict_types=1);
+
+use Hyva\Theme\ViewModel\HyvaCsp;
+
+/** @var HyvaCsp $hyvaCsp */
+
+/**
+ * @deprecated has been replaced via listeners sitting in Hyva_Checkout::page/js/api/v1/init-shipping.phtml
+ */
+?>
+<script>
+    function hyvaCheckoutShippingMethodActivate() {
+        return {}
+    }
+
+    window.addEventListener('alpine:init', () => {
+        Alpine.data('hyvaCheckoutShippingMethodActivate', hyvaCheckoutShippingMethodActivate)
+    }, { once: true })
+</script>
+<?php $hyvaCsp->registerInlineScript() ?>

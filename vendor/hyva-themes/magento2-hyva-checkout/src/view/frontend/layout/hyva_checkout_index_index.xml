@@ -1,0 +1,367 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2022-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      layout="1column"
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd"
+>
+    <!-- Try to load all available checkout components. -->
+    <update handle="hyva_checkout_components"/>
+    <!-- Try to load all available form layout elements. -->
+    <update handle="hyva_checkout_form_elements"/>
+
+    <body>
+        <!-- The "header-content" block is only available for page layouts other than "checkout". -->
+        <!-- To use the full theme header, set the template to Magento_Theme::html/header.phtml. -->
+        <referenceBlock name="header-content" template="Hyva_Checkout::page/header/checkout-header.phtml"/>
+
+        <referenceBlock name="page.main.title">
+            <arguments>
+                <argument name="css_class" xsi:type="string">sr-only</argument>
+            </arguments>
+        </referenceBlock>
+
+        <referenceContainer name="main">
+            <!-- Let's make sure the cache is fully disabled. -->
+            <block name="checkout.disable.fpc-cache" cacheable="false"/>
+
+            <block name="hyva-checkout-main" as="hyva.checkout.main" template="Hyva_Checkout::main.phtml">
+                <arguments>
+                    <argument name="magewire" xsi:type="object">
+                        \Hyva\Checkout\Magewire\Main
+                    </argument>
+                </arguments>
+
+                <!-- Breadcrumbs are by default always visible. -->
+                <block name="hyva.checkout.breadcrumbs" template="Hyva_Checkout::breadcrumbs.phtml">
+                    <block name="hyva.checkout.breadcrumbs.progress.bar"
+                           template="Hyva_Checkout::breadcrumbs/progress-bar.phtml"
+                           ifconfig="hyva_themes_checkout/breadcrumbs/show"
+                    />
+
+                    <block name="hyva.checkout.breadcrumbs.waypoints"
+                           template="Hyva_Checkout::breadcrumbs/waypoints.phtml"
+                           ifconfig="hyva_themes_checkout/breadcrumbs/show"
+                    />
+
+                    <!-- Add additional global buttons after the global breadcrumbs. -->
+                    <container name="hyva.checkout.breadcrumbs.additional" />
+                </block>
+
+                <!-- Store your checkout columns here. -->
+                <container name="hyva.checkout.container"/>
+
+                <!-- By default, the navigation is seperated into two placeholders for storing e.g. buttons. -->
+                <block name="hyva.checkout.navigation" template="Hyva_Checkout::navigation.phtml">
+                    <container name="hyva.checkout.navigation.left"/>
+
+                    <container name="hyva.checkout.navigation.right">
+                        <block name="hyva.checkout.navigation.history"
+                               template="Hyva_Checkout::navigation/history.phtml"
+                        >
+                            <!-- Using the Magewire loading SVG for centralized control over visual updates. -->
+                            <block name="hyva.checkout.navigation.history.loader-svg"
+                                   as="loader"
+                                   template="Magewirephp_Magewire::html/loader/spinner.phtml"
+                            />
+                        </block>
+
+                        <block name="checkout.place-order"
+                               template="Hyva_Checkout::navigation/place-order.phtml"
+                               after="-"
+                        >
+                            <!-- Using the Magewire loading SVG for centralized control over visual updates. -->
+                            <block name="checkout.place-order.loader-svg"
+                                   as="loader"
+                                   template="Magewirephp_Magewire::html/loader/spinner.phtml"
+                            />
+                        </block>
+                    </container>
+                </block>
+            </block>
+
+            <!-- Load the checkout frontend API. -->
+            <block name="hyva.checkout.api"
+                   template="Hyva_Checkout::page/js/api/v1.phtml"
+                   after="hyva.checkout.main"
+            >
+                <container name="hyva.checkout.api-v1.after" as="after">
+                    <!-- AlpineJS component: Address form (@deprecated: use "Magewire form" instead). -->
+                    <block name="hyva.checkout.alpinejs.address-form-component"
+                           template="Hyva_Checkout::page/js/api/v1/alpinejs/address-form-component.phtml"
+                    >
+                        <container name="hyva.checkout.alpinejs.address-form-component.after" as="after"/>
+                    </block>
+
+                    <!-- AlpineJS component: Loader. -->
+                    <block name="hyva.checkout.alpinejs.checkout-loader"
+                           template="Hyva_Checkout::page/js/api/v1/alpinejs/checkout-loader.phtml"
+                    >
+                        <container name="hyva.checkout.alpinejs.checkout-loader.after" as="after"/>
+                    </block>
+
+                    <!-- AlpineJS component: Block messenger. -->
+                    <block name="hyva.checkout.alpinejs.component-messenger"
+                           template="Hyva_Checkout::page/js/api/v1/alpinejs/component-messenger.phtml"
+                    >
+                        <container name="hyva.checkout.alpinejs.component-messenger.after" as="after"/>
+                    </block>
+
+                    <!-- AlpineJS component: Redirect dialog (Evaluation API). -->
+                    <block name="hyva.checkout.alpinejs.evaluation-redirect-dialog"
+                           template="Hyva_Checkout::page/js/api/v1/alpinejs/evaluation-redirect-dialog.phtml"
+                    >
+                        <container name="hyva.checkout.alpinejs.evaluation-redirect-dialog.before" as="before"/>
+                        <container name="hyva.checkout.alpinejs.evaluation-redirect-dialog.after" as="after"/>
+                    </block>
+
+                    <!-- AlpineJS component: Magewire form. -->
+                    <block name="hyva.checkout.alpinejs.magewire-form-component"
+                           template="Hyva_Checkout::page/js/api/v1/alpinejs/magewire-form-component.phtml"
+                    >
+                        <container name="hyva.checkout.alpinejs.magewire-form-component.after" as="after">
+                            <block name="hyva.checkout.alpinejs.magewire-guest-details-form-component"
+                                   template="Hyva_Checkout::page/js/api/v1/alpinejs/magewire-form-component/magewire-form-guest-details.phtml"
+                            />
+                        </container>
+                    </block>
+
+                    <!-- AlpineJS component: Message dialog. -->
+                    <block name="hyva.checkout.alpinejs.message-dialog"
+                           template="Hyva_Checkout::page/js/api/v1/alpinejs/message-dialog.phtml"
+                    >
+                        <container name="hyva.checkout.alpinejs.message-dialog.after" as="after"/>
+                    </block>
+
+                    <!-- AlpineJS component: Primary navigation. -->
+                    <block name="hyva.checkout.alpinejs.navigation-component"
+                           template="Hyva_Checkout::page/js/api/v1/alpinejs/navigation-component.phtml"
+                    >
+                        <container name="hyva.checkout.alpinejs.navigation-component.before" as="before"/>
+                        <container name="hyva.checkout.alpinejs.navigation-component.after" as="after"/>
+                    </block>
+
+                    <!-- @deprecated: AlpineJS component: Shipping Method Activate. -->
+                    <block name="hyva.checkout.alpinejs.shipping.method-activate"
+                           template="Hyva_Checkout::page/js/api/v1/alpinejs/shipping/method-activate.phtml"
+                    />
+                    <!-- AlpineJS component: Shipping Method Option. -->
+                    <block name="hyva.checkout.alpinejs.shipping.method-option"
+                           template="Hyva_Checkout::page/js/api/v1/alpinejs/shipping/method-option.phtml"
+                    />
+                    <!-- AlpineJS component: Coupon Code. -->
+                    <block name="hyva.checkout.alpinejs.coupon-code"
+                           template="Hyva_Checkout::page/js/api/v1/alpinejs/coupon-code.phtml"
+                    />
+                    <!-- AlpineJS component: Terms & Conditions. -->
+                    <block name="hyva.checkout.alpinejs.terms-conditions"
+                           template="Hyva_Checkout::page/js/api/v1/alpinejs/terms-conditions.phtml"
+                    />
+                    <!-- AlpineJS component: Customer Comment. -->
+                    <block name="hyva.checkout.alpinejs.customer-comment"
+                           template="Hyva_Checkout::page/js/api/v1/alpinejs/customer-comment.phtml"
+                    />
+                    <!-- AlpineJS component: Cart Items. -->
+                    <block name="hyva.checkout.alpinejs.price-summary.cart-items"
+                           template="Hyva_Checkout::page/js/api/v1/alpinejs/price-summary/cart-items.phtml"
+                    />
+                    <!-- AlpineJS component: Tax Grand Total Details. -->
+                    <block name="hyva.checkout.alpinejs.price-summary.total-segments.extension-attributes.tax-grand-total-details"
+                           template="Hyva_Checkout::page/js/api/v1/alpinejs/price-summary/total-segments/extension-attributes/tax-grand-total-details.phtml"
+                    />
+                    <!-- AlpineJS component: Address List (exception to the rule: multiple declarations in a single file). -->
+                    <block name="hyva.checkout.alpinejs.address-view.address-list"
+                           template="Hyva_Checkout::page/js/api/v1/alpinejs/address-view/address-list.phtml"
+                    />
+                    <!-- AlpineJS component: Form Element Tool tip. -->
+                    <block name="hyva.checkout.alpinejs.tooltip"
+                           template="Hyva_Checkout::page/js/api/v1/alpinejs/form-element-tool-tip.phtml"
+                    />
+                    <!-- AlpineJS component: Password Visibility. -->
+                    <block name="hyva.checkout.alpinejs.password-visibility"
+                           template="Hyva_Checkout::page/js/api/v1/alpinejs/password-visibility.phtml"
+                    />
+                    <!-- AlpineJS component: Breadcrumbs Navigation. -->
+                    <block name="hyva.checkout.alpinejs.breadcrumbs-navigation"
+                           template="Hyva_Checkout::page/js/api/v1/alpinejs/breadcrumbs-navigation.phtml"
+                    />
+
+                    <!-- @deprecated: has been taken over by the "Primary navigation" AlpineJS component. -->
+                    <block name="hyva.checkout.directive.navigation"
+                           template="Hyva_Checkout::page/js/api/v1/directive/navigation.phtml"
+                    />
+
+                    <!-- Frontend API. -->
+                    <block name="hyva.checkout.init"
+                           template="Hyva_Checkout::page/js/api/v1/init.phtml"
+                           after="hyva.checkout.before"
+                    />
+
+                    <block name="hyva.checkout.init-storage"
+                           template="Hyva_Checkout::page/js/api/v1/init-storage.phtml"
+                           after="hyva.checkout.init"
+                    >
+                        <!-- Best practice: After storage templates should go into a specific directory. -->
+                        <!-- Path: Module_Name::page/js/api/v1/storage/logic-code-description.phtml -->
+                        <container name="hyva.checkout.init-storage.after" as="after"/>
+                    </block>
+
+                    <block name="hyva.checkout.init-config"
+                           template="Hyva_Checkout::page/js/api/v1/init-config.phtml"
+                           after="hyva.checkout.storage"
+                    >
+                        <!-- Best practice: After config templates should go into a specific directory. -->
+                        <!-- Path: Module_Name::page/js/api/v1/config/logic-code-description.phtml -->
+                        <container name="hyva.checkout.init-config.after" as="after"/>
+                    </block>
+
+                    <block name="hyva.checkout.init-validation"
+                           template="Hyva_Checkout::page/js/api/v1/init-validation.phtml"
+                           after="hyva.checkout.init-storage"
+                    >
+                        <!-- Best practice: After validation templates should go into a specific directory. -->
+                        <!-- Path: Module_Name::page/js/api/v1/validation/logic-code-description.phtml -->
+                        <container name="hyva.checkout.init-validation.after" as="after">
+                            <block name="hyva.checkout.init-validation.cascading-step-validation"
+                                   template="Hyva_Checkout::page/js/api/v1/validation/cascading-step-validation.phtml"
+                            />
+                        </container>
+                    </block>
+
+                    <block name="hyva.checkout.init-evaluation"
+                           template="Hyva_Checkout::page/js/api/v1/init-evaluation.phtml"
+                           after="hyva.checkout.init-validation"
+                    >
+                        <container name="hyva.checkout.evaluation.executables" as="executables">
+
+                            <!-- Injects browser executables belonging to "hyvaCheckout.browser". -->
+                            <block name="hyva.checkout.evaluation.executables.browser"
+                                   template="Hyva_Checkout::page/js/api/v1/evaluation/executables/browser.phtml"
+                            />
+                            <!-- Injects navigation executables belonging to "hyvaCheckout.navigation". -->
+                            <block name="hyva.checkout.evaluation.executables.navigation"
+                                   template="Hyva_Checkout::page/js/api/v1/evaluation/executables/navigation.phtml"
+                            />
+                            <!-- Injects page executables to provide page related functionality. -->
+                            <block name="hyva.checkout.evaluation.executables.page"
+                                   template="Hyva_Checkout::page/js/api/v1/evaluation/executables/page.phtml"
+                            />
+                        </container>
+
+                        <!-- Best practice: After evaluation templates should go into a specific directory. -->
+                        <!-- Path: Module_Name::page/js/api/v1/evaluation/logic-code-description.phtml -->
+                        <container name="hyva.checkout.init-evaluation.after" as="after">
+
+                            <!-- Evaluation Redirect dialog -->
+                            <block name="hyva.checkout.evaluation.redirect.dialog"
+                                   template="Hyva_Checkout::page/js/api/v1/evaluation/redirect-dialog.phtml"
+                            >
+                                <container name="hyva.checkout.evaluation.redirect.dialog-before" as="before"/>
+                                <container name="hyva.checkout.evaluation.redirect.dialog-after" as="after"/>
+                            </block>
+
+                            <!-- Evaluation feature: multi tabs compatibility. -->
+                            <block name="hyva.checkout.evaluation.multi-tabs-compatibility"
+                                   template="Hyva_Checkout::page/js/api/v1/evaluation/multi-tabs-compatibility.phtml"
+                            />
+                        </container>
+                    </block>
+
+                    <block name="hyva.checkout.init-navigation"
+                           template="Hyva_Checkout::page/js/api/v1/init-navigation.phtml"
+                           after="hyva.checkout.init-evaluation"
+                    >
+                        <!-- Best practice: After navigation templates should go into a specific directory. -->
+                        <!-- Path: Module_Name::page/js/api/v1/navigation/logic-code-description.phtml -->
+                        <container name="hyva.checkout.init-navigation.after" as="after">
+
+                            <!-- Navigation feature: browser history compatibility. -->
+                            <block name="hyva.checkout.navigation.browser-history"
+                                   template="Hyva_Checkout::page/js/api/v1/navigation/browser-history.phtml"
+                            />
+                        </container>
+                    </block>
+
+                    <block name="hyva.checkout.init-payment"
+                           template="Hyva_Checkout::page/js/api/v1/init-payment.phtml"
+                           after="hyva.checkout.init-navigation"
+                    >
+                        <!-- Best practice: After payment templates should go into a specific directory. -->
+                        <!-- Path: Module_Name::page/js/api/v1/payment/logic-code-description.phtml -->
+                        <container name="hyva.checkout.init-payment.after" as="after"/>
+                    </block>
+
+                    <block name="hyva.checkout.init-shipping"
+                           template="Hyva_Checkout::page/js/api/v1/init-shipping.phtml"
+                           after="hyva.checkout.init-payment"
+                    >
+                        <!-- Best practice: After shipping templates should go into a specific directory. -->
+                        <!-- Path: Module_Name::page/js/api/v1/shipping/logic-code-description.phtml -->
+                        <container name="hyva.checkout.init-shipping.after" as="after"/>
+                    </block>
+
+                    <block name="hyva.checkout.init-order"
+                           template="Hyva_Checkout::page/js/api/v1/init-order.phtml"
+                           after="hyva.checkout.init-shipping"
+                    >
+                        <!-- Best practice: After order templates should go into a specific directory. -->
+                        <!-- Path: Module_Name::page/js/api/v1/order/logic-code-description.phtml -->
+                        <container name="hyva.checkout.init-order.after" as="after"/>
+                    </block>
+
+                    <block name="hyva.checkout.init-message"
+                           template="Hyva_Checkout::page/js/api/v1/init-message.phtml"
+                           after="hyva.checkout.init-order"
+                    >
+                        <!-- Best practice: After message templates should go into a specific directory. -->
+                        <!-- Path: Module_Name::page/js/api/v1/message/logic-code-description.phtml -->
+                        <container name="hyva.checkout.init-message.after" as="after">
+
+                            <!-- AlpineJS message dialog component -->
+                            <block name="hyva.checkout.message.dialog"
+                                   template="Hyva_Checkout::page/js/api/v1/message/dialog.phtml"/>
+                        </container>
+                    </block>
+
+                    <block name="hyva.checkout.init-messenger"
+                           template="Hyva_Checkout::page/js/api/v1/init-messenger.phtml"
+                           after="hyva.checkout.init-message"
+                    >
+                        <!-- Best practice: After messenger templates should go into a specific directory. -->
+                        <!-- Path: Module_Name::page/js/api/v1/messenger/logic-code-description.phtml -->
+                        <container name="hyva.checkout.init-messenger.after" as="after"/>
+                    </block>
+
+                    <block name="hyva.checkout.init-loader"
+                           template="Hyva_Checkout::page/js/api/v1/init-loader.phtml"
+                           after="hyva.checkout.init-messenger"
+                    >
+                        <!-- Best practice: After loader templates should go into a specific directory. -->
+                        <!-- Path: Module_Name::page/js/api/v1/loader/logic-code-description.phtml -->
+                        <container name="hyva.checkout.init-loader.after" as="after"/>
+                    </block>
+
+                    <block name="hyva.checkout.init-viewport"
+                           template="Hyva_Checkout::page/js/api/v1/init-viewport.phtml"
+                           after="hyva.checkout.init-loader"
+                    >
+                        <!-- Best practice: After viewport templates should go into a specific directory. -->
+                        <!-- Path: Module_Name::page/js/api/v1/viewport/logic-code-description.phtml -->
+                        <container name="hyva.checkout.init-viewport.after" as="after"/>
+                    </block>
+                </container>
+            </block>
+        </referenceContainer>
+
+        <referenceContainer name="magewire.directive.scripts">
+            <block name="magewire.directive.advanced-form-validation"
+                   template="Hyva_Checkout::page/js/magewire/directive/auto-save.phtml"/>
+        </referenceContainer>
+    </body>
+</page>

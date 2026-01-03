@@ -1,0 +1,312 @@
+<?php
+/** @var \Magento\Framework\View\Element\Template $block */
+/** @var \Hyva\Theme\Model\ViewModelRegistry $viewModels */
+
+declare(strict_types=1);
+
+use Hyva\Theme\ViewModel\HeroiconsOutline;
+use Hyva\Theme\ViewModel\HeroiconsSolid;
+
+/* Hyvä view models */
+$viewModels = $viewModels ?? $block->getData('viewModels');
+$heroIcons  = $viewModels->require(HeroiconsOutline::class);
+$hiSolid    = $viewModels->require(HeroiconsSolid::class);
+
+/* Hero image (aktuálne SVG, kľudne zmeň na PNG s priesvitom) */
+$heroImg = $block->getViewFileUrl('Magento_Cms::images/milling-machine.svg');
+
+/* Galéria: načítaj súbory z témy */
+$fsDir  = BP . '/app/design/frontend/Metalio/hyva/Magento_Cms/web/images/referencie';
+$allow  = ['jpg','jpeg','png','webp','avif','gif','svg'];
+$files  = [];
+
+if (is_dir($fsDir)) {
+    foreach (glob($fsDir . '/*') as $p) {
+        if (!is_file($p)) continue;
+        $ext = strtolower(pathinfo($p, PATHINFO_EXTENSION));
+        if (!in_array($ext, $allow, true)) continue;
+        $files[] = basename($p);
+    }
+}
+natsort($files);
+$files = array_values($files);
+$hasGallery = !empty($files);
+
+/* URL + ALT pre galériu */
+$urls = $alts = [];
+foreach ($files as $f) {
+    $urls[] = $block->getViewFileUrl('Magento_Cms::images/referencie/' . $f);
+    $alts[] = ucfirst(str_replace(['-','_'], ' ', pathinfo($f, PATHINFO_FILENAME)));
+}
+?>
+
+<?php if ($hasGallery): ?>
+<script>
+window.addEventListener('alpine:init', () => {
+  Alpine.data('galleryRef', () => ({
+    ...hyva.modal(),
+    images: <?= /* @noEscape */ json_encode($urls) ?>,
+    alts:   <?= /* @noEscape */ json_encode($alts) ?>,
+    idx: 0,
+    openAt(i){ this.idx = i; this.show(); },
+    next(){ this.idx = (this.idx + 1) % this.images.length; },
+    prev(){ this.idx = (this.idx - 1 + this.images.length) % this.images.length; },
+  }));
+}, { once:true });
+</script>
+<?php endif; ?>
+
+<!-- HERO -->
+<section class="rounded-2xl bg-primary text-white ring-1 ring-black/5 overflow-hidden">
+  <div class="mx-auto max-w-screen-xl grid gap-8 lg:grid-cols-[60%_40%] items-center px-6 sm:px-8 lg:px-10 py-10">
+    <div>
+      <h1 class="text-3xl sm:text-4xl font-extrabold"><?= $block->escapeHtml(__('Výroba na mieru z kovu')) ?></h1>
+      <p class="mt-3 text-white/90">
+        <b><?= $block->escapeHtml(__('Laicky aj na úrovni výkresu.')) ?></b>
+        <?= $block->escapeHtml(__('Pošlite fotku alebo technické dáta (DXF/DWG/STEP) – pripravíme návrh aj cenovú ponuku.')) ?>
+      </p>
+
+      <ul class="mt-5 flex flex-wrap gap-2 text-sm">
+        <li class="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1.5 ring-1 ring-white/20">
+          <?= /* @noEscape */ $heroIcons->checkHtml('h-4 w-4') ?>
+          <?= $block->escapeHtml(__('Stačí fotka alebo náčrt')) ?>
+        </li>
+        <li class="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1.5 ring-1 ring-white/20">
+          <?= /* @noEscape */ $heroIcons->documentTextHtml('h-4 w-4') ?>
+          <?= $block->escapeHtml(__('Podporujeme DXF/DWG/STEP')) ?>
+        </li>
+        <li class="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1.5 ring-1 ring-white/20">
+          <?= /* @noEscape */ $heroIcons->phoneHtml('h-4 w-4') ?>
+          <?= $block->escapeHtml(__('Poradenstvo od technika')) ?>
+        </li>
+      </ul>
+
+      <div class="mt-6 flex flex-wrap gap-3">
+        <a href="#kontakt-form" class="inline-flex items-center gap-2 rounded-md bg-white px-5 py-3 font-semibold text-primary shadow-sm hover:bg-white/90">
+          <?= $block->escapeHtml(__('Poslať fotku / náčrt')) ?>
+          <?= /* @noEscape */ $heroIcons->arrowNarrowRightHtml('h-5 w-5 -mr-1') ?>
+        </a>
+        <a href="#kontakt-form" class="inline-flex items-center gap-2 rounded-md border border-white/30 px-5 py-3 font-semibold hover:bg-white/10">
+          <?= $block->escapeHtml(__('Nahrať technické dáta (DXF/DWG/STEP)')) ?>
+        </a>
+      </div>
+      <p class="mt-2 text-xs text-white/70">
+        <?= $block->escapeHtml(__('Podporujeme PDF, JPG/PNG, DXF/DWG, STEP. Ak nevieš formát, pošli pokojne fotku.')) ?>
+      </p>
+    </div>
+
+    <!-- Ilustračný obrázok -->
+    <div class="relative flex items-center justify-center lg:mr-6 lg:justify-end">
+      <img
+        src="<?= $block->escapeUrl($heroImg) ?>"
+        alt="<?= $block->escapeHtmlAttr(__('Ukážka kovového výrezu na mieru')) ?>"
+        class="h-[240px] max-h-60 w-auto opacity-60 object-contain"
+        loading="lazy" decoding="async"
+      />
+    </div>
+  </div>
+</section>
+
+<!-- 2 panely: Laik vs. Profi -->
+<section class="mt-10">
+  <div class="mx-auto max-w-screen-xl px-6 sm:px-8 lg:px-10 grid gap-6 md:grid-cols-2">
+    <div class="rounded-2xl border border-slate-200 p-6 sm:p-7 bg-white">
+      <h2 class="text-xl font-extrabold text-slate-900 inline-flex items-center gap-2">
+        <?= /* @noEscape */ $heroIcons->sparklesHtml('h-5 w-5 text-primary') ?>
+        <?= $block->escapeHtml(__('Jednoduché zadanie (pre „ne-technikov“)')) ?>
+      </h2>
+      <ol class="mt-4 space-y-3 text-slate-700">
+        <li class="flex items-start gap-2"><?= /* @noEscape */ $heroIcons->checkHtml('mt-0.5 h-5 w-5 text-primary') ?><span><b><?= $block->escapeHtml(__('Pošlite fotku alebo náčrt')) ?></b> <?= $block->escapeHtml(__('(mobilom). Pridajte približné rozmery a materiál, ak viete.')) ?></span></li>
+        <li class="flex items-start gap-2"><?= /* @noEscape */ $heroIcons->checkHtml('mt-0.5 h-5 w-5 text-primary') ?><span><b><?= $block->escapeHtml(__('Grafik to prekreslí')) ?></b> <?= $block->escapeHtml(__('do výrobných dát a pošleme vizualizáciu.')) ?></span></li>
+        <li class="flex items-start gap-2"><?= /* @noEscape */ $heroIcons->checkHtml('mt-0.5 h-5 w-5 text-primary') ?><span><b><?= $block->escapeHtml(__('Schválenie & cena.')) ?></b> <?= $block->escapeHtml(__('Po odsúhlasení spúšťame výrobu.')) ?></span></li>
+        <li class="flex items-start gap-2"><?= /* @noEscape */ $heroIcons->checkHtml('mt-0.5 h-5 w-5 text-primary') ?><span><b><?= $block->escapeHtml(__('Výroba & doručenie.')) ?></b> <?= $block->escapeHtml(__('Laser, ohyb, lakovanie, bezpečné balenie.')) ?></span></li>
+      </ol>
+      <a href="#kontakt-form" class="mt-5 inline-flex items-center gap-2 rounded-md bg-primary px-5 py-3 font-semibold text-white hover:bg-primary/90">
+        <?= $block->escapeHtml(__('Začať jednoduchým zadaním')) ?>
+      </a>
+    </div>
+
+    <div class="rounded-2xl border border-slate-200 p-6 sm:p-7 bg-white">
+      <h2 class="text-xl font-extrabold text-slate-900 inline-flex items-center gap-2">
+        <?= /* @noEscape */ $heroIcons->documentTextHtml('h-5 w-5 text-primary') ?>
+        <?= $block->escapeHtml(__('Technické zadanie (pre profesionálov)')) ?>
+      </h2>
+      <div class="mt-4 grid gap-3 text-sm">
+        <div><b><?= $block->escapeHtml(__('Formáty:')) ?></b> <?= $block->escapeHtml(__('DXF/DWG (2D), STEP (3D), PDF pre kontrolu.')) ?></div>
+        <div><b><?= $block->escapeHtml(__('Jednotky:')) ?></b> <?= $block->escapeHtml(__('mm (preferované).')) ?></div>
+        <div><b><?= $block->escapeHtml(__('Vrstvy / farby:')) ?></b> <?= $block->escapeHtml(__('rezná kontúra, dierovanie, gravír, ohybové čiary (ak sú).')) ?></div>
+        <div><b><?= $block->escapeHtml(__('Tolerancie:')) ?></b> <?= $block->escapeHtml(__('bežne ±0,1 mm (podľa materiálu/hrúbky/geo.).')) ?></div>
+        <div><b><?= $block->escapeHtml(__('Hrany:')) ?></b> <?= $block->escapeHtml(__('ostré/zaoblené, odhrotovanie na požiadanie.')) ?></div>
+        <div><b><?= $block->escapeHtml(__('Povrch:')) ?></b> <?= $block->escapeHtml(__('surové / brúsené / s fóliou / práškové lakovanie (RAL).')) ?></div>
+      </div>
+      <a href="#kontakt-form" class="mt-5 inline-flex items-center gap-2 rounded-md bg-slate-900 px-5 py-3 font-semibold text-white hover:opacity-90">
+        <?= $block->escapeHtml(__('Nahrať výrobné dáta')) ?>
+      </a>
+      <p class="mt-2 text-xs text-slate-500">
+        <?= $block->escapeHtml(__('Priložte kusovník, sériovosť, materiál, hrúbky, povrch, požadovaný termín.')) ?>
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- Naše možnosti -->
+<section class="mt-10">
+  <div class="mx-auto max-w-screen-xl px-6 sm:px-8 lg:px-10">
+    <h2 class="text-xl sm:text-2xl font-bold text-slate-900"><?= $block->escapeHtml(__('Naše možnosti')) ?></h2>
+    <div class="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      <div class="rounded-xl border border-slate-200 p-5">
+        <div class="flex items-center gap-2 text-primary">
+          <?= /* @noEscape */ $heroIcons->sparklesHtml('h-5 w-5') ?>
+          <div class="font-semibold text-slate-900"><?= $block->escapeHtml(__('Laserové rezanie plechov')) ?></div>
+        </div>
+        <ul class="mt-2 text-sm text-slate-700 list-disc list-inside">
+          <li><?= $block->escapeHtml(__('Oceľ • Nerez • Hliník • Kortén')) ?></li>
+          <li><?= $block->escapeHtml(__('Hrúbky: bežne 0,8–10 mm (viac na dotaz)')) ?></li>
+          <li><?= $block->escapeHtml(__('Tolerancia: ±0,1 mm (typicky)')) ?></li>
+        </ul>
+      </div>
+      <div class="rounded-xl border border-slate-200 p-5">
+        <div class="flex items-center gap-2 text-primary">
+          <?= /* @noEscape */ $heroIcons->cubeHtml('h-5 w-5') ?>
+          <div class="font-semibold text-slate-900"><?= $block->escapeHtml(__('Rezanie rúr a profilov')) ?></div>
+        </div>
+        <ul class="mt-2 text-sm text-slate-700 list-disc list-inside">
+          <li><?= $block->escapeHtml(__('Priemer ~20–220 mm')) ?></li>
+          <li><?= $block->escapeHtml(__('Dĺžka až ~6 m')) ?></li>
+          <li><?= $block->escapeHtml(__('Otvorové vzory, fazety, označovanie')) ?></li>
+        </ul>
+      </div>
+      <div class="rounded-xl border border-slate-200 p-5">
+        <div class="flex items-center gap-2 text-primary">
+          <?= /* @noEscape */ $heroIcons->colorSwatchHtml('h-5 w-5') ?>
+          <div class="font-semibold text-slate-900"><?= $block->escapeHtml(__('Ohýbanie a povrch')) ?></div>
+        </div>
+        <ul class="mt-2 text-sm text-slate-700 list-disc list-inside">
+          <li><?= $block->escapeHtml(__('Presné ohyby podľa výkresu')) ?></li>
+          <li><?= $block->escapeHtml(__('Práškové lakovanie (RAL)')) ?></li>
+          <li><?= $block->escapeHtml(__('Odhrotovanie, prebrus, ochranná fólia')) ?></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Galéria (automaticky z priečinka) -->
+<?php if ($hasGallery): ?>
+<section class="mt-10" x-data="galleryRef">
+  <div class="mx-auto max-w-screen-xl px-6 sm:px-8 lg:px-10">
+    <h2 class="text-xl sm:text-2xl font-bold text-slate-900">
+      <?= $block->escapeHtml(__('Inšpirácia a referencie')) ?>
+    </h2>
+    <div class="mt-4 grid gap-4 grid-cols-2 sm:grid-cols-3 lg:grid-cols-6">
+      <?php foreach ($urls as $i => $src): ?>
+        <button type="button"
+                class="group relative rounded-lg overflow-hidden ring-1 ring-slate-200 hover:ring-primary focus:outline-none"
+                @click="openAt(<?= (int)$i ?>)">
+          <img src="<?= $block->escapeUrl($src) ?>"
+               alt="<?= $block->escapeHtmlAttr($alts[$i]) ?>"
+               class="h-28 w-full object-cover transition-transform duration-200 group-hover:scale-[1.03]"
+               loading="lazy" decoding="async" />
+          <span class="pointer-events-none absolute inset-0 bg-black/0 group-hover:bg-black/5 transition"></span>
+        </button>
+      <?php endforeach; ?>
+    </div>
+  </div>
+
+  <!-- MODAL s HeroiconsSolid -->
+  <div x-cloak x-spread="overlay" x-bind="overlay"
+       class="fixed inset-0 flex items-center justify-center bg-black/60 z-40">
+    <div x-ref="dialog" role="dialog" class="relative max-w-[90vw] max-h-[90vh]">
+      <img :src="images[idx]" :alt="alts[idx]"
+           class="max-w-[90vw] max-h-[90vh] object-contain rounded-xl shadow-2xl" />
+      <button @click="hide"
+              class="z-[9999] absolute top-3 right-3 rounded-full bg-white/90 hover:bg-white p-2 shadow ring-1 ring-slate-200">
+        <?= /* @noEscape */ $hiSolid->xHtml('h-5 w-5 text-slate-700') ?>
+        <span class="sr-only"><?= $block->escapeHtml(__('Zavrieť')) ?></span>
+      </button>
+      <div class="absolute inset-y-0 left-0 flex items-center p-3">
+        <button @click="prev" class="rounded-full bg-white/90 hover:bg-white p-2 shadow ring-1 ring-slate-200">
+          <?= /* @noEscape */ $hiSolid->chevronLeftHtml('h-5 w-5 text-slate-700') ?>
+          <span class="sr-only"><?= $block->escapeHtml(__('Predošlá')) ?></span>
+        </button>
+      </div>
+      <div class="absolute inset-y-0 right-0 flex items-center p-3">
+        <button @click="next" class="rounded-full bg-white/90 hover:bg-white p-2 shadow ring-1 ring-slate-200">
+          <?= /* @noEscape */ $hiSolid->chevronRightHtml('h-5 w-5 text-slate-700') ?>
+          <span class="sr-only"><?= $block->escapeHtml(__('Ďalšia')) ?></span>
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+<?php endif; ?>
+
+<!-- CTA panel -->
+<section class="mt-10">
+  <div class="mx-auto max-w-screen-xl px-6 sm:px-8 lg:px-10">
+    <div class="rounded-2xl bg-slate-50 border border-slate-200 p-6 sm:p-8 grid gap-6 md:grid-cols-[1fr_auto] items-center">
+      <ul class="flex flex-wrap gap-2 text-sm">
+        <li class="inline-flex items-center gap-1.5 rounded-full bg-white px-3 py-1 ring-1 ring-slate-200">
+          <?= /* @noEscape */ $heroIcons->sparklesHtml('h-4 w-4 text-primary') ?><span><?= $block->escapeHtml(__('Laser 2D do plechov')) ?></span>
+        </li>
+        <li class="inline-flex items-center gap-1.5 rounded-full bg-white px-3 py-1 ring-1 ring-slate-200">
+          <?= /* @noEscape */ $heroIcons->cubeHtml('h-4 w-4 text-primary') ?><span><?= $block->escapeHtml(__('Rezanie rúr/profilov')) ?></span>
+        </li>
+        <li class="inline-flex items-center gap-1.5 rounded-full bg-white px-3 py-1 ring-1 ring-slate-200">
+          <?= /* @noEscape */ $heroIcons->arrowsExpandHtml('h-4 w-4 text-primary') ?><span><?= $block->escapeHtml(__('Ohýbanie')) ?></span>
+        </li>
+        <li class="inline-flex items-center gap-1.5 rounded-full bg-white px-3 py-1 ring-1 ring-slate-200">
+          <?= /* @noEscape */ $heroIcons->colorSwatchHtml('h-4 w-4 text-primary') ?><span><?= $block->escapeHtml(__('Práškové lakovanie RAL')) ?></span>
+        </li>
+        <li class="inline-flex items-center gap-1.5 rounded-full bg-white px-3 py-1 ring-1 ring-slate-200">
+          <?= /* @noEscape */ $heroIcons->collectionHtml('h-4 w-4 text-primary') ?><span><?= $block->escapeHtml(__('Sériová aj kusová výroba')) ?></span>
+        </li>
+      </ul>
+      <div class="flex gap-3">
+        <a href="#kontakt-form" class="inline-flex items-center gap-2 rounded-md bg-primary px-5 py-3 font-semibold text-white hover:bg-primary/90">
+          <?= $block->escapeHtml(__('Nahrať fotku / náčrt')) ?>
+          <?= /* @noEscape */ $heroIcons->arrowNarrowRightHtml('h-5 w-5') ?>
+        </a>
+        <a href="#kontakt-form" class="inline-flex items-center gap-2 rounded-md border px-5 py-3 font-semibold text-slate-800 hover:bg-white">
+          <?= $block->escapeHtml(__('Nahrať DXF/DWG/STEP')) ?>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- INLINE KONTAKTNÝ FORMULÁR (Amasty) -->
+<section id="kontakt-form" class="mt-12 lg:mt-16 mb-14">
+  <div class="mx-auto max-w-screen-lg px-6 sm:px-8 lg:px-10">
+    <div class="mb-5">
+      <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900">
+        <?= $block->escapeHtml(__('Pošlite nám zadanie')) ?>
+      </h2>
+      <p class="mt-2 text-slate-600">
+        <?= $block->escapeHtml(__('Priložte fotografie, náčrt alebo výrobné dáta (PDF, JPG/PNG, DXF/DWG, STEP). Odpovieme s návrhom a cenou.')) ?>
+      </p>
+    </div>
+
+    <div class="rounded-2xl bg-white p-5 sm:p-7 shadow ring-1 ring-slate-200">
+      <?= $this->helper("Amasty\Customform\Helper\Data")->renderForm(5) ?>
+    </div>
+
+    <p class="mt-3 text-xs text-slate-500">
+      <?= $block->escapeHtml(__('Odoslaním súhlasíte so spracovaním osobných údajov na účely vybavenia dopytu.')) ?>
+    </p>
+  </div>
+</section>
+
+<!-- Smooth scroll (offset ~80px podľa sticky headeru) -->
+<script>
+document.addEventListener('click', function(e) {
+  const link = e.target.closest('a[href="#kontakt-form"]');
+  if (!link) return;
+  const target = document.getElementById('kontakt-form');
+  if (!target) return;
+  e.preventDefault();
+  const offset = 80;
+  const y = target.getBoundingClientRect().top + window.pageYOffset - offset;
+  window.scrollTo({ top: y, behavior: 'smooth' });
+});
+</script>

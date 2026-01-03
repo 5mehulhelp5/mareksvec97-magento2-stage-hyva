@@ -1,0 +1,59 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2022-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+declare(strict_types=1);
+
+use Hyva\Theme\ViewModel\HyvaCsp;
+use Magento\Framework\View\Element\Template;
+
+/** @var Template $block */
+/** @var HyvaCsp $hyvaCsp */
+
+/**
+ * @Internal Prefer utilizing the "after" container for injecting additional code.
+ */
+?>
+<script>
+    hyvaCheckout.evaluation.registerValidator('magewire-form', async (component, form, evaluation) => {
+        if (! (form instanceof HTMLFormElement)) {
+            form = form.querySelector('form')
+
+            if (! form) {
+                return true;
+            }
+        }
+
+        const results = await Promise.all(hyva.formValidation(form).validateGroup());
+        const args = evaluation.arguments
+        const details = Object.assign({ saveAction: 'submit' }, (args.detail || {}))
+
+        if (results.every(result => result === true)) {
+            <?php /* Cannot be performed directly on the component object. Using __livewire provides a workaround to resolve this issue. */ ?>
+            if (form.__livewire && Object.values(form.__livewire.deferredActions).length !== 0) {
+                await component.call(details.saveAction);
+            }
+
+            return true;
+        }
+
+        return false;
+    });
+
+    function initMagewireForm() {
+        return Object.assign(
+            hyva.formValidation.apply(this),
+            {
+                initialize() {}
+            }
+        )
+    }
+    window.addEventListener('alpine:init', () => Alpine.data('initMagewireForm', initMagewireForm), { once: true })
+</script>
+<?php $hyvaCsp->registerInlineScript() ?>
+
+<?= $block->getChildHtml('after') ?>

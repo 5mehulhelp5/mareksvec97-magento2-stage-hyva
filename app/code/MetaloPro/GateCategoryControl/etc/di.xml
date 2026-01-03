@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+
+    <type name="Magento\Catalog\Block\Product\ListProduct">
+        <plugin name="filter_simple_products_by_material"
+                type="MetaloPro\GateCategoryControl\Plugin\Catalog\Block\Product\FilterByMaterial"/>
+    </type>
+    
+    
+
+</config>

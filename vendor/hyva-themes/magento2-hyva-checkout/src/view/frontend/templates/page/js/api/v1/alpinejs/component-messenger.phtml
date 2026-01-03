@@ -1,0 +1,252 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2022-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+declare(strict_types=1);
+
+use Hyva\Theme\ViewModel\HyvaCsp;
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Element\Template;
+
+/** @var Template $block */
+/** @var Escaper $escaper */
+/** @var HyvaCsp $hyvaCsp */
+?>
+<script>
+    function initComponentMessenger() {
+        return {
+            messages: [],
+
+            options: {
+                onEmptyMessageText: '<?= $escaper->escapeJs(__('Something went wrong.')) ?>',
+                onEmptyMessageType: 'error',
+                messagesSuccessListener: `:success`,
+                maxAttempts: 4
+            },
+
+            initialize() {
+                const messagesListener = this.$el.dataset.messageListener;
+                const options = JSON.parse(this.$el.dataset.options);
+
+                if (typeof messagesListener !== 'string') {
+                    return hyvaCheckout.message.console(
+                        `Component messenger listener can only be of type string. ${ typeof messagesListener } given.`
+                    )
+                }
+
+                // Backwards compatible
+                this.options.messagesSuccessListener = `${messagesListener}:success`;
+
+                window.addEventListener(messagesListener, event => {
+                    if (! event.detail || ! event.detail.message) {
+                        return hyvaCheckout.message.console('Messenger could not dispatch the message.');
+                    }
+
+                    let message = this.setMessage(
+                        event.detail.component || null,
+                        event.detail.message.text || options.onEmptyMessageText,
+                        event.detail.message.type || options.onEmptyMessageType,
+                        event.detail.message.duration || null,
+                        event.detail.message.metadata || {}
+                    )
+
+                    <?php /* Listen for subsequent Magewire message responses to determine if certain messages can be hidden. */ ?>
+                    Magewire.hook('message.received', (wireMessage, wireComponent) => {
+                        if (wireComponent.id === (event.detail && event.detail.component && event.detail.component.id)) {
+                            this.resetMessage(message.id)
+                        }
+                    })
+                })
+
+                <?php /* Listen for a success event to provide a counterbalance, enabling the reset of the message. */ ?>
+                window.addEventListener(options.messagesSuccessListener, event => {
+                    this.resetMessage(message.id)
+                })
+            },
+
+            <?php /* Function to encode a string to base64 using TextEncoder */ ?>
+            generateMessageHash(str) {
+                const encoder = new TextEncoder()
+                const bytes = encoder.encode(str)
+                return btoa(String.fromCharCode.apply(null, bytes))
+            },
+
+            setMessage(component, text, type, duration = null, metadata = {}) {
+                <?php /* Generate a non-unique hash based on a text and type combination. */ ?>
+                const hash = this.generateMessageHash(text + type)
+                <?php /* See if a similar message was set earlier (array length can only be 0 or 1). */ ?>
+                const messages = this.getMessagesByHash(hash)
+                <?php /* Try and locate the message index based on the first from the messages. */ ?>
+                let index = messages.length ? this.getMessageIndex(messages[0].id) : null
+                <?php /* Predefine the final message. */ ?>
+                let message = this.messages[index]
+
+                if (message) {
+                    this.resetMessage(message)
+                } else {
+                    const id = `${ hash }_${ messages.length }`
+
+                    this.messages.push({
+                        id: id,
+                        hash: hash,
+                        component: component,
+                        dispatched: 0,
+                        timeoutID: null,
+                        show: true,
+                        type: type,
+                        text: text,
+                        metadata: metadata
+                    })
+
+                    index = this.getMessageIndex(id)
+                    message = this.messages[index]
+                }
+
+                this.modifyMessage(message.id, {
+                    dispatched: message.dispatched + 1,
+                    show: true,
+                    metadata: metadata
+                })
+
+                <?php /* Transform message into a general flash message for better visibility. */ ?>
+                if (this.options.maxAttempts && message.dispatched === this.options.maxAttempts) {
+                    this.resetMessage(message.id)
+                    hyvaCheckout.message.send(message.text, message.type, duration)
+                }
+
+                if (duration) {
+                    this.messages[index].timeoutID = setTimeout(
+                        () => this.messages[index].show = false, message.dispatched === 0 ? duration : duration * message.dispatched
+                    )
+                }
+
+                return this.messages[index]
+            },
+
+            getMessages() {
+                return this.messages.filter(message => message.show)
+            },
+
+            getMessagesByHash(hash) {
+                return this.messages.filter(message => message.hash === hash)
+            },
+
+            getMessage(id) {
+                return this.messages[this.getMessageIndex(id)]
+            },
+
+            getMessageIndex(id) {
+                const message = this.messages.findIndex(message => id === message.id)
+
+                return message === -1 ? null : message
+            },
+
+            resetMessage(id) {
+                const message = this.getMessage(id)
+
+                if (message) {
+                    clearTimeout(this.messages[this.getMessageIndex(message.id)].timeoutID)
+
+                    message.dispatched = 0
+                    message.show = false
+                }
+
+                return this.messages
+            },
+
+            modifyMessage(id, data) {
+                const index = this.getMessageIndex(id)
+
+                if (index === null) {
+                    return hyvaCheckout.message.console(`No message found for id: ${ id }`);
+                }
+
+                // Preventing a change of id.
+                data.id = id
+
+                return Object.assign(this.messages[index], data);
+            },
+
+            getOptions() {
+                return this.options
+            }
+        }
+    }
+
+    (() => {
+        const initFn = () => {
+            <?php /** The messenger component */ ?>
+            Alpine.data('initComponentMessenger', initComponentMessenger);
+            <?php /** Additional per message methods */ ?>
+            Alpine.data('initComponentMessengerMessage', () => ({
+                    wrapper() {
+                        return {
+                            'x-show'() {
+                                return this.message.show
+                            },
+                            'x-bind:class'() {
+                                return {
+                                    [this.message.type]: true
+                                }
+                            },
+                            'x-bind:data-testid'() {
+                                return this.message.component ? `${this.message.component.id}-message` : ''
+                            }
+                        }
+                    },
+                    isDispatchedLargerThan2() {
+                        return this.message.dispatched >= 2
+                    },
+                    bindDot() {
+                        return {
+                            'x-bind:data-message-dispatched'() {
+                                return this.message.dispatched
+                            },
+                            'x-bind:data-message-type'() {
+                                return this.message.type
+
+                            },
+                            'x-bind:data-message-alias'() {
+                                return this.message.alias || 'none'
+
+                            },
+                            'x-bind:class'() {
+                                return {
+                                    'animate-bounce': this.message.dispatched >= 3
+                                }
+                            }
+                        }
+                    },
+                    bindDotColor() {
+                        return {
+                            'x-bind:class'() {
+                                return {
+                                    'bg-red-500': this.message.type === 'error',
+                                    'bg-blue-500': this.message.type === 'info',
+                                    'bg-yellow-500': this.message.type === 'warning'
+                                }
+                            }
+                        }
+                    },
+                    close() {
+                        return {
+                            'x-on:click.prevent'() {
+                                return this.resetMessage(this.message.id)
+                            }
+                        }
+                    }
+                })
+            );
+        }
+
+        window.Alpine ? initFn() : window.addEventListener('alpine:init', initFn, { once: true })
+    })()
+
+</script>
+<?php $hyvaCsp->registerInlineScript() ?>
+
+<?= $block->getChildHtml('after') ?>

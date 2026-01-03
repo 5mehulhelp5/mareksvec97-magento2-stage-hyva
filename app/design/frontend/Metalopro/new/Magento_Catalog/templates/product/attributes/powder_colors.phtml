@@ -1,0 +1,9 @@
+<?php 
+if ($powderColor = $block->isPowderColors($block->getProduct())) { ?>
+        <?php if ($powderColor) { ?>
+                <div class='powder-colors'>
+                    <img src='/pub/media/wysiwyg/steelbro/praskove-farby.png'>
+                    <span><?= $powderColor ?></span>
+                </div>
+        <?php } ?>
+<?php } ?>

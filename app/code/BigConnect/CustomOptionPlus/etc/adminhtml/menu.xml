@@ -1,0 +1,6 @@
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+    <menu>
+        
+        <add id="BigConnect_CustomOptionPlus::config_customoptionplus" title="Custom Option Plus" module="BigConnect_CustomOptionPlus" sortOrder="10" parent="BigConnect_Core::main" action="adminhtml/system_config/edit/section/customoptionplus" resource="Magento_Backend::content"/>
+    </menu>
+</config>

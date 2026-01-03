@@ -1,0 +1,64 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2022-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+use Magento\Paypal\Block\Payflow\Link\Iframe as PayflowLinkIframe;
+use Magento\Paypal\Block\Payflow\Advanced\Iframe as PayflowAdvancedIframe;
+
+/**
+ * @var PayflowLinkIframe|PayflowAdvancedIframe $block
+ * @var \Magento\Framework\Escaper $escaper
+ * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
+ */
+?>
+<html>
+<head>
+</head>
+<body>
+<?php $scriptString= <<<script
+
+    (function() {
+        'use strict';
+
+        function redirect(cartUrl, errorMessage, goToSuccessPage, successUrl) {
+            if (!!errorMessage.message) {
+                alert(errorMessage.message);
+                window.top.location.href = cartUrl;
+            } else if (!!goToSuccessPage) {
+                window.top.location.href = successUrl;
+            } else {
+                window.top.location.href = cartUrl;
+            }
+        }
+
+        var cartUrl = '{$escaper->escapeJs($block->getUrl('checkout/cart'))}',
+            successUrl = '{$escaper->escapeJs($block->getUrl('checkout/onepage/success'))}',
+            goToSuccessPage = '{$escaper->escapeJs($block->getGotoSuccessPage())}',
+            require = window.top.require,
+            windowContext = window,
+            errorMessage = {
+                message: '{$escaper->escapeJs($block->getErrorMsg())}'
+            };
+
+        if(typeof(require) == "undefined") {
+            redirect(cartUrl, errorMessage, goToSuccessPage, successUrl);
+        } else {
+            require([
+                'underscore',
+                'Magento_Paypal/js/model/iframe-redirect'
+            ], function(_, iframeRedirect) {
+                _.bind(iframeRedirect, windowContext)(cartUrl, errorMessage, goToSuccessPage, successUrl);
+            })
+        }
+
+    })();
+
+script;
+?>
+<?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>
+</body>
+</html>

@@ -1,0 +1,150 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2022-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+ -->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceBlock name="checkout.payment.methods">
+            <block name="checkout.payment.method.paypal-express"
+                   as="paypal_express"
+                   template="Hyva_CheckoutPayPal::checkout/payment/method/paypal_express.phtml">
+                <arguments>
+                    <argument name="magewire" xsi:type="object">Hyva\CheckoutPayPal\Magewire\Payment\Method\PaypalExpress</argument>
+                </arguments>
+                <block name="checkout.payment.in-context.paypal-express"
+                       as="paypal_express_in_context"
+                       template="Hyva_CheckoutPayPal::checkout/payment/method/paypal_express/paypal_express_in_context.phtml"/>
+                <block name="checkout.payment.review.paypal-express"
+                       as="paypal_express_review"
+                       template="Hyva_CheckoutPayPal::checkout/payment/method/paypal_express/paypal_express_review.phtml"/>
+                <block name="checkout.payment.redirect.paypal-express"
+                       as="paypal_express_redirect"
+                       template="Hyva_CheckoutPayPal::checkout/payment/method/paypal_express/paypal_express_redirect.phtml"/>
+                <block name="checkout.payment.billing-agreement.paypal-express"
+                       as="paypal_billing_agreement"
+                       template="Hyva_CheckoutPayPal::checkout/payment/method/paypal_express/paypal_billing_agreement.phtml"/>
+                <block name="checkout.payment.pay-later.paypal-express"
+                       as="pay_later"
+                       template="Hyva_CheckoutPayPal::checkout/payment/method/paypal_express/pay_later.phtml"/>
+            </block>
+
+            <block name="checkout.payment.method.payflow-express"
+                   as="payflow_express"
+                   template="Hyva_CheckoutPayPal::checkout/payment/method/paypal_express.phtml">
+                <arguments>
+                    <argument name="magewire" xsi:type="object">Hyva\CheckoutPayPal\Magewire\Payment\Method\PayflowExpress</argument>
+                </arguments>
+                <block name="checkout.payment.review.payflow-express"
+                       as="paypal_express_review"
+                       template="Hyva_CheckoutPayPal::checkout/payment/method/paypal_express/paypal_express_review.phtml"/>
+                <block name="checkout.payment.redirect.payflow-express"
+                       as="paypal_express_redirect"
+                       template="Hyva_CheckoutPayPal::checkout/payment/method/paypal_express/paypal_express_redirect.phtml"/>
+                <block name="checkout.payment.pay-later.payflow-express"
+                       as="pay_later"
+                       template="Hyva_CheckoutPayPal::checkout/payment/method/paypal_express/pay_later.phtml"/>
+            </block>
+
+            <block name="checkout.payment.method.payflow-express-bml"
+                   as="payflow_express_bml"
+                   template="Hyva_CheckoutPayPal::checkout/payment/method/paypal_express.phtml">
+                <arguments>
+                    <argument name="magewire" xsi:type="object">Hyva\CheckoutPayPal\Magewire\Payment\Method\PayflowExpressBml</argument>
+                </arguments>
+                <block name="checkout.payment.review.payflow-express-bml"
+                       as="paypal_express_review"
+                       template="Hyva_CheckoutPayPal::checkout/payment/method/paypal_express/paypal_express_review.phtml"/>
+                <block name="checkout.payment.redirect.payflow-express-bml"
+                       as="paypal_express_redirect"
+                       template="Hyva_CheckoutPayPal::checkout/payment/method/paypal_express/paypal_express_redirect.phtml"/>
+                <block name="checkout.payment.pay-later.payflow-express-bml"
+                       as="pay_later"
+                       template="Hyva_CheckoutPayPal::checkout/payment/method/paypal_express/pay_later.phtml"/>
+            </block>
+
+            <block name="checkout.payment.method.payflow-advanced"
+                   as="payflow_advanced"
+                   template="Hyva_CheckoutPayPal::checkout/payment/method/payflow_iframe.phtml">
+                <arguments>
+                    <argument name="magewire" xsi:type="object">Hyva\CheckoutPayPal\Magewire\Payment\Method\PayflowAdvanced</argument>
+                </arguments>
+            </block>
+
+            <block name="checkout.payment.method.payflow-link"
+                   as="payflow_link"
+                   template="Hyva_CheckoutPayPal::checkout/payment/method/payflow_iframe.phtml">
+                <arguments>
+                    <argument name="magewire" xsi:type="object">Hyva\CheckoutPayPal\Magewire\Payment\Method\PayflowLink</argument>
+                </arguments>
+            </block>
+
+            <block name="checkout.payment.method.hosted-pro"
+                   as="hosted_pro"
+                   template="Hyva_CheckoutPayPal::checkout/payment/method/payflow_iframe.phtml">
+                <arguments>
+                    <argument name="magewire" xsi:type="object">Hyva\CheckoutPayPal\Magewire\Payment\Method\HostedPro</argument>
+                </arguments>
+            </block>
+
+            <block name="checkout.payment.method.payflowpro"
+                   as="payflowpro"
+                   template="Hyva_CheckoutPayPal::checkout/payment/method/payflowpro.phtml">
+                <arguments>
+                    <argument name="magewire" xsi:type="object">Hyva\CheckoutPayPal\Magewire\Payment\Method\Payflowpro</argument>
+                </arguments>
+                <block name="payflowpro.selected_card"
+                       as="payflowpro_selected_card"
+                       template="Hyva_CheckoutPayPal::checkout/payment/method/payflowpro/selected_card.phtml"/>
+                <block name="payflowpro.iframe_hidden_form"
+                       as="payflowpro_iframe_hidden_form"
+                       template="Hyva_CheckoutPayPal::checkout/payment/method/payflowpro/iframe_hidden_form.phtml"/>
+                <block name="payflowpro.form"
+                       as="payflowpro_form"
+                       template="Hyva_CheckoutPayPal::checkout/payment/method/payflowpro/payflowpro_form.phtml">
+                    <block class="Magento\Payment\Block\Form\Cc"
+                           name="payflowpro.credit_card_form"
+                           as="credit_card_form"
+                           template="Hyva_CheckoutPayPal::checkout/payment/credit_card_form.phtml">
+                        <arguments>
+                            <argument name="method" xsi:type="object">Hyva\CheckoutPayPal\ViewModel\Payment\Method\PayflowproCc</argument>
+                        </arguments>
+                    </block>
+                    <block name="payflowpro.recaptcha"
+                           as="payflowpro_recaptcha"
+                           template="Hyva_CheckoutPayPal::checkout/payment/method/payflowpro/recaptcha.phtml"/>
+                </block>
+            </block>
+
+            <block name="checkout.payment.method.payflow-payflowpro_cc_vault"
+                   as="payflowpro_cc_vault"
+                   template="Hyva_CheckoutPayPal::checkout/payment/method/payflowpro_cc_vault.phtml">
+                <arguments>
+                    <argument name="magewire" xsi:type="object">Hyva\CheckoutPayPal\Magewire\Payment\Method\PayflowproCcVault</argument>
+                </arguments>
+                <block class="Magento\Paypal\Block\Payflow\Customer\CardRenderer"
+                       name="payflowpro.stored_payment_renderer"
+                       as="stored_payment_renderer"
+                       template="Hyva_CheckoutPayPal::checkout/payment/method/payflowpro_cc_vault/stored_payment.phtml"/>
+            </block>
+
+            <block name="checkout.payment.method.paypal_billing_agreement"
+                   as="paypal_billing_agreement"
+                   template="Hyva_CheckoutPayPal::checkout/payment/method/paypal_billing_agreement.phtml">
+                <arguments>
+                    <argument name="magewire" xsi:type="object">Hyva\CheckoutPayPal\Magewire\Payment\Method\PaypalBillingAgreement</argument>
+                </arguments>
+            </block>
+        </referenceBlock>
+        <referenceBlock name="page.recaptcha.loader.form_ids">
+            <block name="recaptcha.paypal_payflowpro"
+                   as="paypal_payflowpro"
+                   ifconfig="recaptcha_frontend/type_for/paypal_payflowpro"/>
+        </referenceBlock>
+    </body>
+</page>

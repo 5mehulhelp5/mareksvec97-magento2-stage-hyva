@@ -1,0 +1,11 @@
+{
+  "name": "hyva-checkout-tests",
+  "version": "1.0.0",
+  "description": "Playwright tests for Hyvä-Checkout",
+  "scripts": {},
+  "license": "proprietary",
+  "devDependencies": {
+    "@playwright/test": "^1.30.0",
+    "dotenv": "^16.0.3"
+  }
+}

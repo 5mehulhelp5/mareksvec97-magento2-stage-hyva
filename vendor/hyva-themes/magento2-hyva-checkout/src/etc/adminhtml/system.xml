@@ -1,0 +1,214 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2022-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd"
+>
+    <system>
+        <tab id="hyva_themes" sortOrder="999">
+            <label>Hyvä Themes</label>
+        </tab>
+
+        <section id="hyva_themes_checkout"
+                 showInDefault="1"
+                 showInStore="1"
+                 showInWebsite="1"
+                 sortOrder="10"
+                 translate="label"
+        >
+            <label>Checkout</label>
+            <tab>hyva_themes</tab>
+            <resource>Hyva_Checkout::hyva_themes_checkout</resource>
+
+            <group id="general"
+                   showInDefault="1"
+                   showInStore="1"
+                   showInWebsite="1"
+                   sortOrder="10"
+                   translate="label"
+            >
+                <label>General</label>
+                <comment>
+                    <![CDATA[<strong>Please note:</strong> all settings on this page only apply to checkout
+                    experiences provided by Hyvä Themes or any alternatives derived from it. A checkout such as e.g.
+                    Magento Luma has its own specific settings. These can be found elsewhere within the Magento
+                    configuration.]]>
+                </comment>
+
+                <field id="checkout"
+                       showInDefault="1"
+                       showInStore="1"
+                       showInWebsite="1"
+                       sortOrder="10"
+                       translate="label"
+                       type="select"
+                >
+                    <label>Checkout</label>
+                    <source_model>Hyva\Checkout\Model\Config\Source\Checkout</source_model>
+                </field>
+
+                <group id="mobile"
+                       showInDefault="1"
+                       showInStore="1"
+                       showInWebsite="1"
+                       sortOrder="20"
+                >
+                    <label>Mobile</label>
+                    <comment>
+                        <![CDATA[By default, the checkout selected at <span style="text-decoration: underline;">
+                        General > Checkout</span> will be used for both desktop and mobile devices. The following
+                        options let you apply specific settings for mobile users. Mobile users are identified on the
+                        basis of the
+                        <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/User-Agent" target="_blank">
+                            User-Agent.
+                        </a>]]>
+                    </comment>
+
+                    <field id="enable"
+                           showInDefault="1"
+                           showInStore="1"
+                           showInWebsite="1"
+                           sortOrder="10"
+                           translate="label comment"
+                           type="select"
+                    >
+                        <label>Enable</label>
+                        <comment>Specify a custom checkout experience for mobile devices.</comment>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    </field>
+
+                    <field id="checkout"
+                           showInDefault="1"
+                           showInStore="1"
+                           showInWebsite="1"
+                           sortOrder="10"
+                           translate="label"
+                           type="select"
+                    >
+                        <label>Checkout</label>
+                        <depends>
+                            <field id="hyva_themes_checkout/general/mobile/enable">1</field>
+                        </depends>
+                        <source_model>Hyva\Checkout\Model\Config\Source\Checkout</source_model>
+                    </field>
+                </group>
+            </group>
+
+            <!-- API: Component configuration group placeholder -->
+            <group id="component"
+                   showInDefault="1"
+                   showInStore="1"
+                   showInWebsite="1"
+                   sortOrder="20"
+            >
+                <label>Components</label>
+
+                <include path="Hyva_Checkout::system/component/order_comment.xml"/>
+                <include path="Hyva_Checkout::system/component/discount_code.xml"/>
+                <include path="Hyva_Checkout::system/component/shipping.xml"/>
+                <include path="Hyva_Checkout::system/component/shipping_address_form.xml"/>
+                <include path="Hyva_Checkout::system/component/billing.xml"/>
+                <include path="Hyva_Checkout::system/component/billing_address_form.xml"/>
+                <include path="Hyva_Checkout::system/component/payment.xml"/>
+                <include path="Hyva_Checkout::system/component/guest_details.xml"/>
+                <!--<include path="Hyva_Checkout::system/component/newsletter_subscription.xml"/>-->
+            </group>
+
+            <include path="Hyva_Checkout::system/address_form.xml"/>
+            <include path="Hyva_Checkout::system/breadcrumbs.xml"/>
+            <include path="Hyva_Checkout::system/navigation.xml"/>
+            <include path="Hyva_Checkout::system/signin_registration.xml"/>
+            <include path="Hyva_Checkout::system/order_summary.xml"/>
+            <include path="Hyva_Checkout::system/design.xml"/>
+            <include path="Hyva_Checkout::system/developer.xml"/>
+        </section>
+
+        <section id="customer">
+            <group id="address_templates">
+                <field id="hyva_checkout_shipping"
+                       translate="label"
+                       type="textarea"
+                       sortOrder="980"
+                       showInDefault="1"
+                       showInWebsite="1"
+                       showInStore="1"
+                       canRestore="1"
+                >
+                    <label>Hyvä Checkout - Shipping</label>
+                    <comment>Only 'b', 'br', 'em', 'i', 'li', 'ol', 'p', 'strong', 'sub', 'sup', 'ul' tags are allowed</comment>
+                </field>
+
+                <field id="hyva_checkout_billing"
+                       translate="label"
+                       type="textarea"
+                       sortOrder="990"
+                       showInDefault="1"
+                       showInWebsite="1"
+                       showInStore="1"
+                       canRestore="1"
+                >
+                    <label>Hyvä Checkout - Billing</label>
+                    <comment>Only 'b', 'br', 'em', 'i', 'li', 'ol', 'p', 'strong', 'sub', 'sup', 'ul' tags are allowed</comment>
+                </field>
+            </group>
+        </section>
+
+        <section id="checkout">
+            <group id="options">
+                <field id="agreements_type"
+                       translate="label"
+                       type="select"
+                       sortOrder="21"
+                       showInDefault="1"
+                       showInWebsite="1"
+                       showInStore="1"
+                       canRestore="1"
+                >
+                    <label>Terms and Conditions type</label>
+                    <source_model>Hyva\Checkout\Model\Config\Source\TermsConditionsType</source_model>
+                    <depends>
+                        <field id="enable_agreements">1</field>
+                    </depends>
+                </field>
+
+                <field id="agreements_message"
+                       translate="label"
+                       type="text"
+                       sortOrder="22"
+                       showInDefault="1"
+                       showInWebsite="1"
+                       showInStore="1"
+                       canRestore="1"
+                >
+                    <label>Terms and Conditions message</label>
+                    <validate>required-entry</validate>
+                    <depends>
+                        <field id="agreements_type" separator=",">message,page</field>
+                    </depends>
+                </field>
+
+                <field id="agreements_page"
+                       translate="label"
+                       type="select"
+                       sortOrder="23"
+                       showInDefault="1"
+                       showInWebsite="1"
+                       showInStore="1"
+                       canRestore="1"
+                >
+                    <label>Terms and Conditions CMS page</label>
+                    <source_model>Magento\Cms\Model\Config\Source\Page</source_model>
+                    <depends>
+                        <field id="agreements_type">page</field>
+                    </depends>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

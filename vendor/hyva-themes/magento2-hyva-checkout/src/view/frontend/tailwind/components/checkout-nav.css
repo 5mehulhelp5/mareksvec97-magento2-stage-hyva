@@ -1,0 +1,29 @@
+.checkout-nav {
+    @apply flex flex-col-reverse gap-2;
+
+    & .checkout-nav-main,
+    & .checkout-nav-secondary {
+        @apply flex flex-col gap-2;
+    }
+}
+
+.area-main .checkout-nav {
+    @apply md:flex-row;
+
+    & .checkout-nav-main,
+    & .checkout-nav-secondary {
+        @apply md:flex-row md:items-center;
+
+        @screen md {
+            flex-grow: 1;
+        }
+    }
+
+    & .checkout-nav-main {
+        @apply md:justify-between;
+
+        & > button:only-child {
+            @apply md:ml-auto;
+        }
+    }
+}

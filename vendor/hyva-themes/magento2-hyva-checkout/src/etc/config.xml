@@ -1,0 +1,216 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2022-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd"
+>
+    <default>
+        <!-- disable inline scripts on hyva checkout -->
+        <csp>
+            <mode>
+                <storefront_hyva_checkout_index_index>
+                    <report_only>0</report_only>
+                </storefront_hyva_checkout_index_index>
+            </mode>
+            <policies>
+                <storefront_hyva_checkout_index_index>
+                    <scripts>
+                        <eval>0</eval>
+                        <inline>0</inline>
+                        <event_handlers>0</event_handlers>
+                    </scripts>
+                </storefront_hyva_checkout_index_index>
+            </policies>
+        </csp>
+
+        <hyva_themes_checkout>
+            <general>
+                <checkout>magento_luma</checkout>
+
+                <mobile>
+                    <enable>0</enable>
+                    <!-- Set "default" checkout as default checkout to load when mobile checkout is enabled -->
+                    <checkout>default</checkout>
+                </mobile>
+            </general>
+
+            <navigation>
+                <show_back_button>1</show_back_button>
+                <show_back_to_cart_button>0</show_back_to_cart_button>
+            </navigation>
+
+            <breadcrumbs>
+                <show>1</show>
+                <display_type>classic</display_type>
+                <show_cart>0</show_cart>
+                <show_waypoints>1</show_waypoints>
+            </breadcrumbs>
+
+            <signin_registration>
+                <show_signin_registration_button>1</show_signin_registration_button>
+            </signin_registration>
+
+            <component>
+                <billing>
+                    <shipping_as_billing>1</shipping_as_billing>
+                    <address_list_view>select</address_list_view>
+                </billing>
+
+                <shipping>
+                    <address_list_view>grid</address_list_view>
+                </shipping>
+
+                <shipping_address>
+                    <!-- @deprecated has been replaced with hyva_themes_checkout/component/guest_details/email_address_tooltip. -->
+                    <use_luma_checkout_email_tooltip>1</use_luma_checkout_email_tooltip>
+                    <use_luma_checkout_telephone_tooltip>1</use_luma_checkout_telephone_tooltip>
+
+                    <eav_attribute_form_fields>
+                        <![CDATA[{"_1490649978118_118":{"sort_order":"1","attribute_code":"email","enabled":"0","required":"0","length":"0","tool_tip":""},"_1490649978093_93":{"sort_order":"2","attribute_code":"prefix","enabled":"1","required":"1","length":"0","tool_tip":""},"_1490649978096_96":{"sort_order":"3","attribute_code":"firstname","enabled":"1","required":"1","length":"1","tool_tip":""},"_1490649978097_97":{"sort_order":"4","attribute_code":"middlename","enabled":"0","required":"0","length":"0","tool_tip":""},"_1490649978100_100":{"sort_order":"5","attribute_code":"lastname","enabled":"1","required":"1","length":"0","tool_tip":""},"_1490649978101_101":{"sort_order":"6","attribute_code":"suffix","enabled":"0","required":"0","length":"0","tool_tip":""},"_1495116447001_1":{"sort_order":"7","attribute_code":"street.0","enabled":"1","required":"1","length":"3","tool_tip":""},"_1495116483963_963":{"sort_order":"8","attribute_code":"street.1","enabled":"1","required":"0","length":"0","tool_tip":""},"_1495116483964_964":{"sort_order":"9","attribute_code":"street.2","enabled":"1","required":"0","length":"0","tool_tip":""},"_1495116447002_2":{"sort_order":"10","attribute_code":"street.3","enabled":"1","required":"1","length":"3","tool_tip":""},"_1490649978107_107":{"sort_order":"11","attribute_code":"country_id","enabled":"1","required":"1","length":"1","tool_tip":""},"_1490649978109_109":{"sort_order":"12","attribute_code":"region","enabled":"1","required":"0","length":"1","tool_tip":""},"_1490649978111_111":{"sort_order":"13","attribute_code":"postcode","enabled":"1","required":"1","length":"1","tool_tip":""},"_1490649978106_106":{"sort_order":"14","attribute_code":"city","enabled":"1","required":"0","length":"1","tool_tip":""},"_1490649978112_112":{"sort_order":"15","attribute_code":"telephone","enabled":"1","required":"1","length":"1","tool_tip":""},"_1490649978103_103":{"sort_order":"16","attribute_code":"company","enabled":"1","required":"0","length":"1","tool_tip":""},"_1490649978114_114":{"sort_order":"17","attribute_code":"fax","enabled":"0","required":"0","length":"0","tool_tip":""},"_1490649978117_117":{"sort_order":"18","attribute_code":"vat_id","enabled":"0","required":"0","length":"0","tool_tip":""},"_1490649978120_120":{"sort_order":"19","attribute_code":"dob","enabled":"0","required":"0","length":"0","tool_tip":""},"_1490649978122_122":{"sort_order":"20","attribute_code":"taxvat","enabled":"0","required":"0","length":"0","tool_tip":""},"_1490649978124_124":{"sort_order":"21","attribute_code":"gender","enabled":"0","required":"0","length":"0","tool_tip":""}}]]>
+                    </eav_attribute_form_fields>
+                </shipping_address>
+
+                <billing_address>
+                    <eav_attribute_form_fields>
+                        <![CDATA[{"_1490649978030_30":{"sort_order":"1","attribute_code":"email","enabled":"0","required":"0","length":"0","tool_tip":""},"_1490649978002_2":{"sort_order":"2","attribute_code":"prefix","enabled":"1","required":"1","length":"0","tool_tip":""},"_1490649978005_5":{"sort_order":"3","attribute_code":"firstname","enabled":"1","required":"1","length":"1","tool_tip":""},"_1490649978007_7":{"sort_order":"4","attribute_code":"middlename","enabled":"0","required":"0","length":"0","tool_tip":""},"_1490649978009_9":{"sort_order":"5","attribute_code":"lastname","enabled":"1","required":"1","length":"1","tool_tip":""},"_1490649978010_10":{"sort_order":"6","attribute_code":"suffix","enabled":"0","required":"0","length":"0","tool_tip":""},"_1495116483899_899":{"sort_order":"7","attribute_code":"street.0","enabled":"1","required":"0","length":"3","tool_tip":""},"_1495116446936_936":{"sort_order":"8","attribute_code":"street.1","enabled":"1","required":"1","length":"3","tool_tip":""},"_1495116483900_900":{"sort_order":"9","attribute_code":"street.2","enabled":"1","required":"0","length":"3","tool_tip":""},"_1495116446937_937":{"sort_order":"10","attribute_code":"street.3","enabled":"1","required":"0","length":"3","tool_tip":""},"_1490649978018_18":{"sort_order":"11","attribute_code":"country_id","enabled":"1","required":"1","length":"1","tool_tip":""},"_1490649978020_20":{"sort_order":"12","attribute_code":"region","enabled":"1","required":"0","length":"1","tool_tip":""},"_1490649978022_22":{"sort_order":"13","attribute_code":"postcode","enabled":"1","required":"1","length":"1","tool_tip":""},"_1490649978015_15":{"sort_order":"14","attribute_code":"city","enabled":"1","required":"0","length":"1","tool_tip":""},"_1490649978025_25":{"sort_order":"15","attribute_code":"telephone","enabled":"1","required":"1","length":"1","tool_tip":""},"_1490649978012_12":{"sort_order":"16","attribute_code":"company","enabled":"1","required":"0","length":"1","tool_tip":""},"_1490649978027_27":{"sort_order":"17","attribute_code":"fax","enabled":"0","required":"0","length":"0","tool_tip":""},"_1490649978029_29":{"sort_order":"18","attribute_code":"vat_id","enabled":"0","required":"0","length":"0","tool_tip":""},"_1490649978032_32":{"sort_order":"19","attribute_code":"dob","enabled":"0","required":"0","length":"0","tool_tip":""},"_1490649978035_35":{"sort_order":"20","attribute_code":"taxvat","enabled":"0","required":"0","length":"0","tool_tip":""},"_1490649978036_36":{"sort_order":"21","attribute_code":"gender","enabled":"0","required":"0","length":"0","tool_tip":""}}]]>
+                    </eav_attribute_form_fields>
+                </billing_address>
+
+                <discount_code>
+                    <enable>1</enable>
+                </discount_code>
+
+                <order_comment>
+                    <enable>1</enable>
+                </order_comment>
+
+                <newsletter_subscription>
+                    <enable>1</enable>
+                </newsletter_subscription>
+
+                <payment>
+                    <show_method_icons>1</show_method_icons>
+                    <remove_non_zero_methods>0</remove_non_zero_methods>
+                    <enabled_non_zero_methods>free</enabled_non_zero_methods>
+                </payment>
+
+                <guest_details>
+                    <email_address_tooltip>We'll send your order confirmation here.</email_address_tooltip>
+                    <enable_login>0</enable_login>
+                </guest_details>
+            </component>
+
+            <address_form>
+                <street>
+                    <field_label_0>Street Address</field_label_0>
+                </street>
+            </address_form>
+
+            <design>
+                <shipping_payment_methods>
+                    <universal_icon_width>44</universal_icon_width>
+                    <universal_icon_height>32</universal_icon_height>
+                    <combine_shipping_method_name>0</combine_shipping_method_name>
+                </shipping_payment_methods>
+
+                <form_fields>
+                    <show_password_visibility_toggle>1</show_password_visibility_toggle>
+                    <tooltip_style>hint_text</tooltip_style>
+                </form_fields>
+
+                <formatting>
+                    <show_zero_price_free_label>0</show_zero_price_free_label>
+                    <show_shipping_method_total_if_none_selected>1</show_shipping_method_total_if_none_selected>
+                </formatting>
+            </design>
+
+            <developer>
+                <mobile_useragent_regex>
+                    <![CDATA[/android|avantgo|blackberry|bolt|boost|cricket|docomo|fone|hiptop|mini|mobi|palm|phone|pie|tablet|up\.browser|up\.link|webos|wos/i]]>
+                </mobile_useragent_regex>
+
+                <evaluation_api>
+                    <error_as_warning>0</error_as_warning>
+
+                    <redirect>
+                        <enable_confirmation>0</enable_confirmation>
+                        <confirmation_message>You are about to be redirected to an external URL. Before proceeding, please grant your consent to continue.</confirmation_message>
+                        <enable_notification>0</enable_notification>
+                        <notification_message>You are about to be redirected to an external URL.</notification_message>
+                        <dialog_visibility_duration>3000</dialog_visibility_duration>
+                    </redirect>
+                </evaluation_api>
+
+                <shipping_billing_form>
+                    <autosave_timeout>3000</autosave_timeout><!-- Deprecated -->
+                </shipping_billing_form>
+
+                <address_form>
+                    <use_street_renderer>0</use_street_renderer>
+                </address_form>
+
+                <place_order>
+                    <success_page_redirect_timeout>3000</success_page_redirect_timeout>
+                </place_order>
+
+                <fixes_workarounds>
+                    <migrate_guest_info>1</migrate_guest_info>
+                    <total_segments_collect_totals>1</total_segments_collect_totals>
+                    <render_billing_address>0</render_billing_address>
+                    <disable_form_auto_saving>0</disable_form_auto_saving>
+                </fixes_workarounds>
+
+                <experimental>
+                    <enable_first_payment_method_available>0</enable_first_payment_method_available>
+                    <enable_first_shipping_method_available>0</enable_first_shipping_method_available>
+                    <disable_main_evaluation_result_merge>1</disable_main_evaluation_result_merge>
+                </experimental>
+            </developer>
+        </hyva_themes_checkout>
+
+        <checkout>
+            <options>
+                <agreements_type>list</agreements_type>
+                <agreements_page>home</agreements_page>
+            </options>
+        </checkout>
+
+        <customer>
+            <address_templates>
+                <hyva_checkout_shipping>
+                    <![CDATA[{{depend prefix}}{{var prefix}} {{/depend}}{{var firstname}} {{depend middlename}}{{var middlename}} {{/depend}}{{var lastname}}{{depend suffix}} {{var suffix}}{{/depend}}{{depend firstname}}<br />{{/depend}}
+{{depend company}}{{var company}}<br />{{/depend}}
+{{if street1}}{{var street1}}<br />{{/if}}
+{{depend street2}}{{var street2}}<br />{{/depend}}
+{{depend street3}}{{var street3}}<br />{{/depend}}
+{{depend street4}}{{var street4}}<br />{{/depend}}
+{{if city}}{{var city}},  {{/if}}{{if region}}{{var region}}, {{/if}}{{if postcode}}{{var postcode}}{{/if}}<br />
+{{var country}}<br />
+{{depend telephone}}T: <a href="tel:{{var telephone}}">{{var telephone}}</a>{{/depend}}
+{{depend fax}}<br />F: {{var fax}}{{/depend}}
+{{depend vat_id}}<br />VAT: {{var vat_id}}{{/depend}}]]>
+                </hyva_checkout_shipping>
+
+                <hyva_checkout_billing>
+                    <![CDATA[{{depend prefix}}{{var prefix}} {{/depend}}{{var firstname}} {{depend middlename}}{{var middlename}} {{/depend}}{{var lastname}}{{depend suffix}} {{var suffix}}{{/depend}}{{depend firstname}}<br />{{/depend}}
+{{depend company}}{{var company}}<br />{{/depend}}
+{{if street1}}{{var street1}}<br />{{/if}}
+{{depend street2}}{{var street2}}<br />{{/depend}}
+{{depend street3}}{{var street3}}<br />{{/depend}}
+{{depend street4}}{{var street4}}<br />{{/depend}}
+{{if city}}{{var city}},  {{/if}}{{if region}}{{var region}}, {{/if}}{{if postcode}}{{var postcode}}{{/if}}<br />
+{{var country}}<br />
+{{depend telephone}}T: <a href="tel:{{var telephone}}">{{var telephone}}</a>{{/depend}}
+{{depend fax}}<br />F: {{var fax}}{{/depend}}
+{{depend vat_id}}<br />VAT: {{var vat_id}}{{/depend}}]]>
+                </hyva_checkout_billing>
+            </address_templates>
+        </customer>
+    </default>
+</config>

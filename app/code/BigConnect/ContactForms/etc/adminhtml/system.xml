@@ -1,0 +1,67 @@
+<?xml version="1.0" ?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <tab id="BigConnect" translate="label" sortOrder="400">
+            <label>BigConnect</label>
+        </tab>
+        <section id="bigconnect_contactforms" translate="label" type="text" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
+            <label>Contact Forms</label>
+            <tab>BigConnect</tab>
+            <resource>Magento_Config::config_admin</resource>
+            <group id="general" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                <attribute type="expanded">1</attribute>
+                <label>General settings</label>
+                <field id="active_product" translate="label" sortOrder="0" type="select" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Enable extension product page</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="active_category" translate="label" sortOrder="0" type="select" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Enable extension category</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="link" translate="label" sortOrder="3" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Link to custom production page</label>
+                    <comment>Enter link etc. /custom-production.</comment>
+                </field>
+                <field id="show_number_or_email" translate="label" sortOrder="0" type="select" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Show number or email</label>
+                    <source_model>BigConnect\ContactForms\Model\Config\Source\ContactOptions</source_model>
+                    <comment>Disable or enable email or telephone number on visible place in contact elements.</comment>
+                </field>
+                <field id="avatar" translate="label" type="image" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Avatar image</label>
+                    <backend_model>Magento\Config\Model\Config\Backend\Image</backend_model>
+                    <upload_dir config="system/filesystem/media" scope_info="1">contactform/avatars</upload_dir>
+                    <base_url type="media" scope_info="1">contactform/avatars</base_url>
+                    <comment>Maximum file size: 4 MB. Allowed file types: JPG, GIF, PNG.</comment>
+                </field>
+            </group>
+            <group id="contactforms_product" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Product page</label>
+                <field id="title" translate="label" sortOrder="3" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Title block</label>
+                    <comment>Enter main title of block.</comment>
+                </field>
+                <field id="message" translate="label" sortOrder="3" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Message block</label>
+                    <comment>Enter text visible for customer.</comment>
+                </field>
+            </group>
+            <group id="contactforms_category" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Category page</label>
+                <field id="title" translate="label" sortOrder="3" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Title block</label>
+                    <comment>Enter main title of block.</comment>
+                </field>
+                <field id="message" translate="label" sortOrder="3" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Message block</label>
+                    <comment>Enter text visible for customer.</comment>
+                </field>
+                <field id="time" translate="label" sortOrder="3" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Time block</label>
+                    <comment>Enter time for email answer.</comment>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

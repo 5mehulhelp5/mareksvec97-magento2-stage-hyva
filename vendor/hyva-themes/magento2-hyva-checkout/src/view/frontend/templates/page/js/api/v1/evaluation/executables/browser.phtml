@@ -1,0 +1,44 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2022-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+declare(strict_types=1);
+
+use Hyva\Checkout\Model\Magewire\Component\Evaluation\BrowserConsoleLog;
+use Hyva\Theme\ViewModel\HyvaCsp;
+
+/** @var HyvaCsp $hyvaCsp */
+
+/**
+ * @Internal Use layout container "hyva.checkout.evaluation.executables" to inject custom executables.
+ */
+?>
+<script>
+    function hyvaCheckoutEvaluationResultBrowserConsoleLog(result)
+    {
+        if (! result.arguments.dispatch) {
+            return;
+        }
+
+        const arguments = result.arguments;
+        const params = arguments['params_log'] ? arguments.params : null;
+
+        switch(result.arguments.variant) {
+            case 'warning': console.warn(arguments.message, params)
+                break;
+            case 'error': console.error(arguments.message, params)
+                break;
+
+            default: console.log(arguments.message, params)
+        }
+    }
+
+    window.addEventListener('checkout:init:evaluation', () => {
+        hyvaCheckout.evaluation.registerExecutable('checkout.browser.console-log', result => hyvaCheckoutEvaluationResultBrowserConsoleLog(result))
+    })
+</script>
+<?php $hyvaCsp->registerInlineScript() ?>

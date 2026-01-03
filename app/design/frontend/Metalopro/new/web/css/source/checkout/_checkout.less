@@ -1,0 +1,206 @@
+.firecheckout.firecheckout-col1-set.firecheckout-layout-empty .page-main, .firecheckout.firecheckout-col1-set.firecheckout-layout-minimal .page-main, .firecheckout.firecheckout-col1-set.firecheckout-layout-empty .header.content, .firecheckout.firecheckout-col1-set.firecheckout-layout-minimal .header.content {
+	max-width: 1280px !important;
+}
+
+.firecheckout.checkout-index-index {
+	.authentication-wrapper {
+		display: none !important;
+	}
+	.items-in-cart>.minicart-items:after {
+		display: none;
+	}
+
+
+	#opc-sidebar {
+		padding: 0;
+		margin: 0;
+		background: 0 0;
+		box-shadow: none;
+		border: none;
+		background: #efeeec;
+		padding: 28px;
+		.payment-method.agreements-clone {
+
+			.checkout-agreement.required {
+				display: flex;
+				gap: 8px;
+			}
+		}
+	}
+	#checkout {
+		.opc-wrapper {
+			
+			.step-title {
+				font-size: 25px;
+				font-weight: 600;
+				margin-bottom: 25px;
+			}
+		}
+		.opc-sidebar {
+			border: none;
+			padding: 0px;
+			.discount-code {
+				display: none;
+			}
+			
+		}
+		.opc-block-summary>.title, .opc-sidebar .step-title {
+			font-size: 25px;
+			font-weight: 600;
+			margin-bottom: 25px;
+		}
+		.opc-wrapper .opc>li, .opc-sidebar {
+			border: none;
+		}
+	}
+	.place-order {
+		.primary {
+			width: 100%;
+			.action.primary {
+				min-height: 80px;
+				font-size: 18px;
+			}
+		}
+	}
+}
+
+.firecheckout #checkout .opc-wrapper .form-login #customer-email-fieldset .control .note {
+    display: none !important;
+}
+
+// Shipping
+
+.firecheckout.checkout-index-index {
+	.table-checkout-shipping-method {
+		border-collapse: separate;
+		border-spacing: 0 8px;
+		margin-top: -16px;
+		margin-bottom: -8px;
+		tbody {
+			tr {
+				td {
+					padding-bottom: 22px !important;
+					padding-top: 22px !important;
+					border-bottom: 1px solid #e6e6e6 !important;
+					border-top: 1px solid #e6e6e6 !important;
+					&.col-price {
+						width: 50px;
+						.price {
+							font-weight: 500 !important;
+							font-size: 14px !important;
+						}
+					}
+					&.col-carrier {
+						font-weight: 600;
+						font-size: 15px;
+					}
+					&.col-method {
+    					text-align: right;
+					}
+					&:first-child {
+						border-left: 1px solid #e6e6e6 !important;
+						padding-left: 15px;
+					}
+					&:last-child {
+						border-right: 1px solid #e6e6e6 !important;
+					}
+					&.radio-button {
+						width: 10px;
+					}
+				}
+				&.-selected {
+					td {
+						background: #f2f2f2;
+						&:first-child {
+							border-left: 1px solid #e6e6e6 !important;
+							padding-left: 15px;
+						}
+					}
+				}	
+			}
+		}
+	}
+}
+
+// Payments
+.firecheckout #checkout{
+	.payment-method {
+		border: 1px solid #e6e6e6;
+		margin-bottom: 8px;
+		position: relative;
+		&.agreements-clone {
+			border: none;
+		}
+		.payment-method-content {
+			padding: 0 25px 5px;
+		}
+		.payment-method-title {
+			input[type=radio] {
+			    left: 25px;
+			    transform: translate(-50%, -50%) !important;
+			    top: 35px;
+			    border-radius: 50%;
+			    position: absolute;
+			}
+		}
+		
+		&._active {
+			background: #f2f2f2;
+		}
+		.payment-method-title {
+			    display: flex;
+			    padding: 0 !important;
+			    position: relative;
+			.carrier {
+			    padding-left: 15px;
+			    font-weight: 600;
+			    font-size: 15px;
+			}
+			.payment-logo {
+			    position: absolute;
+			    z-index: 1;
+			    right: 25px;
+			    top: 22px;
+			    height: 28px;
+			}
+			.method-description {
+				display: block;
+			    margin-top: 15px;
+			    padding-left: 15px;
+			    display: none;
+			    font-size: 14px;
+			}
+			label[for=paypal_express] .method-logo {
+			    position: absolute;
+			    z-index: 1;
+			    right: 25px;
+			    top: 22px;
+			    height: 28px;
+			    img {
+			        height: 100%;
+			        margin-right: 0;
+			    }
+			}
+		}
+		.amcheckout-label {
+			    padding: 25px;
+			    padding-left: 40px !important;
+			    width: 100%;
+			    cursor: pointer;
+			}
+	}
+} 
+
+.firecheckout .form-shipping-address input[type=checkbox]:checked, .firecheckout #checkout input[type=checkbox]:checked, .firecheckout .form-shipping-address input[type=radio]:checked, .firecheckout #checkout input[type=radio]:checked {
+	box-shadow: 0 0 0 10px #ffa500 inset !important;
+}
+
+//
+//  Mobile
+//  _____________________________________________
+
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
+	.firecheckout #checkout .opc-wrapper .opc>li, .firecheckout #checkout .opc-sidebar {
+		    padding: 15px 0px !important;
+	}
+}

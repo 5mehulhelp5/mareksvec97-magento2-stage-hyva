@@ -1,0 +1,63 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2022-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+declare(strict_types=1);
+
+use Hyva\Theme\Model\ViewModelRegistry;
+use Magento\Customer\Api\Data\AddressInterface;
+use Magento\Customer\Api\Data\AddressSearchResultsInterface;
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Element\Template;
+use Hyva\Theme\ViewModel\HeroiconsOutline;
+
+/** @var Template $block */
+/** @var ViewModelRegistry $viewModels */
+/** @var AddressSearchResultsInterface $shippingAddressList */
+/** @var AddressInterface $shippingAddress */
+/** @var Escaper $escaper */
+
+/** @var HeroiconsOutline $heroicons */
+$heroicons = $viewModels->require(HeroiconsOutline::class);
+
+$activeEntity = $block->getData('active_entity');
+$addressList = $block->getData('address_list');
+
+$addressListItems = $addressList->getAddressListItems();
+?>
+<?php if ($addressListItems): ?>
+    <div class="address-grid address-select flex" data-view="select" x-data="hyvaCheckoutAddressSelector">
+        <label class="sr-only" for="address-list"><?= $escaper->escapeHtml(__('Address List')) ?></label>
+
+        <select id="address-list"
+                name="address-list"
+                class="block w-full h-full form-input pr-9"
+                wire:model="activeAddressEntity"
+        >
+            <?php foreach ($addressListItems as $address): ?>
+                <option value="<?= $escaper->escapeHtmlAttr($address->getId() ?? 0) ?>">
+                    <?= $escaper->escapeHtml($addressList->renderAddress($address, 'oneline')) ?>
+                </option>
+            <?php endforeach ?>
+        </select>
+
+        <?php if (! is_numeric($activeEntity)): ?>
+            <button data-modal-address-form-block-name="<?= $escaper->escapeHtmlAttr($addressList->getModalAddressFormBlockName()) ?>"
+                    x-on:click="editAddress"
+                    class="btn btn-secondary py-0 flex justify-center items-center"
+                    title="<?= $escaper->escapeHtmlAttr(__('Edit Address')) ?>"
+            >
+                <span class="sr-only"><?= $escaper->escapeHtml(__('Edit Address')) ?></span>
+                <?= $heroicons->pencilAltHtml('', 20, 20, ['aria-hidden' => 'true']) ?>
+            </button>
+        <?php endif ?>
+    </div>
+<?php else: ?>
+    <div class="bg-yellow-100 p-4 border-dashed border-2 border-yellow-400 text-center">
+        <?= $escaper->escapeHtml(__('No addresses available.')) ?>
+    </div>
+<?php endif ?>

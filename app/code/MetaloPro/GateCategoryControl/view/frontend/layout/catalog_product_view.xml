@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <!-- Odstráň pôvodný add to cart blok -->
+     
+
+        <!-- Vlož vlastný add to cart blok -->
+        <referenceContainer name="product.info.form.content">
+          <block class="MetaloPro\GateCategoryControl\Block\MaterialSwitcher"
+                 name="material.switcher"
+                 template="MetaloPro_GateCategoryControl::material_switcher.phtml"
+                 before="material.custom.addtocart"/>
+            <block class="Magento\Framework\View\Element\Template"
+                   name="material.custom.addtocart"
+                   template="MetaloPro_GateCategoryControl::material/switcher_link.phtml"
+                   before="-"/>
+        </referenceContainer>
+        <referenceContainer name="product.info.contact">
+          <block class="MetaloPro\GateCategoryControl\Block\Visibility"
+                 name="product.contact.form"
+                 template="MetaloPro_GateCategoryControl::product-contact-form.phtml"
+                 after="-"/>
+          
+        </referenceContainer>
+        <referenceContainer name="product.info.main">>
+        <block class="Magento\Catalog\Block\Widget\RecentlyViewed"
+                     name="design.series.products"
+                     template="MetaloPro_GateCategoryControl::product/widget/viewed/grid.phtml"
+                     after="-">
+                  <arguments>
+                      <argument name="uiComponent" xsi:type="string">widget_recently_viewed</argument>
+                      <argument name="page_size" xsi:type="number">10</argument>
+                  </arguments>
+              </block>
+              <block class="MetaloPro\GateCategoryControl\Block\Visibility"
+                 name="product.custom.production.info"
+                 template="MetaloPro_GateCategoryControl::product/custom-production-info.phtml"
+                 before="design.series.products"/>
+        </referenceContainer>
+        <referenceContainer name="after.body.start">
+                    <block class="MetaloPro\GateCategoryControl\Block\Visibility" name="floating.cta.button" template="MetaloPro_GateCategoryControl::html/floating-cta.phtml"/>
+                </referenceContainer>
+        <referenceContainer name="content">
+        	<block class="MetaloPro\GateCategoryControl\Block\Visibility"
+                 name="product.gate.benefits"
+                 template="MetaloPro_GateCategoryControl::product/benefits-block.phtml"
+                 after="product.info.description"/>
+        	</referenceContainer>
+
+
+    </body>
+</page>

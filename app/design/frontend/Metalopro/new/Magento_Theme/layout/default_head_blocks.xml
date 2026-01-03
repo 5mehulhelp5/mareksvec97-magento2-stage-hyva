@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <head>
+        
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <font src="fonts/Luma-Icons.woff2"/>
+        <link rel="preload" src="fonts/jost-web/Jost-100-Hairline.woff2" as="font" type="font/woff2"/>
+        <link rel="preload" src="fonts/jost-web/Jost-200-Thin.woff2" as="font" type="font/woff2"/>
+        <link rel="preload" src="fonts/jost-web/Jost-300-Light.woff2" as="font" type="font/woff2"/>
+        <link rel="preload" src="fonts/jost-web/Jost-400-Book.woff2" as="font" type="font/woff2"/>
+        <link rel="preload" src="fonts/jost-web/Jost-500-Medium.woff2" as="font" type="font/woff2"/>
+        <link rel="preload" src="fonts/jost-web/Jost-600-Semi.woff2" as="font" type="font/woff2"/>
+        <link rel="preload" src="fonts/jost-web/Jost-700-Bold.woff2" as="font" type="font/woff2"/>
+        <link rel="preload" src="fonts/jost-web/Jost-800-Heavy.woff2" as="font" type="font/woff2"/>
+        <link rel="preload" src="fonts/jost-web/Jost-900-Black.woff2" as="font" type="font/woff2"/>
+
+        
+    </head>
+</page>

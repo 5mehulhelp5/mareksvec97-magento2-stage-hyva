@@ -1,0 +1,30 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2020-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+use Magento\Checkout\Block\Onepage\Link;
+use Magento\Framework\Escaper;
+use Hyva\Theme\ViewModel\HeroiconsSolid;
+$heroiconsSolid = $viewModels->require(HeroiconsSolid::class);
+
+/** @var Escaper $escaper */
+/** @var Link $block */
+?>
+<?= $block->getLayout()->renderElement('checkout.cart.coupon') ?>
+<?php if ($block->isPossibleOnepageCheckout()): ?>
+
+    <a @click.prevent.stop="$dispatch('toggle-authentication',
+        {url: '<?= $escaper->escapeHtmlAttr($escaper->escapeUrl($block->getCheckoutUrl())) ?>'});"
+        href="<?= $escaper->escapeHtmlAttr($escaper->escapeUrl($block->getCheckoutUrl())) ?>"
+        title="<?= $escaper->escapeHtmlAttr(__('Proceed to Checkout')) ?>"
+        class="checkout my-4 justify-center btn-action btn-action-lg group btn-size-lg w-full"
+        id="checkout-link-button"
+    >
+        <?= $escaper->escapeHtml(__('Proceed to Checkout')) ?>
+        <?= $heroiconsSolid->chevronRightHtml('icon-right', 24, 24, ['aria-hidden' => 'true']); ?>
+    </a>
+<?php endif ?>

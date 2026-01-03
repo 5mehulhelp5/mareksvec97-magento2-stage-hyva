@@ -1,0 +1,47 @@
+<?php
+/**
+ * Copyright © MageWorx. All rights reserved.
+ * See LICENSE.txt for license details.
+ */
+?>
+<?php
+/** @var \Magento\Framework\View\Element\Template $block */
+/**
+ * Review list toolbar
+ *
+ * @var $toolbar \MageWorx\XReviewBase\Block\Review\Product\ListView\Toolbar
+ */
+
+$toolbar = $block->getParentBlock();
+?>
+<div class="toolbar-sorter sorter">
+    <label class="sorter-label" for="sorter"><?= $toolbar->escapeHtml(__('Sort By')) ?></label>
+    <select id="sorter" data-role="sorter" class="sorter-options">
+        <?php foreach ($toolbar->getAvailableOrders() as $_key => $_order) : ?>
+            <option value="<?= $toolbar->escapeHtmlAttr($_key) ?>"
+                <?php if ($toolbar->isOrderCurrent($_key)) : ?>
+                    selected="selected"
+                <?php endif; ?>
+            >
+                <?= $toolbar->escapeHtml(__($_order)) ?>
+            </option>
+        <?php endforeach; ?>
+    </select>
+    <?php if ($toolbar->getCurrentDirection() == 'desc') : ?>
+        <a title="<?= $toolbar->escapeHtmlAttr(__('Set Ascending Direction')) ?>"
+           href="#"
+           class="action sorter-action sort-desc"
+           data-role="direction-switcher"
+           data-value="asc">
+            <span><?= $toolbar->escapeHtml(__('Set Ascending Direction')) ?></span>
+        </a>
+    <?php else : ?>
+        <a title="<?= $toolbar->escapeHtmlAttr(__('Set Descending Direction')) ?>"
+           href="#"
+           class="action sorter-action sort-asc"
+           data-role="direction-switcher"
+           data-value="desc">
+            <span><?= $toolbar->escapeHtml(__('Set Descending Direction')) ?></span>
+        </a>
+    <?php endif; ?>
+</div>

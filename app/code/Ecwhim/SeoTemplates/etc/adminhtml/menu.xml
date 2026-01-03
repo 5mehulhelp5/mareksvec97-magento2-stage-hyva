@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Ecwhim. All rights reserved.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+    <menu>
+        <add id="Ecwhim_SeoTemplates::seo_templates" title="SEO Templates" translate="title"
+             module="Ecwhim_SeoTemplates" sortOrder="41" parent="Magento_Backend::marketing"
+             resource="Ecwhim_SeoTemplates::seo_templates"/>
+        <add id="Ecwhim_SeoTemplates::seo_templates_product_template" title="Product Templates" translate="title"
+             module="Ecwhim_SeoTemplates" sortOrder="10" parent="Ecwhim_SeoTemplates::seo_templates"
+             resource="Ecwhim_SeoTemplates::seo_templates_product_template" action="ecwhim_seotemplates/productTemplate"/>
+        <add id="Ecwhim_SeoTemplates::seo_templates_category_template" title="Category Templates" translate="title"
+             module="Ecwhim_SeoTemplates" sortOrder="20" parent="Ecwhim_SeoTemplates::seo_templates"
+             resource="Ecwhim_SeoTemplates::seo_templates_category_template" action="ecwhim_seotemplates/categoryTemplate"/>
+    </menu>
+</config>

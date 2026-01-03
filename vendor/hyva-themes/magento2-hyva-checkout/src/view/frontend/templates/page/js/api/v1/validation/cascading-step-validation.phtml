@@ -1,0 +1,35 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2022-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+declare(strict_types=1);
+
+use Hyva\Theme\ViewModel\HyvaCsp;
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Element\Template;
+
+/** @var Escaper $escaper */
+/** @var Template $block */
+/** @var HyvaCsp $hyvaCsp */
+?>
+<script>
+    (() => {
+        window.addEventListener('checkout:step:loaded', event => {
+            hyvaCheckout.storage.setValue(event.detail.route, false, 'cascading-step-data')
+        })
+        window.addEventListener('checkout:validation:success', event => {
+            hyvaCheckout.storage.setValue(event.detail.step, true, 'cascading-step-data')
+        })
+        window.addEventListener('checkout:validation:failure', event => {
+            hyvaCheckout.storage.setValue(event.detail.step, false, 'cascading-step-data')
+        })
+        window.addEventListener('checkout:validation:exception', event => {
+            hyvaCheckout.storage.setValue(event.detail.step, false, 'cascading-step-data')
+        })
+    })()
+</script>
+<?php $hyvaCsp->registerInlineScript() ?>

@@ -1,0 +1,22 @@
+
+# Defaults
+variables:
+  SRC_DIR: './src'
+
+include:
+  - project: 'hyva-themes/base-ci'
+    file: 'lint/php.yml'
+    ref: main
+  - project: 'hyva-themes/base-ci'
+    file: 'static/phpcs.yml'
+    ref: main
+  - project: 'hyva-themes/base-ci'
+    file: 'test/checkout-playwright.yml'
+    ref: main
+
+test:checkout_playwright:
+  extends: .test:checkout_playwright
+  parallel:
+    matrix:
+      - MAGEVERSION: ['2.4.5-p8']
+        HYVAVERSION: ['1.3.12']

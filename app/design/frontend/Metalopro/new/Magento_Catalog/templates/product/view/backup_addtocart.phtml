@@ -1,0 +1,86 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+/** @var $block \Magento\Catalog\Block\Product\View */
+$objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+$storeManager = $objectManager->get('Magento\Store\Model\StoreManagerInterface');
+$themeDirectory = $objectManager->get('\Magento\Framework\View\Asset\Repository');
+$imagePath = $themeDirectory->getUrlWithParams('Magento_Checkout::img/cart.svg', ['_secure' => $storeManager->getStore()->isCurrentlySecure()]);
+$imageCheckPath = $themeDirectory->getUrlWithParams('Magento_Checkout::img/check.svg', ['_secure' => $storeManager->getStore()->isCurrentlySecure()]);
+$blockIdentifier = 'payment-icon';
+$block_payment = $this->getLayout()->createBlock('Magento\Cms\Block\Block')->setBlockId($blockIdentifier);
+
+?>
+<?php $_product = $block->getProduct(); ?>
+<?php $buttonTitle = __('Add to Cart'); ?>
+ 
+
+
+<?php 
+$dostupnost = $_product->getAttributeText('dostupnost');
+?>
+
+<?php if ($block->displayProductStockStatus()) :?>
+    <?php if ($_product->isAvailable()) :?>
+      <?php if (!empty($dostupnost)) { ?>
+        <div class="stock available" title="<?= $block->escapeHtmlAttr(__('Availability')) ?>">
+            <div class="delivery-time">
+               
+            <span class="dostupnost"><img src="<?= $imageCheckPath ?>" alt="Check"> <?php echo $dostupnost; ?></span>
+          </div>
+        </div>
+    <?php } ?>
+    <?php else :?>
+        <div class="stock unavailable" title="<?= $block->escapeHtmlAttr(__('Availability')) ?>">
+            <span><?= $block->escapeHtml(__('Out of stock')) ?></span>
+        </div>
+    <?php endif; ?>
+<?php endif; ?>
+
+
+
+<?php if ($_product->isSaleable()) :?>
+<div class="to-cart-group">
+<div class="box-tocart">
+    <div class="fieldset">
+        <?php if ($block->shouldRenderQuantity()) :?>
+        <div class="field qty">
+            <div class="control">
+                <input type="number"
+                       name="qty"
+                       id="qty"
+                       min="0"
+                       value="<?= $block->getProductDefaultQty() * 1 ?>"
+                       title="<?= $block->escapeHtmlAttr(__('Qty')) ?>"
+                       class="input-text qty"
+                       data-validate="<?= $block->escapeHtml(json_encode($block->getQuantityValidators())) ?>"
+                       />
+            </div>
+        </div>
+        <?php endif; ?>
+        <div class="actions">
+            <button type="submit"
+                    title="<?= $block->escapeHtmlAttr($buttonTitle) ?>"
+                    class="action primary tocart"
+                    id="product-addtocart-button" disabled>
+                <img src="<?= $imagePath ?>" alt="Cart"> 
+                <span><?= $block->escapeHtml($buttonTitle) ?></span>
+            </button>
+            <?= $block->getChildHtml('', true) ?>
+        </div>
+        
+    </div>
+  </div>
+  <?php if ($block_payment) { echo $block_payment->toHtml(); } ?>
+</div>
+<?php endif; ?>
+<script type="text/x-magento-init">
+    {
+        "#product_addtocart_form": {
+            "Magento_Catalog/js/validate-product": {}
+        }
+    }
+</script>

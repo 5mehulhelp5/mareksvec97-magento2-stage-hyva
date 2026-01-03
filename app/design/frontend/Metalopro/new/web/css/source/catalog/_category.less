@@ -1,0 +1,215 @@
+//
+//  Common
+//  _____________________________________________
+
+& when (@media-common = true) {
+	.catalog-category-view {
+		.category-description {
+			h2 {
+				font-weight: 600;
+				line-height: 1.1;
+				font-size: 2.1rem;
+				margin-top: 2.2rem;
+				margin-bottom: 1.1rem;
+			}
+		.mage-accordion-disabled {
+			[data-role="collapsible"] {
+			    border-bottom: 1px solid #ddd;
+			}
+			[data-role="trigger"] {
+			    background-color: #f8f8f8;
+			    color: #333;
+			    padding: 15px;
+			    font-size: 16px;
+			    font-weight: bold;
+			    cursor: pointer;
+			    display: flex;
+			    justify-content: space-between;
+			    align-items: center;
+			    transition: background-color 0.3s ease;
+			    &:hover {
+    				background-color: #e0e0e0;
+				}
+
+			}
+			[data-role="content"] {
+			    display: none;
+			    padding: 15px;
+			    font-size: 15px;
+			    line-height: 1.6;
+			    background-color: #fff;
+			    color: #666;
+			    p {
+			    	margin-bottom: 0px;
+			    }
+			}
+		}
+		}
+	}
+	.page-products .products-grid .product-items {
+		z-index: 0;
+	}
+	.category-bottom {
+		margin-top: 35px;
+		display: flex;
+		flex-direction: column;
+	}
+	.category-description.bottom {
+		margin-bottom: 0px;
+	}
+	.subcategory-list {
+		display: flex;
+		flex-wrap: wrap;
+		.subcategory-single {
+			width: 100%;
+			display: flex;
+			align-items: center;
+			border-radius: 0px;
+			background: @white-color;
+
+			-webkit-box-shadow:inset 0px 0px 0px 2px #f7f7f7;
+			-moz-box-shadow:inset 0px 0px 0px 2px #f7f7f7;
+			box-shadow:inset 0px 0px 0px 2px #f7f7f7;
+			&.current-category {
+				background: #f7f7f7;
+				span {
+					
+					
+				}
+			}
+			img {
+				display: flex;
+				max-width: 40px !important;
+			}
+			.apptrian-subcategories-category {
+				gap: 15px;
+				width: 100%;
+				.apptrian-subcategories-category-name {
+					width: 100%;
+					display: flex;
+					align-items: center;
+				}
+				
+			}
+		}
+	}
+	.category-top {
+		position: relative;
+		
+		
+        .page-title {
+        	font-weight: 700;
+        }
+        
+	}
+	.category-benefits {
+		position: relative;
+	}
+}
+
+//
+//  Desktop min 768px
+//  _____________________________________________
+
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
+	.category-bottom {
+		gap: 55px;
+		padding: 35px 0px 50px 0px;
+		.category-description {
+			margin-bottom: 50px;
+		}
+	}
+	.category-top {
+		margin-bottom: 60px;
+	}
+	.subcategory-list {
+		gap: 15px;
+		.subcategory-single {
+			img {
+				max-width: 40px !important;
+			}
+			.apptrian-subcategories-category {
+				.apptrian-subcategories-category-name {
+					gap: 15px;
+					padding: 10px 15px;
+				}
+				
+			}
+		}
+	}
+}
+
+
+//
+//  Mobile max 768px
+//  _____________________________________________
+
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
+	.category-bottom {
+		gap: 30px;
+		
+	}
+	.category-top {
+		padding: 15px 0px 40px 0px;
+		.category-description {
+			margin-bottom: 35px;
+		}
+	}
+	.subcategory-list {
+		gap: 10px;
+		.subcategory-single {
+			img {
+				max-width: 35px !important;
+			}
+			.apptrian-subcategories-category {
+				.apptrian-subcategories-category-name {
+					gap: 10px;
+					padding: 10px 10px;
+				}
+				
+			}
+		}
+	}
+}
+
+//
+//  Desktop
+//  _____________________________________________
+
+@media screen and (min-width:950px) {
+
+    	.subcategory-list {
+    			.subcategory-single {
+    				width: ~"calc(25% - 11.5px)";
+    			}
+    		}
+    
+}
+
+//
+//  Tablet Biger
+//  _____________________________________________
+
+@media screen and (max-width:949px) and (min-width:769px) {
+
+    	.subcategory-list {
+    			.subcategory-single {
+    				width: ~"calc(33% - 11.5px)";
+    			}
+    		}
+    
+}
+
+//
+//  Mobile Biger
+//  _____________________________________________
+
+@media screen and (max-width:768px) and (min-width:390px) {
+
+    	.subcategory-list {
+    			.subcategory-single {
+    				width: ~"calc(50% - 7.5px)";
+    			}
+    		}
+    
+}

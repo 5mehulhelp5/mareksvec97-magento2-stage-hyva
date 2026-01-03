@@ -1,0 +1,71 @@
+<?php
+$objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+$storeManager = $objectManager->get('Magento\Store\Model\StoreManagerInterface');
+$scopeConfig = $objectManager->get('Magento\Framework\App\Config\ScopeConfigInterface');
+
+// Získanie kontaktnej e-mailovej adresy z nastavení
+$contactEmail = $scopeConfig->getValue('trans_email/ident_general/email', \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $storeManager->getStore()->getId());
+
+$faqs = [
+    [
+        'question' => __('Ak vám pošlem návrh stolových nôh, budete ich môcť vyrobiť?'),
+        'answer' => __('Samozrejme, po zaslaní detailov vášho projektu vám radi pripravíme špecifickú cenovú ponuku. Pošlite nám čo najviac informácií na %1.', '<a href="mailto:' . $contactEmail . '">' . $contactEmail . '</a>'),
+    ],
+    [
+        'question' => __('Sú vaše stolové nohy vhodné aj do exteríeru?'),
+        'answer' => __('Ak plánujete ich využitie v exteriéri, odporúčame ošetrenie pozinkovaním pred konečnou povrchovou úpravou. Radi vám s týmto procesom pomôžeme. Ak máte záujem o zinkovanie, kontaktujte nás na %1.', '<a href="mailto:' . $contactEmail . '">' . $contactEmail . '</a>'),
+    ],
+    [
+        'question' => __('Z akého materiálu sú vyrobené vaše stolové podnože?'),
+        'answer' => __('Naše stolové podnože sú vyrábané z vysoko kvalitnej ocele tried DC01 a S235, ktoré zabezpečujú ich pevnosť a odolnosť. Používame profily s hrúbkou 1,5 mm až 2 mm, čo poskytuje ideálnu kombináciu stability a elegancie.'),
+    ],
+    [
+        'question' => __('Je možná úprava produktu na mieru?'),
+        'answer' => __('Áno, je. Ak máte záujem o úpravu produktu na mieru, napíšte nám na %1 a my vám pomôžeme. Úprava na mieru môže zvýšiť cenu produktu.', '<a href="mailto:' . $contactEmail . '">' . $contactEmail . '</a>'),
+    ],
+    [
+        'question' => __('Za aký čas mi príde objednávka?'),
+        'answer' => __('Objednávku doručujeme zvyčajne do 5-10 pracovných dní.'),
+    ],
+];
+?>
+
+<div class="faq-container scroll-reveal">
+    <h3><?= __('Frequently Asked Questions') ?></h3>
+    <div class="accordion">
+        <?php foreach ($faqs as $index => $faq) : ?>
+            <div class="faq-item">
+                <span class="h4 question">
+                    <?= $index + 1 ?>. <?= $faq['question'] ?>
+                </span>
+                <div class="faq-content">
+                    <p><?= $faq['answer'] ?></p>
+                </div>
+            </div>
+        <?php endforeach; ?>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var faqItems = document.querySelectorAll('.faq-item');
+
+        faqItems.forEach(function (item) {
+            item.querySelector('.question').addEventListener('click', function () {
+                var content = item.querySelector('.faq-content');
+
+                if (item.classList.contains('active')) {
+                    item.classList.remove('active');
+                    content.style.maxHeight = '0';
+                } else {
+                    faqItems.forEach(function (otherItem) {
+                        otherItem.classList.remove('active');
+                        otherItem.querySelector('.faq-content').style.maxHeight = '0';
+                    });
+                    item.classList.add('active');
+                    content.style.maxHeight = content.scrollHeight + 'px';
+                }
+            });
+        });
+    });
+</script>

@@ -1,0 +1,26 @@
+<?php
+/**
+ * Copyright © MageWorx. All rights reserved.
+ * See LICENSE.txt for license details.
+ */
+?>
+<?php
+//@formatter:off
+/** @var \Magento\Review\Block\Product\Review $block */
+/** @var \MageWorx\XReviewBase\Model\ConfigProvider $config */
+$config = \Magento\Framework\App\ObjectManager::getInstance()->get(\MageWorx\XReviewBase\Model\ConfigProvider::class);
+?>
+
+<div id="product-review-container" data-role="product-review"></div>
+<?= $block->getChildHtml() ?>
+<script type="text/x-magento-init">
+{
+    "*": {
+        "MageWorx_XReviewBase/js/review/process-reviews": {
+            "productReviewUrl": "<?= $block->escapeJs($block->getProductReviewUrl()) ?>",
+            "reviewsTabSelector": "#tab-label-reviews",
+            "isForceAjax": "<?= $block->escapeJs($config->isForceAjax()) ?>"
+        }
+    }
+}
+</script>

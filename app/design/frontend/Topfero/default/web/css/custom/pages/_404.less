@@ -1,0 +1,37 @@
+& when (@critical) {
+	.cms-no-route {
+		.right-404 {
+			width: 50%;
+			max-width: 360px;
+		}
+		.left-404 {
+			flex-direction: column;
+			justify-content: center;
+			width: 50%;
+			.page-heading {
+				margin-bottom: 15px;
+			}
+			.text-404 {
+				margin-bottom: 30px;
+			}
+		}
+		.columns {
+			margin-bottom: 0px !important;
+			border: none !important;
+			box-shadow: none !important;
+			max-width: 1000px !important;
+		}
+
+	}
+	@media @media-sm-down { 
+		.cms-no-route {
+		.right-404 {
+			width: 100%;
+		}
+		.left-404 {
+			margin-bottom: 55px;
+			width: 100%;	
+		}
+	}	
+}
+}

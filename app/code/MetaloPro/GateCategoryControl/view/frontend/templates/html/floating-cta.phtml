@@ -1,0 +1,59 @@
+<?php if ($block->shouldRenderSubcategoryListing()): ?>
+
+<?php 
+$objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+$storeManager = $objectManager->get(\Magento\Store\Model\StoreManagerInterface::class);
+$assetRepo = $objectManager->get(\Magento\Framework\View\Asset\Repository::class);
+$imageCheckPath = $assetRepo->getUrlWithParams(
+    'MetaloPro_GateCategoryControl::images/rulers-white.svg',
+    ['_secure' => $storeManager->getStore()->isCurrentlySecure()]
+);
+?>
+<!-- CTA Tlačidlo -->
+<div class="floating-cta" style="display: none;">
+    <button onclick="openCtaModal()" aria-label="Záujem o montáž">
+        <img src="<?= $imageCheckPath ?>" alt="ruller">
+        Potrebujte montáž alebo zameranie?
+    </button>
+</div>
+
+<!-- Modal -->
+<div id="cta-modal" class="cta-modal amcform-popup-block hidden">
+    <div class="cta-modal-content amcform-popup">
+        <div class="top-content-modal">
+        <strong>Zabezpečíme Vám montáž aj odborné zameranie</strong>
+        <p>Vyplňte krátky formulár a my sa vám ozveme s návrhom riešenia na mieru.</p>
+    </div>
+        <?php echo $this->helper(\Amasty\Customform\Helper\Data::class)->renderForm(33); ?>
+        <button class="amcform-button -clear -with-icon -close-popup" onclick="closeCtaModal()">
+                            <i class="amcform-icon -cross"></i>
+                        </button>
+
+
+    </div>
+</div>
+
+
+<script>
+function openCtaModal() {
+    document.getElementById('cta-modal').classList.remove('hidden');
+}
+
+function closeCtaModal() {
+    document.getElementById('cta-modal').classList.add('hidden');
+}
+
+// Zobraziť po 3 sekundách
+window.addEventListener('DOMContentLoaded', () => {
+    document.querySelector('.floating-cta').style.display = 'block';
+
+    // Zavrieť modal po kliknutí mimo obsahu
+    document.getElementById('cta-modal').addEventListener('click', function(event) {
+        const modalContent = document.querySelector('.cta-modal-content');
+        if (!modalContent.contains(event.target)) {
+            closeCtaModal();
+        }
+    });
+});
+</script>
+<?php endif; ?>

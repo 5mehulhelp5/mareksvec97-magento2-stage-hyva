@@ -1,0 +1,74 @@
+<script type="text/javascript">
+    document.addEventListener('DOMContentLoaded', function () {
+        'use strict';
+
+        // Funkcia na dekódovanie HTML entít
+        function decodeHTMLEntities(str) {
+            var txt = document.createElement('textarea');
+            txt.innerHTML = str;
+            return txt.value;
+        }
+
+        // Najprv nájdeme kontajner s popisom kategórie
+        let descriptionContainer = document.querySelector('.category-description');
+        if (descriptionContainer) {
+            // V kontajneri nájdeme element s atribútom data-content-type="text"
+            let descriptionElement = descriptionContainer.querySelector('[data-content-type="text"]');
+
+            if (descriptionElement) {
+                // Uložíme celý pôvodný text do premennej
+                let fullText = descriptionElement.innerHTML;
+
+                // Ak je text dlhší ako 1200 znakov, vykonáme skrátenie a pridáme tlačidlo
+                if (fullText.length > 1200) {
+                    // Skrátime text (ponecháme len prvých 1200 znakov)
+                    let truncatedText = fullText.substring(0, 1200);
+
+                    // Nastavíme skrátený text ako nový obsah popisu
+                    descriptionElement.innerHTML = truncatedText + '... ';
+
+                    // Vytvoríme tlačidlo "Show more" a dekódujeme jeho hodnotu
+                    let showMoreButton = document.createElement('a');
+                    showMoreButton.href = '#';
+                    showMoreButton.className = 'action';
+                    showMoreButton.dataset.js = 'category-description-show-more';
+                    showMoreButton.textContent = decodeHTMLEntities('<?php echo __('Show more'); ?>');
+                    showMoreButton.style.cursor = 'pointer';
+                    showMoreButton.style.color = '#007bff';
+                    showMoreButton.style.display = 'inline';
+                    showMoreButton.style.fontWeight = 'bold'; // Tučné písmo
+                    showMoreButton.style.textDecoration = 'underline'; // Podčiarknutie
+
+                    // Funkcia pre rozšírenie popisu po kliknutí na tlačidlo
+                    showMoreButton.addEventListener('click', function (event) {
+                        event.preventDefault(); // Zabránime predvolenému chovaniu odkazu
+                        descriptionElement.innerHTML = fullText + ' '; // Nastavíme späť celý text
+                        descriptionElement.appendChild(showLessButton); // Pridáme tlačidlo "Show less"
+                    });
+
+                    // Vytvoríme tlačidlo "Show less" a dekódujeme jeho hodnotu
+                    let showLessButton = document.createElement('a');
+                    showLessButton.href = '#';
+                    showLessButton.className = 'action';
+                    showLessButton.dataset.js = 'category-description-show-less';
+                    showLessButton.textContent = decodeHTMLEntities('<?php echo __('Show less'); ?>');
+                    showLessButton.style.cursor = 'pointer';
+                    showLessButton.style.color = '#007bff';
+                    showLessButton.style.display = 'inline';
+                    showLessButton.style.fontWeight = 'bold'; // Tučné písmo
+                    showLessButton.style.textDecoration = 'underline'; // Podčiarknutie
+
+                    // Funkcia pre skrytie časti popisu po kliknutí na tlačidlo "Show less"
+                    showLessButton.addEventListener('click', function (event) {
+                        event.preventDefault(); // Zabránime predvolenému chovaniu odkazu
+                        descriptionElement.innerHTML = truncatedText + '... '; // Nastavíme skrátený text
+                        descriptionElement.appendChild(showMoreButton); // Pridáme tlačidlo "Show more" za bodky
+                    });
+
+                    // Pridáme tlačidlo "Show more" za bodky v rovnakom riadku
+                    descriptionElement.appendChild(showMoreButton);
+                }
+            }
+        }
+    });
+</script>

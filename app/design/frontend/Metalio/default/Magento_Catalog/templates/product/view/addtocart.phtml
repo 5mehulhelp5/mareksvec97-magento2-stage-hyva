@@ -1,0 +1,174 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+/** @var $block \Magento\Catalog\Block\Product\View */
+?>
+<?php $_product = $block->getProduct(); ?>
+<?php $buttonTitle = __('Add to Cart'); ?>
+<?php if ($_product->isSaleable()) :?>
+  <?php 
+  $dostupnost = $_product->getAttributeText('dostupnost');
+  ?>
+
+  <?php if ($block->displayProductStockStatus()) :?>
+      <?php if ($_product->isAvailable()) :?>
+        <?php if (!empty($dostupnost)) { ?>
+          <div class="information-material-colors">
+              <a href="/materialy-a-farby" class="materials-colors-link d-flex align-items-center gap-2">
+              
+              <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <g clip-path="url(#clip0_186_4)">
+              <path d="M11 0C4.92031 0 0 4.91975 0 11C0 17.0796 4.91975 22 11 22C17.0797 22 22 17.0802 22 11C22 4.92039 17.0802 0 11 0ZM11 20.4651C5.78093 20.4651 1.53489 16.2191 1.53489 11C1.53489 5.78089 5.78093 1.53489 11 1.53489C16.2191 1.53489 20.4651 5.78089 20.4651 11C20.4651 16.2191 16.2191 20.4651 11 20.4651Z" fill="#4f4f4f"/>
+              <path d="M11.0007 9.16992C10.3491 9.16992 9.88574 9.44509 9.88574 9.8505V15.3671C9.88574 15.7146 10.3491 16.0621 11.0007 16.0621C11.6233 16.0621 12.13 15.7146 12.13 15.3671V9.85042C12.13 9.44505 11.6233 9.16992 11.0007 9.16992Z" fill="#4f4f4f"/>
+              <path d="M10.9998 5.76758C10.3337 5.76758 9.8125 6.24539 9.8125 6.79561C9.8125 7.34586 10.3338 7.83816 10.9998 7.83816C11.6513 7.83816 12.1726 7.34586 12.1726 6.79561C12.1726 6.24539 11.6513 5.76758 10.9998 5.76758Z" fill="#4f4f4f"/>
+              </g>
+              <defs>
+              <clipPath id="clip0_186_4">
+              <rect width="22" height="22" fill="white"/>
+              </clipPath>
+              </defs>
+              </svg>
+
+              <span class="material-colors-text">Viac o materiáloch a farbách</span>
+            </a>
+          </div>
+          <div class="stock-available">
+              <div class="delivery-time d-flex align-items-center gap-2">
+                 
+              <span class="dostupnost stock in_stock available"><?php echo $dostupnost; ?></span>
+            </div>
+          </div>
+      <?php } ?>
+      <?php else :?>
+          <div class="stock unavailable" title="<?= $block->escapeHtmlAttr(__('Availability')) ?>">
+              <span><?= $block->escapeHtml(__('Out of stock')) ?></span>
+          </div>
+      <?php endif; ?>
+  <?php endif; ?>
+<div class="box-tocart">
+    <div class="fieldset">
+        <?php if ($block->shouldRenderQuantity()) :?>
+        <div class="field qty">
+            <div class="control">
+                <input type="number"
+                       name="qty"
+                       id="qty"
+                       min="0"
+                       value="<?= $block->getProductDefaultQty() * 1 ?>"
+                       title="<?= $block->escapeHtmlAttr(__('Qty')) ?>"
+                       class="input-text qty"
+                       data-validate="<?= $block->escapeHtml(json_encode($block->getQuantityValidators())) ?>"
+                       />
+            </div>
+        </div>
+        <?php endif; ?>
+        <div class="actions">
+            <button type="submit"
+                    title="<?= $block->escapeHtmlAttr($buttonTitle) ?>"
+                    class="action primary tocart"
+                    id="product-addtocart-button" disabled>
+                <span><?= $block->escapeHtml($buttonTitle) ?></span>
+            </button>
+            <?= $block->getChildHtml('', true) ?>
+        </div>
+    </div>
+</div>
+
+<?php endif; ?>
+<?php
+echo $this->getLayout()->createBlock('Magento\Framework\View\Element\Template')
+    ->setTemplate('Magento_Catalog::product/view/payments-icon.phtml')
+    ->toHtml();
+?>
+<script type="text/x-magento-init">
+    {
+        "#product_addtocart_form": {
+            "Magento_Catalog/js/validate-product": {}
+        }
+    }
+</script>
+<script type="text/javascript">
+ document.addEventListener('DOMContentLoaded', function () {
+    // Získanie kontajnera rádio buttonov
+    const optionsList = document.querySelector('.color_options');
+
+    if (optionsList) {
+        // Skrytie pôvodných rádio buttonov
+        optionsList.style.display = 'none';
+
+        // Vytvorenie vlastného dropdownu
+        const dropdown = document.createElement('div');
+        dropdown.className = 'custom-dropdown colors-dropdown';
+
+        // Vytvorenie zobrazenia vybratej možnosti
+        const selectedOption = document.createElement('div');
+        selectedOption.className = 'selected-option';
+        dropdown.appendChild(selectedOption);
+
+        // Vytvorenie zoznamu možností
+        const optionsContainer = document.createElement('ul');
+        optionsContainer.className = 'dropdown-options';
+
+        // Prechádzanie všetkých rádio buttonov a vytvorenie možností
+        const radioButtons = optionsList.querySelectorAll('.field.choice');
+        radioButtons.forEach((radioField, index) => {
+            const input = radioField.querySelector('input[type="radio"]');
+            const label = radioField.querySelector('.color-name').textContent.trim();
+            const ralColor = radioField.querySelector('.ral-color').textContent.trim();
+            const imgSrc = radioField.querySelector('img').src;
+
+            // Vytvorenie položky dropdownu
+            const option = document.createElement('li');
+            option.className = 'dropdown-option';
+            option.setAttribute('data-value', input.value);
+            option.innerHTML = `<img src="${imgSrc}" alt="${label}"><span>${label} (${ralColor})</span>`;
+
+            // Kliknutie na položku
+            option.addEventListener('click', () => {
+                // Nastavenie vybratej hodnoty
+                selectedOption.innerHTML = `<img src="${imgSrc}" alt="${label}"><span>${label} (${ralColor})</span>`;
+                input.checked = true; // Nastavenie rádio buttonu ako vybratého
+
+                // Skrytie zoznamu možností
+                optionsContainer.style.display = 'none';
+            });
+
+            // Ak je to prvá možnosť, nastavíme ju ako vybranú
+            if (index === 0) {
+                selectedOption.innerHTML = `<img src="${imgSrc}" alt="${label}"><span>${label} (${ralColor})</span>`;
+                input.checked = true; // Označenie prvého rádio buttonu
+            }
+
+            optionsContainer.appendChild(option);
+        });
+
+        dropdown.appendChild(optionsContainer);
+        optionsList.insertAdjacentElement('afterend', dropdown);
+
+        // Zobrazenie alebo skrytie možností
+        selectedOption.addEventListener('click', () => {
+            const isVisible = optionsContainer.style.display === 'block';
+            optionsContainer.style.display = isVisible ? 'none' : 'block';
+            if (isVisible) {
+                dropdown.classList.remove('active');
+            } else {
+                dropdown.classList.add('active');
+            }
+        });
+
+        // Skrytie možností pri kliknutí mimo dropdownu
+        document.addEventListener('click', (event) => {
+            if (!dropdown.contains(event.target)) {
+                optionsContainer.style.display = 'none';
+                dropdown.classList.remove('active');
+            }
+        });
+    }
+});
+
+
+
+</script>

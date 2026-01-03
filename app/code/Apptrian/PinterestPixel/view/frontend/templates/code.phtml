@@ -1,0 +1,1051 @@
+<?php
+/**
+ * @category  Apptrian
+ * @package   Apptrian_PinterestPixel
+ * @author    Apptrian
+ * @copyright Copyright (c) Apptrian (http://www.apptrian.com)
+ * @license   http://www.apptrian.com/license Proprietary Software License EULA
+ */
+
+/**
+ * Pinterest Pixel Code block
+ *
+ * @var $block \Apptrian\PinterestPixel\Block\Code
+ */
+
+$data                = $block->getPinterestPixelData();
+$idData              = $data['id_data'];
+$action              = $data['full_action_name'];
+$pageHandles         = $data['page_handles'];
+$pageHandlesCategory = $data['page_handles_category'];
+$pageHandlesProduct  = $data['page_handles_product'];
+$pageHandlesQuote    = $data['page_handles_quote'];
+$pageHandlesOrder    = $data['page_handles_order'];
+$pageHandlesSearch   = $data['page_handles_search'];
+
+$isPixelEnabled    = $block->isPixelEnabled();
+$isBaseCodeEnabled = $block->isBaseCodeEnabled();
+
+$isPageEnabled    = $block->isEventEnabled('page');
+$isPageWithAll    = $block->isPageWithAll();
+
+$isFpCookie    = $block->isFpCookie();
+$isMdFrequency = $block->isMdFrequency();
+
+// bof Check if Pinterest Pixel is allowed
+if (in_array($action, $pageHandles) && $isPixelEnabled): ?>
+
+<script>
+require([
+    'jquery',
+    'mage/url'
+], function ($, mageUrl) {
+    
+    function getUserData()
+    {
+        mageUrl.setBaseUrl(BASE_URL);
+        var sectionUrl = mageUrl.build('customer/section/load');
+        
+        $.ajax({
+            url: sectionUrl,
+            data: {
+                sections: "apptrian_pinterest_pixel_matching_section"
+            },
+            type: "GET",
+            dataType : "json"
+        })
+        .done(function( json ) {
+            var result = json.apptrian_pinterest_pixel_matching_section.matching_data;
+        });
+    }
+    
+    getUserData();
+    
+});
+</script>
+
+<!-- Pinterest Pixel Code -->
+<script>
+    <?php if ($isBaseCodeEnabled): ?>
+!function(e){if(!window.pintrk){window.pintrk=function(){
+window.pintrk.queue.push(Array.prototype.slice.call(arguments))};var
+n=window.pintrk;n.queue=[],n.version="3.0";n.agent="apptrian";var
+t=document.createElement("script");t.async=!0,t.src=e;var
+r=document.getElementsByTagName("script")[0];
+r.parentNode.insertBefore(t,r)}}("https://s.pinimg.com/ct/core.js");
+    <?php endif; ?>
+
+require([
+    'jquery',
+    'underscore',
+    'mage/url'
+], function ($, _, mageUrl) {
+    $(function () {
+        var propagationStop = 0;
+        
+        $(document).on('ajaxComplete', function (event, xhr, settings) {
+            
+            var userData = {};
+            
+            function isEmpty(obj) {
+                for(var prop in obj) {
+                    if(obj.hasOwnProperty(prop)) {
+                        return false;
+                    }
+                }
+                
+                return true;
+            }
+            
+            var settingsUrl = settings.url;
+            var sectionName = 'apptrian_pinterest_pixel_matching_section';
+            var urlPath = 'customer/section/load';
+            
+            if (propagationStop === 0
+                && settingsUrl.indexOf(urlPath) !== -1
+                && settingsUrl.indexOf(sectionName) !== -1
+            ) {
+                propagationStop = 1;
+                var response = JSON.parse(xhr.responseText);
+                var section;
+                var sectionData;
+                
+                if (response !== 'undefined' && response.hasOwnProperty('apptrian_pinterest_pixel_matching_section')) {
+                    section = response.apptrian_pinterest_pixel_matching_section;
+                    
+                    if (section !== 'undefined' && section.hasOwnProperty('matching_data')) {
+                        sectionData = section.matching_data;
+                        
+                        if (!isEmpty(sectionData)) {
+                            userData = sectionData;
+                        }
+                    }
+                }
+    
+    <?php if ($isBaseCodeEnabled): ?>
+        <?php if (!$isFpCookie): ?>
+        userData.fp_cookie = false;
+        <?php endif; ?>
+        <?php if (!$isMdFrequency): ?>
+        userData.md_frequency = 0;
+        <?php endif; ?>
+        <?php foreach ($idData as $id): ?>
+        if (!isEmpty(userData)) {
+            pintrk('load', '<?= $block->escapeHtml($id) ?>', userData);
+        } else {
+            pintrk('load', '<?= $block->escapeHtml($id) ?>');
+        }
+        <?php endforeach ?>
+    <?php endif; ?>
+    
+    <?php
+    // bof category code
+    if (in_array($action, $pageHandlesCategory)): ?>
+    
+        <?php if ($isPageEnabled && $isBaseCodeEnabled && $isPageWithAll): ?>
+            pintrk("track", "page");
+        <?php endif; ?>
+        
+        <?php
+        $categoryData = $block->getCategoryData();
+        if (!empty($categoryData)): ?>
+            <?php
+                $categoryEventName = $categoryData['event_name'];
+                $categoryEventData = $categoryData['data'];
+                
+                $categoryEventNameJson = json_encode($categoryEventName, JSON_PRETTY_PRINT);
+                $categoryEventDataJson = json_encode($categoryEventData, JSON_FORCE_OBJECT);
+            ?>
+            
+            var categoryEventName = <?= /* @noEscape */ $categoryEventNameJson ?>;
+            var categoryEventData = <?= /* @noEscape */ $categoryEventDataJson ?>;
+            
+            <?php if ($block->isEventEnabled('pagevisit') && $isBaseCodeEnabled): ?>
+            pintrk("track", categoryEventName, categoryEventData);
+            <?php endif; ?>
+        <?php endif; ?>
+        <?php
+    // eof category code
+    // bof product code
+    elseif (in_array($action, $pageHandlesProduct)): ?>
+        
+        <?php if ($isPageEnabled && $isBaseCodeEnabled && $isPageWithAll): ?>
+            pintrk("track", "page");
+        <?php endif; ?>
+        
+        <?php
+        $productData = $block->getProductData();
+        // bof product data
+        if (!empty($productData)): ?>
+            <?php
+            
+            $productEventData               = $productData['data'];
+            $lineItemsWithIds               = $productData['line_items_with_ids'];
+            $bundleProductOptionsData       = $productData['bundle_product_options_data'];
+            $configurableProductOptionsData = $productData['configurable_product_options_data'];
+            $productId                      = $productData['product_id'];
+            $productType                    = $productData['product_type'];
+            $isDetectSelectedSkuEnabled     = $block->isDetectSelectedSkuEnabled($productType);
+
+            $productEventDataJson               = json_encode($productEventData, JSON_PRETTY_PRINT);
+            $lineItemsWithIdsJson               = json_encode($lineItemsWithIds, JSON_PRETTY_PRINT);
+            $bundleProductOptionsDataJson       = json_encode($bundleProductOptionsData, JSON_PRETTY_PRINT);
+            $configurableProductOptionsDataJson = json_encode($configurableProductOptionsData, JSON_PRETTY_PRINT);
+            
+            ?>
+
+var productData = <?= /* @noEscape */ $productEventDataJson ?>;
+var isDetectSelectedSkuEnabled = 0;
+var taxFlag = <?= /* @noEscape */ $block->getDisplayTaxFlag() ?>;
+
+            <?php if ($isDetectSelectedSkuEnabled): ?>
+            // This is used to check whether to execute updateProductData functions
+            isDetectSelectedSkuEnabled = 1;
+        
+                <?php if ($productType == 'bundle'): ?>
+                // bof Detect product SKUs (bundle)
+    
+var lineItemsWithIds = <?= /* @noEscape */ $lineItemsWithIdsJson ?>;
+var bundleProductOptionsData = <?= /* @noEscape */ $bundleProductOptionsDataJson ?>;
+var selectors = {};
+    
+    // bof option loop
+    for (let optionId in bundleProductOptionsData) {
+        // Set all quantity input selectors
+        var nameAttributeValue = 'bundle_option_qty[' + optionId + ']';
+        selectors['qty' + optionId] = $('input[name="' + nameAttributeValue + '"]');
+        
+        // bof Quantity input handler
+        selectors['qty' + optionId].on('change keyup paste click', function() {
+            var idAttr        = $(this).attr('id');
+            var oId           = idAttr.replace(/[^0-9]/g, '');
+            var pId           = 0;
+            var typeAttr      = '';
+            var sIds          = 0;
+            var nameAttrValue = '';
+            var valueAttr     = '';
+            
+            // Set qty of all sibling selections
+            var siblings = bundleProductOptionsData[oId];
+            for (let sId in siblings) {
+                pId = siblings[sId]['product_id'];
+                
+                if ($('#bundle-option-' + oId + '-' + sId).length) {
+                    // bof radio (checkbox does not have qty input)
+                    typeAttr = selectors['opt' + oId + '_' + sId].attr('type');
+                    
+                    if (typeAttr == 'radio') {
+                        if(selectors['opt' + oId + '_' + sId].is(':checked')) {
+                            // Set qty of product to current qty value
+                            lineItemsWithIds[pId].product_quantity = formatQty($(this).val());
+                        }
+                    }
+                    
+                    if (typeAttr == 'hidden') {
+                        // Case when there is only one radio option
+                        // Set qty of product to current qty value
+                        lineItemsWithIds[pId].product_quantity = formatQty($(this).val());
+                    }
+                    // eof radio (checkbox does not have qty input)
+                } else if ($('#bundle-option-' + oId).length) {
+                    // bof dropdown (multiselect does not have qty input)
+                    sIds = selectors['opt' + oId + '_' + sId].parent().val();
+                    
+                    if (!Array.isArray(sIds) && sIds == sId) {
+                        // Set qty of product to current qty value
+                        lineItemsWithIds[pId].product_quantity = formatQty($(this).val());
+                    }
+                    // eof dropdown (multiselect does not have qty input)
+                } else {
+                    // Edge case when there is only one option in dropdown
+                    // There is no id only name="bundle_option[X]" value="Y" type="hidden"
+                    nameAttrValue = 'bundle_option[' + optionId + ']';
+                    selectors['opt' + oId + '_' + sId] = $('input[name="' + nameAttrValue + '"]');
+                    
+                    typeAttr = selectors['opt' + oId + '_' + sId].attr('type');
+                    
+                    if (typeAttr == 'hidden') {
+                        valueAttr = selectors['opt' + oId + '_' + sId].attr('value');
+                        if (valueAttr == sId) {
+                            // Set qty of product to current qty value
+                            lineItemsWithIds[pId].product_quantity = formatQty($(this).val());
+                        }
+                    }
+                }
+            }
+        });
+        // eof Quantity input handler
+        
+        // bof selection loop
+        for (let selectionId in bundleProductOptionsData[optionId]) {
+            // Get product ID
+            var pId = bundleProductOptionsData[optionId][selectionId]['product_id'];
+            
+            // Initialize default product qty var
+            var pQty = 0;
+            
+            // Set qty to 0
+            lineItemsWithIds[pId].product_quantity = 0;
+            
+            if ($('#bundle-option-' + optionId + '-' + selectionId).length) {
+                // bof checkbox and radio
+                
+                var idAttributeValue = 'bundle-option-' + optionId + '-' + selectionId;
+                selectors['opt' + optionId + '_' + selectionId] = $('#' + idAttributeValue);
+                
+                var typeAttr = selectors['opt' + optionId + '_' + selectionId].attr('type');
+                
+                // bof If anything is pre-checked
+                if (selectors['opt' + optionId + '_' + selectionId].is(':checked')) {
+                    // Case when there is qty input
+                    if (selectors['qty' + optionId].length) {
+                        // Set qty of product to current qty value
+                        lineItemsWithIds[pId].product_quantity = formatQty(selectors['qty' + optionId].val());
+                    } else {
+                        // Case when there is no qty input
+                        // Get default quantity
+                        pQty = bundleProductOptionsData[optionId][selectionId]['product_quantity'];
+                        // Set qty of product to defualt quantity
+                        lineItemsWithIds[pId].product_quantity = pQty;
+                    }
+                }
+                // eof If anything is pre-checked
+                
+                // bof Edge case when there is only one radio
+                if (typeAttr == 'hidden') {
+                    // Edge case only one radio option
+                    // Case when there is qty input
+                    if (selectors['qty' + optionId].length) {
+                        // Set qty of product to current qty value
+                        lineItemsWithIds[pId].product_quantity = formatQty(selectors['qty' + optionId].val());
+                    } else {
+                        // Case when there is no qty input
+                        // Get default quantity
+                        pQty = bundleProductOptionsData[optionId][selectionId]['product_quantity'];
+                        // Set qty of product to defualt quantity
+                        lineItemsWithIds[pId].product_quantity = pQty;
+                    }
+                }
+                // eof Edge case when there is only one radio
+                
+                // bof Edge case when there is 'none' radio option
+                if (typeAttr == 'radio') {
+                    if ($('#bundle-option-' + optionId).length) {
+                        var oProperty = 'opt' + optionId + '_none';
+                        
+                        if (!selectors.hasOwnProperty(oProperty)) {
+                            // Set this 'none' radio option only if it is not set
+                            selectors[oProperty] = $('#bundle-option-' + optionId);
+                        }
+                        
+                        // The 'none' radio option handler
+                        selectors[oProperty].on('change, click', function() {
+                            var idAttr = $(this).attr('id');
+                            var oId    = idAttr.replace(/[^0-9]/g, '');
+                            
+                            if($(this).is(':checked')) {
+                                // Set qty of all siblings to 0
+                                var spId = 0;
+                                var siblings = bundleProductOptionsData[oId];
+                                for (let s in siblings) {
+                                    spId = siblings[s]['product_id'];
+                                    lineItemsWithIds[spId].product_quantity = 0;
+                                }
+                            }
+                        });
+                    }
+                }
+                // eof Edge case when there is 'none' radio option
+                
+                // bof checkbox and radio handler
+                selectors['opt' + optionId + '_' + selectionId].on('change, click', function() {
+                    
+                    var idAttr   = $(this).attr('id');
+                    var typeAttr = $(this).attr('type');
+                    var oId      = 0;
+                    var sId      = 0;
+                    var pId      = 0;
+                    
+                    // Get option IDs from id attribute
+                    var optionAndSelectionIds = (idAttr.match(/\d+\.\d+|\d+\b|\d+(?=\w)/g) || []).map(
+                        function (v) {return +v;}
+                    );
+                    
+                    // If there are 2 ids then you can detect product ID
+                    if (optionAndSelectionIds.length === 2) {
+                        oId = optionAndSelectionIds[0];
+                        sId = optionAndSelectionIds[1];
+                        
+                        pId = bundleProductOptionsData[oId][sId]['product_id'];
+                        
+                        // If it is checkbox
+                        if (typeAttr == 'checkbox') {
+                            // If it is checked
+                            if($(this).is(':checked')) {
+                                // Get default quantity
+                                var pQty = bundleProductOptionsData[oId][sId]['product_quantity'];
+                                // Set qty of product to defualt quantity
+                                lineItemsWithIds[pId].product_quantity = pQty;
+                            }
+                            // If it is not checked
+                            if(!$(this).is(':checked')) {
+                                // Set qty of product to 0
+                                lineItemsWithIds[pId].product_quantity = 0;
+                            }
+                        }
+                        
+                        // If it is radio
+                        if (typeAttr == 'radio') {
+                            if($(this).is(':checked')) {
+                                // Set qty of all siblings to 0
+                                var spId = 0;
+                                var siblings = bundleProductOptionsData[oId];
+                                for (let s in siblings) {
+                                    spId = siblings[s]['product_id'];
+                                    lineItemsWithIds[spId].product_quantity = 0;
+                                }
+                                
+                                // Set qty of product to current qty value
+                                lineItemsWithIds[pId].product_quantity = formatQty(selectors['qty' + oId].val());
+                                
+                                // bof Fix for radio not reading correct qty value
+                                setTimeout(function() {
+                                    // Set qty of product to current qty value
+                                    lineItemsWithIds[pId].product_quantity = formatQty(selectors['qty' + oId].val());
+                                }, 300);
+                                // eof Fix for radio not reading correct qty value
+                            }
+                        }
+                    }
+                });
+                // eof checkbox and radio handler
+                
+                // eof checkbox and radio
+            } else if ($('#bundle-option-' + optionId).length) {
+                // bof dropdown and multiselect
+                
+                var idAttribute = 'bundle-option-' + optionId;
+                selectors['opt' + optionId + '_' + selectionId] = $(
+                    '#' + idAttribute + ' option[value=' + selectionId +']'
+                );
+                
+                // bof If anything is pre-selected
+                if (selectors['opt' + optionId + '_' + selectionId].is(':selected')) {
+                    // Case when there is qty input
+                    if (selectors['qty' + optionId].length) {
+                        // Set qty of product to current qty value
+                        lineItemsWithIds[pId].product_quantity = formatQty(selectors['qty' + optionId].val());
+                    } else {
+                        // Case when there is no qty input
+                        pQty = bundleProductOptionsData[optionId][selectionId]['product_quantity'];
+                        // Set qty of product to defualt quantity
+                        lineItemsWithIds[pId].product_quantity = pQty;
+                    }
+                }
+                // eof If anything is pre-selected
+                
+                // bof dropdown and multiselect handler
+                selectors['opt' + optionId + '_' + selectionId].parent().on(
+                    'change, click', function() {
+                        
+                    var idAttr       = $(this).attr('id');
+                    var oId          = idAttr.replace(/[^0-9]/g, '');
+                    var sId          = $(this).val();
+                    var pId          = 0;
+                    var pQty         = 0;
+                    var multipleAttr = '';
+                    
+                    // Set qty of all siblings to 0
+                    var siblings = bundleProductOptionsData[oId];
+                    var spId     = 0;
+                    
+                    for (let s in siblings) {
+                        spId = siblings[s]['product_id'];
+                        lineItemsWithIds[spId].product_quantity = 0;
+                    }
+                    
+                    if (Array.isArray(sId)) {
+                        // There is a bug when using for let loop
+                        // sId sometimes gets additional indexes
+                        // Use simple for loop with length and index
+                        // (Happens with multiselect)
+                        for (var i = 0; i < sId.length; i++) {
+                            var selId = sId[i];
+                            
+                            // If both exist then set product selection
+                            if (oId && selId) {
+                                // Get product Id
+                                pId = bundleProductOptionsData[oId][selId]['product_id'];
+                                // Get default quantity
+                                pQty = bundleProductOptionsData[oId][selId]['product_quantity'];
+                                // Set qty of product to defualt quantity
+                                lineItemsWithIds[pId].product_quantity = pQty;
+                            } else {
+                                // Edge case if there is 'none' option for multiselect
+                                // Set qty of all siblings to 0
+                                for (let s in siblings) {
+                                    spId = siblings[s]['product_id'];
+                                    lineItemsWithIds[spId].product_quantity = 0;
+                                }
+                                
+                                multipleAttr = $(this).attr('multiple');
+                                
+                                if (multipleAttr != 'multiple') {
+                                    // Break out of the for loop
+                                    // (No need to look at other selections because 'none' is selected.)
+                                    break;
+                                }
+                            }
+                        }
+                    } else {
+                        // If both exist then set product selection
+                        if (oId && sId) {
+                            // Get product Id
+                            pId = bundleProductOptionsData[oId][sId]['product_id'];
+                            // Set qty of product to current qty value
+                            lineItemsWithIds[pId].product_quantity = formatQty(selectors['qty' + oId].val());
+                        } else {
+                            // Edge case if there is 'none' option for dropdown
+                            // Set qty of all siblings to 0
+                            for (let s in siblings) {
+                                spId = siblings[s]['product_id'];
+                                lineItemsWithIds[spId].product_quantity = 0;
+                            }
+                        }
+                    }
+                });
+                // eof dropdown and multiselect handler
+                
+                // eof dropdown and multiselect
+            } else {
+                // Edge case when checkbox and multiselect have only one option
+                // Checkbox - There is no id only name="bundle_option[X]" value="Y" type="hidden"
+                // Multiselect - There is no id only name="bundle_option[X]" value="Y" type="hidden"
+                // To unify the code use name attribute selector
+                var nameAttributeValue = 'bundle_option[' + optionId + ']';
+                selectors['opt' + optionId + '_' + selectionId] = $('input[name="' + nameAttributeValue + '"]');
+                
+                var typeAttr = selectors['opt' + optionId + '_' + selectionId].attr('type');
+                
+                if (typeAttr == 'hidden') {
+                    var valueAttr = selectors['opt' + optionId + '_' + selectionId].attr('value');
+                    if (valueAttr == selectionId) {
+                        // Get default quantity
+                        pQty = bundleProductOptionsData[optionId][selectionId]['product_quantity'];
+                        // Set qty of product to defualt quantity
+                        lineItemsWithIds[pId].product_quantity = pQty;
+                    }
+                }
+            }
+        }
+        // eof selection loop
+    }
+    // eof option loop
+    
+    // bof Update product data based on selected SKUs (bundle)
+    function updateProductData()
+    {
+        if('line_items' in productData) {
+            // Reset line_items
+            productData.line_items = [];
+            
+            // Set value to 0
+            productData.value = 0;
+            
+            var qty = 0;
+            var newValue = 0;
+            var itemValue = 0;
+            var itemTotal = 0;
+            var globalQty = formatQty($('#qty').val());
+            
+            for (let productId in lineItemsWithIds) {
+                qty = lineItemsWithIds[productId].product_quantity;
+                if (qty > 0) {
+                    // Adjust qty with global qty
+                    if (globalQty > 1) {
+                        qty = qty * globalQty;
+                        lineItemsWithIds[productId].product_quantity = qty;
+                    }
+                    
+                    // Set the item in the line_items
+                    productData.line_items.push(lineItemsWithIds[productId]);
+                    
+                    // Increase value based on qty and price
+                    itemValue = lineItemsWithIds[productId].product_price;
+                    itemTotal = itemValue * qty;
+                    // Make sure it is 2 decimal float
+                    newValue += parseFloat(parseFloat(itemTotal).toFixed(2));
+                }
+            }
+            
+            // Set value to new value
+            productData.value = parseFloat(parseFloat(newValue).toFixed(2));
+        }
+    }
+    // eof Update product data based on selected SKUs (bundle)
+    
+                // eof Detect product SKUs (bundle)
+                <?php elseif ($productType == 'configurable'): ?>
+                // bof Detect product SKU (configurable)
+    
+    var selectedPrice   = 0;
+    var selectedQty     = 0;
+    var selectedSku     = '';
+    var selectedSkuData = null;
+    var lineItemsWithIds = <?= /* @noEscape */ $lineItemsWithIdsJson ?>;
+    var configurableProductId = <?= /* @noEscape */ $productId ?>;
+    var $price        = $('#product-price-' + configurableProductId);
+    var $priceInclTax = $('#price-including-tax-product-price-' + configurableProductId);
+    
+    // bof Detect selected SKU
+    $('.product-options-wrapper div').on('click', function() {
+        selectedProduct();
+    });
+    
+    function selectedProduct() {
+        var selectedOptions = {};
+        $('div.swatch-attribute').each(function(k,v) {
+            var attributeId    = $(v).attr('data-attribute-id');
+            var optionSelected = $(v).attr('data-option-selected');
+            if (!attributeId || !optionSelected) { return; }
+            selectedOptions[attributeId] = optionSelected;
+        });
+        
+        var productIdIndex = <?= /* @noEscape */ $configurableProductOptionsDataJson ?>;
+        var foundIds = [];
+        
+        $.each(productIdIndex, function (productId, attributes) {
+            var productIsSelected = function (attributes, selectedOptions) {
+                return _.isEqual(attributes, selectedOptions);
+            }
+            
+            if (productIsSelected(attributes, selectedOptions)) {
+                foundIds.push(productId);
+            } 
+        });
+        
+        if (foundIds.length) {
+            var selectedProductId = foundIds[0];
+            
+            if (selectedProductId in lineItemsWithIds) {
+                selectedSkuData = lineItemsWithIds[selectedProductId];
+                selectedSku     = lineItemsWithIds[selectedProductId]['id'];
+                
+                if (taxFlag) {
+                    if ($priceInclTax.length) {
+                        selectedPrice   = formatPrice($priceInclTax.text());
+                    } else {
+                        if ($price.length) {
+                            selectedPrice   = formatPrice($price.text());
+                        }
+                    }
+                } else {
+                    if ($price.length) {
+                        selectedPrice   = formatPrice($price.text());
+                    }
+                }
+            }
+        }
+    }
+    // eof Detect selected SKU
+    
+    // bof Detect selected SKU qty
+    if ($('#qty').length) {
+        $('#qty').on('change keyup paste click', function() {
+            // Make sure it is 2 decimal float
+            // (Magento allows qty to be a float not just integer)
+            selectedQty = formatQty($(this).val());
+        });
+    }
+    // eof Detect selected SKU qty
+    
+    // bof Update product data based on selected SKU
+    function updateProductData()
+    {
+        if('line_items' in productData) {
+            // Set selected SKU data
+            if (selectedSkuData !== null) {
+                // Reset line_items
+                productData.line_items = [];
+                // Set selected SKU line_items
+                productData.line_items[0] = selectedSkuData;
+            }
+            
+            // Set selected price to item_price and value based on qty
+            if (selectedPrice) {
+                // Set item_price
+                productData.line_items[0].product_price = selectedPrice;
+                
+                // The value field must be calculated based on qty
+                if (selectedQty > 1) {
+                    var total = selectedQty * selectedPrice;
+                    // Make sure it is 2 decimal float
+                    productData.value = parseFloat(parseFloat(total).toFixed(2));
+                } else {
+                    productData.value = selectedPrice;
+                }
+            }
+            
+            if (selectedQty) {
+                productData.line_items[0].product_quantity = selectedQty;
+            }
+            
+            if (selectedSku) {
+                productData.line_items[0].id = selectedSku;
+            }
+        }
+    }
+    // eof Update product data based on selected SKU (configurable)
+    
+                // eof Detect product SKU (configurable)
+                <?php elseif ($productType == 'grouped'): ?>
+                // bof Detect product SKUs (grouped)
+    
+    var lineItemsWithIds    = <?= /* @noEscape */ $lineItemsWithIdsJson ?>;
+    var selectors          = {};
+    var nameAttributeValue = '';
+    
+    for (let productId in lineItemsWithIds) {
+        // Set all quantities to zero to as default
+        lineItemsWithIds[productId].product_quantity = 0;
+        
+        if (taxFlag) {
+            if ($('#price-including-tax-product-price-' + productId).length) {
+                selectors['price' + productId] = $('#price-including-tax-product-price-' + productId);
+            } else {
+                if ($('#product-price-' + productId).length) {
+                    selectors['price' + productId] = $('#product-price-' + productId);
+                }
+            }
+        } else {
+            if ($('#product-price-' + productId).length) {
+                selectors['price' + productId] = $('#product-price-' + productId);
+            }
+        }
+        
+        nameAttributeValue = 'super_group[' + productId + ']';
+        selectors['qty' + productId] = $('input[name="' + nameAttributeValue + '"]');
+        
+        // Set all quantities and prices to current
+        lineItemsWithIds[productId].product_quantity = selectors['qty' + productId].val();
+        lineItemsWithIds[productId].product_price = formatPrice(selectors['price' + productId].text());
+        
+        // Set all selectors for change keyup paste click
+        selectors['qty' + productId].on('change keyup paste click', function() {
+            var nameAttr = $(this).attr('name');
+            var productId = nameAttr.replace(/[^0-9]/g, '');
+            
+            // Make sure it is 2 decimal float
+            // (Magento allows qty to be a float not just integer)
+            lineItemsWithIds[productId].product_quantity = parseFloat(parseFloat($(this).val()).toFixed(2));
+        });
+    }
+    
+    // bof Update product data based on selected SKUs (grouped)
+    function updateProductData()
+    {
+        if('line_items' in productData) {
+            // Reset line_items
+            productData.line_items = [];
+            
+            // Set value to 0
+            productData.value = 0;
+            
+            var qty = 0;
+            var newValue = 0;
+            var itemValue = 0;
+            var itemTotal = 0;
+            
+            for (let productId in lineItemsWithIds) {
+                qty = lineItemsWithIds[productId].product_quantity;
+                if (qty > 0) {
+                    // Set the item in the line_items
+                    productData.line_items.push(lineItemsWithIds[productId]);
+                    
+                    // Increase value based on qty and price
+                    itemValue = lineItemsWithIds[productId].product_price;
+                    itemTotal = itemValue * qty;
+                    // Make sure it is 2 decimal float
+                    newValue += parseFloat(parseFloat(itemTotal).toFixed(2));
+                }
+            }
+            
+            // Set value to new value
+            productData.value = newValue;
+        }
+    }
+    // eof Update product data based on selected SKUs (grouped)
+    
+                // eof Detect product SKUs (grouped)
+                <?php else: ?>
+                // bof Detect product SKU (downlodable, simple, virtual, etc.)
+                
+    var selectedPrice = 0;
+    var selectedQty   = 0;
+    var productId     = <?= /* @noEscape */ $productId ?>;
+    var $price        = $('#product-price-' + productId);
+    var $priceInclTax = $('#price-including-tax-product-price-' + productId);
+    
+    // bof Detect selected SKU qty
+    if ($('#qty').length) {
+        $('#qty').on('change keyup paste click', function() {
+            // Make sure it is 2 decimal float
+            // (Magento allows qty to be a float not just integer)
+            selectedQty = formatQty($(this).val());
+        });
+    }
+    // eof Detect selected SKU qty
+    
+    // bof Update product data based on selected SKUs (downlodable, simple, virtual, etc.)
+    function updateProductData()
+    {
+        if('line_items' in productData) {
+            // Get price
+            if (taxFlag) {
+                if ($priceInclTax.length) {
+                    selectedPrice = formatPrice($priceInclTax.text());
+                } else {
+                    if ($price.length) {
+                        selectedPrice = formatPrice($price.text());
+                    }
+                }
+            } else {
+                if ($price.length) {
+                    selectedPrice = formatPrice($price.text());
+                }
+            }
+            
+            var newValue     = 0;
+            var newItemPrice = 0;
+            var newQty       = 0;
+            
+            // If there is selected price update item_price
+            if (selectedPrice > 0 ) {
+                productData.line_items[0].product_price = selectedPrice;
+            }
+            
+            // If there is selected quantity update quantity
+            if (selectedQty > 0 ) {
+                productData.line_items[0].product_quantity = selectedQty;
+            }
+            
+            // Get new value
+            newItemPrice = parseFloat(parseFloat(productData.line_items[0].product_price).toFixed(2));
+            newQty       = parseFloat(parseFloat(productData.line_items[0].product_quantity).toFixed(2));
+            newValue     = newItemPrice * newQty;
+            
+            // Make sure it is 2 decimal float
+            productData.value = parseFloat(parseFloat(newValue).toFixed(2));
+        }
+    }
+    // eof Update product data based on selected SKU (downlodable, simple, virtual, etc.)
+                
+                // eof Detect product SKU (downlodable, simple, virtual, etc.)
+                <?php endif; ?>
+                
+    // bof Utility functions used by all types of products
+    function formatQty(text)
+    {
+        // Make sure it is 2 decimal float
+        return parseFloat(parseFloat(text).toFixed(2));
+    }
+    
+    function formatPrice(text)
+    {
+        var decimalSymbol = escapeRegExp('<?= /* @noEscape */ $block->getPriceDecimalSymbol(); ?>');
+        
+        // RegEx to remove everything except numbers and decimal sign
+        // Example: /[^0-9\.]/gi
+        var regEx = new RegExp('[^0-9' + decimalSymbol + ']', 'gi');
+        var priceText = text.replace(regEx, '');
+        
+        // Replace decimal sign with decimal point
+        var price = priceText.replace(decimalSymbol, '.');
+        
+        // Make sure it is 2 decimal float
+        return parseFloat(parseFloat(price).toFixed(2));
+    }
+    
+    function escapeRegExp(text) {
+        return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
+    }
+    // eof Utility functions used by all types of products
+
+            // eof isDetectSelectedSkuEnabled    
+            <?php endif; ?>
+            
+            <?php if ($block->isEventEnabled('pagevisit') && $isBaseCodeEnabled): ?>
+            pintrk('track', 'pagevisit', productData);
+            <?php endif; ?>
+            
+// Add Pixel Events to the button's click handler
+$('#product-addtocart-button').on('click', function() {
+    // Update product data if detection is enabled
+    if (isDetectSelectedSkuEnabled) {
+        updateProductData();
+    }
+    // The line_items must have at least one item
+    if (productData.line_items.length) {
+            <?php if ($block->isEventEnabled('addtocart') && $isBaseCodeEnabled): ?>
+        pintrk('track', 'addtocart', productData);
+            <?php endif; ?>
+    }
+});
+
+$('.action.towishlist').on('click', function() {
+    // Update product data if detection is enabled
+    if (isDetectSelectedSkuEnabled) {
+        updateProductData();
+    }
+    // The line_items must have at least one item
+    if (productData.line_items.length) {
+            <?php if ($block->isEventEnabled('addtowishlist') && $isBaseCodeEnabled): ?>
+        pintrk('track', 'addtowishlist', productData);
+            <?php endif; ?>
+    }
+});
+            <?php
+        // eof product data
+        endif; ?>
+        <?php
+    // eof product code
+    // bof search code
+    elseif (in_array($action, $pageHandlesSearch)): ?>
+    
+        <?php if ($isPageEnabled && $isBaseCodeEnabled && $isPageWithAll): ?>
+            pintrk("track", "page");
+        <?php endif; ?>
+        
+        <?php
+        $searchData = $block->getSearchDataForJs();
+        if (!empty($searchData)): ?>
+            <?php
+                $searchEventName = $searchData['event_name'];
+                $searchEventData = $searchData['data'];
+                
+                $searchEventNameJson = json_encode($searchEventName, JSON_PRETTY_PRINT);
+                $searchEventDataJson = json_encode($searchEventData, JSON_FORCE_OBJECT);
+            ?>
+            
+            var searchEventName = <?= /* @noEscape */ $searchEventNameJson ?>;
+            var searchEventData = <?= /* @noEscape */ $searchEventDataJson ?>;
+            
+            <?php if ($block->isEventEnabled('search') && $isBaseCodeEnabled): ?>
+            pintrk("track", searchEventName, searchEventData);
+            <?php endif; ?>
+            
+        <?php endif; ?>
+        <?php
+    // eof search code
+    // bof register code
+    elseif ($action == 'customer_account_create'): ?>
+    
+        <?php if ($isPageEnabled && $isBaseCodeEnabled && $isPageWithAll): ?>
+            pintrk("track", "page");
+        <?php endif; ?>
+        
+        <?php
+        $regData = $block->getDataForRegistrationEvent();
+        if (!empty($regData)): ?>
+            <?php
+                $regEventName = $regData['event_name'];
+                $regEventData = $regData['data'];
+                
+                $regEventNameJson = json_encode($regEventName, JSON_PRETTY_PRINT);
+                $regEventDataJson = json_encode($regEventData, JSON_FORCE_OBJECT);
+            ?>
+            $('#form-validate.form-create-account button.submit').on('click', function() {
+                var regEventName = <?= /* @noEscape */ $regEventNameJson ?>;
+                var regEventData = <?= /* @noEscape */ $regEventDataJson ?>;
+                
+                <?php if ($block->isEventEnabled('signup') && $isBaseCodeEnabled): ?>
+                pintrk("track", regEventName, regEventData);
+                <?php endif; ?>
+            });
+        <?php endif; ?>
+        <?php
+    // eof register code
+    // bof checkout
+    elseif (in_array($action, $pageHandlesQuote)): ?>
+        
+        <?php if ($isPageEnabled && $isBaseCodeEnabled && $isPageWithAll): ?>
+            pintrk("track", "page");
+        <?php endif; ?>
+    
+        <?php
+        $quoteData = $block->getQuoteData();
+        if (!empty($quoteData)): ?>
+            <?php
+                $quoteEventName = $quoteData['event_name'];
+                $quoteEventData = $quoteData['data'];
+                
+                $quoteEventNameJson = json_encode($quoteEventName, JSON_PRETTY_PRINT);
+                $quoteEventDataJson = json_encode($quoteEventData, JSON_PRETTY_PRINT);
+            ?>
+            
+            var quoteEventName = <?= /* @noEscape */ $quoteEventNameJson ?>;
+            var quoteEventData = <?= /* @noEscape */ $quoteEventDataJson ?>;
+            
+            <?php if ($block->isEventEnabled('InitiateCheckout') && $isBaseCodeEnabled): ?>
+            pintrk("track", quoteEventName, quoteEventData);
+            <?php endif; ?>
+            
+        <?php endif; ?>
+        <?php
+    // eof checkout
+    // bof checkout success
+    elseif (in_array($action, $pageHandlesOrder)): ?>
+        
+        <?php if ($isPageEnabled && $isBaseCodeEnabled && $isPageWithAll): ?>
+            pintrk("track", "page");
+        <?php endif; ?>
+        
+        <?php
+        $orderData = $block->getOrderData();
+        if (!empty($orderData)): ?>
+            <?php
+                $orderEventName = $orderData['event_name'];
+                $orderEventData = $orderData['data'];
+                
+                $orderEventNameJson = json_encode($orderEventName, JSON_PRETTY_PRINT);
+                $orderEventDataJson = json_encode($orderEventData, JSON_PRETTY_PRINT);
+            ?>
+            
+            var orderEventName = <?= /* @noEscape */ $orderEventNameJson ?>;
+            var orderEventData = <?= /* @noEscape */ $orderEventDataJson ?>;
+            
+            <?php if ($block->isEventEnabled('checkout') && $isBaseCodeEnabled): ?>
+            pintrk("track", orderEventName, orderEventData);
+            <?php endif; ?>
+            
+        <?php endif; ?>
+        <?php
+    // eof checkout success
+    // bof cms_index_index or cms_page_view or any other page.
+    else: ?>
+    
+        <?php if ($block->isEventEnabled('page') && $isBaseCodeEnabled): ?>
+            pintrk("track", "page");
+        <?php endif; ?>
+    
+    <?php endif; //eof cms_index_index or cms_page_view or any other page. ?>
+    } // end of is customer data call
+    }); // end of on ajaxComplete
+    }); // end of on document ready
+});
+</script>
+
+    <?php if ($block->isNoScriptEnabled()): ?>
+<noscript>
+        <?php foreach ($idData as $id): ?>
+<img height="1" width="1" style="display:none" 
+alt="Pinterest Pixel <?= $block->escapeHtml($id) ?>" 
+src="https://ct.pinterest.com/v3/?tid=<?= $block->escapeHtml($id) ?>&noscript=1"/>
+        <?php endforeach; ?>
+</noscript>
+<?php endif; ?>
+<!-- End Pinterest Pixel Code -->
+
+    <?php
+// eof Check if FB Pixel is allowed
+endif; ?>

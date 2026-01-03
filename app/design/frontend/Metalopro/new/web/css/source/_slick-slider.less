@@ -1,0 +1,82 @@
+//
+//  Common
+//  _____________________________________________
+@slick-buton-size: 50px;
+
+& when (@media-common = true) {
+	.product-carousel-widget-custom {
+		.slick-list {
+			padding: 10px 0px;
+		}
+		.slick-track {
+			display: flex;
+			height: 100%;
+			.slick-slide {
+				display: flex;
+				height: 100% !important;
+				> div {
+					width: 100% !important;
+				}
+				li {
+					height: 100%;
+				}
+			}
+		}
+	}
+
+	.slick-dots {
+		li {
+			button {
+				border-color: @dark-color-light;
+			}
+			&.slick-active button {
+				background: @primary-color;
+				border-color: @primary-color;
+			}
+		}
+	}
+	
+
+	.slick-slider {
+		.slick-prev, .slick-next {
+			height: @slick-buton-size;
+			width: @slick-buton-size;
+			border-radius: 100%;
+			border: 1px solid #D1D1D1;
+			&:hover {
+				border-color: #696969;
+			}
+		}
+
+		.slick-prev {
+			left: -15px;
+			&:before {
+    			content: '';
+    			display: inline-block;
+    			width: 28px;
+    			height: 28px;
+    			background-size: contain;
+    			background-repeat: no-repeat;
+    			background-position: center;
+    			padding-right: 5px; /* Adjust if needed */
+    			background-image: url('data:image/svg+xml;charset=UTF-8,%3Csvg viewBox=\'0 0 28 28\' fill=\'none\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cpath d=\'M16.835 6.91797L23.9166 13.9996L16.835 21.0813\' stroke=\'%23161616\' stroke-width=\'2\' stroke-miterlimit=\'10\' stroke-linecap=\'round\' stroke-linejoin=\'round\'/%3E%3Cpath d=\'M4.0835 14H23.7185\' stroke=\'%23161616\' stroke-width=\'2\' stroke-miterlimit=\'10\' stroke-linecap=\'round\' stroke-linejoin=\'round\'/%3E%3C/svg%3E');
+				transform: rotate(180deg);
+			}
+		}
+		.slick-next {
+			right: -15px;
+			&:before {
+    			content: '';
+    			display: inline-block;
+    			width: 28px;
+    			height: 28px;
+    			background-size: contain;
+    			background-repeat: no-repeat;
+    			background-position: center;
+    			padding-right: 5px; /* Adjust if needed */
+    			background-image: url('data:image/svg+xml;charset=UTF-8,%3Csvg viewBox=\'0 0 28 28\' fill=\'none\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cpath d=\'M16.835 6.91797L23.9166 13.9996L16.835 21.0813\' stroke=\'%23161616\' stroke-width=\'2\' stroke-miterlimit=\'10\' stroke-linecap=\'round\' stroke-linejoin=\'round\'/%3E%3Cpath d=\'M4.0835 14H23.7185\' stroke=\'%23161616\' stroke-width=\'2\' stroke-miterlimit=\'10\' stroke-linecap=\'round\' stroke-linejoin=\'round\'/%3E%3C/svg%3E');
+			}
+		}
+	}
+	
+}

@@ -1,0 +1,68 @@
+<?php
+    $config = $block->getBreezeConfig();
+?>
+
+<div class="block widget widget-recent" data-bind="
+    scope: '<?= $config['scope'] ?>',
+    css: options.additionalClasses,
+    visible: visible
+"><!-- ko template: { if: visible, name: 'recent-products' } --><!-- /ko --></div>
+
+<script type="text/x-magento-init">
+{
+    "*": {
+        "Magento_Ui/js/core/app": {
+            "components": {
+                "<?= $config['scope'] ?>": {
+                    "component": "<?= $config['component'] ?>",
+                    "config": <?= json_encode($config) ?>
+                }
+            }
+        }
+    }
+}
+</script>
+
+<script id="recent-products" type="text/x-magento-template">
+    <div class="block-title">
+        <strong role="heading" aria-level="2" data-bind="text: options.title"></strong>
+    </div>
+    <div class="block-content">
+        <div class="recent" data-bind="css: 'products-' + options.displayMode" data-appearance="carousel" data-carousel-mode="default" data-show-arrows="true" data-show-dots="true" data-content-type="products" data-mage-init='{"Magento_PageBuilder/js/content-type/slider/appearance/default/widget":{"arrows":true,"dots":true}}'>
+            <ol class="product-items widget-product-carousel slick-list" data-bind="foreach: items">
+                <li class="product-item">
+                    <div class="product-item-info">
+                        <?php if (!empty($config['attributes']['image'])) : ?>
+                            <a class="product-item-photo" data-bind="
+                                attr: { href: url, title: name },
+                                template: { name: 'productImage', data: $parent.getImageData($data) }
+                            "></a>
+                        <?php endif ?>
+
+                        <div class="product-item-details">
+                            <?php if (!empty($config['attributes']['name'])) : ?>
+                                <strong class="product-item-name">
+                                    <a data-bind="attr: { href: url }" class="product-item-link">
+                                        <span data-bind="html: name"></span>
+                                    </a>
+                                </strong>
+                            <?php endif ?>
+
+                            <?php if (!empty($config['attributes']['price'])) : ?>
+                                <div class="price-box" data-bind="html: $parent.getPriceHtml($data)"></div>
+                            <?php endif ?>
+
+                           
+
+                            <div class="product-item-description">
+                                <div data-bind="html: $parent.getAdditionalContent($data, $element)"></div>
+
+                               
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            </ol>
+        </div>
+    </div>
+</script>

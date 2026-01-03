@@ -1,0 +1,80 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © MageWorx. All rights reserved.
+ * See LICENSE.txt for license details.
+ */
+-->
+<form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <argument name="data" xsi:type="array">
+        <item name="js_config" xsi:type="array">
+            <item name="provider" xsi:type="string">mageworx_reviewreminderbase_unsubscribed_form.unsubscribed_form_data_source</item>
+        </item>
+        <item name="label" xsi:type="string" translate="true">Unsubscribed Information</item>
+        <item name="template" xsi:type="string">templates/form/collapsible</item>
+    </argument>
+    <settings>
+        <buttons>
+            <button name="back" class="MageWorx\ReviewReminderBase\Block\Adminhtml\Unsubscribed\Edit\Buttons\Back"/>
+            <button name="delete" class="MageWorx\ReviewReminderBase\Block\Adminhtml\Unsubscribed\Edit\Buttons\Delete"/>
+            <button name="save" class="MageWorx\ReviewReminderBase\Block\Adminhtml\Unsubscribed\Edit\Buttons\Save"/>
+        </buttons>
+        <namespace>mageworx_reviewreminderbase_unsubscribed_form</namespace>
+        <dataScope>data</dataScope>
+        <deps>
+            <dep>mageworx_reviewreminderbase_unsubscribed_form.unsubscribed_form_data_source</dep>
+        </deps>
+    </settings>
+    <dataSource name="unsubscribed_form_data_source">
+        <argument name="data" xsi:type="array">
+            <item name="js_config" xsi:type="array">
+                <item name="component" xsi:type="string">Magento_Ui/js/form/provider</item>
+            </item>
+        </argument>
+        <settings>
+            <submitUrl path="mageworx_reviewreminderbase/unsubscribed/save"/>
+        </settings>
+        <dataProvider class="MageWorx\ReviewReminderBase\Model\Unsubscribed\DataProvider" name="unsubscribed_form_data_source">
+            <settings>
+                <requestFieldName>unsubscribed_id</requestFieldName>
+                <primaryFieldName>unsubscribed_id</primaryFieldName>
+            </settings>
+        </dataProvider>
+    </dataSource>
+    <fieldset name="general">
+        <settings>
+            <label translate="true">Unsubscribed Information</label>
+        </settings>
+        <field name="unsubscribed_id" formElement="input">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">unsubscribed</item>
+                </item>
+            </argument>
+            <settings>
+                <dataType>text</dataType>
+                <visible>false</visible>
+                <dataScope>unsubscribed_id</dataScope>
+            </settings>
+        </field>
+        <field name="email" sortOrder="10" formElement="input">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">unsubscribed</item>
+                </item>
+            </argument>
+            <settings>
+                <validation>
+                    <rule name="required-entry" xsi:type="boolean">true</rule>
+                </validation>
+                <dataType>text</dataType>
+                <label translate="true">Email</label>
+                <dataScope>email</dataScope>
+                <validation>
+                    <rule name="required-entry" xsi:type="boolean">true</rule>
+                    <rule name="validate-email" xsi:type="boolean">true</rule>
+                </validation>
+            </settings>
+        </field>
+    </fieldset>
+</form>

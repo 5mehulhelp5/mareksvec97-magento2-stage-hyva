@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2022-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd"
+>
+    <head>
+        <css src="Hyva_Checkout::css/hyva-themes-checkout.css"/>
+    </head>
+
+    <body>
+        <referenceContainer name="js">
+            <block class="Hyva\Checkout\Block\Adminhtml\System\Config\HyvaThemesCheckout"
+                   name="js.hyva_themes_checkout"
+                   template="Hyva_Checkout::system/config/hyva-themes-checkout.phtml"
+            />
+        </referenceContainer>
+    </body>
+</page>

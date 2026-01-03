@@ -1,0 +1,138 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2022-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      layout="1column"
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd"
+>
+    <body>
+        <!-- @deprecated has been replaced by "form-field.global.tooltip" aliased with "accessory.tooltip". -->
+        <block name="form-field.tooltip" template="Hyva_Checkout::form/field/html/tooltip.phtml">
+            <arguments>
+                <!-- If false tooltip content displays as hint text -->
+                <argument name="display_as_tooltip" xsi:type="boolean">false</argument>
+            </arguments>
+        </block>
+        <!-- @deprecated has been replaced by "form-field.global.label" aliased with "accessory.label". -->
+        <block name="entity-form.element-label" template="Hyva_Checkout::form/element/html/label.phtml"/>
+
+        <referenceBlock name="main">
+            <!-- Entity Form Fields. -->
+            <block name="entity-form.field-renderers">
+                <!-- Entity type: Text. -->
+                <block name="form-field.text" as="text" template="Hyva_Checkout::form/field/text.phtml"/>
+                <!-- Entity type: Select. -->
+                <block name="form-field.select" as="select" template="Hyva_Checkout::form/field/select.phtml"/>
+                <!-- Entity type: Checkbox. -->
+                <block name="form-field.checkbox" as="checkbox" template="Hyva_Checkout::form/field/checkbox.phtml"/>
+                <!-- Entity type: Radio. -->
+                <block name="form-field.radio" as="radio" template="Hyva_Checkout::form/field/radio.phtml"/>
+                <!-- Entity type: Hidden. -->
+                <block name="form-field.hidden" as="hidden" template="Hyva_Checkout::form/field/hidden.phtml"/>
+                <!-- Entity type: Password. -->
+                <block name="form-field.password" as="password" template="Hyva_Checkout::form/field/password.phtml"/>
+
+                <!-- Form field globals. -->
+                <block name="form-field.global.before"
+                       template="Hyva_Checkout::form/element/html/container.phtml"
+                       as="accessory.before"
+                />
+                <block name="form-field.global.after"
+                       template="Hyva_Checkout::form/element/html/container.phtml"
+                       as="accessory.after"
+                />
+                <block name="form-field.global.label"
+                       template="Hyva_Checkout::form/element/html/label.phtml"
+                       as="accessory.label"
+                />
+                <block name="form-field.global.comment"
+                       template="Hyva_Checkout::form/element/html/comment.phtml"
+                       as="accessory.comment"
+                />
+                <block name="form-field.global.icon"
+                       template="Hyva_Checkout::form/element/html/icon.phtml"
+                       as="accessory.icon"
+                />
+                <block name="form-field.global.tooltip"
+                       template="Hyva_Checkout::form/field/html/tooltip.phtml"
+                       as="accessory.tooltip"
+                />
+                <block name="form-field.global.hint-text"
+                       template="Hyva_Checkout::form/field/html/hint-text.phtml"
+                       as="accessory.hint-text"
+                />
+                <block name="form-field.global.visibility-toggle"
+                       template="Hyva_Checkout::form/field/html/visibility-toggle.phtml"
+                       as="accessory.visibility-toggle"
+                />
+
+                <!-- Specific renderer for fields with the name "street". -->
+                <block name="form-field.street"
+                       as="street"
+                       template="Hyva_Checkout::form/field/street.phtml"
+                       ifconfig="hyva_themes_checkout/developer/address_form/use_street_renderer"
+                />
+
+                <!-- Specific renderer for Shipping form "save in address book" checkbox field. -->
+                <block name="save_address_book_shipping"
+                       as="shipping.save.checkbox"
+                       template="Hyva_Checkout::checkout/address-view/address-form/field/save-address-book.phtml"
+                >
+                    <!-- Injecting a custom label template to be used as the element label. -->
+                    <block name="save_address_book_shipping.label"
+                           as="label"
+                           template="Hyva_Checkout::checkout/address-view/address-form/field/save-address-book/label.phtml"
+                    />
+                </block>
+
+                <!-- Specific renderer for Billing form "save in address book" checkbox field. -->
+                <block name="save_address_book_billing"
+                       as="billing.save.checkbox"
+                       template="Hyva_Checkout::checkout/address-view/address-form/field/save-address-book.phtml"
+                >
+                    <!-- Injecting a custom label template to be used as the element label. -->
+                    <block name="save_address_book_billing.label"
+                           as="label"
+                           template="Hyva_Checkout::checkout/address-view/address-form/field/save-address-book/label.phtml"
+                    />
+                </block>
+            </block>
+
+            <!-- Entity Form Elements. -->
+            <block name="entity-form.element-renderers">
+                <block name="form-element.clickable" as="clickable" template="Hyva_Checkout::form/element/button.phtml"/>
+                <block name="form-element.submit" as="submit" template="Hyva_Checkout::form/element/button.phtml"/>
+                <block name="form-element.url" as="url" template="Hyva_Checkout::form/element/url.phtml"/>
+                <block name="form-element.image" as="image" template="Hyva_Checkout::form/element/image.phtml"/>
+
+                <!-- Specific renderers for Guest Details form submit button. -->
+                <block name="guest_details.login-button"
+                       as="guest_details.login"
+                       template="Hyva_Checkout::checkout/guest-details/login-button.phtml"
+                />
+
+                <!-- Specific renderers for Shipping Details form save button. -->
+                <block name="shipping.save-button"
+                       as="shipping.save"
+                       template="Hyva_Checkout::checkout/address-view/address-form/element/save-button.phtml"
+                />
+
+                <!-- Form element globals. -->
+                <block name="form-element.global.before"
+                       template="Hyva_Checkout::form/element/html/container.phtml"
+                       as="accessory.before"
+                />
+                <block name="form-element.global.after"
+                       template="Hyva_Checkout::form/element/html/container.phtml"
+                       as="accessory.after"
+                />
+            </block>
+        </referenceBlock>
+    </body>
+</page>

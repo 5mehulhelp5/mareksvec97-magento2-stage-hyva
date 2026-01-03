@@ -1,0 +1,135 @@
+<?php
+$contactBlock = $block->getLayout()->createBlock('Magecomp\Quickcontact\Block\Quickcontact');
+if($contactBlock->isEnable()){ ?>
+<div id="mailcotentarea" class="classic-form">
+	<div class="form">
+		<div id="maincontent">
+			<form id="contact-form" name="contact-form"  enctype="multipart/form-data">
+				<div class="fieldset inner-form">
+					<div class="field ">
+						<label for="customername" class="label"><span><?php echo __('Your name (optional)') ?></span></label>
+						<div class="control">
+							<input type="text" id="customername" name="customername" maxlength="255" class="input-text"/>
+						</div>
+					</div>
+					<div class="field email required">
+						<label for="customeremail" class="label"><span><?php echo __('Email address') ?></span></label>
+						<div class="control">
+							<input type="text" id="customeremail" name="customeremail" maxlength="255" class="input-text validate-email required-entry"/>
+						</div>
+					</div>
+					<div class="field phone required">
+						<label for="customerphone" class="label"><span><?php echo __('Phone number') ?></span></label>
+						<div class="control">
+							<input type="tel" id="customerphone" name="customerphone" maxlength="255" class="input-text validate-phone required-entry"/>
+						</div>
+					</div>
+					<div class="field required">
+						<label for="comment" class="label"><span><?php echo __('Your message.') ?></span></label>
+						<div class="control">
+							<textarea rows="10" id="comment" name="comment" class="input-text required-entry"></textarea>
+						</div>
+					</div>
+					<div class="field file">
+						<div class="attachment">
+						<label for="attachment" class="label"><span><?php echo __('Attachements') ?></span></label>
+						<div class="control attachment">
+							<input type="file" id="attachment" name="attachment[]" maxlength="255" data-text="<?php echo __('Upload') ?>" multiple />
+							<div class="info-attachment-text">
+						<?php echo __('Upload us the complete technical documentation.') ?>
+					</div>
+						</div>
+						<div class="info-attachment"><?php echo __('Add up to 5 files') ?></div>
+						<div class="error"></div>
+					</div>
+					
+					</div>
+					
+				</div>
+				<div class="send-msg" style="display: none;">
+					<div class="imageshow">
+						<img src="<?php echo $this->getViewFileUrl('BigConnect_ContactForms::images/send.svg'); ?>" alt="send-icon">
+					</div>
+					<div class="message1">
+						<p><?php echo __('Thanks For Reaching Out') ?></p>
+					</div>
+					<div class="message2">
+						<p><?php echo __('Someone will get back to you soon') ?></p>
+					</div>
+					<div class="center-msg">
+						<h3 class="title-text">
+						<img src="<?php echo $this->getViewFileUrl('BigConnect_ContactForms::images/check.svg'); ?>" alt="check-icon">
+						<?php echo __('Message Sent') ?>
+						</h3>
+					</div>
+				</div>
+				<div class="actions-toolbar button">
+					<div class="primary">
+						<button class="button action primary" id="send-contact" title="<?php echo __('Send') ?>" type="button">
+						<span><span><?php echo __('Send message') ?></span></span>
+						</button>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+	<div class="info_text">
+         <p><?php echo __('Your data will only be processed for the purpose of processing your application. Please see our privacy policy for more information.') ?></p>
+      </div>
+</div>
+<script>
+	require([
+		'jquery'
+	], function($){
+		$('.minus').click(function(e) {
+			$('#mailcotentarea').css('display', 'none');
+		});
+		
+		$('#goback').click(function(e) {
+			$('#mailcotentarea').css('display', 'block');
+			$('.form').css('display', 'block');
+			$('.send-msg').css('display', 'none');
+			$('#customername').val('');
+			$('#customeremail').val('');
+			$('#comment').val('');
+			$('#attachment').val('');
+		});
+		
+		$('#attachment').on('change', function(){
+			$('#send-contact').removeAttr('disabled');
+			$('.error').text('');
+			var numFiles = $('input:file')[0].files.length;
+			if (numFiles>5) {
+$('.error').text("<?php echo __("you can't add more than 5 files") ?>");
+$('#send-contact').attr('disabled', 'disabled');
+}
+});
+$('#send-contact').on('click', function() {
+if ($('#contact-form').valid()) {
+var name = $('#customername').val();
+var email = $('#customeremail').val();
+var phone = $('#customerphone').val();
+var comment = $('#comment').val();
+var formdata = new FormData(jQuery('#contact-form')[0]);
+var formurl = '<?php echo $contactBlock->getSubmitUrl() ?>';
+jQuery.ajax({
+type: 'POST',
+url: formurl,
+data:formdata,
+contentType: false,
+processData: false,
+showLoader: true,
+success: function () {
+$('.inner-form').css('display', 'none');
+$('.send-msg').css('display', 'block');
+$('.actions-toolbar.button').css('display', 'none');
+},
+error: function (data) {
+console.log(data.message)
+}
+});
+}
+});
+});
+</script>
+<?php } ?>

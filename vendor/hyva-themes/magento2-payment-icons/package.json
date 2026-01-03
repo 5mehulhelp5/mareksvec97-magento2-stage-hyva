@@ -1,0 +1,23 @@
+{
+  "name": "@hyva-themes/magento2-payment-icons",
+  "version": "1.0.0",
+  "description": "the npm pkg is here just here to update the payments icons",
+  "homepage": "https://www.hyva.io/",
+  "bugs": {
+    "email": "info@hyva.io"
+  },
+  "private": true,
+  "scripts": {
+    "build:icons:clean": "svgo -f ./src/view/frontend/web/svg/payment-icons/clean -o ./src/view/frontend/web/svg/payment-icons/clean",
+    "build:icons:dark": "svgo -f ./src/view/frontend/web/svg/payment-icons/dark -o ./src/view/frontend/web/svg/payment-icons/dark",
+    "build:icons:light": "svgo -f ./src/view/frontend/web/svg/payment-icons/light -o ./src/view/frontend/web/svg/payment-icons/light",
+    "build:icons:mono": "svgo -f ./src/view/frontend/web/svg/payment-icons/mono -o ./src/view/frontend/web/svg/payment-icons/mono",
+    "build:icons:outline": "svgo -f ./src/view/frontend/web/svg/payment-icons/outline -o ./src/view/frontend/web/svg/payment-icons/outline",
+    "build:icons": "npm run build:icons:clean && npm run build:icons:dark && npm run build:icons:light && npm run build:icons:mono && npm run build:icons:outline",
+    "build:signature": "./bin/generate-icons-signatures",
+    "build": "npm run build:icons && npm run build:signature"
+  },
+  "devDependencies": {
+    "svgo": "^3.3.2"
+  }
+}

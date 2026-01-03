@@ -1,0 +1,148 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2020-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+declare(strict_types=1);
+
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\HyvaCsp;
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Element\Template;
+
+/** @var Template $block */
+/** @var Escaper $escaper */
+/** @var ViewModelRegistry $viewModels */
+/** @var HyvaCsp $hyvaCsp */
+?>
+<script>
+    <?php
+    /**
+     * Small work around for a race condition where 'payflowpro-token-generated' fires before the
+     * PayflowproIframeHiddenForm is initialized
+     */
+    ?>
+    window.payflowTokenHandlers = window.payflowTokenHandlers || [];
+    window.payflowTokenReceived = false;
+
+    if (!window.payflowGlobalListener) {
+        window.addEventListener('payflowpro-token-generated', function(event) {
+            window.payflowTokenReceived = true;
+            window.payflowTokenHandlers.forEach(handler => handler(event));
+            window.payflowTokenHandlers = [];
+        });
+        window.payflowGlobalListener = true;
+    }
+
+function PayflowproIframeHiddenForm() {
+    return {
+        async init(){
+            const {
+                methodCode,
+                blockName
+            } = this.$el.dataset;
+
+            const cardKey = methodCode + 'Card';
+
+            if (window.payflowTokenReceived) {
+                submitIframe();
+            } else {
+                window.payflowTsokenHandlers.push(() => submitIframe());
+            }
+
+            function submitIframe() {
+                showLoader();
+
+                let formSubmitted = false;
+
+                let payflowIframe = getIframe();
+                let payflowHiddenForm = getHiddenForm();
+
+                payflowHiddenForm.elements['acct'].value = getCardNumber();
+                payflowHiddenForm.elements['csc'].value = getCardCvv();
+                payflowHiddenForm.elements['expdate'].value = getCartExpDate();
+
+                payflowIframe.append(payflowHiddenForm);
+
+                let callback = function () {
+                    if (formSubmitted) {
+                        payflowIframe.removeEventListener('load', callback);
+
+                        hideLoader();
+
+                        checkTransaction();
+                    }
+
+                    formSubmitted = true;
+                };
+
+                payflowIframe.addEventListener('load', callback);
+                payflowHiddenForm.submit();
+            }
+
+            function checkTransaction() {
+                showLoader();
+                getComponent().call('checkTransaction').then(() => { hideLoader(); });
+            }
+
+            function getCardNumber() {
+                let cardData = getCardData();
+                return cardData ? cardData.card : '';
+            }
+
+            function getCardCvv() {
+                let cardData = getCardData();
+                return cardData ? cardData.cvv : '';
+            }
+
+            function getCartExpDate() {
+                let cardData = getCardData();
+
+                let year = cardData ? cardData.expYear : '';
+                if (year.length > 2) {
+                    year = year.substring(year.length - 2);
+                }
+
+                let month = parseInt((cardData ? cardData.expMonth : ''), 10);
+                if (month < 10) {
+                    month = '0' + month;
+                }
+
+                return  month + '' + year;
+            }
+
+            function getComponent() {
+                return Magewire.find(
+                    blockName
+                );
+            }
+
+            function getIframe() {
+                return document.getElementById(`${methodCode}-transparent-iframe`);
+            }
+
+            function getHiddenForm() {
+                return document.getElementById(`hidden-form-${methodCode}`);
+            }
+
+            function showLoader() {
+                setTimeout(() => { window.dispatchEvent(new Event('magewire:loader:start')) }, 0);
+            }
+
+            function hideLoader() {
+                window.dispatchEvent(new Event('magewire:loader:done'));
+            }
+
+            function getCardData() {
+                return window[cardKey] || {};
+            }
+        }
+    }
+}
+
+window.addEventListener('alpine:init', () => Alpine.data('PayflowproIframeHiddenForm', PayflowproIframeHiddenForm), {once: true});
+</script>
+<?php $hyvaCsp->registerInlineScript() ?>

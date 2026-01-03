@@ -1,0 +1,39 @@
+<?php $contactinfo = $block->getContactInfo(); ?>
+<section class="admin__page-section order-view-account-information" style="margin-bottom: 20px;">
+    <button id="save-button" title="<?php echo $block->escapeHtml(__('Back')) ?>"
+            class="action-default primary"
+            onclick="location.href='<?php echo $block->getBackURL(); ?>'"
+            style="float: right;">
+        <span><?php echo $block->escapeHtml(__('Back')) ?></span>
+    </button>
+    <div class="admin__page-section-title">
+        <span class="title"><?php echo $block->escapeHtml(__('Customer Details')) ?></span>
+    </div>
+    <div class="admin__page-section-content">
+        <p>
+            <strong><?php echo $block->escapeHtml(__('Customer Name : '));?></strong>
+            <?php echo $contactinfo->getCustomername(); ?>
+        </p>
+        <p>
+            <strong><?php echo $block->escapeHtml(__('Customer Email : '));?></strong>
+            <a href="<?php echo "mailto:".$contactinfo->getCustomeremail(); ?>"><?php echo $contactinfo->getCustomeremail(); ?></a>
+        </p>
+        <p>
+            <strong><?php echo $block->escapeHtml(__('Customer Phone : '));?></strong>
+            <?php echo $contactinfo->getCustomerphone(); ?>
+        </p>
+        <p>
+            <strong><?php echo $block->escapeHtml(__('Comment : '));?></strong>
+            <?php echo $contactinfo->getComment(); ?>
+        </p>
+        <p>
+            <strong><?php echo $block->escapeHtml(__('Attachments : '));?></strong>
+            <?php 
+            $attachments=explode(',', $contactinfo->getAttachment());
+            foreach($attachments as $attachment){
+            ?>
+            <span><a href="<?php echo $block->getFileUrl($attachment) ?>" target="_blank"><img src="<?php echo $this->getViewFileUrl('Magecomp_Quickcontact::images/attachment.png'); ?>" width="50" height="50" /></a></span>
+        <?php }?>
+        </p>
+    </div>
+</section>

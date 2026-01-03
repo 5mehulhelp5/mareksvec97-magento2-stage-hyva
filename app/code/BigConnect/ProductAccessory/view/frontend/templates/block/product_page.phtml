@@ -1,0 +1,109 @@
+<?php
+
+$product = $block->getProduct(); // Získanie objektu produktu.
+
+$imbusakQty = intval($block->getImbusakQty($product));
+$montaznyKluc = intval($block->getMontaznyKluc($product));
+$nastavitelneNozicky = intval($block->getNastavitelneNozicky($product));
+$filc = intval($block->getFilcovaOchrana($product));
+$umeleZaslepky = intval($block->getUmeleZaslepky($product));
+$skrutkym8imbus = intval($block->getSkrutkyM8Imbus($product));
+$skrutkym8sesthran = intval($block->getSkrutkyM8Sesthran($product));
+
+if (!empty($imbusakQty) || !empty($montaznyKluc) || !empty($nastavitelneNozicky) || !empty($umeleZaslepky) || !empty($skrutkym8imbus) || !empty($skrutkym8sesthran)) {
+
+?>
+
+<div class="product-accessory">
+    <div class="headline"><?php echo __('Product accessories'); ?></div>
+    <ul class="product-addons">
+        <?php if ($nastavitelneNozicky > 0): ?>
+            <li>
+                <div class="accessory-single">
+                    <span><?= $nastavitelneNozicky; ?>x</span>
+                    <div class="accessory-images">
+                        <?php for ($i = 0; $i < $nastavitelneNozicky; $i++): ?>
+                            <img class="rektifikacia" src="<?php echo $this->getViewFileUrl('BigConnect_ProductAccessory::image/rektifikacia.png'); ?>" alt="rektifikacia"/>
+                        <?php endfor; ?>
+                    </div>
+                </div>
+            </li>
+        <?php endif; ?>
+        <?php if ($filc > 0): ?>
+            <li>
+                <div class="accessory-single">
+                    <span><?= $filc; ?>x</span>
+                    <div class="accessory-images">
+                        <?php for ($i = 0; $i < $filc; $i++): ?>
+                            <img class="filc" src="<?php echo $this->getViewFileUrl('BigConnect_ProductAccessory::image/filc.png'); ?>" alt="filcova-ochrana"/>
+                        <?php endfor; ?>
+                    </div>
+                </div>
+            </li>
+        <?php endif; ?>
+        <?php if ($imbusakQty > 0): ?>
+        <li>
+            <div class="accessory-single">
+                <span><?= $imbusakQty; ?>x</span>
+                <div class="accessory-images">
+                <?php for($i = 0; $i < $imbusakQty; $i++): ?>
+                <img class="imbusak" src="<?php echo $this->getViewFileUrl('BigConnect_ProductAccessory::image/imbus.png'); ?>" alt="imbus"/>
+                <?php endfor; ?>
+                </div>
+            </div>
+        </li>
+        <?php endif; ?>
+        <?php if ($montaznyKluc > 0): ?>
+        <li>
+            <div class="accessory-single">
+                <span><?= $montaznyKluc; ?>x</span>
+                <div class="accessory-images">
+                <?php for($i = 0; $i < $montaznyKluc; $i++): ?>
+                <img class="kluc" src="<?php echo $this->getViewFileUrl('BigConnect_ProductAccessory::image/kluc.png'); ?>" alt="kluc"/>
+                <?php endfor; ?>
+                </div>
+            </div>
+        </li>
+        <?php endif; ?>
+        <?php if ($skrutkym8imbus > 0): ?>
+        <li>
+            <div class="accessory-single">
+                <span><?= $skrutkym8imbus; ?>x</span>
+                <div class="accessory-images">
+                <?php for($i = 0; $i < $skrutkym8imbus; $i++): ?>
+                <img class="skrutky" src="<?php echo $this->getViewFileUrl('BigConnect_ProductAccessory::image/skrutka.png'); ?>" alt="skrutka"/>
+                <?php endfor; ?>
+                </div>
+            </div>
+        </li>
+        <?php endif; ?>
+        <?php if ($skrutkym8sesthran > 0): ?>
+        <li>
+            <div class="accessory-single">
+                <span><?= $skrutkym8sesthran; ?>x</span>
+                <div class="accessory-images">
+                <?php for($i = 0; $i < $skrutkym8sesthran; $i++): ?>
+                <img class="sruba10" src="<?php echo $this->getViewFileUrl('BigConnect_ProductAccessory::image/sruba10.png'); ?>" alt="sruba10"/>
+                <?php endfor; ?>
+                </div>
+            </div>
+        </li>
+        <?php endif; ?>
+        <?php if ($umeleZaslepky > 0): ?>
+        <li>
+            <div class="accessory-single">
+                <span><?= $umeleZaslepky; ?>x</span>
+                <div class="accessory-images">
+                <?php for($i = 0; $i < $umeleZaslepky; $i++): ?>
+                <img class="zaslepky" src="<?php echo $this->getViewFileUrl('BigConnect_ProductAccessory::image/zaslepka.png'); ?>" alt="zaslepka"/>
+                <?php endfor; ?>
+                </div>
+            </div>
+        </li>
+        <?php endif; ?>
+        
+        <!-- atd... -->
+    </ul>
+</div>
+
+<?php } ?>

@@ -1,0 +1,89 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2022-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+-->
+<include xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_include.xsd"
+>
+    <group id="fixes_workarounds"
+           showInDefault="1"
+           showInStore="1"
+           showInWebsite="1"
+           sortOrder="60"
+           translate="label"
+    >
+        <label>Fixes &amp; Workarounds</label>
+
+        <field id="migrate_guest_info"
+               showInDefault="1"
+               showInStore="1"
+               showInWebsite="1"
+               sortOrder="10"
+               translate="label comment"
+               type="select"
+        >
+            <label>Migrate guest info</label>
+            <comment>Ensure guest info is present in both the quote and the order. This workaround is necessary for Magento versions 2.4.3 and earlier. For those using later versions, it is safe to disable this workaround if needed.</comment>
+            <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+        </field>
+
+        <field id="total_segments_collect_totals"
+               showInDefault="1"
+               showInStore="1"
+               showInWebsite="1"
+               sortOrder="10"
+               translate="label comment"
+               type="select"
+        >
+            <label>Collect Totals During Segment Retrieval</label>
+            <comment>
+                <![CDATA[
+                Flags whether quote totals should be recollected when the total segments are retrieved.
+                <a href="https://docs.hyva.io/checkout/hyva-checkout/faq/missing-or-incorrect-totals.html" target="_blank">
+                    See the Hyvä Checkout documentation for more information, reasoning, and potential issues.
+                </a>
+                ]]>
+            </comment>
+            <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+        </field>
+
+        <field id="render_billing_address"
+               showInDefault="1"
+               showInStore="1"
+               showInWebsite="1"
+               sortOrder="20"
+               translate="label comment"
+               type="select"
+        >
+            <label>Render Billing Address</label>
+            <comment>
+                <![CDATA[
+                    Enabling this option will display the billing address template when the customer selects the option to use the same billing address as the shipping address. The billing address will appear above the checkbox toggle.
+                    <br><br>
+                    <strong>Important:</strong> The shipping address is not saved automatically. In a one-page checkout, where both shipping and billing addresses are handled together, it’s recommended to disable this option to avoid confusion on why no or a wrong address is being shown.
+                    <br><br>
+                    However, if the checkout process handles shipping and billing addresses in separate steps, you may choose to enable this option. Since checkout flows can vary, this setting needs to be configured manually based on the specific implementation.
+                ]]>
+            </comment>
+            <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+        </field>
+
+        <field id="disable_form_auto_saving"
+               showInDefault="1"
+               showInStore="1"
+               showInWebsite="1"
+               sortOrder="30"
+               translate="label comment"
+               type="select"
+        >
+            <label>Disable Form Auto Saving</label>
+            <comment>The form auto-saving feature has been a core part of Hyvä Checkout since its inception. As development progressed, more third-party integrators began designing their solutions with auto-saving in mind. Consequently, some third-party systems now depend on this feature, making it essential to keep auto-saving enabled. Disabling it could lead to unexpected issues, especially when using third-party integrations. To function correctly without auto-saving, these integrations will need to be updated accordingly.</comment>
+            <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+        </field>
+    </group>
+</include>

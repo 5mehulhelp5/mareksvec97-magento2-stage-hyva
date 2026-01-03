@@ -1,0 +1,151 @@
+@import "_fonts.less";
+@import "_footer.less";
+@import "_header.less";
+@import "_homepage.less";
+@import "_bootstrap.less";
+@import "_cookies_bar.less";
+@import "_global-blocks.less";
+@import "_mobile-responsive.less";
+@import "_slick-slider.less";
+@import "_product-carousel.less";
+@import "_payment-icons.less";
+@import "_messages-custom.less";
+@import "catalog/_badges.less";
+@import "catalog/_product-grid.less";
+@import "catalog/_product-page.less";
+@import "catalog/_category.less";
+@import "catalog/_color-swatch.less";
+@import "catalog/_dropdown-select.less";
+@import "catalog/_rectification-swatch.less";
+@import "catalog/_size-swatch.less";
+@import "catalog/_qty-global.less";
+@import "catalog/_product-tabs.less";
+@import "checkout/_checkout-header.less";
+@import "checkout/_coupon.less";
+@import "checkout/_checkout.less";
+@import "pages/_about-us.less";
+@import "pages/_vyroba-na-mieru.less";
+@import "pages/_contact.less";
+@import "pages/_404.less";
+
+
+// Primárne farby
+@primary-color: #FFA500;
+@primary__color: #000000;
+@primary-color-light: #FFB733;
+@primary-color-lighter: #FFCC66;
+@primary-color-dark: #EFA30D;
+
+// Sekundárne farby
+@secondary-color: #000000;
+@secondary-color-dark: #666666;
+@secondary-color-light: #CCCCCC;
+
+// Svetlé farby
+@white-color: #FFFFFF;
+@gray-light-color: #C9C9C9;
+@light-gray-color: #F7F7F7;
+
+// Tmavé farby
+@black-color: #000000;
+@dark-color: #161616;
+@black-color-medium: #1c1c1c;
+@gray-color-text: #4D4D4D;
+@dark-color-dark: #333333;
+@dark-color-darker: #666666;
+@dark-color-medium: #999999;
+@dark-color-light: #CCCCCC;
+@dark-color-lightest: #FFFFFF; // Najsvetlejšia farba, použijeme ju pre text na tlačidlách
+
+//Badge
+@discount-color: #F53D6B;
+@bestseller-color: #F7941D;
+@personalized-color: #6FA4F0;
+@instock-color: #97c97a;
+@slovakia-color: #474747;
+
+//Price
+@old-price-color: #9699A3;
+
+// Tlačidlá
+@button-primary__background: @primary-color; // Používame premennú @primary-color pre pozadie
+@button-primary__border: 1px solid @primary-color; // Rovnaká farba pre okraje
+@button-primary__color: @dark-color-lightest; // Používame @dark-color-lightest pre farbu textu, čo je biela
+@button__border-radius: 0px;
+@button-secondary__border-radius: 0px;
+@button-primary__active__background: @primary-color-dark;
+@button-primary__active__border: 1px solid @primary-color-dark;
+
+
+// Definovanie nových hover farieb pre tlačidlá
+@button-primary__hover__background: @primary-color-dark; // Tmavšia pri hoveri
+@button-primary__hover__border: 1px solid @primary-color-dark;
+@form-element-input__border-color: #E4E6EB;
+@form-element-input__border: 2px solid @form-element-input__border-color; // Tmavšia pri hoveri
+@button-primary__hover__color: @dark-color-lightest; // Vaša nová farba textu tlačidla pri hoveri
+
+// Definovanie farieb a štýlov pre inputy
+@input-focus-border-color: #ff6699; // Zmeňte na požadovanú farbu
+
+// Border-Colors
+@border-gray-color: #F3F5F6;
+
+//Rating
+@rating_stars_colors: #FFD337;
+@_icon-color-active: @rating_stars_colors;
+//  Focus
+@focus__color: none;
+@link__active__color: blue;
+
+// Inputy
+@form-element-input__height: 40px; // Nastavte na požadovanú výšku
+@input-border: 2px solid red;
+
+// Texty
+@font-size__base: 16px;
+@text-color: #333333;
+
+// Pagination
+@pager-current__background: @primary-color;
+@pager-item__padding: 4px 16px;
+@pager-actions__padding: 4px 16px;
+@_pager-font-size: 16px;
+@pager-item__margin: 0px;
+@pager-icon__font-margin: 0px;
+@pager-action__background: none;
+@pager-action__border: none;
+
+
+// Layout
+@layout__max-width: 1440px;
+
+//  Navigation
+//  ---------------------------------------------
+
+@navigation__background: @black-color-medium;
+@collapsible-nav-color: #FFFFFF;
+@navigation-desktop__font-weight: 500;
+@navigation-level0-item__color: @black-color;
+@navigation-desktop-level0-item__hover__color: @primary-color;
+@submenu-item__color: @black-color;
+@navigation-desktop-level0-item__color: @white-color;
+@navigation-level0-item__active__color: @primary-color;
+@submenu-item__active__color: @primary-color;
+
+//  Desktop navigation
+@navigation-desktop-level0-item__line-height: 68px;
+@submenu-desktop__font-weight: @font-weight__regular;
+@submenu-desktop-item__active__color: @navigation-level0-item__active__color;
+
+// Odkazy
+@theme__color__primary-alt: @dark-color-darker;
+
+@font-family-name__base: 'Jost', sans-serif;
+.bg-dark {
+	background: @dark-color;
+	color: @white-color;
+}
+body {
+	color: @text-color;
+	overflow-x: hidden;
+}

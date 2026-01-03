@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <tab id="zymion" sortOrder="1000">
+            <label>Zymion</label>
+        </tab>
+        <section id="seofriendlyimages" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+            <label>SEO Friendly Images</label>
+            <tab>zymion</tab>
+            <resource>Zymion_SeoFriendlyImages::config</resource>
+            <group id="general" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>General</label>
+                <field id="enabled" translate="label comment" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Enabled</label>
+                    <comment>Should the SEO Friendly Images extension be enabled?</comment>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="custom_pattern" translate="label comment" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Use custom filename pattern</label>
+                    <comment>Allows more flexibility in defining the filename to be used for renaming image filenames</comment>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="append_category" translate="label comment" type="select" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Append category name to filename</label>
+                    <comment>Should the category name be appended to the filename (e.g. product-name-category-name.jpg)?</comment>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <depends>
+                        <field id="*/*/custom_pattern">0</field>
+                    </depends>
+                </field>
+                <field id="filename_pattern" translate="label comment" type="text" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Renamed filename pattern</label>
+                    <comment>Define the renamed filename to be used for image files (see documentation for all possibilities)</comment>
+                    <depends>
+                        <field id="*/*/custom_pattern">1</field>
+                    </depends>
+                </field>
+                <field id="use_symlink" translate="label comment" type="select" sortOrder="50" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Use symlinks instead of copy during rename process</label>
+                    <comment>Should symlinks be used during the process of renaming the files instead of copying the file?</comment>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="overwrite_alt" translate="label comment" type="select" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Overwrite alt text of product images</label>
+                    <comment>Allows to define a custom alt text using a pattern</comment>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="alt_pattern" translate="label comment" type="text" sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Alt text pattern</label>
+                    <comment>Define the custom alt to be used for image files (see documentation for all possibilities)</comment>
+                    <depends>
+                        <field id="*/*/overwrite_alt">1</field>
+                    </depends>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

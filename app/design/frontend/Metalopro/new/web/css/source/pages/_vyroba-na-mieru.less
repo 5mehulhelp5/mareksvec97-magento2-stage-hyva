@@ -1,0 +1,118 @@
+//
+//  Common
+//  _____________________________________________
+
+& when (@media-common = true) {
+	.custom-production-top {
+		padding: 0px 15px 60px 15px;
+		h1 {
+			font-size: 30px;
+			font-weight: 700;
+			margin-bottom: 0px;
+		}
+		h4 {
+			font-size: 18px;
+		}
+	}
+	.custom-production-boxes {
+		padding: 0px 15px;
+		.pagebuilder-column-group {
+			padding: 60px 0px;
+			.pagebuilder-column-line {
+				gap: 30px;
+				.pagebuilder-column {
+					background: @color-white;
+					color: @color-black;
+					padding: 15px;
+					img {
+						height: 45px !important;
+					}
+					h4 {
+						margin-bottom: 15px;
+					}
+					p {
+						margin-bottom: 25px;
+					}
+				}
+			}
+		}
+		
+	}
+	.custom-production-contact-form {
+		padding: 60px 15px;
+		h3 {
+			font-size: 30px;
+			font-weight: 700;
+			margin-top: 0px;
+		}
+		.amform-form {
+			box-shadow: 0px 15px 35px rgba(206, 206, 206, 0.25);	
+			padding: 15px 15px 10px 15px;	
+			max-width: 1000px;
+			.amform-textinfo-attachment-text {
+				font-size: 14px;
+				padding: 5px 10px;
+				background: #f7f7f7;
+				width: max-content;
+				border-radius: 4px;
+			}
+			.amcform-toolbar {
+				margin-top: 20px;
+				width: 100%;
+				text-align: center;
+			}
+		}
+	}
+	.custom-production-benefits {
+		.pagebuilder-column-line .pagebuilder-column {
+			box-shadow: 0px 15px 35px rgba(206, 206, 206, 0.25);	
+		}
+	}
+}
+
+//
+//  Desktop min 768px
+//  _____________________________________________
+
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
+	.custom-production-top {
+		padding: 0px 15px 120px 15px;
+		h1 {
+			font-size: 46px;
+		}
+		h4 {
+			font-size: 24px;
+		}
+	}
+	.custom-production-boxes {
+		.pagebuilder-column-group {
+			padding: 100px 0px;
+			.pagebuilder-column-line {
+				gap: 30px;
+				.pagebuilder-column {
+					background: @color-white;
+					color: @color-black;
+					padding: 30px;
+					h4 {
+						font-size: 26px;
+					}
+					img {
+						height: 55px !important;
+					}
+				}
+			}
+		}
+		
+	}
+	.custom-production-contact-form {
+		padding: 120px 15px;
+		h3 {
+			font-size: 46px;
+		}
+		.amform-form {
+
+			padding: 40px 40px 25px 40px;	
+
+		}
+	}
+}

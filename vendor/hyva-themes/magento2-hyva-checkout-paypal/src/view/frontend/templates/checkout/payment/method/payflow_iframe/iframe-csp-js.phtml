@@ -1,0 +1,47 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2020-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+declare(strict_types=1);
+
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\HyvaCsp;
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Element\Template;
+
+/** @var Template $block */
+/** @var Escaper $escaper */
+/** @var ViewModelRegistry $viewModels */
+/** @var HyvaCsp $hyvaCsp */
+
+?>
+<script>
+function PaymentMethodPayflowIframe() {
+    return {
+        init() {
+            const { methodCode } = this.$el.dataset;
+            const iframe = document.getElementById(`${methodCode}`);
+
+            let iframeIsLoaded = false;
+
+            document.addEventListener('click', iframe.stopEventPropagation, true);
+
+            iframe.addEventListener('load', () => {
+                if (iframeIsLoaded) {
+                    iframe.contentWindow.location.reload();
+                    document.removeEventListener('click', iframe.stopEventPropagation, true);
+                }
+
+                iframeIsLoaded = true;
+            })
+        }
+    }
+}
+
+window.addEventListener('alpine:init', () => Alpine.data('PaymentMethodPayflowIframe', PaymentMethodPayflowIframe), {once: true});
+</script>
+<?php $hyvaCsp->registerInlineScript() ?>

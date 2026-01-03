@@ -1,0 +1,118 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2022-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+declare(strict_types=1);
+
+use Hyva\Theme\ViewModel\HyvaCsp;
+use Magento\Framework\Escaper;
+
+/** @var Escaper $escaper */
+/** @var HyvaCsp $hyvaCsp */
+?>
+<script>
+    function hyvaCheckoutAddressListModal() {
+        return Object.assign(
+            hyva.modal.apply(this),
+            {
+                showModalEvent() {
+                    if (this.$event.detail.type === this.$el.dataset.typeNamespace) {
+                        this.$dispatch(this.$el.dataset.typeShowEvent)
+                    }
+                },
+                triggerShowModal() {
+                    this.show(this.$el.dataset.dialogRefName, this.$el.dataset.focusAfterHide)
+                },
+                hideModalEvent() {
+                    if (this.$event.detail.type === this.$el.dataset.typeNamespace) {
+                        this.$dispatch(this.$el.dataset.typeHideEvent)
+                    }
+                }
+            }
+        )
+    }
+    function hyvaCheckoutAddressFormCreateNew() {
+        return {
+            newAddress() {
+                Livewire.emitTo(this.$el.dataset.modalAddressFormBlockName, 'create')
+            }
+        }
+    }
+    function hyvaCheckoutAddressSelector() {
+        return {
+            id: parseInt(this.$el.dataset.id),
+            activeEntityClasses() {
+                const active = this.id === parseInt(this.$el.dataset.activeAddressEntity);
+                return {
+                    'active': active,
+                    'bg-primary': active,
+                    'bg-opacity-10': active,
+                    'border-primary': active,
+
+                    'inactive': !active,
+                    'bg-white': !active,
+                }
+            },
+            editAddress() {
+                Livewire.emitTo(this.$el.dataset.modalAddressFormBlockName, 'edit')
+            }
+        }
+    }
+    function hyvaCheckoutAddressListForm() {
+        return Object.assign(
+            hyva.formValidation.apply(this),
+            {
+                saveForm() {
+                    this.validate()
+                        .then(() => this.$wire.submit())
+                        .catch(() => {})
+                },
+                cancelForm() {
+                    window.hyva.modal.pop()
+                }
+            }
+        )
+    }
+    function hyvaCheckoutAddressListGrid() {
+        return {
+            open: false,
+
+            toggle: {
+                ['x-bind:aria-expanded']() {
+                    return this.open;
+                },
+                ['x-on:click']() {
+                    this.open = !this.open;
+                    this.$el.innerText = this.open
+                        ? '<?= $escaper->escapeHtml(__('Show less')) ?>'
+                        : '<?= $escaper->escapeHtml(__('Show all')) ?>';
+                },
+            },
+            details: {
+                ['x-bind:data-expanded']() {
+                    return `${this.open}`;
+                },
+            },
+        }
+    }
+
+    window.addEventListener(
+        'alpine:init',
+        () => {
+            Alpine.data('hyvaCheckoutAddressListModal', hyvaCheckoutAddressListModal)
+            Alpine.data('hyvaCheckoutAddressFormCreateNew', hyvaCheckoutAddressFormCreateNew)
+            Alpine.data('hyvaCheckoutAddressSelector', hyvaCheckoutAddressSelector)
+            Alpine.data('hyvaCheckoutAddressListForm', hyvaCheckoutAddressListForm)
+            Alpine.data('hyvaCheckoutAddressListGrid', hyvaCheckoutAddressListGrid)
+
+            <?php /* Backwards compatibility: method name is deprecated, use hyvaCheckoutAddressListGrid instead. */ ?>
+            Alpine.data('hyvaExpandSavedAddress', hyvaCheckoutAddressListGrid)
+        },
+        { once: true }
+    )
+</script>
+<?php $hyvaCsp->registerInlineScript() ?>

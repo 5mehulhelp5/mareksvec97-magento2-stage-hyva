@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Ecwhim. All rights reserved.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Indexer/etc/indexer.xsd">
+    <indexer id="ecwhim_seotemplates_product_template_template"
+             view_id="ecwhim_seotemplates_product_template_template"
+             class="Ecwhim\SeoTemplates\Model\Indexer\ProductTemplate\Template\TemplateProductIndexer"
+             shared_index="ecwhim_seotemplates_product_template">
+        <title translate="true">Ecwhim SEO Template Products</title>
+        <description translate="true">Indexed template/product association</description>
+    </indexer>
+    <indexer id="ecwhim_seotemplates_product_template_product"
+             view_id="ecwhim_seotemplates_product_template_product"
+             class="Ecwhim\SeoTemplates\Model\Indexer\ProductTemplate\Product\ProductTemplateIndexer"
+             shared_index="ecwhim_seotemplates_product_template">
+        <title translate="true">Ecwhim SEO Product Templates</title>
+        <description translate="true">Indexed product/template association</description>
+    </indexer>
+</config>

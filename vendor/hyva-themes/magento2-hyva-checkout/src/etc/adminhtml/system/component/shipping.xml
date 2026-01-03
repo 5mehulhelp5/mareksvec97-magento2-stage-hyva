@@ -1,0 +1,34 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2022-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+-->
+<include xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_include.xsd"
+>
+    <group id="shipping"
+           showInDefault="1"
+           showInStore="1"
+           showInWebsite="1"
+           translate="label"
+    >
+        <label>Shipping</label>
+
+        <field id="address_list_view"
+               translate="label comment"
+               type="select"
+               sortOrder="10"
+               showInDefault="1"
+               showInWebsite="1"
+               showInStore="1"
+        >
+            <label>Address list view</label>
+            <comment>Only for non-guest users.</comment>
+            <source_model>Hyva\Checkout\Model\Config\Source\AddressRendererType</source_model>
+        </field>
+    </group>
+</include>

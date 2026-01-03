@@ -1,0 +1,39 @@
+//
+//  Common
+//  _____________________________________________
+
+& when (@media-common = true) {
+	#discount-coupon-form, .payment-option-content {
+			.fieldset.coupon, #discount-form {
+				height: 40px;
+				display: flex;
+				align-items: center;
+				border: 1px solid white;
+				.label {
+					display: none;
+				}
+				.field {
+					width: 100%;
+					margin: 0px;
+					input {
+						border: none;
+					}
+				}
+				.actions-toolbar {
+					.primary {
+						button {
+							margin: 0px !important;
+							height: 40px;
+							display: flex;
+							align-items: center;
+							justify-content: center;
+							box-shadow: none;
+							border: none;
+							background: @primary-color;
+							color: @color-white;
+						}
+					}
+				}
+			}
+	}
+}

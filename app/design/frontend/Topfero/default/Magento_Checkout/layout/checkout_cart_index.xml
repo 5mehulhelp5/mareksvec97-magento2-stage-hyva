@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceBlock name="checkout.cart.summary.title" remove="false"/>
+        <move element="checkout.cart.coupon" destination="cart.summary" before="checkout.cart.methods.bottom"/>
+        <referenceBlock name="cart.summary">
+        <block class="Magento\Framework\View\Element\Template" name="cart.payment.icon" after="-">
+                        <arguments>
+                            <argument name="template" xsi:type="string">Magento_Catalog::product/view/payments-icon.phtml</argument>
+                        </arguments>
+        </block>
+        </referenceBlock>  
+        <referenceBlock name="content">
+            <block class="Magento\Framework\View\Element\Template" name="cart.benefits" after="-">
+                        <arguments>
+                            <argument name="template" xsi:type="string">Magento_Checkout::cart/cart-benefits.phtml</argument>
+                        </arguments>
+        </block>
+        </referenceBlock>
+          
+    </body>
+</page>

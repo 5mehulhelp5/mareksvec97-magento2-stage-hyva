@@ -1,0 +1,57 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <tab id="magecomp" translate="label" sortOrder="100" class="magecomp-logo">
+            <label><![CDATA[]]></label>
+        </tab>
+        <section id="quickcontact" sortOrder="150" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
+            <label>Quick Contact</label>
+            <tab>magecomp</tab>
+            <resource>Magecomp_Quickcontact::quickcontactconfig</resource>
+            <group id="general" translate="label" sortOrder="10" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Configuration</label>
+                <field id="enable" translate="label" sortOrder="10" type="select" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Quick Contact</label>
+                    <source_model>Magento\Config\Model\Config\Source\Enabledisable</source_model>
+                </field>
+                <field id="adminmailreceiver" translate="label" sortOrder="20" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Email ID of Admin</label>
+                    <comment>Email ID on which you want to receive email</comment>
+                    <validate>required-entry validate-email</validate>
+                    <depends>
+                        <field id="*/*/enable">1</field>
+                    </depends>
+                </field>
+                <field id="email_template" translate="label" sortOrder="30" type="select" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Email Template</label>
+                    <source_model>Magento\Config\Model\Config\Source\Email\Template</source_model>
+                    <depends>
+                        <field id="*/*/enable">1</field>
+                    </depends>
+                </field>
+                <field id="emailsender" translate="label" sortOrder="40" type="select" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Email Sender</label>
+                    <source_model>Magento\Config\Model\Config\Source\Email\Identity</source_model>
+                    <depends>
+                        <field id="*/*/enable">1</field>
+                    </depends>
+                </field>
+                <field id="emailsubject" translate="label" sortOrder="50" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Email Subject</label>
+                    <validate>required-entry</validate>
+                    <depends>
+                        <field id="*/*/enable">1</field>
+                    </depends>
+                </field>
+                <field id="bgcolor" translate="label"  sortOrder="60" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Background Color</label>
+                        <validate>required-entry</validate>
+                        <frontend_model>Magecomp\Quickcontact\Block\Adminhtml\Color</frontend_model>
+                        <depends>
+                        <field id="*/*/enable">1</field>
+                    </depends>
+                    </field>
+            </group>
+        </section>
+    </system>
+</config>

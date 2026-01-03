@@ -1,0 +1,74 @@
+<?php
+// Získanie inštancie Object Managera - použitie v príklade, nie pre produkčný kód
+$objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+
+// Získanie store managera a konfigurácie
+$storeManager = $objectManager->get('\Magento\Store\Model\StoreManagerInterface');
+$storeConfig = $objectManager->get('\Magento\Framework\App\Config\ScopeConfigInterface');
+
+// Získanie zoznamu všetkých websites
+$websites = $storeManager->getWebsites();
+?>
+
+<div class="switcher language switcher-language page-main justify-content-center" data-ui-id="language-switcher" id="switcher-language">
+    <div class="options switcher-options">
+        <ul class="d-flex gap-4 flex-wrap justify-content-center"> 
+            <?php foreach ($websites as $website) : ?>
+                <?php foreach ($website->getGroups() as $group) : ?>
+                    <?php foreach ($group->getStores() as $store) : ?>
+                        <?php
+                        // Získanie potrebných údajov pre store
+                        $storeId = $store->getId();
+                        $storeName = $store->getName();
+                        $storeCode = $store->getCode();
+                        $baseUrl = $store->getBaseUrl();
+                        $localeCode = $storeConfig->getValue('general/locale/code', \Magento\Store\Model\ScopeInterface::SCOPE_STORES, $storeCode);
+
+                        // Ensure $localeCode is a string before calling substr()
+                        $localeCodeShort = !empty($localeCode) ? substr($localeCode, 0, 2) : 'en'; // default to 'en' if $localeCode is null or empty
+                        
+                        $imageUrl = $block->getViewFileUrl('Magento_Store::img/circle/' . $localeCodeShort . '.png');
+                        
+                        // Nastavenie špecifických URL podľa kódu store
+                        if ($storeCode == 'metalopro_it') {
+                            $baseUrl = 'https://metalopro.it';
+                        } elseif ($storeCode == 'metalopro_at') {
+                            $baseUrl = 'https://metalopro.at';
+                            $imageUrl = $block->getViewFileUrl('Magento_Store::img/circle/at.png');
+                        } elseif ($storeCode == 'metalopro_de') {
+                            $baseUrl = 'https://metalopro.de';
+                        } elseif ($storeCode == 'default') {
+                            $baseUrl = 'https://magento-1503313-5759661.cloudwaysapps.com';
+                        } elseif ($storeCode == 'steelbro_cz') {
+                            $baseUrl = 'https://steelbro.cz';
+                        }
+                        elseif ($storeCode == 'metalopro_fi') {
+                            $baseUrl = 'https://metalopro.fi';
+                            $storeName = "metalopro.fi";
+                        }
+                        elseif ($storeCode == 'metalopro_se') {
+                            $baseUrl = 'https://metalopro.se';
+                            $storeName = "metalopro.se";
+                            $imageUrl = $block->getViewFileUrl('Magento_Store::img/circle/se-sv.png');
+                        }
+                        elseif ($storeCode == 'metalopro_dk') {
+                            $baseUrl = 'https://metalopro.dk';
+                            $storeName = "metalopro.dk";
+                            $imageUrl = $block->getViewFileUrl('Magento_Store::img/circle/dk.png');
+                        }
+
+                        if (in_array($storeCode, ['metalopro_it', 'metalopro_at', 'metalopro_de', 'default', 'steelbro_cz', 'metalopro_fi', 'metalopro_se', 'metalopro_dk'])) :
+                        ?>
+                            <li class="language d-flex switcher-option">
+                                <a href="<?= $block->escapeUrl($baseUrl) ?>" class="d-flex align-items-center gap-2">
+                                    <img src="<?= $block->escapeUrl($imageUrl) ?>" alt="<?= $block->escapeHtmlAttr($localeCodeShort) ?>" />
+                                    <span><?= $block->escapeHtml($storeName) ?></span>
+                                </a>
+                            </li>
+                        <?php endif; ?>
+                    <?php endforeach; ?>
+                <?php endforeach; ?>
+            <?php endforeach; ?>
+        </ul>
+    </div>
+</div>
