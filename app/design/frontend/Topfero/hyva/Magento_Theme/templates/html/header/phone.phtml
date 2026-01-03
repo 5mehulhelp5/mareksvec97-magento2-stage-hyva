@@ -31,7 +31,7 @@ $dotLabel      = $isOpen ? __('K dispozícii') : __('Mimo pracovnej doby');
 <div class="flex items-center gap-2">
     <!-- Mobil: okrúhla ikonka -->
     <a href="tel:<?= $escaper->escapeHtmlAttr($telHref) ?>"
-       class="inline-flex md:hidden items-center justify-center w-10 h-10 min-w-[48px] min-h-[48px] rounded-full bg-gray-100 hover:bg-gray-200 transition-colors relative text-slate-800"
+       class="inline-flex md:hidden items-center justify-center w-10 h-10 rounded-lg bg-gray-100 hover:bg-gray-200 transition-colors relative text-slate-800"
        aria-label="<?= $escaper->escapeHtmlAttr(__('Zavolať')) ?>"
        title="<?= $escaper->escapeHtmlAttr(__('Zavolať')) ?>">
         <span class="relative inline-flex">
@@ -43,7 +43,7 @@ $dotLabel      = $isOpen ? __('K dispozícii') : __('Mimo pracovnej doby');
 
     <!-- Tablet/desktop: pill s výškou 48px, zarovnanie ako customer/cart -->
     <a href="tel:<?= $escaper->escapeHtmlAttr($telHref) ?>"
-       class="hidden md:inline-flex items-center md:h-[48px] min-w-[48px] min-h-[48px] h-full gap-2 bg-gray-100 px-3 rounded-full hover:bg-gray-200 transition-colors relative text-slate-800">
+       class="hidden md:inline-flex items-center h-11 gap-2 border border-gray-200 bg-white px-3 rounded-lg hover:bg-gray-50 transition-colors relative text-slate-800">
         <span class="relative inline-flex">
             <?= $heroicons->phoneHtml('', 24, 24, ["aria-hidden" => "true"]) ?>
             <span class="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full <?= $dotClass ?>"
