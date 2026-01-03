@@ -1,107 +1,67 @@
 @layer components {
-  .section {
-    @apply py-12 md:py-20;
-  }
+    .section-spacing {
+        @apply py-12 md:py-20;
+    }
 
-  .container-brand {
-    @apply max-w-7xl mx-auto px-4;
-  }
+    .card-product {
+        @apply bg-white rounded-2xl shadow-lg hover:shadow-2xl border border-gray-100 p-6 transition-all duration-300 overflow-hidden;
+    }
 
-  .btn-primary {
-    @apply bg-brand text-white font-bold rounded-lg shadow-lg px-8 py-6 transition-all duration-300;
-  }
+    .badge-section {
+        @apply inline-block px-4 py-2 rounded-full text-sm font-medium bg-brand text-white;
+    }
 
-  .btn-primary:hover {
-    @apply bg-brand-hover shadow-xl;
-  }
+    .badge-product {
+        @apply px-3 py-1 rounded-full text-xs sm:text-sm font-bold text-white;
+    }
 
-  .btn-outline {
-    @apply border-2 border-brand text-brand font-bold rounded-lg px-8 py-6 transition-all duration-300;
-  }
+    .badge-bestseller {
+        @apply bg-brand;
+    }
 
-  .btn-outline:hover {
-    @apply bg-brand text-white;
-  }
+    .badge-sale {
+        @apply bg-red-500;
+    }
 
-  .btn-primary--md {
-    @apply px-6 py-4;
-  }
+    .icon-circle {
+        @apply w-16 h-16 rounded-full flex items-center justify-center;
+    }
 
-  .card-product {
-    @apply bg-white rounded-2xl shadow-lg border border-gray-100 p-6 transition-all duration-300 overflow-hidden;
-  }
+    .icon-circle-on-brand {
+        @apply bg-white;
+    }
 
-  .card-product:hover {
-    @apply shadow-2xl;
-  }
+    .icon-circle-on-white {
+        @apply bg-brand-light;
+    }
 
-  .badge-section {
-    @apply inline-block px-4 py-2 rounded-full text-sm font-medium text-white bg-brand;
-  }
+    .icon-circle svg,
+    .icon-circle img {
+        @apply w-8 h-8;
+        color: theme("colors.brand.DEFAULT");
+    }
 
-  .badge-product {
-    @apply px-3 py-1 rounded-full text-xs sm:text-sm font-bold text-white;
-  }
+    .trust-banner {
+        @apply bg-brand py-12 rounded-2xl text-white;
+    }
 
-  .badge-product--bestseller {
-    @apply bg-brand;
-  }
+    .trust-banner-grid {
+        @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4;
+    }
 
-  .badge-product--sale {
-    @apply bg-red-500;
-  }
+    .trust-banner-item {
+        @apply flex items-center gap-4 font-bold;
+    }
 
-  .icon-circle {
-    @apply w-16 h-16 rounded-full flex items-center justify-center bg-brand-light;
-  }
+    .quantity-selector {
+        @apply flex items-center border-2 border-gray-200 rounded-lg overflow-hidden;
+    }
 
-  .icon-circle--inverse {
-    @apply bg-white;
-  }
+    .quantity-selector input {
+        @apply w-16 text-center font-bold border-0 focus:ring-0;
+    }
 
-  .icon-circle svg {
-    @apply w-8 h-8;
-    color: #7e9b84;
-  }
-
-  .trust-banner {
-    @apply bg-brand py-12 rounded-2xl;
-  }
-
-  .trust-banner__grid {
-    @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-8;
-  }
-
-  .trust-banner__item {
-    @apply flex items-center gap-4 text-white font-bold;
-  }
-
-  .trust-banner__icon {
-    @apply w-12 h-12 rounded-full flex items-center justify-center bg-white;
-  }
-
-  .trust-banner__icon svg {
-    @apply w-6 h-6;
-    color: #7e9b84;
-  }
-
-  .input-field {
-    @apply border-2 border-gray-200 rounded-lg px-4 py-3 transition-colors;
-  }
-
-  .input-field:focus {
-    @apply border-brand outline-none;
-  }
-
-  .qty-selector {
-    @apply border-2 border-gray-200 rounded-lg flex items-center overflow-hidden;
-  }
-
-  .qty-button {
-    @apply p-2 transition-colors hover:bg-gray-50;
-  }
-
-  .qty-input {
-    @apply w-16 text-center font-bold;
-  }
+    .quantity-selector button {
+        @apply p-2 hover:bg-gray-50 transition-all duration-300;
+    }
 }
