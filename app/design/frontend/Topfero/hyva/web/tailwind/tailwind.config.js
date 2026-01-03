@@ -14,6 +14,11 @@ module.exports = hyvaModules.mergeTailwindConfig({
           hover: '#6a8470',
           light: '#f0f4f1'
         },
+        primary: {
+          DEFAULT: '#7e9b84',
+          hover: '#6a8470',
+          light: '#f0f4f1'
+        },
         text: {
           secondary: '#666666'
         },
