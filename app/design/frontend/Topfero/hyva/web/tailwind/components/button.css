@@ -1,0 +1,86 @@
+@layer components {
+    .btn {
+        --btn-stroke: theme("colors.blue.400");
+        --btn-bg: theme("colors.white");
+        --btn-color: theme("colors.blue.700");
+        @apply flex justify-center items-center gap-1.5 border-2 rounded-md py-2.5 px-5 text-base font-medium select-none cursor-pointer align-middle ease-in-out duration-150;
+        border-color: var(--btn-stroke);
+        background-color: var(--btn-bg);
+        font-weight: 700;
+        color: var(--btn-color);
+        transition-property: theme("transitionProperty.colors"), box-shadow;
+
+        &:hover {
+            @apply shadow-lg;
+            border-color: var(--btn-hover-stroke, var(--btn-stroke));
+            background-color: var(--btn-hover-bg, var(--btn-bg));
+            color: var(--btn-hover-color, var(--btn-color));
+        }
+
+        &:focus-visible {
+            @apply outline outline-4 outline-blue-200/50 outline-offset-0;
+        }
+
+        &:active {
+            @apply shadow;
+            border-color: var(--btn-active-stroke, var(--btn-stroke));
+            background-color: var(--btn-active-bg, var(--btn-bg));
+            color: var(--btn-active-color, var(--btn-color));
+        }
+
+        &:disabled {
+            @apply opacity-70 cursor-not-allowed shadow-none hover:shadow-none;
+            border-color: var(--btn-disabled-stroke, theme("colors.slate.200"));
+            background-color: var(--btn-disabled-bg, theme("colors.white"));
+            color: var(--btn-disabled-color, theme("colors.slate.600"));
+        }
+    }
+
+
+      .btn-action {
+        @apply inline-flex items-center justify-center gap-2 rounded-full px-6 py-3
+                       bg-green-500 hover:bg-green-600 text-white font-bold transition
+                       focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-offset-2;
+      }
+    
+
+    .btn-primary {
+        --btn-stroke: transparent;
+        --btn-bg: theme("colors.primary.DEFAULT");
+        --btn-color: theme("colors.white");
+        --btn-hover-bg: theme("colors.primary.darker");
+        --btn-active-bg: theme("colors.primary.darker");
+        --btn-disabled-stroke: transparent;
+        --btn-disabled-bg: theme("colors.slate.600");
+        --btn-disabled-color: theme("colors.slate.50");
+    }
+
+    .btn-secondary {
+        @apply inline-flex items-center justify-center rounded-full px-5 py-2
+               text-sm font-semibold bg-slate-100 text-slate-700
+               hover:bg-slate-200
+               focus:outline-none focus:ring-2 focus:ring-slate-300
+               transition;
+      }
+      .btn-secondary:disabled {
+        @apply opacity-50 cursor-not-allowed;
+      }
+
+    .btn-flat {
+        --btn-stroke: transparent;
+        --btn-bg: transparent;
+        --btn-color: theme("colors.blue.700");
+        --btn-hover-color: theme("colors.blue.800");
+        --btn-active-stroke: currentcolor;
+        --btn-active-color: theme("colors.blue.800");
+    }
+
+    .btn-size-lg {
+        @apply py-4 px-8 text-lg;
+        font-size: 17px;
+    }
+
+    .btn-size-sm {
+        @apply py-2 px-4 text-sm;
+    }
+}
