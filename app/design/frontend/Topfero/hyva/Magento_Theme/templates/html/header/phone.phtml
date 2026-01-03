@@ -35,7 +35,7 @@ $dotLabel      = $isOpen ? __('K dispozícii') : __('Mimo pracovnej doby');
        aria-label="<?= $escaper->escapeHtmlAttr(__('Zavolať')) ?>"
        title="<?= $escaper->escapeHtmlAttr(__('Zavolať')) ?>">
         <span class="relative inline-flex">
-            <?= $heroicons->phoneHtml('text-primary', 24, 24, ["aria-hidden" => "true"]) ?>
+            <?= $heroicons->phoneHtml('', 24, 24, ["aria-hidden" => "true"]) ?>
             <span class="absolute -top-1 -right-1 w-3 h-3 rounded-full <?= $dotClass ?>"
                   title="<?= $escaper->escapeHtmlAttr($dotLabel) ?>"></span>
         </span>
@@ -45,7 +45,7 @@ $dotLabel      = $isOpen ? __('K dispozícii') : __('Mimo pracovnej doby');
     <a href="tel:<?= $escaper->escapeHtmlAttr($telHref) ?>"
        class="hidden md:inline-flex items-center h-11 gap-2 border border-gray-200 bg-white px-3 rounded-lg hover:bg-gray-50 transition-colors relative text-slate-800">
         <span class="relative inline-flex">
-            <?= $heroicons->phoneHtml('text-primary', 24, 24, ["aria-hidden" => "true"]) ?>
+            <?= $heroicons->phoneHtml('', 24, 24, ["aria-hidden" => "true"]) ?>
             <span class="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full <?= $dotClass ?>"
                   title="<?= $escaper->escapeHtmlAttr($dotLabel) ?>"></span>
         </span>
