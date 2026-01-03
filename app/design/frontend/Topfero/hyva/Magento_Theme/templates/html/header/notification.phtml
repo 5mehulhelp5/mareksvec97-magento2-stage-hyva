@@ -36,16 +36,16 @@ $ctaUrl  = (string) $scopeConfig->getValue('metalio/topbar/cta_url',  ScopeInter
 
 <!-- Top benefit bar (non-sticky) -->
 <div class="bg-primary text-white">
-  <div class="container mx-auto px-3 sm:px-4">
-    <div class="flex items-center gap-3 py-2">
+  <div class="container mx-auto px-4">
+    <div class="flex items-center gap-4 py-2 text-sm">
 
       <!-- Horizontálny zoznam benefitov: scroll len na mobile -->
-      <ul class="flex-1 flex items-center gap-4 sm:gap-6 overflow-x-auto md:overflow-visible scrollbar-none text-[12px] md:text-[13px]">
+      <ul class="flex-1 flex items-center gap-6 overflow-x-auto md:overflow-visible scrollbar-none text-[12px] md:text-[13px]">
         <?php foreach ($benefits as $benefit): ?>
           <?php if (trim($benefit) !== ''): ?>
             <li class="shrink-0 inline-flex items-center gap-2">
               <span class="inline-grid place-items-center size-5 text-white/95">
-                <?= $hero->badgeCheckHtml('w-4 h-4 sm:w-5 sm:h-5') ?>
+                <?= $hero->badgeCheckHtml('w-4 h-4') ?>
               </span>
               <span class="whitespace-nowrap"><?= $block->escapeHtml($benefit) ?></span>
             </li>
@@ -56,9 +56,9 @@ $ctaUrl  = (string) $scopeConfig->getValue('metalio/topbar/cta_url',  ScopeInter
       <!-- CTA: Pozrite si našu výrobu (z adminu) -->
       <?php if (trim($ctaText) !== '' && trim($ctaUrl) !== ''): ?>
         <a href="<?= $block->escapeUrl($ctaUrl) ?>"
-           class="hidden lg:inline-flex items-center gap-2 rounded-md bg-white/10 px-3 py-1.5 ring-1 ring-white/20 transition
-                  hover:bg-white/20 hover:ring-white/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white text-[12px] md:text-[13px]">
-          <?= $heroSolid->playHtml('w-5 h-5 text-white') ?>
+           class="hidden xl:inline-flex items-center gap-2 rounded-lg bg-white/20 px-3 py-1.5 ring-1 ring-white/20 transition
+                  hover:bg-white/30 hover:ring-white/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white text-[12px] md:text-[13px]">
+          <?= $heroSolid->playHtml('w-4 h-4 text-white') ?>
           <span><?= $block->escapeHtml($ctaText) ?></span>
         </a>
       <?php endif; ?>
