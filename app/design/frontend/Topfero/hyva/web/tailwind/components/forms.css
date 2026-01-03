@@ -6,7 +6,7 @@
 .form-select,
 .form-multiselect,
 .form-textarea {
-    @apply border-2 border-gray-200 rounded-lg px-4 py-3 shadow-sm min-h-a11y transition-colors;
+    @apply border-2 border-gray-200 rounded-lg px-4 py-3 shadow-sm min-h-[44px] transition-colors;
 
     &:focus {
         @apply border-brand outline-none ring-0;
