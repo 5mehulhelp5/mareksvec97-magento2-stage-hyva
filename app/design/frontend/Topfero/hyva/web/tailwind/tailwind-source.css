@@ -21,6 +21,7 @@
 @import url(components/typography.css);
 @import url(components/page-builder.css);
 @import url(utilities/mask-overflow.css);
+@import url(tokens.css);
 
 /* purgecss end ignore */
 
