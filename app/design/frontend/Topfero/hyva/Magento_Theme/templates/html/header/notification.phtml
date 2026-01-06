@@ -1,6 +1,9 @@
 <?php
 /**
- * Top bar benefity (Hyvä)
+ * Top bar benefity (Hyvä) - Figma Make style
+ * - XL: benefity vľavo + CTA button vpravo
+ * - MD..LG: benefity v strede (bez CTA)
+ * - Mobile: marquee benefity vľavo + CTA fixne vpravo (rovnaký dizajn)
  */
 
 declare(strict_types=1);
@@ -15,54 +18,134 @@ use Hyva\Theme\ViewModel\HeroiconsSolid;
 $hero      = $viewModels->require(HeroiconsOutline::class);
 $heroSolid = $viewModels->require(HeroiconsSolid::class);
 
-/** Získaj ScopeConfig – primárne z bloku, inak fallback cez ObjectManager */
+/** ScopeConfig */
 $scopeConfig = method_exists($block, 'getScopeConfig') ? $block->getScopeConfig() : null;
 if (!$scopeConfig) {
     $scopeConfig = \Magento\Framework\App\ObjectManager::getInstance()
         ->get(\Magento\Framework\App\Config\ScopeConfigInterface::class);
 }
 
-/** Načítaj benefity + CTA z adminu */
-$benefits = [
+/** DB: benefity + CTA */
+$benefitsRaw = [
     (string) $scopeConfig->getValue('metalio/topbar/benefit_1', ScopeInterface::SCOPE_STORE),
     (string) $scopeConfig->getValue('metalio/topbar/benefit_2', ScopeInterface::SCOPE_STORE),
     (string) $scopeConfig->getValue('metalio/topbar/benefit_3', ScopeInterface::SCOPE_STORE),
     (string) $scopeConfig->getValue('metalio/topbar/benefit_4', ScopeInterface::SCOPE_STORE),
 ];
 
-$ctaText = (string) $scopeConfig->getValue('metalio/topbar/cta_text', ScopeInterface::SCOPE_STORE);
-$ctaUrl  = (string) $scopeConfig->getValue('metalio/topbar/cta_url',  ScopeInterface::SCOPE_STORE);
+$benefits = array_values(array_filter(array_map('trim', $benefitsRaw), static fn($v) => $v !== ''));
+
+$ctaText = trim((string) $scopeConfig->getValue('metalio/topbar/cta_text', ScopeInterface::SCOPE_STORE));
+$ctaUrl  = trim((string) $scopeConfig->getValue('metalio/topbar/cta_url',  ScopeInterface::SCOPE_STORE));
+$hasCta  = ($ctaText !== '' && $ctaUrl !== '');
 ?>
 
-<!-- Top benefit bar (non-sticky) -->
-<div class="bg-primary text-white">
-  <div class="container max-w-7xl mx-auto px-4">
-    <div class="flex items-center gap-4 py-2 text-sm">
+<?php if (!empty($benefits) || $hasCta): ?>
+<div class="text-white" style="background-color:#7e9b84; max-height:48px;">
+    <div class="container mx-auto px-4">
 
-      <!-- Horizontálny zoznam benefitov: scroll len na mobile -->
-      <ul class="flex-1 flex items-center gap-6 overflow-x-auto md:overflow-visible scrollbar-none text-[12px] md:text-[13px]">
-        <?php foreach ($benefits as $benefit): ?>
-          <?php if (trim($benefit) !== ''): ?>
-            <li class="shrink-0 inline-flex items-center gap-2">
-              <span class="inline-grid place-items-center size-5 text-white/95">
-                <?= $hero->badgeCheckHtml('w-4 h-4') ?>
-              </span>
-              <span class="whitespace-nowrap"><?= $block->escapeHtml($benefit) ?></span>
-            </li>
-          <?php endif; ?>
-        <?php endforeach; ?>
-      </ul>
+        <!-- XL (>=1280): benefity vľavo + CTA vpravo -->
+        <div class="hidden xl:flex items-center justify-between gap-6 py-2 h-[48px] text-sm">
+            <div class="flex items-center gap-6 min-w-0">
+                <?php foreach ($benefits as $benefit): ?>
+                    <div class="flex items-center gap-2 shrink-0">
+                        <span class="inline-flex items-center justify-center">
+                            <?= /* @noEscape */ $hero->badgeCheckHtml('w-4 h-4 text-white') ?>
+                        </span>
+                        <span class="whitespace-nowrap">
+                            <?= $block->escapeHtml($benefit) ?>
+                        </span>
+                    </div>
+                <?php endforeach; ?>
+            </div>
 
-      <!-- CTA: Pozrite si našu výrobu (z adminu) -->
-      <?php if (trim($ctaText) !== '' && trim($ctaUrl) !== ''): ?>
-        <a href="<?= $block->escapeUrl($ctaUrl) ?>"
-           class="hidden xl:inline-flex items-center gap-2 rounded-lg bg-white/20 px-3 py-1.5 ring-1 ring-white/20 transition
-                  hover:bg-white/30 hover:ring-white/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white text-[12px] md:text-[13px]">
-          <?= $heroSolid->playHtml('w-4 h-4 text-white') ?>
-          <span><?= $block->escapeHtml($ctaText) ?></span>
-        </a>
-      <?php endif; ?>
+            <?php if ($hasCta): ?>
+                <a
+                    href="<?= $block->escapeUrl($ctaUrl) ?>"
+                    class="shrink-0 inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white/20 hover:bg-white/30 transition-colors whitespace-nowrap"
+                >
+                    <?= /* @noEscape */ $heroSolid->playHtml('w-4 h-4 text-white') ?>
+                    <span><?= $block->escapeHtml($ctaText) ?></span>
+                </a>
+            <?php endif; ?>
+        </div>
+
+        <!-- Tablet (md..lg): statický rad bez CTA -->
+        <div class="hidden md:flex xl:hidden justify-center py-2 h-[48px]">
+            <div class="flex items-center gap-4 text-xs text-white">
+                <?php foreach ($benefits as $benefit): ?>
+                    <div class="flex items-center gap-2 shrink-0">
+                        <span class="inline-flex items-center justify-center">
+                            <?= /* @noEscape */ $hero->badgeCheckHtml('w-3.5 h-3.5 text-white') ?>
+                        </span>
+                        <span class="whitespace-nowrap">
+                            <?= $block->escapeHtml($benefit) ?>
+                        </span>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+        </div>
+
+        <!-- Mobile: marquee vľavo + CTA fixne vpravo -->
+        <div class="md:hidden py-2 h-[48px] overflow-hidden relative">
+            <div class="flex items-center gap-3">
+                <!-- Marquee: berie zvyšok šírky -->
+                <div class="flex-1 overflow-hidden">
+                    <div class="topfero-topbar-marquee flex items-center">
+                        <!-- track 1 -->
+                        <div class="flex items-center gap-6 px-1 text-xs text-white whitespace-nowrap">
+                            <?php foreach ($benefits as $benefit): ?>
+                                <div class="flex items-center gap-2">
+                                    <span class="inline-flex items-center justify-center">
+                                        <?= /* @noEscape */ $hero->badgeCheckHtml('w-3.5 h-3.5 text-white') ?>
+                                    </span>
+                                    <span><?= $block->escapeHtml($benefit) ?></span>
+                                </div>
+                            <?php endforeach; ?>
+                        </div>
+                        <!-- track 2 -->
+                        <div class="flex items-center gap-6 px-1 text-xs text-white whitespace-nowrap" aria-hidden="true">
+                            <?php foreach ($benefits as $benefit): ?>
+                                <div class="flex items-center gap-2">
+                                    <span class="inline-flex items-center justify-center">
+                                        <?= /* @noEscape */ $hero->badgeCheckHtml('w-3.5 h-3.5 text-white') ?>
+                                    </span>
+                                    <span><?= $block->escapeHtml($benefit) ?></span>
+                                </div>
+                            <?php endforeach; ?>
+                        </div>
+                    </div>
+                </div>
+
+                <?php if ($hasCta): ?>
+                    <a
+                        href="<?= $block->escapeUrl($ctaUrl) ?>"
+                        class="shrink-0 inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white/20 hover:bg-white/30 transition-colors whitespace-nowrap"
+                    >
+                        <?= /* @noEscape */ $heroSolid->playHtml('w-4 h-4 text-white') ?>
+                        <span class="text-xs"><?= $block->escapeHtml($ctaText) ?></span>
+                    </a>
+                <?php endif; ?>
+            </div>
+
+            <!-- jemný fade pod CTA (vyzerá ako figma) -->
+            <div
+                class="pointer-events-none absolute right-0 top-0 h-full w-10"
+                style="background: linear-gradient(to left, rgba(126,155,132,1), rgba(126,155,132,0));">
+            </div>
+        </div>
 
     </div>
-  </div>
 </div>
+
+<style>
+@keyframes topfero-topbar-scroll {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+.topfero-topbar-marquee {
+  width: max-content;
+  animation: topfero-topbar-scroll 22s linear infinite;
+}
+</style>
+<?php endif; ?>

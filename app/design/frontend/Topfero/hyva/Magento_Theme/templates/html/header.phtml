@@ -172,7 +172,7 @@ $showLanguage = $block->getShowLanguage() !== null ? (bool) $block->getShowLangu
     @private-content-loaded.window="getData"
     @resize.window.debounce="checkHeaderSize"
 >
-    <div class="container max-w-7xl px-4 py-3 md:py-4 grid grid-cols-[auto_auto] md:grid-cols-[auto_minmax(0px,1fr)_auto] gap-3 md:gap-6 items-center">
+    <div class="container px-4 py-3 md:py-4 grid grid-cols-[auto_auto] md:grid-cols-[auto_minmax(0px,1fr)_auto] gap-3 md:gap-6 items-center">
         <div class="flex items-center gap-3">
             <?= $block->getChildHtml('mobilemenu') ?>
             <?= $block->getChildHtml('logo'); ?>
@@ -203,7 +203,10 @@ $showLanguage = $block->getShowLanguage() !== null ? (bool) $block->getShowLangu
                 <a
             <?php endif ?>
                 id="menu-cart-icon"
-                class="flex items-center h-10 md:h-11 gap-2 bg-primary px-3 md:px-4 rounded-lg text-white shadow-sm hover:bg-primary/90 transition-colors duration-150"
+                class="relative inline-flex items-center justify-center gap-2 md:gap-2.5
+                       text-white p-2 md:px-4 md:py-2 rounded-lg
+                       shadow-md hover:shadow-lg transition-all
+                       bg-[#7e9b84] hover:bg-[#6d8a73]"
                 x-ref="cartButton"
                 :aria-disabled="isCartEmpty"
                 :aria-label="ariaLabel"
@@ -217,20 +220,28 @@ $showLanguage = $block->getShowLanguage() !== null ? (bool) $block->getShowLangu
                     title="<?= $escaper->escapeHtmlAttr(__('View cart')) ?>"
                 <?php endif ?>
             >
-                <div class="relative flex items-center">
-                    <?= $heroicons->shoppingCartHtml('text-white', 22, 22, ["aria-hidden" => "true"]) ?>
-                    <span
-                        x-text="summaryCount"
-                        x-show="summaryCount"
-                        x-cloak
-                        class="absolute -top-1 -right-1 min-w-[15px] h-[15px] flex items-center justify-center rounded-full bg-red-500 text-white text-[10px] font-bold leading-none shadow-blink"
-                        aria-hidden="true"
-                    ></span>
+                <span
+                    x-text="summaryCount()"
+                    x-show="summaryCount()"
+                    x-cloak
+                    class="absolute -top-1 -right-1 md:-top-2 md:-right-2
+                           min-w-[18px] h-[18px] md:min-w-[20px] md:h-[20px]
+                           flex items-center justify-center rounded-full
+                           bg-red-600 text-white text-[11px] font-bold leading-none
+                           border-2"
+                    style="animation: pulse-border 2s ease-in-out infinite;"
+                    aria-hidden="true"
+                ></span>
+
+                <div class="flex items-center">
+                    <?= $heroicons->shoppingCartHtml('text-white', 20, 20, ["aria-hidden" => "true"]) ?>
                 </div>
+
+
                 <span
                     x-show="summaryCount()"
                     x-html="subtotalHtml()"
-                    class="hidden md:inline text-sm font-semibold md:ml-1.5"
+                    class="hidden md:inline font-semibold text-sm"
                     x-cloak
                 ></span>
             <?php if ($showMiniCart): ?>
@@ -238,6 +249,7 @@ $showLanguage = $block->getShowLanguage() !== null ? (bool) $block->getShowLangu
             <?php else: ?>
             </a>
             <?php endif ?>
+
         </div>
 
         <div class="col-span-full mt-3 pt-3 border-t border-gray-100 md:mt-0 md:pt-0 md:border-0 md:col-span-1 md:col-start-2 md:row-start-1">
@@ -246,7 +258,7 @@ $showLanguage = $block->getShowLanguage() !== null ? (bool) $block->getShowLangu
     </div>
 
     <div class="border-t border-gray-200 bg-gray-50 hidden md:block">
-        <div class="container max-w-7xl">
+        <div class="container">
             <div class="flex items-center justify-between gap-6 h-[65px]">
                 <div class="min-w-0">
                     <?= $block->getChildHtml('topmenu') ?>
@@ -264,15 +276,14 @@ $showLanguage = $block->getShowLanguage() !== null ? (bool) $block->getShowLangu
     
 </div>
 <style>
-	@keyframes shadow-blink {
-	  0%, 100% {
-	    box-shadow: 0 0 0px rgba(239, 68, 68, 0.0);
-	  }
-	  50% {
-	    box-shadow: 0 0 8px rgba(239, 68, 68, 0.8);
-	  }
-	}
-	.shadow-blink {
-	  animation: shadow-blink 1.5s infinite;
-	}
+  @keyframes pulse-border {
+    0%, 100% {
+      border-color: rgba(220, 38, 38, 1);
+      box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.7);
+    }
+    50% {
+      border-color: rgba(220, 38, 38, 0.5);
+      box-shadow: 0 0 0 4px rgba(220, 38, 38, 0);
+    }
+  }
 </style>
