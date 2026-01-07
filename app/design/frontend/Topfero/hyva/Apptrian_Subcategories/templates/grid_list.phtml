@@ -1,0 +1,116 @@
+<?php
+/**
+ * @category  Apptrian
+ * @package   Apptrian_Subcategories
+ */
+
+/** @var $block \Apptrian\Subcategories\Block\GridList */
+$data       = $block->getSubcategoriesData();
+$categories = $data['categories'] ?? [];
+$options    = $data['options'] ?? [];
+$elements   = $options['sort_order'] ?? ['image','name'];
+$singleLink = (bool)($options['single_link'] ?? true);
+
+$imageAttributes = '';
+if (!empty($options['image_width']))  $imageAttributes .= ' width="'  . (int)$options['image_width']  . '"';
+if (!empty($options['image_height'])) $imageAttributes .= ' height="' . (int)$options['image_height'] . '"';
+?>
+
+<?php if (!empty($options['enabled']) && !empty($categories)): ?>
+  <section class="pb-8 bg-white">
+    <div class="mx-auto">
+      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-4">
+
+        <?php foreach ($categories as $c): ?>
+          <?php
+            $isCurrent   = (($data['current'] ?? null) == ($c['id'] ?? null));
+            $image       = $c['image'] ?? '';
+            $name        = $c['name'] ?? '';
+            $description = $c['description'] ?? '';
+            $url         = $c['url'] ?? '#';
+
+            // React-like card styling
+            $baseClasses =
+              'flex items-center gap-2 md:gap-3 p-3 md:p-4 rounded-xl border-2 transition-all ' .
+              'hover:shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#7e9b84]/30';
+
+            $stateClasses = $isCurrent
+              ? 'border-[#7e9b84] bg-[#7e9b84]/5 shadow-md'
+              : 'border-gray-200 hover:border-[#7e9b84]/50 bg-white';
+
+            $imgWrapClass = 'w-10 h-10 md:w-12 md:h-12 flex-shrink-0 flex items-center justify-center bg-gray-50 rounded-lg overflow-hidden';
+            $imgClass     = 'w-full h-full object-contain';
+            $textClass    = 'text-xs md:text-sm font-medium text-gray-900 text-left leading-tight';
+          ?>
+
+          <?php if ($singleLink): ?>
+            <a
+              href="<?= $block->escapeUrl($url) ?>"
+              class="<?= $baseClasses . ' ' . $stateClasses ?>"
+              title="<?= $block->escapeHtmlAttr($name) ?>"
+              <?= $isCurrent ? 'aria-current="page"' : '' ?>
+            >
+              <?php if (in_array('image', $elements, true) && $image): ?>
+                <div class="<?= $imgWrapClass ?>">
+                  <img
+                    src="<?= $block->escapeUrl($image) ?>"
+                    alt="<?= $block->escapeHtmlAttr($name) ?>"
+                    loading="lazy"
+                    decoding="async"
+                    class="<?= $imgClass ?>"
+                    <?= /* @noEscape */ $imageAttributes ?>
+                  />
+                </div>
+              <?php endif; ?>
+
+              <?php if (in_array('name', $elements, true) && $name): ?>
+                <span class="<?= $textClass ?>">
+                  <?= $block->escapeHtml($name) ?>
+                </span>
+              <?php endif; ?>
+
+              <?php if (in_array('description', $elements, true) && $description): ?>
+                <span class="sr-only"><?= $block->escapeHtml($description) ?></span>
+              <?php endif; ?>
+            </a>
+
+          <?php else: ?>
+            <div class="<?= $baseClasses . ' ' . $stateClasses ?>">
+              <a
+                href="<?= $block->escapeUrl($url) ?>"
+                class="w-full flex items-center gap-2 md:gap-3"
+                title="<?= $block->escapeHtmlAttr($name) ?>"
+                <?= $isCurrent ? 'aria-current="page"' : '' ?>
+              >
+                <?php if (in_array('image', $elements, true) && $image): ?>
+                  <div class="<?= $imgWrapClass ?>">
+                    <img
+                      src="<?= $block->escapeUrl($image) ?>"
+                      alt="<?= $block->escapeHtmlAttr($name) ?>"
+                      loading="lazy"
+                      decoding="async"
+                      class="<?= $imgClass ?>"
+                      <?= /* @noEscape */ $imageAttributes ?>
+                    />
+                  </div>
+                <?php endif; ?>
+
+                <?php if (in_array('name', $elements, true) && $name): ?>
+                  <span class="<?= $textClass ?>">
+                    <?= $block->escapeHtml($name) ?>
+                  </span>
+                <?php endif; ?>
+              </a>
+
+              <?php if (in_array('description', $elements, true) && $description): ?>
+                <span class="sr-only"><?= $block->escapeHtml($description) ?></span>
+              <?php endif; ?>
+            </div>
+          <?php endif; ?>
+
+        <?php endforeach; ?>
+
+      </div>
+    </div>
+  </section>
+<?php endif; ?>

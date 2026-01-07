@@ -20,7 +20,7 @@
         <referenceContainer name="head.additional">
             <block name="js.sticky.header" template="Magento_Theme::page/js/sticky-header.phtml">
                 <arguments>
-                    <argument name="hide_on_scroll_down" xsi:type="boolean">true</argument> <!-- Hide sticky header on scroll down (true/false) -->
+                    <argument name="hide_on_scroll_down" xsi:type="boolean">false</argument> <!-- Hide sticky header on scroll down (true/false) -->
                     <argument name="scroll_offset" xsi:type="number">100</argument> <!-- Offset before the helper reflects the scrollDir -->
                     <argument name="enable_css_only_sticky_style" xsi:type="boolean">false</argument> <!-- Enable CSS only solution (true/false) -->
                 </arguments>

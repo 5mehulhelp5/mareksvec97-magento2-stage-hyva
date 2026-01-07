@@ -32,30 +32,44 @@ $heroiconsSolid = $viewModels->require(HeroiconsSolid::class);
 $storeConfig = $viewModels->require(StoreConfig::class);
 $showMiniCart = $storeConfig->getStoreConfig(SidebarCart::XML_PATH_CHECKOUT_SIDEBAR_DISPLAY);
 
-$showCompare = $block->getShowCompare() !== null ? (bool) $block->getShowCompare() : true;
+$showCompare  = $block->getShowCompare() !== null ? (bool) $block->getShowCompare() : true;
 $showWishlist = $block->getShowWishlist() !== null ? (bool) $block->getShowWishlist() : true;
 $showLanguage = $block->getShowLanguage() !== null ? (bool) $block->getShowLanguage() : true;
 ?>
+
 <script>
     function initHeader () {
         return {
             searchOpen: false,
             cart: {},
+            isCartOpen: false,
+
+            // scroll behavior (mobile hide + shadow)
+            isScrolled: false,
+            scrollThreshold: 50,
+
             subtotalHtml() {
-                        return this.cart?.subtotal || '';
-                    },
+                return this.cart?.subtotal || '';
+            },
             init() {
                 this.checkHeaderSize();
+
+                this.onScroll();
+                window.addEventListener('scroll', this.onScroll.bind(this), { passive: true });
             },
+            onScroll() {
+                this.isScrolled = window.scrollY > this.scrollThreshold;
+            },
+
             checkHeaderSize() {
                 const pageHeader = document.querySelector('.page-header');
                 if (!pageHeader) return;
                 document.documentElement.style.setProperty("--page-header-height", `${pageHeader.offsetHeight}px`);
             },
+
             summaryCount() {
                 return this.cart.summary_count || 0;
             },
-            isCartOpen: false,
             getData() {
                 const data = this.$event.detail.data;
                 if (data.cart) { this.cart = data.cart }
@@ -72,27 +86,21 @@ $showLanguage = $block->getShowLanguage() !== null ? (bool) $block->getShowLangu
                 return !this.summaryCount()
             },
             openCart() {
-                this.$dispatch('toggle-cart', {
-                    isOpen: true
-                })
+                this.$dispatch('toggle-cart', { isOpen: true })
             },
             toggleCart() {
                 const event = this.$event;
                 if (event.detail && event.detail.isOpen !== undefined) {
                     this.isCartOpen = event.detail.isOpen
-                    if (!this.isCartOpen && this.$refs && this.$refs.cartButton) {
+                    if (!this.isCartOpen && this.$refs?.cartButton) {
                         this.$refs.cartButton.focus()
                     }
                 } else {
-                    <?php
-                    /*
-                     * The toggle-cart event was previously dispatched without parameter to open the drawer (not toggle).
-                     * Keeping this in here for backwards compatibility.
-                     */
-                    ?>
+                    // backwards compatibility
                     this.isCartOpen = true
                 }
             },
+
             searchClosed() {
                 return !this.searchOpen;
             },
@@ -115,9 +123,7 @@ $showLanguage = $block->getShowLanguage() !== null ? (bool) $block->getShowLangu
             compareProducts: null,
             itemCount: 0,
             hiddenIfEmpty() {
-                return {
-                    'hidden': this.itemCount < 1
-                }
+                return { 'hidden': this.itemCount < 1 }
             },
             linkAriaLabel() {
                 const countLabel = this.itemCount > 1
@@ -150,7 +156,6 @@ $showLanguage = $block->getShowLanguage() !== null ? (bool) $block->getShowLangu
             },
             receiveWishlistData() {
                 const data = this.$event.detail.data;
-
                 this.itemCount = data.wishlist && data.wishlist.items
                     ? data.wishlist.items.length
                     : 0;
@@ -164,14 +169,18 @@ $showLanguage = $block->getShowLanguage() !== null ? (bool) $block->getShowLangu
         Alpine.data('initWishlistHeader', initWishlistHeader);
     }, { once: true })
 </script>
+
 <?php $hyvaCsp->registerInlineScript() ?>
+
 <div
     id="header"
-    class="z-30 relative bg-white border-b border-gray-200 shadow-sm"
+    class="z-30 relative sticky top-0 bg-container border-b border-border transition-shadow duration-300"
+    :class="isScrolled ? 'shadow-lg' : 'shadow-sm'"
     x-data="initHeader"
     @private-content-loaded.window="getData"
     @resize.window.debounce="checkHeaderSize"
 >
+    <!-- MAIN HEADER ROW -->
     <div class="container px-4 py-3 md:py-4 grid grid-cols-[auto_auto] md:grid-cols-[auto_minmax(0px,1fr)_auto] gap-3 md:gap-6 items-center">
         <div class="flex items-center gap-3">
             <?= $block->getChildHtml('mobilemenu') ?>
@@ -188,9 +197,7 @@ $showLanguage = $block->getShowLanguage() !== null ? (bool) $block->getShowLangu
             <?php endif; ?>
 
             <?= $block->getChildHtml('additional') ?>
-
             <?= $block->getChildHtml('header-phone') ?>
-
             <?= $block->getChildHtml('customer') ?>
 
             <?php if ($showWishlist): ?>
@@ -206,7 +213,7 @@ $showLanguage = $block->getShowLanguage() !== null ? (bool) $block->getShowLangu
                 class="relative inline-flex items-center justify-center gap-2 md:gap-2.5
                        text-white p-2 md:px-4 md:py-2 rounded-lg
                        shadow-md hover:shadow-lg transition-all
-                       bg-[#7e9b84] hover:bg-[#6d8a73]"
+                       bg-primary hover:bg-primary-darker"
                 x-ref="cartButton"
                 :aria-disabled="isCartEmpty"
                 :aria-label="ariaLabel"
@@ -225,10 +232,10 @@ $showLanguage = $block->getShowLanguage() !== null ? (bool) $block->getShowLangu
                     x-show="summaryCount()"
                     x-cloak
                     class="absolute -top-1 -right-1 md:-top-2 md:-right-2
-                           min-w-[18px] h-[18px] md:min-w-[20px] md:h-[20px]
+                           min-w-[20px] h-[20px] md:min-w-[24px] md:h-[24px]
                            flex items-center justify-center rounded-full
                            bg-red-600 text-white text-[11px] font-bold leading-none
-                           border-2"
+                           border-2 border-container"
                     style="animation: pulse-border 2s ease-in-out infinite;"
                     aria-hidden="true"
                 ></span>
@@ -237,27 +244,36 @@ $showLanguage = $block->getShowLanguage() !== null ? (bool) $block->getShowLangu
                     <?= $heroicons->shoppingCartHtml('text-white', 20, 20, ["aria-hidden" => "true"]) ?>
                 </div>
 
-
                 <span
                     x-show="summaryCount()"
                     x-html="subtotalHtml()"
                     class="hidden md:inline font-semibold text-sm"
                     x-cloak
                 ></span>
+
             <?php if ($showMiniCart): ?>
             </button>
             <?php else: ?>
             </a>
             <?php endif ?>
-
         </div>
 
-        <div class="col-span-full mt-3 pt-3 border-t border-gray-100 md:mt-0 md:pt-0 md:border-0 md:col-span-1 md:col-start-2 md:row-start-1">
+        <!-- DESKTOP SEARCH (inside grid) -->
+        <div class="hidden md:block col-span-full mt-3 pt-3 border-t border-border-lighter md:mt-0 md:pt-0 md:border-0 md:col-span-1 md:col-start-2 md:row-start-1">
             <?= $block->getChildHtml('header-search'); ?>
         </div>
     </div>
 
-    <div class="border-t border-gray-200 bg-gray-50 hidden md:block">
+    <!-- MOBILE SEARCH (hide on scroll) -->
+    <div
+        class="md:hidden px-4 overflow-hidden transition-all duration-300 border-t border-border-lighter"
+        :class="isScrolled ? 'max-h-0 py-0' : 'max-h-24 py-3'"
+    >
+        <?= $block->getChildHtml('header-search'); ?>
+    </div>
+
+    <!-- DESKTOP NAV BAR -->
+    <div class="border-t border-border bg-secondary-lighter hidden md:block">
         <div class="container">
             <div class="flex items-center justify-between gap-6 h-[65px]">
                 <div class="min-w-0">
@@ -273,8 +289,8 @@ $showLanguage = $block->getShowLanguage() !== null ? (bool) $block->getShowLangu
 
     <?= $block->getChildHtml('cart-drawer'); ?>
     <?= $block->getChildHtml('authentication-popup'); ?>
-    
 </div>
+
 <style>
   @keyframes pulse-border {
     0%, 100% {

@@ -50,14 +50,10 @@
         }
     }
 
-    .btn-action {
-        @apply inline-flex items-center justify-center gap-2 rounded-full px-6 py-3
-                       bg-green-500 hover:bg-green-600 text-white font-bold transition
-                       focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-offset-2;
-    }
+    
 
     /* ✅ PRIMARY: gradient pozadie (iba pozadie, ostatné nech rieši .btn) */
-    .btn-primary {
+    .btn-primary, .btn-action {
     @apply !border-0 !rounded-xl;
 
     --btn-stroke: transparent;
