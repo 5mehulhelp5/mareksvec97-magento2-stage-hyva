@@ -1,0 +1,100 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ */
+
+declare(strict_types=1);
+
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\CurrentCategory;
+use Hyva\Theme\ViewModel\ProductListItem;
+use Hyva\Theme\ViewModel\ProductPage;
+use Magento\Catalog\Block\Product\ListProduct;
+use Magento\Framework\Escaper;
+
+/** @var ListProduct $block */
+/** @var Escaper $escaper */
+/** @var ViewModelRegistry $viewModels */
+
+$productViewModel         = $viewModels->require(ProductPage::class);
+$productListItemViewModel = $viewModels->require(ProductListItem::class);
+$currentCategoryViewModel = $viewModels->require(CurrentCategory::class);
+
+$eagerLoadImagesCount = (int) ($block->getData('eager_load_images_count') ?? 3);
+$productCollection    = $block->getLoadedProductCollection();
+?>
+
+<?php if (!$productCollection->count()): ?>
+    <div class="message info empty max-w-7xl mx-auto px-6 py-16 text-center">
+        <?= $escaper->escapeHtml(__('We can\'t find products matching the selection.')) ?>
+    </div>
+<?php else: ?>
+
+<section
+    id="product-list"
+    aria-label="<?= $escaper->escapeHtmlAttr(__('Product list')) ?>"
+    tabindex="-1"
+    class="bg-white"
+>
+    <!-- TOP TOOLBAR -->
+    <?= $block->getToolbarHtml() ?>
+    <?= $block->getAdditionalHtml() ?>
+
+    <?php
+    if ($block->getMode() === 'grid') {
+        $viewMode         = 'grid';
+        $imageDisplayArea = 'category_page_grid';
+        $showDescription  = false;
+        $templateType     = \Magento\Catalog\Block\Product\ReviewRendererInterface::SHORT_VIEW;
+    } else {
+        $viewMode         = 'list';
+        $imageDisplayArea = 'category_page_list';
+        $showDescription  = true;
+        $templateType     = \Magento\Catalog\Block\Product\ReviewRendererInterface::FULL_VIEW;
+    }
+    ?>
+
+    <!-- PRODUCTS GRID -->
+    <div class="products-grid-category">
+        <ul
+            role="list"
+            class="
+                grid
+                grid-cols-2
+                gap-4
+                md:gap-6
+                lg:grid-cols-3
+                xl:grid-cols-4
+                py-12
+            "
+        >
+            <?php foreach (array_values($productCollection->getItems()) as $i => $product): ?>
+                <?php
+                if ($i < $eagerLoadImagesCount) {
+                    $product->setData('image_custom_attributes', [
+                        'loading' => 'eager',
+                        'fetchpriority' => 'high'
+                    ]);
+                }
+                ?>
+                <li class="flex">
+                    <?= $productListItemViewModel->getItemHtml(
+                        $product,
+                        $block,
+                        $viewMode,
+                        $templateType,
+                        $imageDisplayArea,
+                        $showDescription
+                    ); ?>
+                </li>
+            <?php endforeach; ?>
+        </ul>
+    </div>
+
+    <!-- BOTTOM TOOLBAR / PAGINATION -->
+    <div class="container">
+        <?= $block->getChildBlock('toolbar')->setIsBottom(true)->toHtml() ?>
+    </div>
+</section>
+
+<?php endif; ?>

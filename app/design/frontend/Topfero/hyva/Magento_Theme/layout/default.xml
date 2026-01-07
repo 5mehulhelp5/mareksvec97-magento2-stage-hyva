@@ -3,60 +3,65 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd"
 >
-<update handle="hyva_modal"/>
+    <update handle="hyva_modal"/>
     <body>
         <referenceBlock name="script-alpine-js">
             <block name="alpine-plugin-htmldialog" template="Magento_Theme::page/js/plugins/htmldialog.phtml"/>
             <block name="alpine-plugin-collapse" template="Magento_Theme::page/js/plugins/collapse.phtml"/>
-            
+            <block name="alpine-plugin-quick-add" template="Magento_Theme::page/js/plugins/quick-add.phtml"/>
         </referenceBlock>
+
         <referenceBlock name="cart-drawer">
             <arguments>
-                <argument name="show_sku" xsi:type="boolean">true</argument> <!-- Show sku in product options (true/false) -->
-                <argument name="qty_style" xsi:type="string">input</argument> <!-- Qty style (text/input/select/incrementor) -->
+                <argument name="show_sku" xsi:type="boolean">true</argument>
+                <argument name="qty_style" xsi:type="string">input</argument>
             </arguments>
             <block name="cart-drawer.qtybox" template="Magento_Theme::html/cart/qtybox.phtml"/>
         </referenceBlock>
+
         <referenceContainer name="head.additional">
             <block name="js.sticky.header" template="Magento_Theme::page/js/sticky-header.phtml">
                 <arguments>
-                    <argument name="hide_on_scroll_down" xsi:type="boolean">false</argument> <!-- Hide sticky header on scroll down (true/false) -->
-                    <argument name="scroll_offset" xsi:type="number">100</argument> <!-- Offset before the helper reflects the scrollDir -->
-                    <argument name="enable_css_only_sticky_style" xsi:type="boolean">false</argument> <!-- Enable CSS only solution (true/false) -->
+                    <argument name="hide_on_scroll_down" xsi:type="boolean">false</argument>
+                    <argument name="scroll_offset" xsi:type="number">100</argument>
+                    <argument name="enable_css_only_sticky_style" xsi:type="boolean">false</argument>
                 </arguments>
             </block>
         </referenceContainer>
- 
-       
+
         <referenceBlock name="after.body.start">
             <block name="header-notification" template="Magento_Theme::html/header/notification.phtml" after="global_notices"/>
             <block name="metalio.quickquote" template="Magento_Theme::quick-quote.phtml"/>
         </referenceBlock>
+
         <referenceBlock name="breadcrumbs">
             <arguments>
-                <argument name="show_back_btn" xsi:type="boolean">true</argument> <!-- Show back button on mobile (true/false) -->
-                <argument name="overflow_style" xsi:type="string">normal</argument> <!-- Overflow style (normal/sticky) -->
+                <argument name="show_back_btn" xsi:type="boolean">true</argument>
+                <argument name="overflow_style" xsi:type="string">normal</argument>
             </arguments>
         </referenceBlock>
+
         <referenceBlock name="messages">
             <arguments>
-                <argument name="display_mode" xsi:type="string">default</argument> <!-- Notification appearance (default/blank/tag) -->
-                <argument name="show_icon" xsi:type="boolean">true</argument> <!-- Show icon (true/false) -->
+                <argument name="display_mode" xsi:type="string">default</argument>
+                <argument name="show_icon" xsi:type="boolean">true</argument>
             </arguments>
-        </referenceBlock>    
+        </referenceBlock>
+
         <referenceBlock name="header-content">
             <arguments>
-                <argument name="show_compare" xsi:type="boolean">false</argument> <!-- Show compare button (true/false) -->
-                <argument name="show_wishlist" xsi:type="boolean">false</argument> <!-- Show wishlist button (true/false) -->
-                <argument name="show_language" xsi:type="boolean">true</argument> <!-- Show language select (true/false) -->
+                <argument name="show_compare" xsi:type="boolean">false</argument>
+                <argument name="show_wishlist" xsi:type="boolean">false</argument>
+                <argument name="show_language" xsi:type="boolean">true</argument>
             </arguments>
+
             <block name="metalio.header.links"
-                       as="metalio.header.links"
-                       template="Metalio_HeaderLinks::header/links.phtml"/>
+                   as="metalio.header.links"
+                   template="Metalio_HeaderLinks::header/links.phtml"/>
             <block name="header.compare" as="compare" template="Magento_Theme::html/header/compare.phtml"/>
             <block class="Magento\Framework\View\Element\Template"
-                       name="header-phone"
-                       template="Magento_Theme::html/header/phone.phtml"/> 
+                   name="header-phone"
+                   template="Magento_Theme::html/header/phone.phtml"/>
 
             <block
                 name="topmenu_mobile_wrapper"
@@ -69,6 +74,7 @@
                 </arguments>
             </block>
         </referenceBlock>
+
         <referenceContainer name="footer">
             <container name="store-benefits-wrapper" htmlTag="div" htmlClass="container" before="store-review">
                 <block
@@ -77,16 +83,13 @@
                 />
             </container>
 
-            <block name="store-review" template="Magento_Theme::elements/store-review.phtml" before="-"/>  
-        </referenceContainer>    
-       
-       
+            <block name="store-review" template="Magento_Theme::elements/store-review.phtml" before="-"/>
+        </referenceContainer>
+
         <referenceContainer name="before.body.end">
             <block name="js.scroll.helpers" template="Magento_Theme::page/js/scroll-helpers.phtml"/>
-        </referenceContainer>    
-  
-        <move element="topmenu_mobile" destination="topmenu_mobile_wrapper"/>
+        </referenceContainer>
 
-  
+        <move element="topmenu_mobile" destination="topmenu_mobile_wrapper"/>
     </body>
 </page>

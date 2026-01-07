@@ -1,6 +1,6 @@
 <?php
 /**
- * Hyvä Themes – Pager (Metalio primary colors)
+ * Hyvä Themes – Pager (Topfero / Figma Make style) – uses Tailwind theme tokens (primary/secondary/border/text)
  */
 
 use Hyva\Theme\Model\LocaleFormatter;
@@ -21,182 +21,97 @@ $paginationUrlAnchor = $block->hasData('pagination_url_anchor')
     ? '#' . $escaper->escapeHtmlAttr((string) $block->getData('pagination_url_anchor'))
     : '';
 
-$iconSize = 18;
+$iconSize = 20;
 
-// Base classes with primary colors
-$circleBtn = 'inline-flex items-center justify-center rounded-full w-10 h-10 transition';
-$arrowBtn  = $circleBtn . ' border border-primary text-primary hover:bg-primary hover:text-white focus:outline-none focus:ring-2 focus:ring-primary';
-$pageBtn   = $circleBtn . ' text-slate-700 hover:bg-slate-50';
+// Wrapper (matches your React layout)
+$wrapperClass = 'flex items-center justify-center gap-2 mt-8';
+
+// Prev/Next buttons (token-based)
+$iconBtnBase = 'p-2 rounded-lg border transition-colors inline-flex items-center justify-center';
+$iconBtnEnabled = 'border-border text-text hover:bg-secondary-lighter';
+$iconBtnDisabled = 'border-border-lighter text-muted cursor-not-allowed pointer-events-none';
+
+// Page buttons (token-based)
+$pageBtnBase = 'min-w-[40px] h-[40px] rounded-lg font-medium transition-all inline-flex items-center justify-center';
+$pageBtnInactive = 'bg-secondary text-text hover:bg-secondary-darker';
+$pageBtnActive = 'bg-primary text-white shadow-md';
+
+// Ellipsis
+$ellipsisClass = 'px-2 text-muted select-none';
 
 ?>
 <?php if ($block->getCollection()->getSize()): ?>
-    <div class="pager flex items-center justify-center gap-3" x-data="pagerSync()" x-init="init()">
-        <?php if ($block->getLastPageNum() > 1): ?>
-            <nav class="flex items-center gap-3" aria-label="pagination">
-                <?php
-                    $previousLabel = $block->getAnchorTextForPrevious() ?: __('Previous Page');
-                    $nextLabel = $block->getAnchorTextForNext() ?: __('Next Page');
-                ?>
+    <?php if ($block->getLastPageNum() > 1): ?>
+        <nav class="<?= $wrapperClass ?>" aria-label="pagination">
+            <?php
+                $previousLabel = $block->getAnchorTextForPrevious() ?: __('Previous Page');
+                $nextLabel = $block->getAnchorTextForNext() ?: __('Next Page');
+            ?>
 
-                <!-- Prev -->
-                <a
-                    href="<?= $escaper->escapeUrl($block->getPreviousPageUrl()) . /* @noEscape */ $paginationUrlAnchor ?>"
-                    class="<?= $arrowBtn ?> pages-item-previous <?= $block->isFirstPage() ? 'pointer-events-none opacity-40' : '' ?>"
-                    aria-label="<?= $escaper->escapeHtmlAttr($previousLabel) ?>"
-                    <?= $block->isFirstPage() ? 'aria-disabled="true" tabindex="-1"' : '' ?>
-                >
-                    <?= $heroicons->chevronLeftHtml('', $iconSize, $iconSize, ['aria-hidden' => 'true']); ?>
-                </a>
+            <!-- Prev -->
+            <a
+                href="<?= $escaper->escapeUrl($block->getPreviousPageUrl()) . /* @noEscape */ $paginationUrlAnchor ?>"
+                class="<?= $iconBtnBase ?> <?= $block->isFirstPage() ? $iconBtnDisabled : $iconBtnEnabled ?> pages-item-previous"
+                aria-label="<?= $escaper->escapeHtmlAttr($previousLabel) ?>"
+                <?= $block->isFirstPage() ? 'aria-disabled="true" tabindex="-1"' : '' ?>
+                rel="prev"
+            >
+                <?= $heroicons->chevronLeftHtml('w-5 h-5', $iconSize, $iconSize, ['aria-hidden' => 'true']); ?>
+            </a>
 
-                <ol class="flex items-center gap-3">
-                    <?php if ($block->canShowFirst()): ?>
-                        <li>
-                            <a
-                                
-                                href="<?= $escaper->escapeUrl($block->getFirstPageUrl()) . /* @noEscape */ $paginationUrlAnchor ?>"
-                                class="<?= $pageBtn ?>"
-                                aria-label="<?= $escaper->escapeHtml(__('Page') . ' 1') ?>"
-                            ><?= $escaper->escapeHtml($localeFormatter->formatNumber(1)) ?></a>
-                        </li>
+            <!-- Pages -->
+            <div class="flex items-center gap-2">
+                <?php if ($block->canShowFirst()): ?>
+                    <a
+                        href="<?= $escaper->escapeUrl($block->getFirstPageUrl()) . /* @noEscape */ $paginationUrlAnchor ?>"
+                        class="<?= $pageBtnBase ?> <?= $pageBtnInactive ?>"
+                        aria-label="<?= $escaper->escapeHtml(__('Page') . ' 1') ?>"
+                    ><?= $escaper->escapeHtml($localeFormatter->formatNumber(1)) ?></a>
+                <?php endif; ?>
+
+                <?php if ($block->canShowPreviousJump()): ?>
+                    <span class="<?= $ellipsisClass ?>">…</span>
+                <?php endif; ?>
+
+                <?php foreach ($block->getFramePages() as $page): ?>
+                    <?php if ($block->isPageCurrent($page)): ?>
+                        <span
+                            class="<?= $pageBtnBase ?> <?= $pageBtnActive ?>"
+                            aria-current="page"
+                            aria-label="<?= $escaper->escapeHtml(__('You\'re currently reading page')) ?>"
+                        ><?= $escaper->escapeHtml($localeFormatter->formatNumber($page)) ?></span>
+                    <?php else: ?>
+                        <a
+                            href="<?= $escaper->escapeUrl($block->getPageUrl($page)) . /* @noEscape */ $paginationUrlAnchor ?>"
+                            class="<?= $pageBtnBase ?> <?= $pageBtnInactive ?>"
+                            aria-label="<?= $escaper->escapeHtml(__('Page') . ' ' . $localeFormatter->formatNumber($page)) ?>"
+                        ><?= $escaper->escapeHtml($localeFormatter->formatNumber($page)) ?></a>
                     <?php endif; ?>
+                <?php endforeach; ?>
 
-                    <?php if ($block->canShowPreviousJump()): ?>
-                        <li class="select-none text-slate-500">…</li>
-                    <?php endif; ?>
+                <?php if ($block->canShowNextJump()): ?>
+                    <span class="<?= $ellipsisClass ?>">…</span>
+                <?php endif; ?>
 
-                    <?php foreach ($block->getFramePages() as $page): ?>
-                        <li>
-                            <?php if ($block->isPageCurrent($page)): ?>
-                                <span
-                                    class="<?= $circleBtn ?> bg-primary text-white font-semibold"
-                                    aria-current="page"
-                                    aria-label="<?= $escaper->escapeHtml(__('You\'re currently reading page')) ?>"
-                                ><?= $escaper->escapeHtml($localeFormatter->formatNumber($page)) ?></span>
-                            <?php else: ?>
-                                <a
-                                    href="<?= $escaper->escapeUrl($block->getPageUrl($page)) . /* @noEscape */ $paginationUrlAnchor ?>"
-                                    class="<?= $pageBtn ?>"
-                                    aria-label="<?= $escaper->escapeHtml(__('Page') . ' ' . $localeFormatter->formatNumber($page)) ?>"
-                                ><?= $escaper->escapeHtml($localeFormatter->formatNumber($page)) ?></a>
-                            <?php endif; ?>
-                        </li>
-                    <?php endforeach; ?>
+                <?php if ($block->canShowLast()): ?>
+                    <a
+                        href="<?= $escaper->escapeUrl($block->getLastPageUrl()) . /* @noEscape */ $paginationUrlAnchor ?>"
+                        class="<?= $pageBtnBase ?> <?= $pageBtnInactive ?>"
+                        aria-label="<?= $escaper->escapeHtml(__('Page') . ' ' . $localeFormatter->formatNumber($block->getLastPageNum())) ?>"
+                    ><?= $escaper->escapeHtml($localeFormatter->formatNumber($block->getLastPageNum())) ?></a>
+                <?php endif; ?>
+            </div>
 
-                    <?php if ($block->canShowNextJump()): ?>
-                        <li class="select-none text-slate-500">…</li>
-                    <?php endif; ?>
-
-                    <?php if ($block->canShowLast()): ?>
-                        <li>
-                            <a
-                                href="<?= $escaper->escapeUrl($block->getLastPageUrl()) . /* @noEscape */ $paginationUrlAnchor ?>"
-                                class="<?= $pageBtn ?>"
-                                aria-label="<?= $escaper->escapeHtml(__('Page') . ' ' . $localeFormatter->formatNumber($block->getLastPageNum())) ?>"
-                            ><?= $escaper->escapeHtml($localeFormatter->formatNumber($block->getLastPageNum())) ?></a>
-                        </li>
-                    <?php endif; ?>
-                </ol>
-
-                <!-- Next -->
-                <a
-                    href="<?= $escaper->escapeUrl($block->getNextPageUrl()) . /* @noEscape */ $paginationUrlAnchor ?>"
-                    class="<?= $arrowBtn ?> pages-item-next <?= $block->isLastPage() ? 'pointer-events-none opacity-40' : '' ?>"
-                    aria-label="<?= $escaper->escapeHtmlAttr($nextLabel) ?>"
-                    <?= $block->isLastPage() ? 'aria-disabled="true" tabindex="-1"' : '' ?>
-                >
-                    <?= $heroicons->chevronRightHtml('', $iconSize, $iconSize, ['aria-hidden' => 'true']); ?>
-                </a>
-            </nav>
-        <?php endif; ?>
-    </div>
+            <!-- Next -->
+            <a
+                href="<?= $escaper->escapeUrl($block->getNextPageUrl()) . /* @noEscape */ $paginationUrlAnchor ?>"
+                class="<?= $iconBtnBase ?> <?= $block->isLastPage() ? $iconBtnDisabled : $iconBtnEnabled ?> pages-item-next"
+                aria-label="<?= $escaper->escapeHtmlAttr($nextLabel) ?>"
+                <?= $block->isLastPage() ? 'aria-disabled="true" tabindex="-1"' : '' ?>
+                rel="next"
+            >
+                <?= $heroicons->chevronRightHtml('w-5 h-5', $iconSize, $iconSize, ['aria-hidden' => 'true']); ?>
+            </a>
+        </nav>
+    <?php endif; ?>
 <?php endif; ?>
-
-<script>
-document.addEventListener('alpine:init', () => {
-  Alpine.data('pagerSync', () => ({
-    active: 1,
-    selector: '.pager',
-    pagesCount: null, // nastavíme, ak vieš (napr. cez #am-page-count)
-
-    init() {
-      // Pokus o načítanie počtu strán (ak používaš #am-page-count)
-      const el = document.querySelector('#am-page-count');
-      if (el) {
-        const n = parseInt(el.textContent.trim(), 10);
-        if (!Number.isNaN(n)) this.pagesCount = n;
-      }
-
-      // 1) inicializácia podľa URL
-      this.updateFromUrl();
-      this.apply();
-
-      // 2) reaguj na scroll (Amasty počas scrollu mení URL cez replaceState)
-      window.addEventListener('scroll', this.updateFromUrl.bind(this));
-
-      // 3) reaguj na späť/vpred
-      window.addEventListener('popstate', this.updateFromUrl.bind(this));
-
-      // 4) hook na replaceState → vyšleme event pri zmene URL (bez zásahu do Amasty)
-      const origReplaceState = history.replaceState;
-      history.replaceState = function (state, title, url) {
-        const ret = origReplaceState.apply(this, arguments);
-        window.dispatchEvent(new Event('url:changed'));
-        return ret;
-      };
-      window.addEventListener('url:changed', () => {
-        this.updateFromUrl();
-        this.apply();
-      });
-    },
-
-    getPageFromUrl() {
-      const p = parseInt(new URLSearchParams(location.search).get('p') || '1', 10);
-      return Number.isNaN(p) || p < 1 ? 1 : p;
-    },
-
-    updateFromUrl() {
-      const p = this.getPageFromUrl();
-      if (p !== this.active) this.active = p;
-    },
-
-    apply() {
-      const pager = document.querySelector(this.selector);
-      if (!pager) return;
-
-      // prepnúť aktívnu stránku
-      pager.querySelectorAll('[data-page], .pager a, .pager span').forEach((el) => {
-        // preferuj data-page; fallback: z textu čísla
-        let val = el.getAttribute('data-page');
-        val = val ? parseInt(val, 10) : parseInt((el.textContent || '').trim(), 10);
-
-        const isCurrent = val === this.active;
-        el.classList.toggle('is-current', isCurrent);
-        el.classList.toggle('bg-primary', isCurrent);
-        el.classList.toggle('text-white', isCurrent);
-        el.classList.toggle('font-semibold', isCurrent);
-
-        // „neaktívny“ vzhľad (prispôsob si, ak máš iné utility)
-        const makeInactive = !isCurrent && Number.isInteger(val);
-        if (makeInactive) {
-          el.classList.add('text-slate-700');
-          el.classList.remove('bg-primary', 'text-white', 'font-semibold');
-        }
-      });
-
-      // Prev/Next disable (ak existujú)
-      const prev = pager.querySelector('.pages-item-previous');
-      const next = pager.querySelector('.pages-item-next');
-
-      if (prev) {
-        if (this.active <= 1) prev.classList.add('pointer-events-none', 'opacity-40');
-        else prev.classList.remove('pointer-events-none', 'opacity-40');
-      }
-
-      if (next && this.pagesCount) {
-        if (this.active >= this.pagesCount) next.classList.add('pointer-events-none', 'opacity-40');
-        else next.classList.remove('pointer-events-none', 'opacity-40');
-      }
-    }
-  }));
-});
-</script>
