@@ -3,52 +3,56 @@
 
 declare(strict_types=1);
 
-use Hyva\Theme\Model\ViewModelRegistry;
 use Hyva\Theme\ViewModel\HeroiconsOutline;
 use Hyva\Theme\ViewModel\HeroiconsSolid;
 
-/** ---- ViewModels najprv registry, potom require ---- */
-
-
 $heroicons = $viewModels->require(HeroiconsOutline::class);
-
 /** @var HeroiconsSolid $heroiconsSolid */
 $heroiconsSolid = $viewModels->require(HeroiconsSolid::class);
 
-/** ---- Ikona telefónu: solid -> outline -> inline SVG fallback ---- */
-
-
 /** ---- Nastavenia ---- */
-$phoneNumber   = $block->getData('phone_number') ?: '+421 910 123 456';
-$telHref       = preg_replace('/\s+/', '', $phoneNumber); // "tel:+421910123456"
-$startHour     = 9;
-$endHour       = 16;
-$currentHour   = (int) date('G'); // server time; prípadne si môžeš nahradiť store time
-$isOpen        = ($currentHour >= $startHour && $currentHour < $endHour);
-$dotClass      = $isOpen ? 'bg-green-500' : 'bg-red-500';
-$dotLabel      = $isOpen ? __('K dispozícii') : __('Mimo pracovnej doby');
+$phoneNumber = $block->getData('phone_number') ?: '+421 910 123 456';
+$telHref     = preg_replace('/\s+/', '', $phoneNumber);
+
+$startHour   = 9;
+$endHour     = 16;
+$currentHour = (int) date('G');
+$isOpen      = ($currentHour >= $startHour && $currentHour < $endHour);
+
+$dotClass = $isOpen ? 'bg-green-500' : 'bg-red-500';
+$dotLabel = $isOpen ? __('K dispozícii') : __('Mimo pracovnej doby');
 ?>
+
 <div class="flex items-center gap-2">
-    <!-- Mobil: okrúhla ikonka -->
+    <!-- Mobil: chip 38x38 -->
     <a href="tel:<?= $escaper->escapeHtmlAttr($telHref) ?>"
-       class="inline-flex md:hidden items-center justify-center w-10 h-10 rounded-lg bg-gray-100 hover:bg-gray-200 transition-colors relative text-slate-800"
+       class="inline-flex md:hidden items-center justify-center
+              h-[38px] w-[38px] min-w-[38px] min-h-[38px]
+              rounded-lg hover:bg-gray-50 transition-colors border border-gray-200"
        aria-label="<?= $escaper->escapeHtmlAttr(__('Zavolať')) ?>"
-       title="<?= $escaper->escapeHtmlAttr(__('Zavolať')) ?>">
+       title="<?= $escaper->escapeHtmlAttr(__('Zavolať')) ?>"
+    >
         <span class="relative inline-flex">
-            <?= $heroicons->phoneHtml('text-primary', 24, 24, ["aria-hidden" => "true"]) ?>
+            <?= $heroicons->phoneHtml('', 22, 22, ['aria-hidden' => 'true']) ?>
             <span class="absolute -top-1 -right-1 w-3 h-3 rounded-full <?= $dotClass ?>"
                   title="<?= $escaper->escapeHtmlAttr($dotLabel) ?>"></span>
         </span>
     </a>
 
-    <!-- Tablet/desktop: pill s výškou 48px, zarovnanie ako customer/cart -->
+    <!-- Tablet/desktop: chip 38px s číslom -->
     <a href="tel:<?= $escaper->escapeHtmlAttr($telHref) ?>"
-       class="hidden md:inline-flex items-center h-11 gap-2 border border-gray-200 bg-white px-3 rounded-lg hover:bg-gray-50 transition-colors relative text-slate-800">
+       class="hidden md:inline-flex items-center gap-2
+              h-[38px] min-h-[38px] min-w-[38px]
+              px-3 rounded-lg hover:bg-gray-50 transition-colors border border-gray-200"
+    >
         <span class="relative inline-flex">
-            <?= $heroicons->phoneHtml('text-primary', 24, 24, ["aria-hidden" => "true"]) ?>
+            <?= $heroicons->phoneHtml('', 22, 22, ['aria-hidden' => 'true']) ?>
             <span class="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full <?= $dotClass ?>"
                   title="<?= $escaper->escapeHtmlAttr($dotLabel) ?>"></span>
         </span>
-        <span class="text-sm font-semibold whitespace-nowrap"><?= $escaper->escapeHtml($phoneNumber) ?></span>
+
+        <span class="text-sm font-semibold whitespace-nowrap">
+            <?= $escaper->escapeHtml($phoneNumber) ?>
+        </span>
     </a>
 </div>

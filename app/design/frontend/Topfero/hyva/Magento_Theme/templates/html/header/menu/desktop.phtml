@@ -1,7 +1,6 @@
 <?php
 /**
- * Hyvä Themes - https://hyva.io
- * Copyright © Hyvä Themes
+ * desktop.phtml (CELÝ SÚBOR – bez inline hexov, farby cez tokeny, gradient cez bg-inspiration)
  */
 
 use Hyva\Theme\Model\ViewModelRegistry;
@@ -18,24 +17,20 @@ use Magento\UrlRewrite\Model\ResourceModel\UrlRewriteCollectionFactory;
 /** @var Escaper $escaper */
 /** @var ViewModelRegistry $viewModels */
 
-/** @var Navigation $viewModelNavigation */
 $viewModelNavigation = $viewModels->require(Navigation::class, $block);
-
-/** @var HeroiconsSolid $heroiconsSolid */
 $heroiconsSolid = $viewModels->require(HeroiconsSolid::class);
 
 $uniqueId = '_' . uniqid();
 
-// --- priprav data a cache tagy
 $menuItems = $viewModelNavigation->getNavigation(4);
 $block->setData('cache_tags', $viewModelNavigation->getIdentities());
 
-// --- služby
 $om = ObjectManager::getInstance();
 /** @var CategoryRepositoryInterface $catRepo */
 $catRepo = $om->get(CategoryRepositoryInterface::class);
 /** @var StoreManagerInterface $storeManager */
 $storeManager = $om->get(StoreManagerInterface::class);
+
 $storeId   = (int) $storeManager->getStore()->getId();
 $mediaBaseFull = rtrim($storeManager->getStore()->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_MEDIA), '/');
 
@@ -120,63 +115,98 @@ $__resolveCategoryId = function (array $item) use ($storeManager, $om): int {
 
     return 0;
 };
+
+$__isInspiration = static function (array $menuItem): bool {
+    $name = mb_strtolower((string) ($menuItem['name'] ?? ''));
+    $url  = (string) ($menuItem['url'] ?? '');
+    return $name === 'inšpirácie'
+        || str_contains($url, '/galeria')
+        || str_contains($url, '/gallery');
+};
 ?>
 
 <div
     x-data="initMenuDesktop<?= $escaper->escapeHtml($uniqueId) ?>()"
-    class="z-20 order-2 sm:order-1 lg:order-2 navigation hidden lg:flex w-full"
+    class="hidden md:block"
 >
-    <div x-ref="nav-desktop" @load.window="setActiveMenu($root)" class="hidden lg:block w-full">
-        <div class="container lg:px-0">
-            <nav class="relative" aria-label="<?= $escaper->escapeHtmlAttr(__('Main menu')) ?>">
-                <ul class="flex justify-start flex-wrap gap-x-7 py-3 lg:py-4">
+    <div x-ref="nav-desktop" @load.window="setActiveMenu($root)">
+        <div class="mx-auto">
+            <nav class="py-3" aria-label="<?= $escaper->escapeHtmlAttr(__('Main menu')) ?>">
+                <ul class="flex items-center gap-6 lg:gap-8">
                     <?php foreach ($menuItems as $index => $menuItem): ?>
                         <?php
                         $cid0 = $__resolveCategoryId($menuItem);
                         $iconUrl0 = $cid0 ? $__categoryIconUrl($cid0) : null;
+                        $hasChildren = !empty($menuItem['childData']);
+                        $isInspiration = $__isInspiration($menuItem);
                         ?>
-                        <li class="relative level-0"
-                            @mouseenter="hoverPanelActiveId = '<?= (string) $index ?>'"
-                            @mouseleave="hoverPanelActiveId = 0"
-                            @keyup.escape="hoverPanelActiveId = 0"
+
+                        <li
+                            class="relative group"
+                            <?php if ($hasChildren): ?>
+                                @mouseenter="hoverPanelActiveId = '<?= (string) $index ?>'"
+                                @mouseleave="hoverPanelActiveId = 0"
+                                @keyup.escape="hoverPanelActiveId = 0"
+                            <?php endif; ?>
                         >
-                            <span class="flex items-center text-md">
+                            <!-- HIT AREA -->
+                            <div class="flex items-center gap-2 py-2">
                                 <a
-                                    class="block font-semibold text-[16px] text-slate-800 level-0 py-2 px-0.5 flex items-center gap-2
-                                           transition-colors hover:text-primary"
                                     href="<?= $escaper->escapeUrl($menuItem['url']) ?>"
                                     title="<?= $escaper->escapeHtmlAttr($menuItem['name']) ?>"
                                     @focus="hoverPanelActiveId = 0"
+                                    <?php if ($isInspiration): ?>
+                                        class="inline-flex items-center gap-2 px-4 py-2 rounded-lg transition-all group relative overflow-hidden text-white font-semibold bg-inspiration hover:bg-inspiration-hover"
+                                    <?php else: ?>
+                                        class="inline-flex items-center gap-2 text-gray-700 hover:text-black transition-colors"
+                                    <?php endif; ?>
                                 >
                                     <?php if ($iconUrl0): ?>
                                         <img
                                             src="<?= $escaper->escapeUrl($iconUrl0) ?>"
                                             alt=""
                                             width="20" height="20"
-                                            class="w-5 h-5 object-contain rounded-sm shrink-0"
+                                            class="w-4 h-4 lg:w-5 lg:h-5 object-contain rounded-sm shrink-0"
                                             loading="lazy"
                                             decoding="async"
                                         />
                                     <?php endif; ?>
-                                    <span><?= $escaper->escapeHtml($menuItem['name']) ?></span>
+
+                                    <span class="<?= $isInspiration ? 'text-white' : 'font-medium text-sm lg:text-base' ?>">
+                                        <?= $escaper->escapeHtml($menuItem['name']) ?>
+                                    </span>
+
+                                    <?php if ($isInspiration): ?>
+                                        <span class="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity"></span>
+                                    <?php endif; ?>
                                 </a>
 
-                                <?php if (!empty($menuItem['childData'])): ?>
-                                    <button type="button"
-                                            data-sr-button-id="<?= $escaper->escapeHtmlAttr($index) ?>"
-                                            :aria-expanded="hoverPanelActiveId === '<?= (string) $index ?>' ? 'true' : 'false'"
-                                            @click="openMenuOnClick('<?= (string) $index ?>')"
-                                            class="rounded p-1 text-slate-500 hover:text-primary transition-colors">
-                                        <?= $heroiconsSolid->chevronDownHtml("flex self-center", 20, 20, ['aria-hidden' => 'true']) ?>
-                                        <span class="sr-only"><?= $escaper->escapeHtml(__('Show submenu for %1 category', $menuItem['name'])) ?></span>
+                                <?php if ($hasChildren): ?>
+                                    <button
+                                        type="button"
+                                        data-sr-button-id="<?= $escaper->escapeHtmlAttr($index) ?>"
+                                        :aria-expanded="hoverPanelActiveId === '<?= (string) $index ?>' ? 'true' : 'false'"
+                                        @click="openMenuOnClick('<?= (string) $index ?>')"
+                                        class="inline-flex items-center justify-center h-full leading-none text-gray-700 hover:text-black transition-colors"
+                                    >
+                                        <span
+                                            class="inline-flex transition-transform translate-y-[0.5px]"
+                                            :class="hoverPanelActiveId === '<?= (string) $index ?>' ? 'rotate-180' : ''"
+                                        >
+                                            <?= $heroiconsSolid->chevronDownHtml("", 16, 16, ['aria-hidden' => 'true']) ?>
+                                        </span>
+                                        <span class="sr-only">
+                                            <?= $escaper->escapeHtml(__('Show submenu for %1 category', $menuItem['name'])) ?>
+                                        </span>
                                     </button>
                                 <?php endif; ?>
-                            </span>
+                            </div>
 
-                            <?php if (!empty($menuItem['childData'])): ?>
+                            <?php if ($hasChildren): ?>
+                                <!-- Dropdown -->
                                 <div
                                     x-cloak
-                                    class="absolute left-0 top-full z-30 pt-2"
+                                    class="absolute left-0 top-full z-50"
                                     :class="{
                                         'hidden' : hoverPanelActiveId !== '<?= (string) $index ?>',
                                         'block'  : hoverPanelActiveId === '<?= (string) $index ?>'
@@ -184,12 +214,11 @@ $__resolveCategoryId = function (array $item) use ($storeManager, $om): int {
                                     @mouseenter="hoverPanelActiveId = '<?= (string) $index ?>'"
                                     @mouseleave="hoverPanelActiveId = 0"
                                 >
-                                    <nav
-                                        aria-label="<?= $escaper->escapeHtmlAttr(__('Submenu for %1', $menuItem['name'])) ?>"
-                                        class="w-max max-w-[90vw] min-w-[14rem] overflow-auto
-                                               rounded-2xl shadow-lg bg-white border border-slate-200 p-1"
-                                    >
-                                        <div class="py-1" role="menu" aria-orientation="vertical">
+                                    <!-- bridge -->
+                                    <div class="h-2"></div>
+
+                                    <div class="w-[480px] bg-white rounded-lg shadow-xl border border-border p-4">
+                                        <div class="grid grid-cols-2 gap-2">
                                             <?php foreach ($menuItem['childData'] as $subMenuItem): ?>
                                                 <?php
                                                 $cid = $__resolveCategoryId($subMenuItem);
@@ -198,29 +227,43 @@ $__resolveCategoryId = function (array $item) use ($storeManager, $om): int {
                                                 <a
                                                     href="<?= $escaper->escapeUrl($subMenuItem['url']) ?>"
                                                     title="<?= $escaper->escapeHtmlAttr($subMenuItem['name']) ?>"
-                                                    class="group block w-full min-h-[44px] flex items-center gap-2 rounded-xl px-3 py-2
-                                                           text-sm text-slate-800 transition-colors
-                                                           hover:bg-primary/5 hover:text-primary"
+                                                    class="flex items-center gap-3 px-3 py-2.5 hover:bg-gray-50 rounded-lg transition-colors"
                                                     role="menuitem"
                                                     @keyup.escape="$nextTick(() => document.querySelector('[data-sr-button-id=<?= $escaper->escapeJs($index) ?>]').focus())"
                                                 >
-                                                    <?php if ($iconUrl): ?>
-                                                        <img
-                                                            src="<?= $escaper->escapeUrl($iconUrl) ?>"
-                                                            alt=""
-                                                            class="h-5 w-5 rounded-sm object-contain shrink-0"
-                                                            width="20" height="20"
-                                                            loading="lazy" decoding="async"
-                                                        >
-                                                    <?php endif; ?>
-
-                                                    <span class="font-semibold whitespace-nowrap">
+                                                    <div class="w-12 h-12 bg-gray-100 rounded-md flex items-center justify-center p-1.5 flex-shrink-0 overflow-hidden">
+                                                        <?php if ($iconUrl): ?>
+                                                            <img
+                                                                src="<?= $escaper->escapeUrl($iconUrl) ?>"
+                                                                alt=""
+                                                                class="w-full h-full object-contain"
+                                                                width="48" height="48"
+                                                                loading="lazy"
+                                                                decoding="async"
+                                                            />
+                                                        <?php endif; ?>
+                                                    </div>
+                                                    <span class="font-medium text-gray-900 text-sm">
                                                         <?= $escaper->escapeHtml($subMenuItem['name']) ?>
                                                     </span>
                                                 </a>
                                             <?php endforeach; ?>
                                         </div>
-                                    </nav>
+
+                                        <div class="border-t border-border mt-3 pt-3">
+                                            <a
+                                                href="<?= $escaper->escapeUrl($menuItem['url']) ?>"
+                                                class="flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium hover:bg-primary/5 rounded-lg transition-colors text-primary"
+                                            >
+                                                <span>
+                                                    <?= $escaper->escapeHtml(__('Zobraziť všetky %1', $menuItem['name'])) ?>
+                                                </span>
+                                                <span class="inline-flex -rotate-90">
+                                                    <?= $heroiconsSolid->chevronDownHtml("", 16, 16, ['aria-hidden' => 'true']) ?>
+                                                </span>
+                                            </a>
+                                        </div>
+                                    </div>
                                 </div>
                             <?php endif; ?>
 
@@ -236,14 +279,14 @@ $__resolveCategoryId = function (array $item) use ($storeManager, $om): int {
 'use strict';
 const initMenuDesktop<?= $escaper->escapeHtml($uniqueId) ?> = () => {
     return {
-        hoverPanelActiveId: null,
+        hoverPanelActiveId: 0,
         setActiveMenu(menuNode) {
             Array.from(menuNode.querySelectorAll('a'))
                 .filter(link => link.href === window.location.href.split('?')[0])
                 .map(link => {
                     link.setAttribute('aria-current', 'page');
-                    link.classList.add('text-primary');
-                    link.closest('li.level-0')?.setAttribute('data-active', 'true');
+                    link.classList.add('text-black');
+                    link.closest('li')?.setAttribute('data-active', 'true');
                 });
         },
         openMenuOnClick(menuNode) {

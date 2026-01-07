@@ -3,6 +3,7 @@
         --btn-stroke: theme("colors.blue.400");
         --btn-bg: theme("colors.white");
         --btn-color: theme("colors.blue.700");
+
         @apply flex justify-center items-center gap-1.5 border-2 rounded-md py-2.5 px-5 text-base font-medium select-none cursor-pointer align-middle ease-in-out duration-150;
         border-color: var(--btn-stroke);
         background-color: var(--btn-bg);
@@ -10,11 +11,19 @@
         color: var(--btn-color);
         transition-property: theme("transitionProperty.colors"), box-shadow;
 
+        /* ✅ default: žiadny gradient */
+        background-image: var(--btn-bg-image, none);
+        background-size: cover;
+        background-repeat: no-repeat;
+
         &:hover {
             @apply shadow-lg;
             border-color: var(--btn-hover-stroke, var(--btn-stroke));
             background-color: var(--btn-hover-bg, var(--btn-bg));
             color: var(--btn-hover-color, var(--btn-color));
+
+            /* ✅ hover gradient (ak je nastavený) */
+            background-image: var(--btn-hover-bg-image, var(--btn-bg-image, none));
         }
 
         &:focus-visible {
@@ -26,6 +35,9 @@
             border-color: var(--btn-active-stroke, var(--btn-stroke));
             background-color: var(--btn-active-bg, var(--btn-bg));
             color: var(--btn-active-color, var(--btn-color));
+
+            /* ✅ active gradient (ak je nastavený) */
+            background-image: var(--btn-active-bg-image, var(--btn-bg-image, none));
         }
 
         &:disabled {
@@ -33,27 +45,37 @@
             border-color: var(--btn-disabled-stroke, theme("colors.slate.200"));
             background-color: var(--btn-disabled-bg, theme("colors.white"));
             color: var(--btn-disabled-color, theme("colors.slate.600"));
+
+            background-image: none;
         }
     }
 
-
-      .btn-action {
+    .btn-action {
         @apply inline-flex items-center justify-center gap-2 rounded-full px-6 py-3
                        bg-green-500 hover:bg-green-600 text-white font-bold transition
                        focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-offset-2;
-      }
-    
+    }
 
+    /* ✅ PRIMARY: gradient pozadie (iba pozadie, ostatné nech rieši .btn) */
     .btn-primary {
-        --btn-stroke: transparent;
-        --btn-bg: theme("colors.primary.DEFAULT");
-        --btn-color: theme("colors.white");
-        --btn-hover-bg: theme("colors.primary.darker");
-        --btn-active-bg: theme("colors.primary.darker");
-        --btn-disabled-stroke: transparent;
-        --btn-disabled-bg: theme("colors.slate.600");
-        --btn-disabled-color: theme("colors.slate.50");
+    @apply !border-0 !rounded-xl;
 
+    --btn-stroke: transparent;
+    --btn-bg: transparent; /* dôležité: aby neprebil gradient */
+    --btn-color: theme("colors.white");
+
+    /* Default gradient */
+    --btn-bg-image: linear-gradient(to right, #7e9b84, #6a8470);
+
+    /* Hover gradient */
+    --btn-hover-bg-image: linear-gradient(to right, #6a8470, #5a7460);
+
+    /* Active gradient */
+    --btn-active-bg-image: linear-gradient(to right, #6a8470, #5a7460);
+
+    --btn-disabled-stroke: transparent;
+    --btn-disabled-bg: theme("colors.slate.600");
+    --btn-disabled-color: theme("colors.slate.50");
     }
 
     .btn-secondary {
@@ -62,10 +84,10 @@
                hover:bg-slate-200
                focus:outline-none focus:ring-2 focus:ring-slate-300
                transition;
-      }
-      .btn-secondary:disabled {
+    }
+    .btn-secondary:disabled {
         @apply opacity-50 cursor-not-allowed;
-      }
+    }
 
     .btn-flat {
         --btn-stroke: transparent;
@@ -85,3 +107,4 @@
         @apply py-2 px-4 text-sm;
     }
 }
+  

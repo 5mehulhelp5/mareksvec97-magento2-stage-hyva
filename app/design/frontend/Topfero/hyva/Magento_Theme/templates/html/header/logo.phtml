@@ -45,11 +45,18 @@ if ($badgeEnabled && $badgeSvgRaw) {
         $badgeSvg = preg_replace('/<svg\b(?![^>]*\bclass=)/i', '<svg class="h-6 md:h-7 lg:h-8 w-auto"', $badgeSvg, 1);
     }
 }
+// Figma Make: h-7 md:h-10
+$figmaDesktopHeightPx = 40;
+
+// Pre CLS: prepočítame width podľa pomeru z resolvera (ak je k dispozícii)
+$ratio = ($logoWidth > 0 && $logoHeight > 0) ? ($logoWidth / $logoHeight) : 5; // fallback ratio
+$attrHeight = $figmaDesktopHeightPx;
+$attrWidth  = (int) round($attrHeight * $ratio);
 ?>
+
 <div class="flex items-center gap-3">
-  <!-- Logo -->
   <a
-      class="inline-block align-middle"
+      class="inline-flex items-center flex-shrink-0"
       href="<?= $escaper->escapeUrl($block->getUrl()) ?>"
       title="<?= $escaper->escapeHtmlAttr(__('Go to Home page')) ?>"
   >
@@ -57,10 +64,12 @@ if ($badgeEnabled && $badgeSvgRaw) {
           <img
               src="<?= $escaper->escapeUrl($logoSrc) ?>"
               alt="<?= $escaper->escapeHtmlAttr($block->getLogoAlt() ?: $storeName) ?>"
-              width="<?= $escaper->escapeHtmlAttr($logoWidth) ?>"
-              height="<?= $escaper->escapeHtmlAttr($logoHeight) ?>"
+              width="<?= $escaper->escapeHtmlAttr($attrWidth) ?>"
+              height="<?= $escaper->escapeHtmlAttr($attrHeight) ?>"
+              class="h-7 md:h-10 w-auto"
               loading="eager"
               fetchpriority="high"
+              decoding="async"
           >
       <?php else: ?>
           <span class="text-xl font-medium font-title">
@@ -68,12 +77,4 @@ if ($badgeEnabled && $badgeSvgRaw) {
           </span>
       <?php endif; ?>
   </a>
-
-  <!-- Badge SVG z adminu -->
-  <?php if ($badgeSvg): ?>
-    <!-- skryté na mobile, viditeľné od sm↑ -->
-    <span class="hidden sm:inline-flex items-center" aria-hidden="true">
-      <?= /* @noEscape */ $badgeSvg ?>
-    </span>
-  <?php endif; ?>
 </div>

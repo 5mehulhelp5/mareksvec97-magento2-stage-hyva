@@ -5,39 +5,16 @@
         font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
     }
 
-    /* Nová utilita pre Setup Grotesk */
+    /* Nová utilita pre Jost */
     .font-setup {
-        font-family: "Setup Grotesk", ui-sans-serif, system-ui, sans-serif;
+        font-family: "Jost", ui-sans-serif, system-ui, sans-serif;
     }
 }
 
 @layer base {
-    @font-face {
-        font-family: "Setup Grotesk";
-        src: url("../fonts/SetupGrotesk-Regular.woff2") format("woff2");
-        font-weight: 400;
-        font-style: normal;
-        font-display: swap;
-    }
-
-    @font-face {
-        font-family: "Setup Grotesk";
-        src: url("../fonts/SetupGrotesk-Bold.woff2") format("woff2");
-        font-weight: 700;
-        font-style: normal;
-        font-display: swap;
-    }
-
-    @font-face {
-        font-family: "Setup Grotesk";
-        src: url("../fonts/SetupGrotesk-Black.woff2") format("woff2");
-        font-weight: 900;
-        font-style: normal;
-        font-display: swap;
-    }
 
     html {
-        font-family: "Setup Grotesk", ui-sans-serif, system-ui, sans-serif;
+        font-family: "Jost", ui-sans-serif, system-ui, sans-serif;
     }
 }
 

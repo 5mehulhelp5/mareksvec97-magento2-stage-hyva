@@ -106,7 +106,7 @@ $searchConfig = $viewModels->require(SearchConfig::class);
 <?php $hyvaCsp->registerInlineScript() ?>
 
 <!-- POZOR: odstránený vnútorný container, aby to ladilo v header gride -->
-<div class="relative w-full" x-data="initMiniSearch">
+<div class="relative w-full max-w-[550px] m-auto" x-data="initMiniSearch">
     <search title="<?= $escaper->escapeHtmlAttr(__('Store')) ?>" role="search">
         <form
             id="search_mini_form"
@@ -132,7 +132,7 @@ $searchConfig = $viewModels->require(SearchConfig::class);
 
                 class="w-full pl-4 pr-12 bg-gray-50 rounded-lg border border-gray-200
                        focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary/40
-                       text-[13px] text-slate-800 placeholder-slate-400 placeholder:text-[13px] h-11"
+                       text-[13px] text-slate-800 placeholder-slate-400 placeholder:text-[13px] h-11 h-[42px]"
                 @search-open.window.debounce.10="focusAfterOpen"
                 <?php if ($searchConfig->isSuggestionsAllowed()): ?>
                 @focus.once="suggest"
