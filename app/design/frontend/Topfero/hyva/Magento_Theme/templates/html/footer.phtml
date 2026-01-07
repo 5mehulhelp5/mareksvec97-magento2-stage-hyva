@@ -1,92 +1,105 @@
 <?php
-/**
- * Hyvä Themes - https://hyva.io
- */
-
 declare(strict_types=1);
 
 use Hyva\Theme\ViewModel\HyvaCsp;
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\HeroiconsOutline;
+use Hyva\PaymentIcons\ViewModel\PaymentIconsLight;
+use Hyva\Theme\ViewModel\Store;
+use Hyva\Theme\ViewModel\StoreSwitcher;
 use Magento\Framework\Escaper;
 use Magento\Framework\View\Element\Template;
 use Magento\Store\Model\ScopeInterface;
-use Hyva\Theme\Model\ViewModelRegistry;
-use Hyva\Theme\ViewModel\HeroiconsOutline;
-use Hyva\Theme\ViewModel\HeroiconsSolid;
-use Hyva\PaymentIcons\ViewModel\PaymentIconsLight;
+use Magento\Store\ViewModel\SwitcherUrlProvider;
 
-/** @var \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig */
+/** @var Template $block */
+/** @var Escaper $escaper */
+/** @var HyvaCsp $hyvaCsp */
+/** @var ViewModelRegistry $viewModels */
+
 $scopeConfig = \Magento\Framework\App\ObjectManager::getInstance()
     ->get(\Magento\Framework\App\Config\ScopeConfigInterface::class);
 
-/** Telefón z natívneho Store Information */
-$storePhone = (string) ($scopeConfig->getValue('general/store_information/phone', ScopeInterface::SCOPE_STORE) ?? '');
-$phoneHref = $storePhone ? 'tel:' . preg_replace('/[^\d\+]/', '', $storePhone) : '';
-/** Email z General Contact */
-$generalEmail = (string) ($scopeConfig->getValue(
-    'trans_email/ident_general/email',
-    ScopeInterface::SCOPE_STORE
-) ?? '');
+$storePhone = (string)($scopeConfig->getValue('general/store_information/phone', ScopeInterface::SCOPE_STORE) ?? '');
+$phoneHref  = $storePhone ? 'tel:' . preg_replace('/[^\d\+]/', '', $storePhone) : '';
 
+$generalEmail = (string)($scopeConfig->getValue('trans_email/ident_general/email', ScopeInterface::SCOPE_STORE) ?? '');
 
-// Footer – stĺpec 1 + sociálne siete
-$aboutUs   = (string) $scopeConfig->getValue('metalio/footer/about_us', ScopeInterface::SCOPE_STORE);
-$instagram = (string) $scopeConfig->getValue('metalio/footer/instagram', ScopeInterface::SCOPE_STORE);
-$facebook  = (string) $scopeConfig->getValue('metalio/footer/facebook', ScopeInterface::SCOPE_STORE);
-$youtube   = (string) $scopeConfig->getValue('metalio/footer/youtube', ScopeInterface::SCOPE_STORE);
+$aboutUs   = (string)$scopeConfig->getValue('metalio/footer/about_us', ScopeInterface::SCOPE_STORE);
+$instagram = (string)$scopeConfig->getValue('metalio/footer/instagram', ScopeInterface::SCOPE_STORE);
+$facebook  = (string)$scopeConfig->getValue('metalio/footer/facebook', ScopeInterface::SCOPE_STORE);
+$youtube   = (string)$scopeConfig->getValue('metalio/footer/youtube', ScopeInterface::SCOPE_STORE);
 
-// Footer – stĺpce 2 a 3
-$col2Title = (string) $scopeConfig->getValue('metalio/footer/col2_title', ScopeInterface::SCOPE_STORE);
-$col2Html  = (string) $scopeConfig->getValue('metalio/footer/col2_html',  ScopeInterface::SCOPE_STORE);
-$col3Title = (string) $scopeConfig->getValue('metalio/footer/col3_title', ScopeInterface::SCOPE_STORE);
-$col3Html  = (string) $scopeConfig->getValue('metalio/footer/col3_html',  ScopeInterface::SCOPE_STORE);
+$col2Title = (string)$scopeConfig->getValue('metalio/footer/col2_title', ScopeInterface::SCOPE_STORE);
+$col2Html  = (string)$scopeConfig->getValue('metalio/footer/col2_html',  ScopeInterface::SCOPE_STORE);
+$col3Title = (string)$scopeConfig->getValue('metalio/footer/col3_title', ScopeInterface::SCOPE_STORE);
+$col3Html  = (string)$scopeConfig->getValue('metalio/footer/col3_html',  ScopeInterface::SCOPE_STORE);
 
-
-// Column 4 – kontakt
-$col4Title    = (string) $scopeConfig->getValue('metalio/footer/col4_title', ScopeInterface::SCOPE_STORE);
-$col4Html     = (string) $scopeConfig->getValue('metalio/footer/col4_html',  ScopeInterface::SCOPE_STORE);
-$showPhone    = (bool)   $scopeConfig->isSetFlag('metalio/footer/show_phone', ScopeInterface::SCOPE_STORE);
-
+$col4Title = (string)$scopeConfig->getValue('metalio/footer/col4_title', ScopeInterface::SCOPE_STORE);
+$col4Html  = (string)$scopeConfig->getValue('metalio/footer/col4_html',  ScopeInterface::SCOPE_STORE);
+$showPhone = (bool)$scopeConfig->isSetFlag('metalio/footer/show_phone', ScopeInterface::SCOPE_STORE);
 
 $heroicons = $viewModels->require(HeroiconsOutline::class);
-/** @var HeroiconsSolid $heroiconsSolid */
-$heroiconsSolid = $viewModels->require(HeroiconsSolid::class);
 
-
-/** @var Escaper  $escaper */
-/** @var Template $block   */
-/** @var HyvaCsp  $hyvaCsp */
-/** @var ViewModelRegistry $viewModels */
-
-// --- Konfigurácia loga + názvu značky ---
-// Umiestni súbor: <téma>/web/images/footer-logo.png
-$logoSrc   = $block->getViewFileUrl('images/footer-logo.png');
-$homeUrl   = $block->getUrl('');
-$brandName = 'MetaloPro'; // uprav podľa potreby (napr. 'Metalio')
-
-// Payment icons (Hyvä Payment Icons module musí byť nainštalovaný)
 /** @var PaymentIconsLight $paymentIcons */
 $paymentIcons = $viewModels->require(PaymentIconsLight::class);
-$paymentIconsWidth = 48;
+$paymentIconsWidth  = 48;
 $paymentIconsHeight = 32;
+
+$logoSrc   = $block->getViewFileUrl('images/footer-logo.png');
+$homeUrl   = $block->getUrl('');
+$brandName = 'TOPFERO';
+
 $socialLinks = array_filter([
-  'facebook'  => $facebook,
-  'instagram' => $instagram,
-  'youtube'   => $youtube,
+    'facebook'  => $facebook,
+    'instagram' => $instagram,
+    'youtube'   => $youtube,
 ]);
-$skFlag = $block->getViewFileUrl('images/flags/sk1.svg');
-$czFlag = $block->getViewFileUrl('images/flags/cz1.svg');
+
+$aboutFallback = 'TOPFERO – Prémiové stolové nohy a domové čísla na mieru. Laserové gravírovanie a práškové lakovanie. Vyrobené s precíznosťou a vášňou na Slovensku.';
+
+/**
+ * Language switcher (dynamicky)
+ */
+$switcherUrlProvider     = $viewModels->require(SwitcherUrlProvider::class);
+$storeViewModel          = $viewModels->require(Store::class);
+$storeSwitcherViewModel  = $viewModels->require(StoreSwitcher::class);
+
+$currentStore = $storeSwitcherViewModel->getStore();
+$stores       = $storeSwitcherViewModel->getStores();
+
+$normalizeFlagCode = static function (string $storeCode): string {
+    $code = strtolower(trim($storeCode));
+    $code = str_replace('-', '_', $code);
+    $parts = array_values(array_filter(explode('_', $code)));
+    if (!$parts) return 'en';
+
+    $last = end($parts);
+    if (preg_match('/^[a-z]{2}$/', (string) $last)) {
+        return (string) $last; // sk, cz, de...
+    }
+    $fallback = substr((string) $parts[0], 0, 2);
+    return $fallback ?: 'en';
+};
+
+$flagSvgUrl = static function (string $flagCode) use ($block): string {
+    return $block->getViewFileUrl('images/flags/' . $flagCode . '1.svg');
+};
+
+$flagPngUrl = static function (string $flagCode) use ($block): string {
+    return $block->getViewFileUrl('images/flags/circle/' . $flagCode . '.png');
+};
 ?>
 
 <?= $block->getChildHtml('footer-content-before') ?>
 
-<footer class="bg-primary text-white" role="contentinfo">
-    <!-- Top pás s logom + About + ostatné stĺpce -->
-
-    <div class="container mx-auto py-10">
+<footer class="bg-black text-white" role="contentinfo">
+    <!-- Main footer -->
+    <div class="max-w-7xl mx-auto px-4 py-10">
         <div class="grid grid-cols-1 gap-8 lg:grid-cols-4 lg:gap-10">
-            <!-- Col 1: Logo + O nás -->
+            <!-- Col 1: Logo + About + Social -->
             <div>
-                <a href="<?= $escaper->escapeUrl($homeUrl) ?>" class="inline-flex items-center gap-3">
+                <a href="<?= $escaper->escapeUrl($homeUrl) ?>" class="inline-block">
                     <img
                         src="<?= $escaper->escapeUrl($logoSrc) ?>"
                         alt="<?= $escaper->escapeHtmlAttr($brandName) ?>"
@@ -94,185 +107,241 @@ $czFlag = $block->getViewFileUrl('images/flags/cz1.svg');
                         width="180" height="40"
                         loading="lazy" decoding="async"
                     />
-                    <span class="sr-only"><?= $escaper->escapeHtml($brandName) ?></span>
                 </a>
+
                 <p class="mt-5 max-w-[60ch] leading-relaxed text-white">
-                  <?php if ($aboutUs): ?>
-                    <?= $escaper->escapeHtml($aboutUs) ?>
-                  <?php endif; ?>
+                    <?= $escaper->escapeHtml($aboutUs ?: $aboutFallback) ?>
                 </p>
-                <!-- Social ikony (brandové logá ako inline SVG; Heroicons nemajú FB/IG/YT) -->
-                              <nav class="mt-5" aria-label="<?= $escaper->escapeHtml(__('Sociálne siete')) ?>">
-                                  <ul class="flex items-center gap-3">
-                                      <?php if (!empty($socialLinks['facebook'])): ?>
-                                          <li>
-                                              <a href="<?= $escaper->escapeUrl($socialLinks['facebook']) ?>"
-                                                 class="group inline-flex h-10 w-10 items-center justify-center rounded-full bg-white/10 ring-1 ring-white/20 transition hover:bg-white/20 hover:ring-white/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
-                                                 target="_blank" rel="noopener" aria-label="Facebook">
-                                                  <!-- Facebook -->
-                                                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"
-                                                       fill="currentColor"
-                                                       class="h-5 w-5 text-white/95 transition group-hover:scale-105" aria-hidden="true">
-                                                      <path d="M512 256C512 114.6 397.4 0 256 0S0 114.6 0 256s114.6 256 256 256c1.5 0 3 0 4.5-.1V312.7h-55v-64.1h55v-47.2
-                                                          c0-54.7 33.4-84.5 82.2-84.5 23.4 0 43.5 1.7 49.3 2.5v57.2h-33.6c-26.5 0-31.7 12.6-31.7 31.1v40.8h63.5l-8.3
-                                                          64.1h-55.2v189.5C433.7 471.4 512 372.9 512 256z"/>
-                                                  </svg>
-                                                  <span class="sr-only">Facebook</span>
-                                              </a>
-                                          </li>
-                                      <?php endif; ?>
 
-                                      <?php if (!empty($socialLinks['instagram'])): ?>
-                                          <li>
-                                              <a href="<?= $escaper->escapeUrl($socialLinks['instagram']) ?>"
-                                                 class="group inline-flex h-10 w-10 items-center justify-center rounded-full bg-white/10 ring-1 ring-white/20 transition hover:bg-white/20 hover:ring-white/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
-                                                 target="_blank" rel="noopener" aria-label="Instagram">
-                                                  <!-- Instagram -->
-                                                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 511 511.9"
-                                                       fill="currentColor"
-                                                       class="h-5 w-5 text-white/95 transition group-hover:scale-105" aria-hidden="true">
-                                                      <path d="m510.949219 150.5c-1.199219-27.199219-5.597657-45.898438-11.898438-62.101562-6.5-17.199219-16.5-32.597657-29.601562-45.398438-12.800781-13-28.300781-23.101562-45.300781-29.5-16.296876-6.300781-34.898438-10.699219-62.097657-11.898438-27.402343-1.300781-36.101562-1.601562-105.601562-1.601562s-78.199219.300781-105.5 1.5c-27.199219 1.199219-45.898438 5.601562-62.097657 11.898438-17.203124 6.5-32.601562 16.5-45.402343 29.601562-13 12.800781-23.097657 28.300781-29.5 45.300781-6.300781 16.300781-10.699219 34.898438-11.898438 62.097657-1.300781 27.402343-1.601562 36.101562-1.601562 105.601562s.300781 78.199219 1.5 105.5c1.199219 27.199219 5.601562 45.898438 11.902343 62.101562 6.5 17.199219 16.597657 32.597657 29.597657 45.398438 12.800781 13 28.300781 23.101562 45.300781 29.5 16.300781 6.300781 34.898438 10.699219 62.101562 11.898438 27.296876 1.203124 36 1.5 105.5 1.5s78.199219-.296876 105.5-1.5c27.199219-1.199219 45.898438-5.597657 62.097657-11.898438 34.402343-13.300781 61.601562-40.5 74.902343-74.898438 6.296876-16.300781 10.699219-34.902343 11.898438-62.101562 1.199219-27.300781 1.5-36 1.5-105.5s-.101562-78.199219-1.300781-105.5zm-46.097657 209c-1.101562 25-5.300781 38.5-8.800781 47.5-8.601562 22.300781-26.300781 40-48.601562 48.601562-9 3.5-22.597657 7.699219-47.5 8.796876-27 1.203124-35.097657 1.5-103.398438 1.5s-76.5-.296876-103.402343-1.5c-25-1.097657-38.5-5.296876-47.5-8.796876-11.097657-4.101562-21.199219-10.601562-29.398438-19.101562-8.5-8.300781-15-18.300781-19.101562-29.398438-3.5-9-7.699219-22.601562-8.796876-47.5-1.203124-27-1.5-35.101562-1.5-103.402343s.296876-76.5 1.5-103.398438c1.097657-25 5.296876-38.5 8.796876-47.5 4.101562-11.101562 10.601562-21.199219 19.203124-29.402343 8.296876-8.5 18.296876-15 29.398438-19.097657 9-3.5 22.601562-7.699219 47.5-8.800781 27-1.199219 35.101562-1.5 103.398438-1.5 68.402343 0 76.5.300781 103.402343 1.5 25 1.101562 38.5 5.300781 47.5 8.800781 11.097657 4.097657 21.199219 10.597657 29.398438 19.097657 8.5 8.300781 15 18.300781 19.101562 29.402343 3.5 9 7.699219 22.597657 8.800781 47.5 1.199219 27 1.5 35.097657 1.5 103.398438s-.300781 76.300781-1.5 103.300781z"/>
-                                                      <path d="m256.449219 124.5c-72.597657 0-131.5 58.898438-131.5 131.5s58.902343 131.5 131.5 131.5c72.601562 0 131.5-58.898438 131.5-131.5s-58.898438-131.5-131.5-131.5zm0 216.800781c-47.097657 0-85.300781-38.199219-85.300781-85.300781s38.203124-85.300781 85.300781-85.300781c47.101562 0 85.300781 38.199219 85.300781 85.300781s-38.199219 85.300781-85.300781 85.300781z"/>
-                                                      <path d="m423.851562 119.300781c0 16.953125-13.746093 30.699219-30.703124 30.699219-16.953126 0-30.699219-13.746094-30.699219-30.699219 0-16.957031 13.746093-30.699219 30.699219-30.699219 16.957031 0 30.703124 13.742188 30.703124 30.699219z"/>
-                                                  </svg>
-                                                  <span class="sr-only">Instagram</span>
-                                              </a>
-                                          </li>
+                <!-- Social icons (hover: bg-primary + ring-white/30) -->
+                <?php if ($socialLinks): ?>
+                    <nav class="mt-6" aria-label="<?= $escaper->escapeHtmlAttr(__('Sociálne siete')) ?>">
+                        <ul class="flex items-center gap-3">
+                            <?php if (!empty($socialLinks['facebook'])): ?>
+                                <li>
+                                    <a
+                                        href="<?= $escaper->escapeUrl($socialLinks['facebook']) ?>"
+                                        class="group inline-flex h-10 w-10 items-center justify-center rounded-full bg-white/10 ring-1 ring-white/20 transition
+                                               hover:bg-primary hover:ring-white/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
+                                        target="_blank" rel="noopener" aria-label="Facebook"
+                                    >
+                                        <!-- Facebook -->
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"
+                                             fill="currentColor" class="h-5 w-5 text-white transition group-hover:scale-110" aria-hidden="true">
+                                            <path d="M512 256C512 114.6 397.4 0 256 0S0 114.6 0 256s114.6 256 256 256c1.5 0 3 0 4.5-.1V312.7h-55v-64.1h55v-47.2c0-54.7 33.4-84.5 82.2-84.5 23.4 0 43.5 1.7 49.3 2.5v57.2h-33.6c-26.5 0-31.7 12.6-31.7 31.1v40.8h63.5l-8.3 64.1h-55.2v189.5C433.7 471.4 512 372.9 512 256z"/>
+                                        </svg>
+                                    </a>
+                                </li>
+                            <?php endif; ?>
 
-                                      <?php endif; ?>
+                            <?php if (!empty($socialLinks['instagram'])): ?>
+                                <li>
+                                    <a
+                                        href="<?= $escaper->escapeUrl($socialLinks['instagram']) ?>"
+                                        class="group inline-flex h-10 w-10 items-center justify-center rounded-full bg-white/10 ring-1 ring-white/20 transition
+                                               hover:bg-primary hover:ring-white/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
+                                        target="_blank" rel="noopener" aria-label="Instagram"
+                                    >
+                                        <!-- Instagram -->
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 511 511.9"
+                                             fill="currentColor" class="h-5 w-5 text-white transition group-hover:scale-110" aria-hidden="true">
+                                            <path d="m510.949219 150.5c-1.199219-27.199219-5.597657-45.898438-11.898438-62.101562-6.5-17.199219-16.5-32.597657-29.601562-45.398438-12.800781-13-28.300781-23.101562-45.300781-29.5-16.296876-6.300781-34.898438-10.699219-62.097657-11.898438-27.402343-1.300781-36.101562-1.601562-105.601562-1.601562s-78.199219.300781-105.5 1.5c-27.199219 1.199219-45.898438 5.601562-62.097657 11.898438-17.203124 6.5-32.601562 16.5-45.402343 29.601562-13 12.800781-23.097657 28.300781-29.5 45.300781-6.300781 16.300781-10.699219 34.898438-11.898438 62.097657-1.300781 27.402343-1.601562 36.101562-1.601562 105.601562s.300781 78.199219 1.5 105.5c1.199219 27.199219 5.601562 45.898438 11.902343 62.101562 6.5 17.199219 16.597657 32.597657 29.597657 45.398438 12.800781 13 28.300781 23.101562 45.300781 29.5 16.300781 6.300781 34.898438 10.699219 62.101562 11.898438 27.296876 1.203124 36 1.5 105.5 1.5s78.199219-.296876 105.5-1.5c27.199219-1.199219 45.898438-5.597657 62.097657-11.898438 34.402343-13.300781 61.601562-40.5 74.902343-74.898438 6.296876-16.300781 10.699219-34.902343 11.898438-62.101562 1.199219-27.300781 1.5-36 1.5-105.5s-.101562-78.199219-1.300781-105.5zm-46.097657 209c-1.101562 25-5.300781 38.5-8.800781 47.5-8.601562 22.300781-26.300781 40-48.601562 48.601562-9 3.5-22.597657 7.699219-47.5 8.796876-27 1.203124-35.097657 1.5-103.398438 1.5s-76.5-.296876-103.402343-1.5c-25-1.097657-38.5-5.296876-47.5-8.796876-11.097657-4.101562-21.199219-10.601562-29.398438-19.101562-8.5-8.300781-15-18.300781-19.101562-29.398438-3.5-9-7.699219-22.601562-8.796876-47.5-1.203124-27-1.5-35.101562-1.5-103.402343s.296876-76.5 1.5-103.398438c1.097657-25 5.296876-38.5 8.796876-47.5 4.101562-11.101562 10.601562-21.199219 19.203124-29.402343 8.296876-8.5 18.296876-15 29.398438-19.097657 9-3.5 22.601562-7.699219 47.5-8.800781 27-1.199219 35.101562-1.5 103.398438-1.5 68.402343 0 76.5.300781 103.402343 1.5 25 1.101562 38.5 5.300781 47.5 8.800781 11.097657 4.097657 21.199219 10.597657 29.398438 19.097657 8.5 8.300781 15 18.300781 19.101562 29.402343 3.5 9 7.699219 22.597657 8.800781 47.5 1.199219 27 1.5 35.097657 1.5 103.398438s-.300781 76.300781-1.5 103.300781z"/>
+                                            <path d="m256.449219 124.5c-72.597657 0-131.5 58.898438-131.5 131.5s58.902343 131.5 131.5 131.5c72.601562 0 131.5-58.898438 131.5-131.5s-58.898438-131.5-131.5-131.5zm0 216.800781c-47.097657 0-85.300781-38.199219-85.300781-85.300781s38.203124-85.300781 85.300781-85.300781c47.101562 0 85.300781 38.199219 85.300781 85.300781s-38.199219 85.300781-85.300781 85.300781z"/>
+                                            <path d="m423.851562 119.300781c0 16.953125-13.746093 30.699219-30.703124 30.699219-16.953126 0-30.699219-13.746094-30.699219-30.699219 0-16.957031 13.746093-30.699219 30.699219-30.699219 16.957031 0 30.703124 13.742188 30.703124 30.699219z"/>
+                                        </svg>
+                                    </a>
+                                </li>
+                            <?php endif; ?>
 
-                                      <?php if (!empty($socialLinks['youtube'])): ?>
-                                          <li>
-                                              <a href="<?= $escaper->escapeUrl($socialLinks['youtube']) ?>"
-                                                 class="group inline-flex h-10 w-10 items-center justify-center rounded-full bg-white/10 ring-1 ring-white/20 transition hover:bg-white/20 hover:ring-white/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
-                                                 target="_blank" rel="noopener" aria-label="YouTube">
-                                                  <!-- YouTube -->
-                                                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="-21 -117 682.66672 682"
-                                                       fill="currentColor"
-                                                       class="h-5 w-5 text-white/95 transition group-hover:scale-105" aria-hidden="true">
-                                                      <path d="M626.8125 64.035156c-7.375-27.417968-28.992188-49.03125-56.40625-56.414062-50.082031-13.703125-250.414062-13.703125-250.414062-13.703125s-200.324219 0-250.40625 13.183593c-26.886719 7.375-49.03125 29.519532-56.40625 56.933594-13.179688 50.078125-13.179688 153.933594-13.179688 153.933594s0 104.378906 13.179688 153.933594c7.382812 27.414062 28.992187 49.027344 56.410156 56.410156 50.605468 13.707031 250.410156 13.707031 250.410156 13.707031s200.324219 0 250.40625-13.183593c27.417969-7.378907 49.03125-28.992188 56.414062-56.40625 13.175782-50.082032 13.175782-153.933594 13.175782-153.933594s.527344-104.382813-13.183594-154.460938zm-370.601562 249.878906v-191.890624l166.585937 95.945312z"/>
-                                                  </svg>
-                                                  <span class="sr-only">YouTube</span>
-                                              </a>
-                                          </li>
-                                      <?php endif; ?>
-                                  </ul>
-                              </nav>
-                              <nav class="mt-4" aria-label="<?= $escaper->escapeHtml(__('Jazyk / krajina')) ?>">
-                                  <ul class="flex items-center gap-2">
-                                      <li>
-                                          <a href="https://metalio.sk"
-                                             hreflang="sk" lang="sk"
-                                             class="inline-flex items-center gap-2 rounded-md bg-white/10 px-2.5 py-1.5 ring-1 ring-white/20 transition hover:bg-white/20 hover:ring-white/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white">
-                                              <img src="<?= $escaper->escapeUrl($skFlag) ?>"
-                                                   alt="<?= $escaper->escapeHtmlAttr(__('Slovensko')) ?>"
-                                                   class="h-5 w-auto rounded-sm shadow-sm" loading="lazy" decoding="async" />
-                                              <span class="text-white/90">metalio.sk</span>
-                                          </a>
-                                      </li>
-                                      <li>
-                                          <a href="https://metalio.cz"
-                                             hreflang="cs" lang="cs"
-                                             class="inline-flex items-center gap-2 rounded-md bg-white/10 px-2.5 py-1.5 ring-1 ring-white/20 transition hover:bg-white/20 hover:ring-white/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white">
-                                              <img src="<?= $escaper->escapeUrl($czFlag) ?>"
-                                                   alt="<?= $escaper->escapeHtmlAttr(__('Česko')) ?>"
-                                                   class="h-5 w-auto rounded-sm shadow-sm" loading="lazy" decoding="async" />
-                                              <span class="text-white/90">metalio.cz</span>
-                                          </a>
-                                      </li>
-                                  </ul>
-                              </nav>
-                          
-            </div>
-
-            <!-- Col 2..4: Fixné stĺpce -->
-            <div>
-                <?php if ($col2Title): ?>
-                  <h3 class="m-0 font-bold leading-tight text-[20px] sm:text-[21px] lg:text-[23px]"><?= $escaper->escapeHtml($col2Title) ?></h3>
+                            <?php if (!empty($socialLinks['youtube'])): ?>
+                                <li>
+                                    <a
+                                        href="<?= $escaper->escapeUrl($socialLinks['youtube']) ?>"
+                                        class="group inline-flex h-10 w-10 items-center justify-center rounded-full bg-white/10 ring-1 ring-white/20 transition
+                                               hover:bg-primary hover:ring-white/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
+                                        target="_blank" rel="noopener" aria-label="YouTube"
+                                    >
+                                        <!-- YouTube -->
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="-21 -117 682.66672 682"
+                                             fill="currentColor" class="h-5 w-5 text-white transition group-hover:scale-110" aria-hidden="true">
+                                            <path d="M626.8125 64.035156c-7.375-27.417968-28.992188-49.03125-56.40625-56.414062-50.082031-13.703125-250.414062-13.703125-250.414062-13.703125s-200.324219 0-250.40625 13.183593c-26.886719 7.375-49.03125 29.519532-56.40625 56.933594-13.179688 50.078125-13.179688 153.933594-13.179688 153.933594s0 104.378906 13.179688 153.933594c7.382812 27.414062 28.992187 49.027344 56.410156 56.410156 50.605468 13.707031 250.410156 13.707031 250.410156 13.707031s200.324219 0 250.40625-13.183593c27.417969-7.378907 49.03125-28.992188 56.414062-56.40625 13.175782-50.082032 13.175782-153.933594 13.175782-153.933594s.527344-104.382813-13.183594-154.460938zm-370.601562 249.878906v-191.890624l166.585937 95.945312z"/>
+                                        </svg>
+                                    </a>
+                                </li>
+                            <?php endif; ?>
+                        </ul>
+                    </nav>
                 <?php endif; ?>
-                <ul class="mt-5 space-y-1.5">
-                    <?php if ($col2Html): ?>
-                      <?= /* @noEscape */ $col2Html ?>
-                    <?php endif; ?>
-                </ul>
-                <?php /* Pozn.: URL kľúče uprav podľa reálnych URL (URL key kategórií/CMS stránok) */ ?>
             </div>
 
+            <!-- Col 2: Informácie -->
             <div>
-                <?php if ($col3Title): ?>
-                  <h3 class="m-0 font-bold leading-tight text-[20px] sm:text-[21px] lg:text-[23px]"><?= $escaper->escapeHtml($col2Title) ?></h3>
+                <h3 class="m-0 font-bold leading-tight text-lg lg:text-xl mb-5"><?= $escaper->escapeHtml($col2Title ?: __('Informácie')) ?></h3>
+
+                <?php if ($col2Html): ?>
+                    <div class="text-white">
+                        <?= /* @noEscape */ $col2Html ?>
+                    </div>
+                <?php else: ?>
+                    <ul class="space-y-2.5">
+                        <li><a class="text-white hover:text-primary transition-colors" href="<?= $escaper->escapeUrl($block->getUrl('obchodne-podmienky')) ?>"><?= $escaper->escapeHtml(__('Obchodné podmienky')) ?></a></li>
+                        <li><a class="text-white hover:text-primary transition-colors" href="<?= $escaper->escapeUrl($block->getUrl('ochrana-osobnych-udajov')) ?>"><?= $escaper->escapeHtml(__('Ochrana osobných údajov')) ?></a></li>
+                        <li><a class="text-white hover:text-primary transition-colors" href="<?= $escaper->escapeUrl($block->getUrl('kontakt')) ?>"><?= $escaper->escapeHtml(__('Kontakt')) ?></a></li>
+                        <li><a class="text-white hover:text-primary transition-colors" href="<?= $escaper->escapeUrl($block->getUrl('blog')) ?>"><?= $escaper->escapeHtml(__('Blog')) ?></a></li>
+                        <li><a class="text-white hover:text-primary transition-colors" href="<?= $escaper->escapeUrl($block->getUrl('o-nas')) ?>"><?= $escaper->escapeHtml(__('O nás')) ?></a></li>
+                        <li><a class="text-white hover:text-primary transition-colors" href="<?= $escaper->escapeUrl($block->getUrl('brand-manual')) ?>"><?= $escaper->escapeHtml(__('Brand Manual')) ?></a></li>
+                    </ul>
                 <?php endif; ?>
-                <ul class="mt-5 space-y-1.5">
-                    <?php if ($col3Html): ?>
-                      <?= /* @noEscape */ $col3Html ?>
-                    <?php endif; ?>
-                </ul>
-                <?php /* Pozn.: 'returns' / 'delivery-and-payment' sú CMS identifikátory – uprav podľa tvojich */ ?>
             </div>
 
+            <!-- Col 3: Služby -->
             <div>
-                <?php if ($col4Title): ?>
-                        <h3 class="m-0 font-bold leading-tight text-[20px] sm:text-[21px] lg:text-[23px]">
-                            <?= $escaper->escapeHtml($col4Title) ?>
-                        </h3>
+                <h3 class="m-0 font-bold leading-tight text-lg lg:text-xl mb-5"><?= $escaper->escapeHtml($col3Title ?: __('Služby')) ?></h3>
+
+                <?php if ($col3Html): ?>
+                    <div class="text-white">
+                        <?= /* @noEscape */ $col3Html ?>
+                    </div>
+                <?php else: ?>
+                    <ul class="space-y-2.5">
+                        <li><a class="text-white hover:text-primary transition-colors" href="<?= $escaper->escapeUrl($block->getUrl('vyroba-na-mieru')) ?>"><?= $escaper->escapeHtml(__('Výroba na mieru')) ?></a></li>
+                        <li><a class="text-white hover:text-primary transition-colors" href="<?= $escaper->escapeUrl($block->getUrl('faq')) ?>"><?= $escaper->escapeHtml(__('Často kladené otázky')) ?></a></li>
+                        <li><a class="text-white hover:text-primary transition-colors" href="<?= $escaper->escapeUrl($block->getUrl('doprava-a-platba')) ?>"><?= $escaper->escapeHtml(__('Doprava a platba')) ?></a></li>
+                        <li><a class="text-white hover:text-primary transition-colors" href="<?= $escaper->escapeUrl($block->getUrl('materialy-a-farby')) ?>"><?= $escaper->escapeHtml(__('Materiály a farby')) ?></a></li>
+                    </ul>
+                <?php endif; ?>
+            </div>
+
+            <!-- Col 4: Kontakt -->
+            <div>
+                <h3 class="m-0 font-bold leading-tight text-lg lg:text-xl mb-5"><?= $escaper->escapeHtml($col4Title ?: __('Kontakt')) ?></h3>
+
+                <address class="not-italic text-white">
+                    <?php if ($col4Html): ?>
+                        <div class="mb-4 text-sm leading-relaxed">
+                            <?= /* @noEscape */ $col4Html ?>
+                        </div>
                     <?php else: ?>
-                        <h3 class="m-0 font-bold leading-tight text-[20px] sm:text-[21px] lg:text-[23px]">
-                            <?= $escaper->escapeHtml(__('Contact')) ?>
-                        </h3>
+                        <div class="mb-4 text-sm leading-relaxed">
+                            <div class="font-semibold text-white">BigConnect s.r.o.</div>
+                            <div>Duklianska 21</div>
+                            <div>08501 Bardejov, Slovensko</div>
+                        </div>
                     <?php endif; ?>
-                <address class="mt-5 not-italic text-white">
-                        <?php if ($col4Html): ?>
-                            <div class="mb-3">
-                                <?= /* @noEscape */ $col4Html ?>
-                            </div>
-                        <?php endif; ?>
 
-                    <!-- E-mail -->
                     <?php if ($generalEmail): ?>
-                      <div class="mt-3">
-                        <a href="mailto:<?= $escaper->escapeHtmlAttr($generalEmail) ?>"
-                           class="group inline-flex items-center gap-2 hover:underline underline-offset-4 decoration-white/40">
-                          <span class="inline-grid size-8 place-items-center rounded-full bg-white/10 ring-1 ring-white/20">
-                            <?= $heroicons->mailHtml('w-5 h-5 text-white/95') ?>
-                          </span>
-                          <span class="text-white/90"><?= $escaper->escapeHtml($generalEmail) ?></span>
-                        </a>
-                      </div>
+                        <div class="mt-4">
+                            <a
+                                href="mailto:<?= $escaper->escapeHtmlAttr($generalEmail) ?>"
+                                class="group inline-flex items-center gap-2.5 text-white/90 hover:text-primary transition-colors hover:underline underline-offset-4 decoration-white/40"
+                            >
+                                <span class="inline-grid size-9 place-items-center rounded-lg bg-white/10 ring-1 ring-white/20 group-hover:bg-white/15 transition-colors">
+                                    <?= $heroicons->mailHtml('w-4 h-4 text-white') ?>
+                                </span>
+                                <span class="text-sm"><?= $escaper->escapeHtml($generalEmail) ?></span>
+                            </a>
+                        </div>
                     <?php endif; ?>
 
-                    <!-- Telefón -->
                     <?php if ($showPhone && $storePhone): ?>
-                      <div class="mt-2">
-                        <a href="<?= $escaper->escapeUrl($phoneHref) ?>"
-                           class="group inline-flex items-center gap-2 hover:underline underline-offset-4 decoration-white/40">
-                          <span class="inline-grid size-8 place-items-center rounded-full bg-white/10 ring-1 ring-white/20">
-                            <?= $heroicons->phoneHtml('w-5 h-5 text-white/95') ?>
-                          </span>
-                          <span class="text-white/90"><?= $escaper->escapeHtml($storePhone) ?></span>
-                        </a>
-                      </div>
+                        <div class="mt-3">
+                            <a
+                                href="<?= $escaper->escapeUrl($phoneHref) ?>"
+                                class="group inline-flex items-center gap-2.5 text-white/90 hover:text-primary transition-colors hover:underline underline-offset-4 decoration-white/40"
+                            >
+                                <span class="inline-grid size-9 place-items-center rounded-lg bg-white/10 ring-1 ring-white/20 group-hover:bg-white/15 transition-colors">
+                                    <?= $heroicons->phoneHtml('w-4 h-4 text-white') ?>
+                                </span>
+                                <span class="text-sm"><?= $escaper->escapeHtml($storePhone) ?></span>
+                            </a>
+                        </div>
                     <?php endif; ?>
-                    <!-- CTA (voliteľné) -->
-                    <div class="mt-4">
-                        <a href="<?= $escaper->escapeUrl($block->getUrl('contact')) ?>"
-                           class="inline-flex items-center gap-2 rounded-lg bg-white/15 px-3 py-2 ring-1 ring-white/25 transition hover:bg-white/25">
-                            <?= $heroicons->chatHtml('w-5 h-5 text-white') ?>
-                            <span class="text-white"><?= $escaper->escapeHtml(__('Napíšte nám')) ?></span>
+
+                    <div class="mt-5">
+                        <a
+                            href="<?= $escaper->escapeUrl($block->getUrl('kontakt')) ?>"
+                            class="inline-flex items-center gap-2 rounded-lg px-4 py-2.5 ring-1 ring-white/25 transition font-medium text-sm
+                                   bg-primary hover:bg-primary-darker text-white"
+                        >
+                            <?= $heroicons->chatHtml('w-4 h-4 text-white') ?>
+                            <span><?= $escaper->escapeHtml(__('Napíšte nám')) ?></span>
                         </a>
                     </div>
                 </address>
             </div>
         </div>
+
+        <!-- Language selector - centered grid -->
+        <?php if (count($stores) > 1): ?>
+            <div class="mt-12 pt-8 border-t border-white/10">
+                <div class="switcher language switcher-language" data-ui-id="language-switcher" id="switcher-language">
+                    <div class="options switcher-options">
+                        <nav aria-label="<?= $escaper->escapeHtmlAttr(__('Jazyk / krajina')) ?>">
+                            <ul class="flex gap-4 flex-wrap justify-center">
+                                <?php foreach ($stores as $lang): ?>
+                                    <?php
+                                    $isCurrent = ((int) $lang->getId() === (int) $storeViewModel->getStoreId());
+                                    $langFlag  = $normalizeFlagCode((string) $lang->getCode());
+                                    $langUrl   = (string) $switcherUrlProvider->getTargetStoreRedirectUrl($lang);
+                                    $storeName = (string) $lang->getName();
+                                    ?>
+
+                                    <li class="language flex <?= $escaper->escapeHtmlAttr($langFlag) ?> switcher-option">
+                                        <?php if ($isCurrent): ?>
+                                            <span
+                                                class="flex items-center gap-2 px-3 py-2 rounded-lg bg-white/5  ring-white/15 opacity-80 cursor-default"
+                                                aria-current="true"
+                                                aria-label="<?= $escaper->escapeHtmlAttr($storeName) ?>"
+                                            >
+                                                <img
+                                                    src="<?= $escaper->escapeUrl($flagSvgUrl($langFlag)) ?>"
+                                                    onerror="this.onerror=null;this.src='<?= $escaper->escapeJs($flagPngUrl($langFlag)) ?>';"
+                                                    alt="<?= $escaper->escapeHtmlAttr($storeName) ?>"
+                                                    class="h-5 w-5 rounded-full shadow-sm object-cover"
+                                                    width="20" height="20"
+                                                    loading="lazy" decoding="async"
+                                                />
+                                                <span class="text-sm text-white/90 font-semibold">
+                                                    <?= $escaper->escapeHtml($storeName) ?>
+                                                </span>
+                                            </span>
+                                        <?php else: ?>
+                                            <a
+                                                href="<?= $escaper->escapeUrl($langUrl) ?>"
+                                                aria-label="<?= $escaper->escapeHtmlAttr($storeName) ?>"
+                                                class="flex items-center gap-2 px-3 py-2 rounded-lg transition-colors
+                                                       text-white/90 hover:text-primary hover:bg-white/5
+                                                       focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
+                                            >
+                                                <img
+                                                    src="<?= $escaper->escapeUrl($flagSvgUrl($langFlag)) ?>"
+                                                    onerror="this.onerror=null;this.src='<?= $escaper->escapeJs($flagPngUrl($langFlag)) ?>';"
+                                                    alt="<?= $escaper->escapeHtmlAttr($storeName) ?>"
+                                                    class="h-5 w-5 rounded-full shadow-sm object-cover"
+                                                    width="20" height="20"
+                                                    loading="lazy" decoding="async"
+                                                />
+                                                <span class="text-sm font-semibold">
+                                                    <?= $escaper->escapeHtml($storeName) ?>
+                                                </span>
+                                            </a>
+                                        <?php endif; ?>
+                                    </li>
+                                <?php endforeach; ?>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        <?php endif; ?>
+
     </div>
-
-
-   
 
     <!-- Bottom bar: copy + platobné ikony -->
     <div class="border-t border-white/15 mt-4">
-        <div class="container mx-auto flex flex-col items-center justify-between gap-3 py-5 text-sm sm:flex-row">
+        <div class="max-w-7xl mx-auto flex flex-col items-center justify-between gap-3 py-5 px-4 text-sm sm:flex-row">
             <div class="opacity-90 flex items-center gap-2">
-                &copy; 2025 Metalio — súčasť skupiny MetaloPro
+                &copy; <?= (int)date('Y') ?> <?= $escaper->escapeHtml($brandName) ?> — <?= $escaper->escapeHtml(__('súčasť skupiny MetaloPro')) ?>
                 <img
                     src="<?= $escaper->escapeUrl($block->getViewFileUrl('images/metalopro-badge.png')) ?>"
                     alt="MetaloPro"
@@ -280,7 +349,8 @@ $czFlag = $block->getViewFileUrl('images/flags/cz1.svg');
                     loading="lazy" decoding="async"
                 />
             </div>
-            <div class="flex gap-3 flex-wrap items-center justify-center sm:justify-end" aria-label="<?= $escaper->escapeHtml(__('Payment Providers')) ?>">
+
+            <div class="flex gap-3 flex-wrap items-center justify-center sm:justify-end" aria-label="<?= $escaper->escapeHtmlAttr(__('Spôsoby platby')) ?>">
                 <?= $paymentIcons->visaHtml('', $paymentIconsWidth, $paymentIconsHeight) ?>
                 <?= $paymentIcons->mastercardHtml('', $paymentIconsWidth, $paymentIconsHeight) ?>
                 <?= $paymentIcons->paypalHtml('', $paymentIconsWidth, $paymentIconsHeight) ?>
@@ -289,43 +359,4 @@ $czFlag = $block->getViewFileUrl('images/flags/cz1.svg');
                 <?= $paymentIcons->googlePayHtml('', $paymentIconsWidth, $paymentIconsHeight) ?>
             </div>
         </div>
-    </div>
-</footer>
-
-<script>
-    function mobileFooterCollpase() {
-        return {
-            open: false,
-            isMobile: false,
-            init() {
-                this.open = this.$root.dataset.open;
-                this.checkIsMobileResolution();
-            },
-            checkIsMobileResolution() {
-                this.isMobile = this.$refs.toggleIcon && getComputedStyle(this.$refs.toggleIcon).display !== 'none'
-            },
-            isOpen() {
-                return this.isMobile ? this.open : true;
-            },
-            toggle() {
-                return this.isMobile ? this.open = !this.open : true;
-            },
-            eventListeners: {
-                ['@resize.window.debounce']() { this.checkIsMobileResolution(); },
-                ['@visibilitychange.window.debounce']() { this.checkIsMobileResolution(); }
-            },
-            setToggleRoles: {
-                [':role']() { return this.isMobile && 'button'; },
-                [':tabindex']() { return this.isMobile && '0'; },
-                [':aria-expanded']() { return this.isMobile ? this.open : null; },
-                [':aria-controls']() { return this.isMobile ? this.$el.dataset.id : null; }
-            },
-            setCollapseRoles: {
-                [':aria-hidden']() { return this.isMobile ? !!this.open : null; },
-                [':aria-labelledby']() { return this.isMobile ? this.$el.id : null; }
-            }
-        }
-    }
-    window.addEventListener('alpine:init', () => Alpine.data('mobileFooterCollpase', mobileFooterCollpase), { once: true });
-</script>
-<?php $hyvaCsp->registerInlineScript() ?>
+    </di

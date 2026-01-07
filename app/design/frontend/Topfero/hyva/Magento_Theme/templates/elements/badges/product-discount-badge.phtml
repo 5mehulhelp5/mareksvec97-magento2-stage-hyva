@@ -1,0 +1,29 @@
+<?php
+declare(strict_types=1);
+
+use Magento\Catalog\Model\Product;
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Element\Template;
+
+/** @var Template $block */
+/** @var Escaper $escaper */
+/** @var Product|null $product */
+$product = $block->getData('product');
+if (!$product) return;
+
+$regular = (float)$product->getPriceInfo()->getPrice('regular_price')->getAmount()->getValue();
+$final   = (float)$product->getPriceInfo()->getPrice('final_price')->getAmount()->getValue();
+
+if (!($regular > 0.0 && $final > 0.0 && $final < $regular)) return;
+
+$percent = (int) round((($regular - $final) / $regular) * 100);
+if ($percent < 1) return;
+
+$discountLabel = '-' . $percent . '%';
+?>
+
+<div class="absolute top-2 right-2 sm:top-4 sm:right-4">
+    <span class="bg-red text-white px-2 py-0.5 sm:px-3 sm:py-1 rounded-full font-bold text-xs sm:text-sm">
+        <?= $escaper->escapeHtml($discountLabel) ?>
+    </span>
+</div>

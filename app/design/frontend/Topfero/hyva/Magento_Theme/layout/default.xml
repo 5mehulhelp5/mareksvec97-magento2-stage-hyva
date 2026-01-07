@@ -76,15 +76,9 @@
         </referenceBlock>
 
         <referenceContainer name="footer">
-            <container name="store-benefits-wrapper" htmlTag="div" htmlClass="container" before="store-review">
-                <block
-                    name="store-benefits"
-                    template="Magento_Theme::elements/store-benefits.phtml"
-                />
-            </container>
-
-            <block name="store-review" template="Magento_Theme::elements/store-review.phtml" before="-"/>
+            <block name="store-benefits" template="Magento_Theme::elements/store-benefits.phtml" before="-"/>
         </referenceContainer>
+
 
         <referenceContainer name="before.body.end">
             <block name="js.scroll.helpers" template="Magento_Theme::page/js/scroll-helpers.phtml"/>

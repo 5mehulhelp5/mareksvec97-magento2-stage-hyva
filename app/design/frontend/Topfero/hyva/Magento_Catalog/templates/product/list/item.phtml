@@ -79,6 +79,7 @@ $payloadJson = json_encode($payload, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLA
 ?>
 
 <div class="group bg-white rounded-xl border border-border overflow-hidden hover:shadow-xl transition-all duration-300">
+	
     <!-- IMAGE -->
     <div class="relative aspect-square bg-secondary overflow-hidden">
         <a href="<?= $escaper->escapeUrl($productUrl) ?>"
@@ -96,6 +97,12 @@ $payloadJson = json_encode($payload, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLA
                 ->toHtml();
             ?>
         </a>
+        <?= $block->getLayout()
+            ->createBlock(\Magento\Framework\View\Element\Template::class)
+            ->setTemplate('Magento_Theme::elements/badges/product-discount-badge.phtml')
+            ->setData('product', $product)
+            ->toHtml()
+        ?>
     </div>
 
     <!-- CONTENT -->

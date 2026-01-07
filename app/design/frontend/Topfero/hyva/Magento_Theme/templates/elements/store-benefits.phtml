@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 /** @var \Hyva\Theme\Model\ViewModelRegistry $viewModels */
 /** @var \Magento\Framework\View\Element\Template $block */
 
@@ -7,11 +9,9 @@ use Magento\Store\Model\ScopeInterface;
 
 $heroIcons = $viewModels->require(HeroiconsOutline::class);
 
-// získanie configu
 $scopeConfig = \Magento\Framework\App\ObjectManager::getInstance()
     ->get(\Magento\Framework\App\Config\ScopeConfigInterface::class);
 
-/** Mapovanie jednoduchých názvov z adminu na Hyvä metódy */
 $iconMap = [
     'shield' => 'shieldCheckHtml',
     'globe'  => 'globeAltHtml',
@@ -20,47 +20,57 @@ $iconMap = [
     'phone'  => 'phoneHtml',
 ];
 
-/** Načítaj benefity z adminu */
 $defs = [];
 for ($i = 1; $i <= 5; $i++) {
     $icon  = (string) ($scopeConfig->getValue("metalio/store_benefits/b{$i}_icon",  ScopeInterface::SCOPE_STORE) ?? '');
     $title = (string) ($scopeConfig->getValue("metalio/store_benefits/b{$i}_title", ScopeInterface::SCOPE_STORE) ?? '');
     $text  = (string) ($scopeConfig->getValue("metalio/store_benefits/b{$i}_text",  ScopeInterface::SCOPE_STORE) ?? '');
+
     if (trim($title) !== '' || trim($text) !== '') {
         $defs[] = [
             'icon'  => strtolower(trim($icon)),
             'title' => $title,
-            'text'  => $text
+            'text'  => $text,
         ];
     }
 }
+
+if (!$defs) {
+    return;
+}
 ?>
 
-<section class="py-6 sm:py-8 mb-12">
-  <ul class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-8 lg:gap-12">
-    <?php foreach ($defs as $def): ?>
-      <?php
-        $method = $iconMap[$def['icon']] ?? 'badgeCheckHtml'; // fallback
-        $hasMethod = method_exists($heroIcons, $method);
-      ?>
-      <li class="flex items-center gap-4">
-        <span class="shrink-0 inline-grid place-items-center size-12 rounded-full align-middle"
-              style="background-color: rgba(88,108,172,0.1); color: #586cac;">
-          
-            <?= /* @noEscape */ $heroIcons->{$method}('w-8 h-8 block') ?>
-        
-           
-          
-        </span>
-        <div class="leading-tight">
-          <?php if ($def['title'] !== ''): ?>
-            <div class="font-semibold text-slate-900 mb-1"><?= $block->escapeHtml($def['title']) ?></div>
-          <?php endif; ?>
-          <?php if ($def['text'] !== ''): ?>
-            <p class="text-sm text-slate-600"><?= $block->escapeHtml($def['text']) ?></p>
-          <?php endif; ?>
+<!-- FULL-WIDTH breakout (funguje aj keď parent je .container / max-width) -->
+<div class="relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] w-screen">
+    <div class="py-12 border-y bg-primary border-primary-darker">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <?php foreach ($defs as $def): ?>
+                    <?php
+                    $method = $iconMap[$def['icon']] ?? 'badgeCheckHtml';
+                    if (!method_exists($heroIcons, $method)) {
+                        $method = 'badgeCheckHtml';
+                    }
+                    ?>
+                    <div class="flex flex-col items-center text-center gap-3">
+                        <div class="w-16 h-16 rounded-full flex items-center justify-center bg-white">
+                            <?= /* @noEscape */ $heroIcons->{$method}('w-8 h-8 text-primary') ?>
+                        </div>
+
+                        <?php if (trim((string)$def['title']) !== ''): ?>
+                            <h3 class="font-bold !text-lg text-white">
+                                <?= $block->escapeHtml($def['title']) ?>
+                            </h3>
+                        <?php endif; ?>
+
+                        <?php if (trim((string)$def['text']) !== ''): ?>
+                            <p class="text-sm text-white leading-relaxed opacity-90">
+                                <?= $block->escapeHtml($def['text']) ?>
+                            </p>
+                        <?php endif; ?>
+                    </div>
+                <?php endforeach; ?>
+            </div>
         </div>
-      </li>
-    <?php endforeach; ?>
-  </ul>
-</section>
+    </div>
+</div>
