@@ -1,0 +1,6 @@
+{
+  "name": "bigconnect/theme-hyva-starter",
+  "description": "Hyvä Starter theme (parent: Metalio Hyvä)",
+  "type": "magento2-theme",
+  "version": "1.0.0"
+}
