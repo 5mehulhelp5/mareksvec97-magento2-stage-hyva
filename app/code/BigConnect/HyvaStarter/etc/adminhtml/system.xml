@@ -1,0 +1,132 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Config/etc/system_file.xsd">
+    <system>
+        <tab id="hyvastarter" translate="label" sortOrder="300">
+            <label>Hyva Starter</label>
+        </tab>
+        <section id="hyvastarter" translate="label" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+            <label>Hyva Starter Settings</label>
+            <tab>hyvastarter</tab>
+            <resource>Magento_Config::config</resource>
+            <group id="footer" translate="label" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Footer</label>
+                <field id="about_text" translate="label" type="textarea" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>About text</label>
+                </field>
+                <field id="logo" translate="label" type="image" sortOrder="15" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Footer logo</label>
+                    <backend_model>Magento\Config\Model\Config\Backend\Image</backend_model>
+                    <upload_dir config="system/filesystem/media" scope_info="1">hyvastarter/footer</upload_dir>
+                    <base_url type="media" scope_info="1">hyvastarter/footer</base_url>
+                </field>
+                <field id="facebook_url" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Facebook URL</label>
+                </field>
+                <field id="instagram_url" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Instagram URL</label>
+                </field>
+                <field id="youtube_url" translate="label" type="text" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>YouTube URL</label>
+                </field>
+                <field id="col2_title" translate="label" type="text" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Column 2 title</label>
+                </field>
+                <field id="col2_html" translate="label" type="textarea" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Column 2 HTML</label>
+                </field>
+                <field id="col3_title" translate="label" type="text" sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Column 3 title</label>
+                </field>
+                <field id="col3_html" translate="label" type="textarea" sortOrder="80" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Column 3 HTML</label>
+                </field>
+                <field id="col4_title" translate="label" type="text" sortOrder="90" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Column 4 title</label>
+                </field>
+                <field id="col4_html" translate="label" type="textarea" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Column 4 HTML</label>
+                </field>
+                <field id="show_phone" translate="label" type="select" sortOrder="110" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Show phone</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+            </group>
+            <group id="store_benefits" translate="label" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Store Benefits</label>
+                <field id="b1_title" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Benefit 1 title</label>
+                </field>
+                <field id="b1_text" translate="label" type="textarea" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Benefit 1 text</label>
+                </field>
+                <field id="b1_icon" translate="label" type="select" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Benefit 1 icon</label>
+                    <source_model>BigConnect\HyvaStarter\Model\Config\Source\BenefitIconOptions</source_model>
+                    <frontend_model>BigConnect\HyvaStarter\Block\Adminhtml\System\Config\Form\Field\BenefitIconPreview</frontend_model>
+                </field>
+                <field id="b1_icon_custom" translate="label" type="image" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Benefit 1 custom icon</label>
+                    <backend_model>BigConnect\HyvaStarter\Model\Config\Backend\BenefitIcon</backend_model>
+                    <upload_dir config="system/filesystem/media" scope_info="1">hyvastarter/benefits</upload_dir>
+                    <base_url type="media" scope_info="1">hyvastarter/benefits</base_url>
+                    <comment>If custom icon is uploaded, it will be used instead of the selected icon.</comment>
+                </field>
+                <field id="b2_title" translate="label" type="text" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Benefit 2 title</label>
+                </field>
+                <field id="b2_text" translate="label" type="textarea" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Benefit 2 text</label>
+                </field>
+                <field id="b2_icon" translate="label" type="select" sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Benefit 2 icon</label>
+                    <source_model>BigConnect\HyvaStarter\Model\Config\Source\BenefitIconOptions</source_model>
+                    <frontend_model>BigConnect\HyvaStarter\Block\Adminhtml\System\Config\Form\Field\BenefitIconPreview</frontend_model>
+                </field>
+                <field id="b2_icon_custom" translate="label" type="image" sortOrder="80" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Benefit 2 custom icon</label>
+                    <backend_model>BigConnect\HyvaStarter\Model\Config\Backend\BenefitIcon</backend_model>
+                    <upload_dir config="system/filesystem/media" scope_info="1">hyvastarter/benefits</upload_dir>
+                    <base_url type="media" scope_info="1">hyvastarter/benefits</base_url>
+                    <comment>If custom icon is uploaded, it will be used instead of the selected icon.</comment>
+                </field>
+                <field id="b3_title" translate="label" type="text" sortOrder="90" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Benefit 3 title</label>
+                </field>
+                <field id="b3_text" translate="label" type="textarea" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Benefit 3 text</label>
+                </field>
+                <field id="b3_icon" translate="label" type="select" sortOrder="110" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Benefit 3 icon</label>
+                    <source_model>BigConnect\HyvaStarter\Model\Config\Source\BenefitIconOptions</source_model>
+                    <frontend_model>BigConnect\HyvaStarter\Block\Adminhtml\System\Config\Form\Field\BenefitIconPreview</frontend_model>
+                </field>
+                <field id="b3_icon_custom" translate="label" type="image" sortOrder="120" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Benefit 3 custom icon</label>
+                    <backend_model>BigConnect\HyvaStarter\Model\Config\Backend\BenefitIcon</backend_model>
+                    <upload_dir config="system/filesystem/media" scope_info="1">hyvastarter/benefits</upload_dir>
+                    <base_url type="media" scope_info="1">hyvastarter/benefits</base_url>
+                    <comment>If custom icon is uploaded, it will be used instead of the selected icon.</comment>
+                </field>
+                <field id="b4_title" translate="label" type="text" sortOrder="130" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Benefit 4 title</label>
+                </field>
+                <field id="b4_text" translate="label" type="textarea" sortOrder="140" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Benefit 4 text</label>
+                </field>
+                <field id="b4_icon" translate="label" type="select" sortOrder="150" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Benefit 4 icon</label>
+                    <source_model>BigConnect\HyvaStarter\Model\Config\Source\BenefitIconOptions</source_model>
+                    <frontend_model>BigConnect\HyvaStarter\Block\Adminhtml\System\Config\Form\Field\BenefitIconPreview</frontend_model>
+                </field>
+                <field id="b4_icon_custom" translate="label" type="image" sortOrder="160" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Benefit 4 custom icon</label>
+                    <backend_model>BigConnect\HyvaStarter\Model\Config\Backend\BenefitIcon</backend_model>
+                    <upload_dir config="system/filesystem/media" scope_info="1">hyvastarter/benefits</upload_dir>
+                    <base_url type="media" scope_info="1">hyvastarter/benefits</base_url>
+                    <comment>If custom icon is uploaded, it will be used instead of the selected icon.</comment>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>
