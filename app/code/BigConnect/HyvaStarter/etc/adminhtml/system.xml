@@ -52,6 +52,81 @@
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
             </group>
+            <group id="store_benefits" translate="label" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Store Benefits</label>
+                <field id="b1_title" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Benefit 1 title</label>
+                </field>
+                <field id="b1_text" translate="label" type="textarea" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Benefit 1 text</label>
+                </field>
+                <field id="b1_icon" translate="label" type="select" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Benefit 1 icon</label>
+                    <source_model>BigConnect\HyvaStarter\Model\Config\Source\BenefitIconOptions</source_model>
+                    <frontend_model>BigConnect\HyvaStarter\Block\Adminhtml\System\Config\Form\Field\BenefitIconPreview</frontend_model>
+                </field>
+                <field id="b1_icon_custom" translate="label" type="image" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Benefit 1 custom icon</label>
+                    <backend_model>BigConnect\HyvaStarter\Model\Config\Backend\BenefitIcon</backend_model>
+                    <upload_dir config="system/filesystem/media" scope_info="1">hyvastarter/benefits</upload_dir>
+                    <base_url type="media" scope_info="1">hyvastarter/benefits</base_url>
+                    <comment>If custom icon is uploaded, it will be used instead of the selected icon.</comment>
+                </field>
+                <field id="b2_title" translate="label" type="text" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Benefit 2 title</label>
+                </field>
+                <field id="b2_text" translate="label" type="textarea" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Benefit 2 text</label>
+                </field>
+                <field id="b2_icon" translate="label" type="select" sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Benefit 2 icon</label>
+                    <source_model>BigConnect\HyvaStarter\Model\Config\Source\BenefitIconOptions</source_model>
+                    <frontend_model>BigConnect\HyvaStarter\Block\Adminhtml\System\Config\Form\Field\BenefitIconPreview</frontend_model>
+                </field>
+                <field id="b2_icon_custom" translate="label" type="image" sortOrder="80" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Benefit 2 custom icon</label>
+                    <backend_model>BigConnect\HyvaStarter\Model\Config\Backend\BenefitIcon</backend_model>
+                    <upload_dir config="system/filesystem/media" scope_info="1">hyvastarter/benefits</upload_dir>
+                    <base_url type="media" scope_info="1">hyvastarter/benefits</base_url>
+                    <comment>If custom icon is uploaded, it will be used instead of the selected icon.</comment>
+                </field>
+                <field id="b3_title" translate="label" type="text" sortOrder="90" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Benefit 3 title</label>
+                </field>
+                <field id="b3_text" translate="label" type="textarea" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Benefit 3 text</label>
+                </field>
+                <field id="b3_icon" translate="label" type="select" sortOrder="110" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Benefit 3 icon</label>
+                    <source_model>BigConnect\HyvaStarter\Model\Config\Source\BenefitIconOptions</source_model>
+                    <frontend_model>BigConnect\HyvaStarter\Block\Adminhtml\System\Config\Form\Field\BenefitIconPreview</frontend_model>
+                </field>
+                <field id="b3_icon_custom" translate="label" type="image" sortOrder="120" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Benefit 3 custom icon</label>
+                    <backend_model>BigConnect\HyvaStarter\Model\Config\Backend\BenefitIcon</backend_model>
+                    <upload_dir config="system/filesystem/media" scope_info="1">hyvastarter/benefits</upload_dir>
+                    <base_url type="media" scope_info="1">hyvastarter/benefits</base_url>
+                    <comment>If custom icon is uploaded, it will be used instead of the selected icon.</comment>
+                </field>
+                <field id="b4_title" translate="label" type="text" sortOrder="130" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Benefit 4 title</label>
+                </field>
+                <field id="b4_text" translate="label" type="textarea" sortOrder="140" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Benefit 4 text</label>
+                </field>
+                <field id="b4_icon" translate="label" type="select" sortOrder="150" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Benefit 4 icon</label>
+                    <source_model>BigConnect\HyvaStarter\Model\Config\Source\BenefitIconOptions</source_model>
+                    <frontend_model>BigConnect\HyvaStarter\Block\Adminhtml\System\Config\Form\Field\BenefitIconPreview</frontend_model>
+                </field>
+                <field id="b4_icon_custom" translate="label" type="image" sortOrder="160" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Benefit 4 custom icon</label>
+                    <backend_model>BigConnect\HyvaStarter\Model\Config\Backend\BenefitIcon</backend_model>
+                    <upload_dir config="system/filesystem/media" scope_info="1">hyvastarter/benefits</upload_dir>
+                    <base_url type="media" scope_info="1">hyvastarter/benefits</base_url>
+                    <comment>If custom icon is uploaded, it will be used instead of the selected icon.</comment>
+                </field>
+            </group>
         </section>
     </system>
 </config>

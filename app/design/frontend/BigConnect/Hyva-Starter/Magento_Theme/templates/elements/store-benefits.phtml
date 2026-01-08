@@ -5,37 +5,12 @@ declare(strict_types=1);
 /** @var \Magento\Framework\View\Element\Template $block */
 
 use Hyva\Theme\ViewModel\HeroiconsOutline;
-use Magento\Store\Model\ScopeInterface;
 
 $heroIcons = $viewModels->require(HeroiconsOutline::class);
+$benefits = $viewModels->require(\BigConnect\HyvaStarter\ViewModel\StoreBenefitsConfig::class);
+$items = $benefits->getItems();
 
-$scopeConfig = \Magento\Framework\App\ObjectManager::getInstance()
-    ->get(\Magento\Framework\App\Config\ScopeConfigInterface::class);
-
-$iconMap = [
-    'shield' => 'shieldCheckHtml',
-    'globe'  => 'globeAltHtml',
-    'badge'  => 'badgeCheckHtml',
-    'thumb'  => 'thumbUpHtml',
-    'phone'  => 'phoneHtml',
-];
-
-$defs = [];
-for ($i = 1; $i <= 5; $i++) {
-    $icon  = (string) ($scopeConfig->getValue("metalio/store_benefits/b{$i}_icon",  ScopeInterface::SCOPE_STORE) ?? '');
-    $title = (string) ($scopeConfig->getValue("metalio/store_benefits/b{$i}_title", ScopeInterface::SCOPE_STORE) ?? '');
-    $text  = (string) ($scopeConfig->getValue("metalio/store_benefits/b{$i}_text",  ScopeInterface::SCOPE_STORE) ?? '');
-
-    if (trim($title) !== '' || trim($text) !== '') {
-        $defs[] = [
-            'icon'  => strtolower(trim($icon)),
-            'title' => $title,
-            'text'  => $text,
-        ];
-    }
-}
-
-if (!$defs) {
+if (!$items) {
     return;
 }
 ?>
@@ -45,27 +20,36 @@ if (!$defs) {
     <div class="py-12 border-y bg-primary border-primary-darker">
         <div class="max-w-7xl mx-auto px-6">
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                <?php foreach ($defs as $def): ?>
+                <?php foreach ($items as $item): ?>
                     <?php
-                    $method = $iconMap[$def['icon']] ?? 'badgeCheckHtml';
+                    $method = $item['icon_method'] ?? 'badgeCheckHtml';
                     if (!method_exists($heroIcons, $method)) {
                         $method = 'badgeCheckHtml';
                     }
                     ?>
                     <div class="flex flex-col items-center text-center gap-3">
                         <div class="w-16 h-16 rounded-full flex items-center justify-center bg-white">
-                            <?= /* @noEscape */ $heroIcons->{$method}('w-8 h-8 text-primary') ?>
+                            <?php if (!empty($item['icon_custom_url'])): ?>
+                                <img
+                                    src="<?= $block->escapeUrl($item['icon_custom_url']) ?>"
+                                    alt="<?= $block->escapeHtmlAttr($item['title'] ?: __('Store benefit icon')) ?>"
+                                    class="w-8 h-8 object-contain"
+                                    loading="lazy"
+                                />
+                            <?php else: ?>
+                                <?= /* @noEscape */ $heroIcons->{$method}('w-8 h-8 text-primary') ?>
+                            <?php endif; ?>
                         </div>
 
-                        <?php if (trim((string)$def['title']) !== ''): ?>
-                            <h3 class="font-bold !text-lg text-white">
-                                <?= $block->escapeHtml($def['title']) ?>
+                        <?php if (trim((string)$item['title']) !== ''): ?>
+                            <h3 class="text-[18px] font-bold text-white leading-tight">
+                                <?= $block->escapeHtml($item['title']) ?>
                             </h3>
                         <?php endif; ?>
 
-                        <?php if (trim((string)$def['text']) !== ''): ?>
+                        <?php if (trim((string)$item['text']) !== ''): ?>
                             <p class="text-sm text-white leading-relaxed opacity-90">
-                                <?= $block->escapeHtml($def['text']) ?>
+                                <?= $block->escapeHtml($item['text']) ?>
                             </p>
                         <?php endif; ?>
                     </div>
