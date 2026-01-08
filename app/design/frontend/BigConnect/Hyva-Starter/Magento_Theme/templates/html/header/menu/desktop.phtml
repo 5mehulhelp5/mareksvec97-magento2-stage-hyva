@@ -4,6 +4,7 @@
  */
 
 use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\HeroiconsOutline;
 use Hyva\Theme\ViewModel\HeroiconsSolid;
 use Hyva\Theme\ViewModel\Navigation;
 use Magento\Framework\View\Element\Template;
@@ -12,6 +13,7 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\UrlRewrite\Model\ResourceModel\UrlRewriteCollectionFactory;
+use BigConnect\HyvaStarter\ViewModel\HeaderLinks;
 
 /** @var Template $block */
 /** @var Escaper $escaper */
@@ -19,6 +21,9 @@ use Magento\UrlRewrite\Model\ResourceModel\UrlRewriteCollectionFactory;
 
 $viewModelNavigation = $viewModels->require(Navigation::class, $block);
 $heroiconsSolid = $viewModels->require(HeroiconsSolid::class);
+$heroiconsOutline = $viewModels->require(HeroiconsOutline::class);
+$headerLinks = $viewModels->require(HeaderLinks::class);
+$headerLinkItems = $headerLinks->getItems();
 
 $uniqueId = '_' . uniqid();
 
@@ -122,6 +127,28 @@ $__isInspiration = static function (array $menuItem): bool {
     return $name === 'inšpirácie'
         || str_contains($url, '/galeria')
         || str_contains($url, '/gallery');
+};
+
+$renderIconHtml = static function (string $iconKey, string $class) use ($heroiconsOutline): string {
+    $iconMap = [
+        'sparkles' => ['sparklesHtml'],
+        'factory' => ['buildingOffice2Html', 'buildingOfficeHtml'],
+        'info' => ['informationCircleHtml'],
+        'phone' => ['phoneHtml'],
+        'mail' => ['envelopeHtml', 'mailHtml'],
+        'map' => ['mapPinHtml', 'mapHtml'],
+        'message' => ['chatBubbleLeftRightHtml', 'chatBubbleLeftEllipsisHtml'],
+        'star' => ['starHtml'],
+    ];
+
+    $methods = $iconMap[$iconKey] ?? ['informationCircleHtml'];
+    foreach ($methods as $method) {
+        if (method_exists($heroiconsOutline, $method)) {
+            return $heroiconsOutline->$method($class, 20, 20, ['aria-hidden' => 'true']);
+        }
+    }
+
+    return $heroiconsOutline->informationCircleHtml($class, 20, 20, ['aria-hidden' => 'true']);
 };
 ?>
 
@@ -267,6 +294,38 @@ $__isInspiration = static function (array $menuItem): bool {
                                 </div>
                             <?php endif; ?>
 
+                        </li>
+                    <?php endforeach; ?>
+                    <?php foreach ($headerLinkItems as $item): ?>
+                        <?php
+                        $variant = $item['variant'] === 'cta' ? 'cta' : 'default';
+                        $linkClass = $variant === 'cta'
+                            ? 'flex items-center gap-2 px-4 py-2 rounded-lg transition-all group relative overflow-hidden bg-inspiration hover:bg-inspiration-hover focus:outline-none focus-visible:ring-2 focus-visible:ring-white/70'
+                            : 'flex items-center gap-2 text-white/80 hover:text-white transition-colors';
+                        $iconClass = $variant === 'cta'
+                            ? 'w-4 h-4 lg:w-5 lg:h-5 text-white'
+                            : 'w-4 h-4 lg:w-5 lg:h-5 text-primary';
+                        $labelClass = $variant === 'cta'
+                            ? 'font-semibold text-sm lg:text-base text-white'
+                            : 'font-medium text-sm lg:text-base';
+                        ?>
+                        <li>
+                            <a
+                                href="<?= $escaper->escapeUrl($item['url']) ?>"
+                                aria-label="<?= $escaper->escapeHtmlAttr($item['label']) ?>"
+                                class="<?= $escaper->escapeHtmlAttr($linkClass) ?>"
+                                <?php if ($item['target_blank']): ?>
+                                    target="_blank" rel="noopener noreferrer"
+                                <?php endif; ?>
+                            >
+                                <?= /* @noEscape */ $renderIconHtml($item['icon'], $iconClass) ?>
+                                <span class="<?= $escaper->escapeHtmlAttr($labelClass) ?>">
+                                    <?= $escaper->escapeHtml($item['label']) ?>
+                                </span>
+                                <?php if ($variant === 'cta'): ?>
+                                    <span class="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity" aria-hidden="true"></span>
+                                <?php endif; ?>
+                            </a>
                         </li>
                     <?php endforeach; ?>
                 </ul>
