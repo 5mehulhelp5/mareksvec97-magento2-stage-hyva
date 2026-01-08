@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Config/etc/config.xsd">
+    <default>
+        <hyvastarter>
+            <footer>
+                <about_text></about_text>
+                <logo></logo>
+                <facebook_url></facebook_url>
+                <instagram_url></instagram_url>
+                <youtube_url></youtube_url>
+                <col2_title></col2_title>
+                <col2_html></col2_html>
+                <col3_title></col3_title>
+                <col3_html></col3_html>
+                <col4_title></col4_title>
+                <col4_html></col4_html>
+                <show_phone>1</show_phone>
+            </footer>
+        </hyvastarter>
+    </default>
+</config>
