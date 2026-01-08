@@ -11,7 +11,7 @@ class HeaderLinkVariantOptions implements OptionSourceInterface
     public function toOptionArray(): array
     {
         return [
-            ['value' => 'default', 'label' => __('Default')],
+            ['value' => 'link', 'label' => __('Link')],
             ['value' => 'cta', 'label' => __('CTA')],
         ];
     }
