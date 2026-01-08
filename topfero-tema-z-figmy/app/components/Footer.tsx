@@ -251,7 +251,7 @@ export function Footer() {
                   }}
                 >
                   <img 
-                    src="https://dev.topfero.sk/static/frontend/TopFero/hyva/sk_SK/images/flags/sk1.svg" 
+                    src="https://dev.topfero.sk/static/frontend/BigConnect/Hyva-Starter/sk_SK/images/flags/sk1.svg" 
                     alt="Slovensko" 
                     className="h-5 w-5 rounded-full shadow-sm object-cover" 
                     loading="lazy"
@@ -273,7 +273,7 @@ export function Footer() {
                   }}
                 >
                   <img 
-                    src="https://dev.topfero.sk/static/frontend/TopFero/hyva/sk_SK/images/flags/cz1.svg" 
+                    src="https://dev.topfero.sk/static/frontend/BigConnect/Hyva-Starter/sk_SK/images/flags/cz1.svg" 
                     alt="Česko" 
                     className="h-5 w-5 rounded-full shadow-sm object-cover" 
                     loading="lazy"
@@ -380,7 +380,7 @@ export function Footer() {
           <div className="opacity-90 flex items-center gap-2">
             © 2025 Metalio — súčasť skupiny MetaloPro
             <img 
-              src="https://dev.topfero.sk/static/frontend/TopFero/hyva/sk_SK/images/metalopro-badge.png" 
+              src="https://dev.topfero.sk/static/frontend/BigConnect/Hyva-Starter/sk_SK/images/metalopro-badge.png" 
               alt="MetaloPro" 
               className="h-5 opacity-60 hover:opacity-90 transition" 
               loading="lazy"
