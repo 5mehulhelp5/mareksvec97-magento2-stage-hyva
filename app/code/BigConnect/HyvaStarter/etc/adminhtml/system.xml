@@ -8,7 +8,7 @@
         <section id="hyvastarter" translate="label" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
             <label>Hyva Starter Settings</label>
             <tab>hyvastarter</tab>
-            <resource>Magento_Config::config</resource>
+            <resource>BigConnect_HyvaStarter::config</resource>
             <group id="footer" translate="label" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Footer</label>
                 <field id="about_text" translate="label" type="textarea" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
@@ -125,6 +125,39 @@
                     <upload_dir config="system/filesystem/media" scope_info="1">hyvastarter/benefits</upload_dir>
                     <base_url type="media" scope_info="1">hyvastarter/benefits</base_url>
                     <comment>If custom icon is uploaded, it will be used instead of the selected icon.</comment>
+                </field>
+            </group>
+            <group id="homepage_categories" translate="label" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Homepage Categories</label>
+                <field id="enabled" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Enable</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="title" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Title</label>
+                </field>
+                <field id="subtitle" translate="label" type="textarea" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Subtitle</label>
+                </field>
+                <field id="category_ids" translate="label" type="text" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Category IDs</label>
+                    <comment>Comma or space separated IDs. Example: 12, 34, 56</comment>
+                </field>
+                <field id="show_desc" translate="label" type="select" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Show description</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="desc_maxlen" translate="label" type="text" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Description max length</label>
+                </field>
+                <field id="limit" translate="label" type="text" sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Limit</label>
+                </field>
+                <field id="fallback_image" translate="label" type="image" sortOrder="80" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Fallback image</label>
+                    <backend_model>Magento\Config\Model\Config\Backend\Image</backend_model>
+                    <upload_dir config="system/filesystem/media" scope_info="1">hyvastarter/homepage_categories</upload_dir>
+                    <base_url type="media" scope_info="1">hyvastarter/homepage_categories</base_url>
                 </field>
             </group>
         </section>
