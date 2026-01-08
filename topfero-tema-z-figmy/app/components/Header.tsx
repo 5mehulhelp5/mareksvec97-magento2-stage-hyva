@@ -41,8 +41,8 @@ export function Header() {
   const [isLanguageDropdownOpen, setIsLanguageDropdownOpen] = useState(false);
 
   const languages = [
-    { code: 'sk', name: 'Slovensko', domain: 'topfero.sk', flag: 'https://dev.topfero.sk/static/frontend/TopFero/hyva/sk_SK/images/flags/sk1.svg' },
-    { code: 'cz', name: 'Česko', domain: 'topfero.cz', flag: 'https://dev.topfero.sk/static/frontend/TopFero/hyva/sk_SK/images/flags/cz1.svg' },
+    { code: 'sk', name: 'Slovensko', domain: 'topfero.sk', flag: 'https://dev.topfero.sk/static/frontend/BigConnect/Hyva-Starter/sk_SK/images/flags/sk1.svg' },
+    { code: 'cz', name: 'Česko', domain: 'topfero.cz', flag: 'https://dev.topfero.sk/static/frontend/BigConnect/Hyva-Starter/sk_SK/images/flags/cz1.svg' },
     { code: 'de', name: 'Deutschland', domain: 'topfero.de', flag: 'https://flagcdn.com/w40/de.png' },
     { code: 'at', name: 'Österreich', domain: 'topfero.at', flag: 'https://flagcdn.com/w40/at.png' },
     { code: 'hu', name: 'Magyarország', domain: 'topfero.hu', flag: 'https://flagcdn.com/w40/hu.png' },
