@@ -7,16 +7,22 @@ namespace BigConnect\HyvaStarter\ViewModel;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
 use Magento\Store\Model\ScopeInterface;
+use Magento\Store\Model\StoreManagerInterface;
 
 class FooterConfig implements ArgumentInterface
 {
     private const XML_PATH_PREFIX = 'hyvastarter/footer/';
 
     private ScopeConfigInterface $scopeConfig;
+    private StoreManagerInterface $storeManager;
 
-    public function __construct(ScopeConfigInterface $scopeConfig)
+    public function __construct(
+        ScopeConfigInterface $scopeConfig,
+        StoreManagerInterface $storeManager
+    )
     {
         $this->scopeConfig = $scopeConfig;
+        $this->storeManager = $storeManager;
     }
 
     public function getAboutText(): string
@@ -27,6 +33,21 @@ class FooterConfig implements ArgumentInterface
     public function getFacebookUrl(): string
     {
         return (string) $this->getValue('facebook_url');
+    }
+
+    public function getLogoUrl(): string
+    {
+        $logo = ltrim((string) $this->getValue('logo'), '/');
+        if ($logo === '') {
+            return '';
+        }
+
+        $baseUrl = rtrim(
+            $this->storeManager->getStore()->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_MEDIA),
+            '/'
+        );
+
+        return $baseUrl . '/hyvastarter/footer/' . $logo;
     }
 
     public function getInstagramUrl(): string

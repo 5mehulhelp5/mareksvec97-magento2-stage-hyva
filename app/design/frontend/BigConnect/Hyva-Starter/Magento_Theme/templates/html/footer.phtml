@@ -29,6 +29,7 @@ $aboutUs   = $footer->getAboutText();
 $instagram = $footer->getInstagramUrl();
 $facebook  = $footer->getFacebookUrl();
 $youtube   = $footer->getYoutubeUrl();
+$footerLogo = $footer->getLogoUrl();
 
 $col2Title = $footer->getCol2Title();
 $col2Html  = $footer->getCol2Html();
@@ -46,7 +47,7 @@ $paymentIcons = $viewModels->require(PaymentIconsLight::class);
 $paymentIconsWidth  = 48;
 $paymentIconsHeight = 32;
 
-$logoSrc   = $block->getViewFileUrl('images/footer-logo.png');
+$logoSrc   = $footerLogo ?: $block->getViewFileUrl('images/footer-logo.png');
 $homeUrl   = $block->getUrl('');
 $brandName = 'TOPFERO';
 

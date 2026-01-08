@@ -14,6 +14,12 @@
                 <field id="about_text" translate="label" type="textarea" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>About text</label>
                 </field>
+                <field id="logo" translate="label" type="image" sortOrder="15" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Footer logo</label>
+                    <backend_model>Magento\Config\Model\Config\Backend\Image</backend_model>
+                    <upload_dir config="system/filesystem/media" scope_info="1">hyvastarter/footer</upload_dir>
+                    <base_url type="media" scope_info="1">hyvastarter/footer</base_url>
+                </field>
                 <field id="facebook_url" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Facebook URL</label>
                 </field>
