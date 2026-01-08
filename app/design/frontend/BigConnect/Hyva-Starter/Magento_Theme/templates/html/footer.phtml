@@ -5,11 +5,11 @@ use Hyva\Theme\ViewModel\HyvaCsp;
 use Hyva\Theme\Model\ViewModelRegistry;
 use Hyva\Theme\ViewModel\HeroiconsOutline;
 use Hyva\PaymentIcons\ViewModel\PaymentIconsLight;
+use Hyva\Theme\ViewModel\StoreConfig;
 use Hyva\Theme\ViewModel\Store;
 use Hyva\Theme\ViewModel\StoreSwitcher;
 use Magento\Framework\Escaper;
 use Magento\Framework\View\Element\Template;
-use Magento\Store\Model\ScopeInterface;
 use Magento\Store\ViewModel\SwitcherUrlProvider;
 
 /** @var Template $block */
@@ -17,27 +17,27 @@ use Magento\Store\ViewModel\SwitcherUrlProvider;
 /** @var HyvaCsp $hyvaCsp */
 /** @var ViewModelRegistry $viewModels */
 
-$scopeConfig = \Magento\Framework\App\ObjectManager::getInstance()
-    ->get(\Magento\Framework\App\Config\ScopeConfigInterface::class);
+$footer = $viewModels->require(\BigConnect\HyvaStarter\ViewModel\FooterConfig::class);
+$storeConfig = $viewModels->require(StoreConfig::class);
 
-$storePhone = (string)($scopeConfig->getValue('general/store_information/phone', ScopeInterface::SCOPE_STORE) ?? '');
+$storePhone = (string)($storeConfig->getStoreConfig('general/store_information/phone') ?? '');
 $phoneHref  = $storePhone ? 'tel:' . preg_replace('/[^\d\+]/', '', $storePhone) : '';
 
-$generalEmail = (string)($scopeConfig->getValue('trans_email/ident_general/email', ScopeInterface::SCOPE_STORE) ?? '');
+$generalEmail = (string)($storeConfig->getStoreConfig('trans_email/ident_general/email') ?? '');
 
-$aboutUs   = (string)$scopeConfig->getValue('metalio/footer/about_us', ScopeInterface::SCOPE_STORE);
-$instagram = (string)$scopeConfig->getValue('metalio/footer/instagram', ScopeInterface::SCOPE_STORE);
-$facebook  = (string)$scopeConfig->getValue('metalio/footer/facebook', ScopeInterface::SCOPE_STORE);
-$youtube   = (string)$scopeConfig->getValue('metalio/footer/youtube', ScopeInterface::SCOPE_STORE);
+$aboutUs   = $footer->getAboutText();
+$instagram = $footer->getInstagramUrl();
+$facebook  = $footer->getFacebookUrl();
+$youtube   = $footer->getYoutubeUrl();
 
-$col2Title = (string)$scopeConfig->getValue('metalio/footer/col2_title', ScopeInterface::SCOPE_STORE);
-$col2Html  = (string)$scopeConfig->getValue('metalio/footer/col2_html',  ScopeInterface::SCOPE_STORE);
-$col3Title = (string)$scopeConfig->getValue('metalio/footer/col3_title', ScopeInterface::SCOPE_STORE);
-$col3Html  = (string)$scopeConfig->getValue('metalio/footer/col3_html',  ScopeInterface::SCOPE_STORE);
+$col2Title = $footer->getCol2Title();
+$col2Html  = $footer->getCol2Html();
+$col3Title = $footer->getCol3Title();
+$col3Html  = $footer->getCol3Html();
 
-$col4Title = (string)$scopeConfig->getValue('metalio/footer/col4_title', ScopeInterface::SCOPE_STORE);
-$col4Html  = (string)$scopeConfig->getValue('metalio/footer/col4_html',  ScopeInterface::SCOPE_STORE);
-$showPhone = (bool)$scopeConfig->isSetFlag('metalio/footer/show_phone', ScopeInterface::SCOPE_STORE);
+$col4Title = $footer->getCol4Title();
+$col4Html  = $footer->getCol4Html();
+$showPhone = $footer->getShowPhone();
 
 $heroicons = $viewModels->require(HeroiconsOutline::class);
 
