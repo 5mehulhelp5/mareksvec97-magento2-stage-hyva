@@ -34,7 +34,7 @@ class HeaderLinks implements ArgumentInterface
         $items = [];
 
         for ($i = 1; $i <= 10; $i++) {
-            $prefix = self::XML_PATH_PREFIX . 'item' . $i . '/';
+            $prefix = self::XML_PATH_PREFIX . 'item' . $i . '_';
             if (!$this->scopeConfig->isSetFlag($prefix . 'enabled', ScopeInterface::SCOPE_STORE)) {
                 continue;
             }

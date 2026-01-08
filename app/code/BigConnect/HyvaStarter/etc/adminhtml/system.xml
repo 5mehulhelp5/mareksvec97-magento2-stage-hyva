@@ -22,34 +22,34 @@
                         <field id="enabled" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>Enabled</label>
                             <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                            <config_path>bigconnect_hyvastarter/header_links/item1/enabled</config_path>
+                            <config_path>bigconnect_hyvastarter/header_links/item1_enabled</config_path>
                         </field>
                         <field id="label" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>Label</label>
-                            <config_path>bigconnect_hyvastarter/header_links/item1/label</config_path>
+                            <config_path>bigconnect_hyvastarter/header_links/item1_label</config_path>
                         </field>
                         <field id="url" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>URL</label>
-                            <config_path>bigconnect_hyvastarter/header_links/item1/url</config_path>
+                            <config_path>bigconnect_hyvastarter/header_links/item1_url</config_path>
                         </field>
                         <field id="icon" translate="label" type="select" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>Icon</label>
                             <source_model>BigConnect\HyvaStarter\Model\Config\Source\HeaderLinkIconOptions</source_model>
-                            <config_path>bigconnect_hyvastarter/header_links/item1/icon</config_path>
+                            <config_path>bigconnect_hyvastarter/header_links/item1_icon</config_path>
                         </field>
                         <field id="variant" translate="label" type="select" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>Variant</label>
                             <source_model>BigConnect\HyvaStarter\Model\Config\Source\HeaderLinkVariantOptions</source_model>
-                            <config_path>bigconnect_hyvastarter/header_links/item1/variant</config_path>
+                            <config_path>bigconnect_hyvastarter/header_links/item1_variant</config_path>
                         </field>
                         <field id="sort_order" translate="label" type="text" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>Sort Order</label>
-                            <config_path>bigconnect_hyvastarter/header_links/item1/sort_order</config_path>
+                            <config_path>bigconnect_hyvastarter/header_links/item1_sort_order</config_path>
                         </field>
                         <field id="target_blank" translate="label" type="select" sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>Open in new tab</label>
                             <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                            <config_path>bigconnect_hyvastarter/header_links/item1/target_blank</config_path>
+                            <config_path>bigconnect_hyvastarter/header_links/item1_target_blank</config_path>
                         </field>
                     </group>
                     <group id="item2" translate="label" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
@@ -57,34 +57,34 @@
                         <field id="enabled" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>Enabled</label>
                             <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                            <config_path>bigconnect_hyvastarter/header_links/item2/enabled</config_path>
+                            <config_path>bigconnect_hyvastarter/header_links/item2_enabled</config_path>
                         </field>
                         <field id="label" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>Label</label>
-                            <config_path>bigconnect_hyvastarter/header_links/item2/label</config_path>
+                            <config_path>bigconnect_hyvastarter/header_links/item2_label</config_path>
                         </field>
                         <field id="url" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>URL</label>
-                            <config_path>bigconnect_hyvastarter/header_links/item2/url</config_path>
+                            <config_path>bigconnect_hyvastarter/header_links/item2_url</config_path>
                         </field>
                         <field id="icon" translate="label" type="select" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>Icon</label>
                             <source_model>BigConnect\HyvaStarter\Model\Config\Source\HeaderLinkIconOptions</source_model>
-                            <config_path>bigconnect_hyvastarter/header_links/item2/icon</config_path>
+                            <config_path>bigconnect_hyvastarter/header_links/item2_icon</config_path>
                         </field>
                         <field id="variant" translate="label" type="select" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>Variant</label>
                             <source_model>BigConnect\HyvaStarter\Model\Config\Source\HeaderLinkVariantOptions</source_model>
-                            <config_path>bigconnect_hyvastarter/header_links/item2/variant</config_path>
+                            <config_path>bigconnect_hyvastarter/header_links/item2_variant</config_path>
                         </field>
                         <field id="sort_order" translate="label" type="text" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>Sort Order</label>
-                            <config_path>bigconnect_hyvastarter/header_links/item2/sort_order</config_path>
+                            <config_path>bigconnect_hyvastarter/header_links/item2_sort_order</config_path>
                         </field>
                         <field id="target_blank" translate="label" type="select" sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>Open in new tab</label>
                             <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                            <config_path>bigconnect_hyvastarter/header_links/item2/target_blank</config_path>
+                            <config_path>bigconnect_hyvastarter/header_links/item2_target_blank</config_path>
                         </field>
                     </group>
                     <group id="item3" translate="label" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
@@ -92,34 +92,34 @@
                         <field id="enabled" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>Enabled</label>
                             <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                            <config_path>bigconnect_hyvastarter/header_links/item3/enabled</config_path>
+                            <config_path>bigconnect_hyvastarter/header_links/item3_enabled</config_path>
                         </field>
                         <field id="label" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>Label</label>
-                            <config_path>bigconnect_hyvastarter/header_links/item3/label</config_path>
+                            <config_path>bigconnect_hyvastarter/header_links/item3_label</config_path>
                         </field>
                         <field id="url" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>URL</label>
-                            <config_path>bigconnect_hyvastarter/header_links/item3/url</config_path>
+                            <config_path>bigconnect_hyvastarter/header_links/item3_url</config_path>
                         </field>
                         <field id="icon" translate="label" type="select" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>Icon</label>
                             <source_model>BigConnect\HyvaStarter\Model\Config\Source\HeaderLinkIconOptions</source_model>
-                            <config_path>bigconnect_hyvastarter/header_links/item3/icon</config_path>
+                            <config_path>bigconnect_hyvastarter/header_links/item3_icon</config_path>
                         </field>
                         <field id="variant" translate="label" type="select" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>Variant</label>
                             <source_model>BigConnect\HyvaStarter\Model\Config\Source\HeaderLinkVariantOptions</source_model>
-                            <config_path>bigconnect_hyvastarter/header_links/item3/variant</config_path>
+                            <config_path>bigconnect_hyvastarter/header_links/item3_variant</config_path>
                         </field>
                         <field id="sort_order" translate="label" type="text" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>Sort Order</label>
-                            <config_path>bigconnect_hyvastarter/header_links/item3/sort_order</config_path>
+                            <config_path>bigconnect_hyvastarter/header_links/item3_sort_order</config_path>
                         </field>
                         <field id="target_blank" translate="label" type="select" sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>Open in new tab</label>
                             <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                            <config_path>bigconnect_hyvastarter/header_links/item3/target_blank</config_path>
+                            <config_path>bigconnect_hyvastarter/header_links/item3_target_blank</config_path>
                         </field>
                     </group>
                     <group id="item4" translate="label" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
@@ -127,34 +127,34 @@
                         <field id="enabled" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>Enabled</label>
                             <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                            <config_path>bigconnect_hyvastarter/header_links/item4/enabled</config_path>
+                            <config_path>bigconnect_hyvastarter/header_links/item4_enabled</config_path>
                         </field>
                         <field id="label" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>Label</label>
-                            <config_path>bigconnect_hyvastarter/header_links/item4/label</config_path>
+                            <config_path>bigconnect_hyvastarter/header_links/item4_label</config_path>
                         </field>
                         <field id="url" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>URL</label>
-                            <config_path>bigconnect_hyvastarter/header_links/item4/url</config_path>
+                            <config_path>bigconnect_hyvastarter/header_links/item4_url</config_path>
                         </field>
                         <field id="icon" translate="label" type="select" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>Icon</label>
                             <source_model>BigConnect\HyvaStarter\Model\Config\Source\HeaderLinkIconOptions</source_model>
-                            <config_path>bigconnect_hyvastarter/header_links/item4/icon</config_path>
+                            <config_path>bigconnect_hyvastarter/header_links/item4_icon</config_path>
                         </field>
                         <field id="variant" translate="label" type="select" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>Variant</label>
                             <source_model>BigConnect\HyvaStarter\Model\Config\Source\HeaderLinkVariantOptions</source_model>
-                            <config_path>bigconnect_hyvastarter/header_links/item4/variant</config_path>
+                            <config_path>bigconnect_hyvastarter/header_links/item4_variant</config_path>
                         </field>
                         <field id="sort_order" translate="label" type="text" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>Sort Order</label>
-                            <config_path>bigconnect_hyvastarter/header_links/item4/sort_order</config_path>
+                            <config_path>bigconnect_hyvastarter/header_links/item4_sort_order</config_path>
                         </field>
                         <field id="target_blank" translate="label" type="select" sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>Open in new tab</label>
                             <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                            <config_path>bigconnect_hyvastarter/header_links/item4/target_blank</config_path>
+                            <config_path>bigconnect_hyvastarter/header_links/item4_target_blank</config_path>
                         </field>
                     </group>
                     <group id="item5" translate="label" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
@@ -162,34 +162,34 @@
                         <field id="enabled" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>Enabled</label>
                             <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                            <config_path>bigconnect_hyvastarter/header_links/item5/enabled</config_path>
+                            <config_path>bigconnect_hyvastarter/header_links/item5_enabled</config_path>
                         </field>
                         <field id="label" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>Label</label>
-                            <config_path>bigconnect_hyvastarter/header_links/item5/label</config_path>
+                            <config_path>bigconnect_hyvastarter/header_links/item5_label</config_path>
                         </field>
                         <field id="url" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>URL</label>
-                            <config_path>bigconnect_hyvastarter/header_links/item5/url</config_path>
+                            <config_path>bigconnect_hyvastarter/header_links/item5_url</config_path>
                         </field>
                         <field id="icon" translate="label" type="select" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>Icon</label>
                             <source_model>BigConnect\HyvaStarter\Model\Config\Source\HeaderLinkIconOptions</source_model>
-                            <config_path>bigconnect_hyvastarter/header_links/item5/icon</config_path>
+                            <config_path>bigconnect_hyvastarter/header_links/item5_icon</config_path>
                         </field>
                         <field id="variant" translate="label" type="select" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>Variant</label>
                             <source_model>BigConnect\HyvaStarter\Model\Config\Source\HeaderLinkVariantOptions</source_model>
-                            <config_path>bigconnect_hyvastarter/header_links/item5/variant</config_path>
+                            <config_path>bigconnect_hyvastarter/header_links/item5_variant</config_path>
                         </field>
                         <field id="sort_order" translate="label" type="text" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>Sort Order</label>
-                            <config_path>bigconnect_hyvastarter/header_links/item5/sort_order</config_path>
+                            <config_path>bigconnect_hyvastarter/header_links/item5_sort_order</config_path>
                         </field>
                         <field id="target_blank" translate="label" type="select" sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>Open in new tab</label>
                             <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                            <config_path>bigconnect_hyvastarter/header_links/item5/target_blank</config_path>
+                            <config_path>bigconnect_hyvastarter/header_links/item5_target_blank</config_path>
                         </field>
                     </group>
                     <group id="item6" translate="label" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="1">
@@ -197,34 +197,34 @@
                         <field id="enabled" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>Enabled</label>
                             <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                            <config_path>bigconnect_hyvastarter/header_links/item6/enabled</config_path>
+                            <config_path>bigconnect_hyvastarter/header_links/item6_enabled</config_path>
                         </field>
                         <field id="label" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>Label</label>
-                            <config_path>bigconnect_hyvastarter/header_links/item6/label</config_path>
+                            <config_path>bigconnect_hyvastarter/header_links/item6_label</config_path>
                         </field>
                         <field id="url" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>URL</label>
-                            <config_path>bigconnect_hyvastarter/header_links/item6/url</config_path>
+                            <config_path>bigconnect_hyvastarter/header_links/item6_url</config_path>
                         </field>
                         <field id="icon" translate="label" type="select" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>Icon</label>
                             <source_model>BigConnect\HyvaStarter\Model\Config\Source\HeaderLinkIconOptions</source_model>
-                            <config_path>bigconnect_hyvastarter/header_links/item6/icon</config_path>
+                            <config_path>bigconnect_hyvastarter/header_links/item6_icon</config_path>
                         </field>
                         <field id="variant" translate="label" type="select" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>Variant</label>
                             <source_model>BigConnect\HyvaStarter\Model\Config\Source\HeaderLinkVariantOptions</source_model>
-                            <config_path>bigconnect_hyvastarter/header_links/item6/variant</config_path>
+                            <config_path>bigconnect_hyvastarter/header_links/item6_variant</config_path>
                         </field>
                         <field id="sort_order" translate="label" type="text" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>Sort Order</label>
-                            <config_path>bigconnect_hyvastarter/header_links/item6/sort_order</config_path>
+                            <config_path>bigconnect_hyvastarter/header_links/item6_sort_order</config_path>
                         </field>
                         <field id="target_blank" translate="label" type="select" sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>Open in new tab</label>
                             <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                            <config_path>bigconnect_hyvastarter/header_links/item6/target_blank</config_path>
+                            <config_path>bigconnect_hyvastarter/header_links/item6_target_blank</config_path>
                         </field>
                     </group>
                     <group id="item7" translate="label" sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="1">
@@ -232,34 +232,34 @@
                         <field id="enabled" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>Enabled</label>
                             <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                            <config_path>bigconnect_hyvastarter/header_links/item7/enabled</config_path>
+                            <config_path>bigconnect_hyvastarter/header_links/item7_enabled</config_path>
                         </field>
                         <field id="label" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>Label</label>
-                            <config_path>bigconnect_hyvastarter/header_links/item7/label</config_path>
+                            <config_path>bigconnect_hyvastarter/header_links/item7_label</config_path>
                         </field>
                         <field id="url" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>URL</label>
-                            <config_path>bigconnect_hyvastarter/header_links/item7/url</config_path>
+                            <config_path>bigconnect_hyvastarter/header_links/item7_url</config_path>
                         </field>
                         <field id="icon" translate="label" type="select" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>Icon</label>
                             <source_model>BigConnect\HyvaStarter\Model\Config\Source\HeaderLinkIconOptions</source_model>
-                            <config_path>bigconnect_hyvastarter/header_links/item7/icon</config_path>
+                            <config_path>bigconnect_hyvastarter/header_links/item7_icon</config_path>
                         </field>
                         <field id="variant" translate="label" type="select" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>Variant</label>
                             <source_model>BigConnect\HyvaStarter\Model\Config\Source\HeaderLinkVariantOptions</source_model>
-                            <config_path>bigconnect_hyvastarter/header_links/item7/variant</config_path>
+                            <config_path>bigconnect_hyvastarter/header_links/item7_variant</config_path>
                         </field>
                         <field id="sort_order" translate="label" type="text" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>Sort Order</label>
-                            <config_path>bigconnect_hyvastarter/header_links/item7/sort_order</config_path>
+                            <config_path>bigconnect_hyvastarter/header_links/item7_sort_order</config_path>
                         </field>
                         <field id="target_blank" translate="label" type="select" sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>Open in new tab</label>
                             <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                            <config_path>bigconnect_hyvastarter/header_links/item7/target_blank</config_path>
+                            <config_path>bigconnect_hyvastarter/header_links/item7_target_blank</config_path>
                         </field>
                     </group>
                     <group id="item8" translate="label" sortOrder="80" showInDefault="1" showInWebsite="1" showInStore="1">
@@ -267,34 +267,34 @@
                         <field id="enabled" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>Enabled</label>
                             <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                            <config_path>bigconnect_hyvastarter/header_links/item8/enabled</config_path>
+                            <config_path>bigconnect_hyvastarter/header_links/item8_enabled</config_path>
                         </field>
                         <field id="label" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>Label</label>
-                            <config_path>bigconnect_hyvastarter/header_links/item8/label</config_path>
+                            <config_path>bigconnect_hyvastarter/header_links/item8_label</config_path>
                         </field>
                         <field id="url" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>URL</label>
-                            <config_path>bigconnect_hyvastarter/header_links/item8/url</config_path>
+                            <config_path>bigconnect_hyvastarter/header_links/item8_url</config_path>
                         </field>
                         <field id="icon" translate="label" type="select" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>Icon</label>
                             <source_model>BigConnect\HyvaStarter\Model\Config\Source\HeaderLinkIconOptions</source_model>
-                            <config_path>bigconnect_hyvastarter/header_links/item8/icon</config_path>
+                            <config_path>bigconnect_hyvastarter/header_links/item8_icon</config_path>
                         </field>
                         <field id="variant" translate="label" type="select" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>Variant</label>
                             <source_model>BigConnect\HyvaStarter\Model\Config\Source\HeaderLinkVariantOptions</source_model>
-                            <config_path>bigconnect_hyvastarter/header_links/item8/variant</config_path>
+                            <config_path>bigconnect_hyvastarter/header_links/item8_variant</config_path>
                         </field>
                         <field id="sort_order" translate="label" type="text" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>Sort Order</label>
-                            <config_path>bigconnect_hyvastarter/header_links/item8/sort_order</config_path>
+                            <config_path>bigconnect_hyvastarter/header_links/item8_sort_order</config_path>
                         </field>
                         <field id="target_blank" translate="label" type="select" sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>Open in new tab</label>
                             <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                            <config_path>bigconnect_hyvastarter/header_links/item8/target_blank</config_path>
+                            <config_path>bigconnect_hyvastarter/header_links/item8_target_blank</config_path>
                         </field>
                     </group>
                     <group id="item9" translate="label" sortOrder="90" showInDefault="1" showInWebsite="1" showInStore="1">
@@ -302,34 +302,34 @@
                         <field id="enabled" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>Enabled</label>
                             <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                            <config_path>bigconnect_hyvastarter/header_links/item9/enabled</config_path>
+                            <config_path>bigconnect_hyvastarter/header_links/item9_enabled</config_path>
                         </field>
                         <field id="label" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>Label</label>
-                            <config_path>bigconnect_hyvastarter/header_links/item9/label</config_path>
+                            <config_path>bigconnect_hyvastarter/header_links/item9_label</config_path>
                         </field>
                         <field id="url" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>URL</label>
-                            <config_path>bigconnect_hyvastarter/header_links/item9/url</config_path>
+                            <config_path>bigconnect_hyvastarter/header_links/item9_url</config_path>
                         </field>
                         <field id="icon" translate="label" type="select" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>Icon</label>
                             <source_model>BigConnect\HyvaStarter\Model\Config\Source\HeaderLinkIconOptions</source_model>
-                            <config_path>bigconnect_hyvastarter/header_links/item9/icon</config_path>
+                            <config_path>bigconnect_hyvastarter/header_links/item9_icon</config_path>
                         </field>
                         <field id="variant" translate="label" type="select" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>Variant</label>
                             <source_model>BigConnect\HyvaStarter\Model\Config\Source\HeaderLinkVariantOptions</source_model>
-                            <config_path>bigconnect_hyvastarter/header_links/item9/variant</config_path>
+                            <config_path>bigconnect_hyvastarter/header_links/item9_variant</config_path>
                         </field>
                         <field id="sort_order" translate="label" type="text" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>Sort Order</label>
-                            <config_path>bigconnect_hyvastarter/header_links/item9/sort_order</config_path>
+                            <config_path>bigconnect_hyvastarter/header_links/item9_sort_order</config_path>
                         </field>
                         <field id="target_blank" translate="label" type="select" sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>Open in new tab</label>
                             <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                            <config_path>bigconnect_hyvastarter/header_links/item9/target_blank</config_path>
+                            <config_path>bigconnect_hyvastarter/header_links/item9_target_blank</config_path>
                         </field>
                     </group>
                     <group id="item10" translate="label" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
@@ -337,34 +337,34 @@
                         <field id="enabled" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>Enabled</label>
                             <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                            <config_path>bigconnect_hyvastarter/header_links/item10/enabled</config_path>
+                            <config_path>bigconnect_hyvastarter/header_links/item10_enabled</config_path>
                         </field>
                         <field id="label" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>Label</label>
-                            <config_path>bigconnect_hyvastarter/header_links/item10/label</config_path>
+                            <config_path>bigconnect_hyvastarter/header_links/item10_label</config_path>
                         </field>
                         <field id="url" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>URL</label>
-                            <config_path>bigconnect_hyvastarter/header_links/item10/url</config_path>
+                            <config_path>bigconnect_hyvastarter/header_links/item10_url</config_path>
                         </field>
                         <field id="icon" translate="label" type="select" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>Icon</label>
                             <source_model>BigConnect\HyvaStarter\Model\Config\Source\HeaderLinkIconOptions</source_model>
-                            <config_path>bigconnect_hyvastarter/header_links/item10/icon</config_path>
+                            <config_path>bigconnect_hyvastarter/header_links/item10_icon</config_path>
                         </field>
                         <field id="variant" translate="label" type="select" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>Variant</label>
                             <source_model>BigConnect\HyvaStarter\Model\Config\Source\HeaderLinkVariantOptions</source_model>
-                            <config_path>bigconnect_hyvastarter/header_links/item10/variant</config_path>
+                            <config_path>bigconnect_hyvastarter/header_links/item10_variant</config_path>
                         </field>
                         <field id="sort_order" translate="label" type="text" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>Sort Order</label>
-                            <config_path>bigconnect_hyvastarter/header_links/item10/sort_order</config_path>
+                            <config_path>bigconnect_hyvastarter/header_links/item10_sort_order</config_path>
                         </field>
                         <field id="target_blank" translate="label" type="select" sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>Open in new tab</label>
                             <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                            <config_path>bigconnect_hyvastarter/header_links/item10/target_blank</config_path>
+                            <config_path>bigconnect_hyvastarter/header_links/item10_target_blank</config_path>
                         </field>
                     </group>
                 </group>
