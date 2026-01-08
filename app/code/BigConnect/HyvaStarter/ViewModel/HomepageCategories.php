@@ -102,7 +102,7 @@ class HomepageCategories implements ArgumentInterface
                 'url' => $this->categoryHelper->getCategoryUrl($category),
                 'img' => $imageUrl,
                 'desc' => $showDesc
-                    ? $this->excerpt((string) $category->getDescription(), $descMaxLen)
+                    ? $this->excerpt((string) $category->getData('homepage_description'), $descMaxLen)
                     : '',
             ];
         }
