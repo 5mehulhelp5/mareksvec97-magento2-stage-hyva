@@ -35,6 +35,90 @@
                 <b4_icon></b4_icon>
                 <b4_icon_custom></b4_icon_custom>
             </store_benefits>
+            <homepage_categories>
+                <enabled>0</enabled>
+                <title>Vybrané kategórie</title>
+                <subtitle>Objavte našu ponuku…</subtitle>
+                <category_ids></category_ids>
+                <show_desc>1</show_desc>
+                <desc_maxlen>120</desc_maxlen>
+                <limit>6</limit>
+                <fallback_image></fallback_image>
+            </homepage_categories>
         </hyvastarter>
+        <bigconnect_hyvastarter>
+            <header_links>
+                <item1_enabled>0</item1_enabled>
+                <item1_label></item1_label>
+                <item1_url></item1_url>
+                <item1_icon>info</item1_icon>
+                <item1_variant>default</item1_variant>
+                <item1_sort_order></item1_sort_order>
+                <item1_target_blank>0</item1_target_blank>
+                <item2_enabled>0</item2_enabled>
+                <item2_label></item2_label>
+                <item2_url></item2_url>
+                <item2_icon>info</item2_icon>
+                <item2_variant>default</item2_variant>
+                <item2_sort_order></item2_sort_order>
+                <item2_target_blank>0</item2_target_blank>
+                <item3_enabled>0</item3_enabled>
+                <item3_label></item3_label>
+                <item3_url></item3_url>
+                <item3_icon>info</item3_icon>
+                <item3_variant>default</item3_variant>
+                <item3_sort_order></item3_sort_order>
+                <item3_target_blank>0</item3_target_blank>
+                <item4_enabled>0</item4_enabled>
+                <item4_label></item4_label>
+                <item4_url></item4_url>
+                <item4_icon>info</item4_icon>
+                <item4_variant>default</item4_variant>
+                <item4_sort_order></item4_sort_order>
+                <item4_target_blank>0</item4_target_blank>
+                <item5_enabled>0</item5_enabled>
+                <item5_label></item5_label>
+                <item5_url></item5_url>
+                <item5_icon>info</item5_icon>
+                <item5_variant>default</item5_variant>
+                <item5_sort_order></item5_sort_order>
+                <item5_target_blank>0</item5_target_blank>
+                <item6_enabled>0</item6_enabled>
+                <item6_label></item6_label>
+                <item6_url></item6_url>
+                <item6_icon>info</item6_icon>
+                <item6_variant>default</item6_variant>
+                <item6_sort_order></item6_sort_order>
+                <item6_target_blank>0</item6_target_blank>
+                <item7_enabled>0</item7_enabled>
+                <item7_label></item7_label>
+                <item7_url></item7_url>
+                <item7_icon>info</item7_icon>
+                <item7_variant>default</item7_variant>
+                <item7_sort_order></item7_sort_order>
+                <item7_target_blank>0</item7_target_blank>
+                <item8_enabled>0</item8_enabled>
+                <item8_label></item8_label>
+                <item8_url></item8_url>
+                <item8_icon>info</item8_icon>
+                <item8_variant>default</item8_variant>
+                <item8_sort_order></item8_sort_order>
+                <item8_target_blank>0</item8_target_blank>
+                <item9_enabled>0</item9_enabled>
+                <item9_label></item9_label>
+                <item9_url></item9_url>
+                <item9_icon>info</item9_icon>
+                <item9_variant>default</item9_variant>
+                <item9_sort_order></item9_sort_order>
+                <item9_target_blank>0</item9_target_blank>
+                <item10_enabled>0</item10_enabled>
+                <item10_label></item10_label>
+                <item10_url></item10_url>
+                <item10_icon>info</item10_icon>
+                <item10_variant>default</item10_variant>
+                <item10_sort_order></item10_sort_order>
+                <item10_target_blank>0</item10_target_blank>
+            </header_links>
+        </bigconnect_hyvastarter>
     </default>
 </config>
