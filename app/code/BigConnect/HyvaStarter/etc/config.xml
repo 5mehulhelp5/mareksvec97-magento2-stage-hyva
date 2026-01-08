@@ -35,6 +35,16 @@
                 <b4_icon></b4_icon>
                 <b4_icon_custom></b4_icon_custom>
             </store_benefits>
+            <homepage_categories>
+                <enabled>0</enabled>
+                <title>Vybrané kategórie</title>
+                <subtitle>Objavte našu ponuku…</subtitle>
+                <category_ids></category_ids>
+                <show_desc>1</show_desc>
+                <desc_maxlen>120</desc_maxlen>
+                <limit>6</limit>
+                <fallback_image></fallback_image>
+            </homepage_categories>
         </hyvastarter>
     </default>
 </config>
