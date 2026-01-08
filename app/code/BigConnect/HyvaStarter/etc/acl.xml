@@ -6,7 +6,6 @@
             <resource id="Magento_Backend::admin">
                 <resource id="BigConnect_HyvaStarter::hyvastarter" title="Hyva Starter" sortOrder="90">
                     <resource id="BigConnect_HyvaStarter::config" title="Configuration" sortOrder="10" />
-                    <resource id="BigConnect_HyvaStarter::category_tree" title="Category Tree" sortOrder="20" />
                 </resource>
             </resource>
         </resources>

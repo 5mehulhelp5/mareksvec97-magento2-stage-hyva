@@ -140,8 +140,8 @@
                     <label>Subtitle</label>
                 </field>
                 <field id="category_ids" translate="label" type="text" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Categories</label>
-                    <frontend_model>BigConnect\HyvaStarter\Block\Adminhtml\System\Config\Form\Field\CategoryTreeChooser</frontend_model>
+                    <label>Category IDs</label>
+                    <comment>Comma or space separated IDs. Example: 12, 34, 56</comment>
                 </field>
                 <field id="show_desc" translate="label" type="select" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Show description</label>
