@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <argument name="data" xsi:type="array">
+        <item name="js_config" xsi:type="array">
+            <item name="provider" xsi:type="string">bigconnect_inspiration_listing.bigconnect_inspiration_listing_data_source</item>
+            <item name="deps" xsi:type="string">bigconnect_inspiration_listing.bigconnect_inspiration_listing_data_source</item>
+        </item>
+        <item name="spinner" xsi:type="string">bigconnect_inspiration_columns</item>
+        <item name="buttons" xsi:type="array">
+            <item name="add" xsi:type="array">
+                <item name="name" xsi:type="string">add</item>
+                <item name="label" xsi:type="string" translate="true">Add Inspiration</item>
+                <item name="class" xsi:type="string">primary</item>
+                <item name="url" xsi:type="string">bigconnect_inspiration/inspiration/new</item>
+            </item>
+        </item>
+    </argument>
+    <settings>
+        <dataScope>bigconnect_inspiration_listing</dataScope>
+        <deps>
+            <dep>bigconnect_inspiration_listing.bigconnect_inspiration_listing_data_source</dep>
+        </deps>
+    </settings>
+    <dataSource name="bigconnect_inspiration_listing_data_source">
+        <argument name="data" xsi:type="array">
+            <item name="js_config" xsi:type="array">
+                <item name="component" xsi:type="string">Magento_Ui/js/grid/provider</item>
+            </item>
+        </argument>
+        <settings>
+            <updateUrl path="mui/index/render"/>
+        </settings>
+        <dataProvider class="BigConnect\Inspiration\Ui\DataProvider\ListingDataProvider" name="bigconnect_inspiration_listing_data_source">
+            <settings>
+                <primaryFieldName>entity_id</primaryFieldName>
+                <requestFieldName>entity_id</requestFieldName>
+            </settings>
+        </dataProvider>
+    </dataSource>
+    <listingToolbar name="listing_top">
+        <settings>
+            <sticky>true</sticky>
+        </settings>
+        <filters name="listing_filters"/>
+        <paging name="listing_paging"/>
+        <massaction name="listing_massaction">
+            <action name="enable">
+                <settings>
+                    <type>enable</type>
+                    <label translate="true">Enable</label>
+                    <url path="bigconnect_inspiration/inspiration/massEnable"/>
+                </settings>
+            </action>
+            <action name="disable">
+                <settings>
+                    <type>disable</type>
+                    <label translate="true">Disable</label>
+                    <url path="bigconnect_inspiration/inspiration/massDisable"/>
+                </settings>
+            </action>
+            <action name="delete">
+                <settings>
+                    <type>delete</type>
+                    <label translate="true">Delete</label>
+                    <url path="bigconnect_inspiration/inspiration/massDelete"/>
+                    <confirm>
+                        <title translate="true">Delete</title>
+                        <message translate="true">Are you sure you want to delete selected items?</message>
+                    </confirm>
+                </settings>
+            </action>
+        </massaction>
+    </listingToolbar>
+    <columns name="bigconnect_inspiration_columns">
+        <column name="entity_id">
+            <settings>
+                <filter>textRange</filter>
+                <sorting>asc</sorting>
+                <label translate="true">ID</label>
+            </settings>
+        </column>
+        <column name="image" class="BigConnect\Inspiration\Ui\Component\Listing\Column\Thumbnail">
+            <settings>
+                <filter>false</filter>
+                <label translate="true">Image</label>
+            </settings>
+        </column>
+        <column name="product_name" class="BigConnect\Inspiration\Ui\Component\Listing\Column\ProductName">
+            <settings>
+                <filter>false</filter>
+                <label translate="true">Product</label>
+            </settings>
+        </column>
+        <column name="product_id">
+            <settings>
+                <filter>textRange</filter>
+                <label translate="true">Product ID</label>
+            </settings>
+        </column>
+        <column name="customer_name">
+            <settings>
+                <filter>text</filter>
+                <label translate="true">Customer</label>
+            </settings>
+        </column>
+        <column name="country_code">
+            <settings>
+                <filter>text</filter>
+                <label translate="true">Country</label>
+            </settings>
+        </column>
+        <column name="rating">
+            <settings>
+                <filter>textRange</filter>
+                <label translate="true">Rating</label>
+            </settings>
+        </column>
+        <column name="status">
+            <settings>
+                <filter>select</filter>
+                <label translate="true">Status</label>
+                <options class="BigConnect\Inspiration\Model\Source\Status"/>
+            </settings>
+        </column>
+        <column name="store_id">
+            <settings>
+                <filter>select</filter>
+                <label translate="true">Store</label>
+                <options class="Magento\Store\Ui\Component\Listing\Column\Store\Options"/>
+            </settings>
+        </column>
+        <column name="position">
+            <settings>
+                <filter>textRange</filter>
+                <label translate="true">Position</label>
+            </settings>
+        </column>
+        <column name="created_at">
+            <settings>
+                <filter>dateRange</filter>
+                <label translate="true">Created At</label>
+            </settings>
+        </column>
+        <actionsColumn name="actions" class="Magento\Ui\Component\Listing\Columns\Actions">
+            <settings>
+                <indexField>entity_id</indexField>
+                <label translate="true">Actions</label>
+            </settings>
+            <action name="edit">
+                <settings>
+                    <url path="bigconnect_inspiration/inspiration/edit"/>
+                    <label translate="true">Edit</label>
+                </settings>
+            </action>
+            <action name="delete">
+                <settings>
+                    <url path="bigconnect_inspiration/inspiration/delete"/>
+                    <confirm>
+                        <title translate="true">Delete</title>
+                        <message translate="true">Are you sure you want to delete this record?</message>
+                    </confirm>
+                    <label translate="true">Delete</label>
+                </settings>
+            </action>
+        </actionsColumn>
+    </columns>
+</listing>
