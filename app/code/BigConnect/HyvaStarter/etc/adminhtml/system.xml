@@ -354,6 +354,64 @@
                     <base_url type="media" scope_info="1">hyvastarter/homepage_categories</base_url>
                 </field>
             </group>
+            <group id="about_section" translate="label" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>About Section</label>
+                <field id="enabled" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Enable</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="title" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Title</label>
+                </field>
+                <field id="text" translate="label" type="textarea" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Text</label>
+                </field>
+                <field id="feature1" translate="label" type="text" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Feature 1</label>
+                </field>
+                <field id="feature2" translate="label" type="text" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Feature 2</label>
+                </field>
+                <field id="feature3" translate="label" type="text" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Feature 3</label>
+                </field>
+                <field id="stat1_number" translate="label" type="text" sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Stat 1 Number</label>
+                </field>
+                <field id="stat1_label" translate="label" type="text" sortOrder="80" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Stat 1 Label</label>
+                </field>
+                <field id="stat2_number" translate="label" type="text" sortOrder="90" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Stat 2 Number</label>
+                </field>
+                <field id="stat2_label" translate="label" type="text" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Stat 2 Label</label>
+                </field>
+                <field id="stat3_number" translate="label" type="text" sortOrder="110" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Stat 3 Number</label>
+                </field>
+                <field id="stat3_label" translate="label" type="text" sortOrder="120" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Stat 3 Label</label>
+                </field>
+                <field id="cta_label" translate="label" type="text" sortOrder="130" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>CTA Label</label>
+                </field>
+                <field id="cta_url" translate="label" type="text" sortOrder="140" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>CTA URL</label>
+                </field>
+                <field id="image" translate="label" type="image" sortOrder="150" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Image</label>
+                    <backend_model>Magento\Config\Model\Config\Backend\Image</backend_model>
+                    <upload_dir config="system/filesystem/media" scope_info="1">hyvastarter/about</upload_dir>
+                    <base_url type="media" scope_info="1">hyvastarter/about</base_url>
+                </field>
+                <field id="badge_title" translate="label" type="text" sortOrder="160" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Badge Title</label>
+                </field>
+                <field id="badge_text" translate="label" type="text" sortOrder="170" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Badge Text</label>
+                </field>
+            </group>
         </section>
     </system>
 </config>

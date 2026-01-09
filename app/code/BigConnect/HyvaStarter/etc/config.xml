@@ -45,6 +45,25 @@
                 <limit>6</limit>
                 <fallback_image></fallback_image>
             </homepage_categories>
+            <about_section>
+                <enabled>0</enabled>
+                <title>O nás</title>
+                <text>Naša výroba je spojením tradície a inovácií, kde skúsení inžinieri a remeselníci pracujú ruka v ruke. Neustále sa posúvame vpred a s precíznosťou pretransformujeme kov do dokonalých výrobkov pod našou strechou.</text>
+                <feature1>Ručná práca slovenských remeselníkov</feature1>
+                <feature2>Precízne CNC spracovanie kovov</feature2>
+                <feature3>Individuálny prístup ku každej zákazke</feature3>
+                <stat1_number>15+</stat1_number>
+                <stat1_label>rokov skúseností</stat1_label>
+                <stat2_number>5000+</stat2_number>
+                <stat2_label>spokojných zákazníkov</stat2_label>
+                <stat3_number>100%</stat3_number>
+                <stat3_label>slovenská výroba</stat3_label>
+                <cta_label>Čítať viac</cta_label>
+                <cta_url></cta_url>
+                <image></image>
+                <badge_title>Kvalita garantovaná</badge_title>
+                <badge_text>Každý výrobok kontrolovaný</badge_text>
+            </about_section>
         </hyvastarter>
         <bigconnect_hyvastarter>
             <header_links>

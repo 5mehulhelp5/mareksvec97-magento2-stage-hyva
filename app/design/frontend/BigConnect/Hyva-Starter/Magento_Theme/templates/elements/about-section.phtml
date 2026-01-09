@@ -1,0 +1,118 @@
+<?php
+declare(strict_types=1);
+
+/** @var \Hyva\Theme\Model\ViewModelRegistry $viewModels */
+/** @var \Magento\Framework\View\Element\Template $block */
+
+use BigConnect\HyvaStarter\ViewModel\AboutSection;
+use Hyva\Theme\ViewModel\HeroiconsOutline;
+
+$about = $viewModels->require(AboutSection::class);
+$heroIcons = $viewModels->require(HeroiconsOutline::class);
+
+if (!$about->isEnabled()) {
+    return;
+}
+
+$features = $about->getFeatures();
+$stats = $about->getStats();
+$ctaLabel = $about->getCtaLabel();
+$ctaUrl = $about->getCtaUrl();
+$imageUrl = $about->getImageUrl();
+?>
+
+<div class="relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] w-screen">
+    <section class="py-20 bg-slate-100">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="grid lg:grid-cols-2 gap-12 items-center">
+                <div>
+                    <?php if (trim($about->getTitle()) !== ''): ?>
+                        <h2 class="text-3xl md:text-4xl font-bold text-slate-800 mb-6">
+                            <?= $block->escapeHtml($about->getTitle()) ?>
+                        </h2>
+                    <?php endif; ?>
+
+                    <?php if (trim($about->getText()) !== ''): ?>
+                        <p class="text-lg text-slate-700 leading-relaxed mb-6">
+                            <?= $block->escapeHtml($about->getText()) ?>
+                        </p>
+                    <?php endif; ?>
+
+                    <?php if ($features): ?>
+                        <div class="space-y-3 mb-8">
+                            <?php foreach ($features as $feature): ?>
+                                <div class="flex items-start gap-3">
+                                    <?= /* @noEscape */ $heroIcons->checkCircleHtml('w-5 h-5 text-primary flex-shrink-0 mt-0.5') ?>
+                                    <span class="text-slate-700">
+                                        <?= $block->escapeHtml($feature) ?>
+                                    </span>
+                                </div>
+                            <?php endforeach; ?>
+                        </div>
+                    <?php endif; ?>
+
+                    <?php if ($stats): ?>
+                        <div class="grid grid-cols-3 gap-6 mb-8">
+                            <?php foreach ($stats as $stat): ?>
+                                <div>
+                                    <div class="font-bold text-2xl md:text-3xl mb-1 text-primary">
+                                        <?= $block->escapeHtml($stat['number']) ?>
+                                    </div>
+                                    <div class="text-sm text-slate-600">
+                                        <?= $block->escapeHtml($stat['label']) ?>
+                                    </div>
+                                </div>
+                            <?php endforeach; ?>
+                        </div>
+                    <?php endif; ?>
+
+                    <?php if ($ctaLabel !== '' && $ctaUrl !== ''): ?>
+                        <a
+                            href="<?= $block->escapeUrl($ctaUrl) ?>"
+                            class="inline-flex items-center gap-2 px-6 py-3 text-white rounded-lg font-medium transition-all bg-primary hover:bg-primary-darker"
+                        >
+                            <?= $block->escapeHtml($ctaLabel) ?>
+                            <?= /* @noEscape */ $heroIcons->arrowNarrowRightHtml('w-4 h-4') ?>
+                        </a>
+                    <?php endif; ?>
+                </div>
+
+                <div class="relative">
+                    <div class="rounded-2xl overflow-hidden shadow-xl border border-slate-200 bg-white">
+                        <?php if ($imageUrl !== ''): ?>
+                            <img
+                                src="<?= $block->escapeUrl($imageUrl) ?>"
+                                alt="<?= $block->escapeHtmlAttr($about->getTitle()) ?>"
+                                class="w-full h-full object-cover"
+                                loading="lazy"
+                                decoding="async"
+                            />
+                        <?php else: ?>
+                            <div class="aspect-[4/3] bg-slate-200"></div>
+                        <?php endif; ?>
+                    </div>
+
+                    <?php if (trim($about->getBadgeTitle()) !== '' || trim($about->getBadgeText()) !== ''): ?>
+                        <div class="absolute -bottom-6 -left-6 bg-white rounded-xl shadow-lg p-6 max-w-xs hidden sm:flex gap-4">
+                            <div class="w-12 h-12 rounded-full flex items-center justify-center bg-primary flex-shrink-0">
+                                <?= /* @noEscape */ $heroIcons->checkCircleHtml('w-6 h-6 text-white') ?>
+                            </div>
+                            <div>
+                                <?php if (trim($about->getBadgeTitle()) !== ''): ?>
+                                    <div class="font-bold text-slate-800">
+                                        <?= $block->escapeHtml($about->getBadgeTitle()) ?>
+                                    </div>
+                                <?php endif; ?>
+                                <?php if (trim($about->getBadgeText()) !== ''): ?>
+                                    <div class="text-sm text-slate-600">
+                                        <?= $block->escapeHtml($about->getBadgeText()) ?>
+                                    </div>
+                                <?php endif; ?>
+                            </div>
+                        </div>
+                    <?php endif; ?>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
