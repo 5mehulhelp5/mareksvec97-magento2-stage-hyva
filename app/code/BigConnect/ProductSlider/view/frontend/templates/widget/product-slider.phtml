@@ -1,15 +1,33 @@
 <?php
 /** @var \BigConnect\ProductSlider\Block\Widget\ProductSlider $block */
 /** @var \Magento\Framework\Escaper $escaper */
+
 $viewModel = $block->getViewModel();
+
+// Hyvä heroicons (bezpečne)
+$heroicons = null;
+$viewModels = null;
+
+if (method_exists($block, 'getViewModelRegistry')) {
+    $viewModels = $block->getViewModelRegistry();
+}
+
+if ($viewModels) {
+    try {
+        $heroicons = $viewModels->require(\Hyva\Theme\ViewModel\HeroiconsOutline::class);
+    } catch (\Throwable $e) {
+        $heroicons = null;
+    }
+}
+
 $config = [
     'page_size' => $block->getPageSize(),
     'period_days' => $block->getPeriodDays(),
     'only_in_stock' => $block->isOnlyInStock(),
     'only_visible' => $block->isOnlyVisible(),
 ];
-$items = $viewModel->getItems($block->getSourceCode(), $config);
 
+$items = $viewModel->getItems($block->getSourceCode(), $config);
 if ($items === []) {
     return;
 }
@@ -19,6 +37,24 @@ $badgeText = $block->getTitleBadge();
 $wishlistEnabled = $block->isWishlistEnabled();
 $addToCartEnabled = $block->isAddToCartEnabled();
 ?>
+
+<style>
+/* skry natívny scrollbar */
+.bc-slider {
+    scrollbar-width: none;           /* Firefox */
+    -ms-overflow-style: none;        /* IE/Edge legacy */
+}
+.bc-slider::-webkit-scrollbar {
+    display: none;                   /* Chrome/Safari */
+}
+
+/* počas dragovania nech sa nevyberá text */
+.bc-dragging, .bc-dragging * {
+    user-select: none !important;
+    cursor: grabbing !important;
+}
+</style>
+
 <section class="py-20 bg-white">
     <div class="max-w-7xl mx-auto px-4">
         <div class="text-center mb-12">
@@ -27,11 +63,13 @@ $addToCartEnabled = $block->isAddToCartEnabled();
                     <?= $escaper->escapeHtml($badgeText) ?>
                 </div>
             <?php endif; ?>
+
             <?php if ($block->getTitle()) : ?>
                 <h2 class="text-3xl md:text-4xl font-bold mb-4">
                     <?= $escaper->escapeHtml($block->getTitle()) ?>
                 </h2>
             <?php endif; ?>
+
             <?php if ($block->getSubtitle()) : ?>
                 <p class="text-lg max-w-2xl mx-auto text-gray-600">
                     <?= $escaper->escapeHtml($block->getSubtitle()) ?>
@@ -39,7 +77,12 @@ $addToCartEnabled = $block->isAddToCartEnabled();
             <?php endif; ?>
         </div>
 
-        <div class="relative" x-data="productSlider()">
+        <div
+            class="relative"
+            x-data="bcProductSlider()"
+            x-init="init()"
+        >
+            <!-- Prev -->
             <button
                 type="button"
                 class="absolute -left-4 top-1/2 -translate-y-1/2 z-10 w-12 h-12 rounded-full bg-white shadow-lg flex items-center justify-center transition-colors border-2"
@@ -47,8 +90,14 @@ $addToCartEnabled = $block->isAddToCartEnabled();
                 @click="scrollPrev"
                 aria-label="<?= $escaper->escapeHtmlAttr(__('Predchádzajúci')) ?>"
             >
-                <span class="text-2xl leading-none">&lsaquo;</span>
+                <?php if ($heroicons) : ?>
+                    <?= $heroicons->chevronLeftHtml('w-6 h-6') ?>
+                <?php else : ?>
+                    <span class="text-2xl leading-none">&lsaquo;</span>
+                <?php endif; ?>
             </button>
+
+            <!-- Next -->
             <button
                 type="button"
                 class="absolute -right-4 top-1/2 -translate-y-1/2 z-10 w-12 h-12 rounded-full bg-white shadow-lg flex items-center justify-center transition-colors border-2"
@@ -56,12 +105,21 @@ $addToCartEnabled = $block->isAddToCartEnabled();
                 @click="scrollNext"
                 aria-label="<?= $escaper->escapeHtmlAttr(__('Ďalší')) ?>"
             >
-                <span class="text-2xl leading-none">&rsaquo;</span>
+             
+                    <?= $heroicons->chevronRightHtml('w-6 h-6') ?>
+              
+                    <span class="text-2xl leading-none">&rsaquo;</span>
+               
             </button>
 
+            <!-- SLIDER -->
             <div
-                class="flex gap-4 overflow-x-auto scroll-smooth snap-x snap-mandatory pb-4"
+                class="bc-slider flex gap-4 overflow-x-auto scroll-smooth snap-x snap-mandatory pb-4"
                 x-ref="slider"
+                :class="isDragging ? 'bc-dragging' : 'cursor-grab'"
+                @scroll.passive="updateThumb()"
+                @pointerdown.capture="startDrag($event)"
+                @click.capture="maybeBlockClick($event)"
             >
                 <?php foreach ($items as $product) : ?>
                     <div class="snap-start shrink-0 w-72 sm:w-80 lg:w-72 xl:w-80">
@@ -69,17 +127,20 @@ $addToCartEnabled = $block->isAddToCartEnabled();
                             <div class="relative overflow-hidden aspect-square bg-white">
                                 <a href="<?= $escaper->escapeUrl($product->getProductUrl()) ?>" class="block">
                                     <img
-                                        src="<?= $escaper->escapeUrl($viewModel->getImageUrl($product)) ?>"
+                                        src="<?= $escaper->escapeUrl($viewModel->getImageUrl($product, 'category_page_grid')) ?>"
                                         alt="<?= $escaper->escapeHtmlAttr($product->getName()) ?>"
                                         class="w-full h-full object-contain p-4 sm:p-8 group-hover:scale-110 transition-transform duration-500"
                                         loading="lazy"
+                                        draggable="false"
                                     />
                                 </a>
+
                                 <div class="absolute top-2 left-2 sm:top-4 sm:left-4">
                                     <span class="text-white px-2 py-0.5 sm:px-3 sm:py-1 rounded-full text-xs sm:text-sm" style="background-color: <?= $escaper->escapeHtmlAttr($accentColor) ?>;">
                                         <?= $escaper->escapeHtml($viewModel->getSourceLabel($block->getSourceCode())) ?>
                                     </span>
                                 </div>
+
                                 <?php if ($viewModel->hasDiscount($product)) : ?>
                                     <div class="absolute top-2 right-2 sm:top-4 sm:right-4">
                                         <span class="bg-red-500 text-white px-2 py-0.5 sm:px-3 sm:py-1 rounded-full font-bold text-xs sm:text-sm">
@@ -87,13 +148,13 @@ $addToCartEnabled = $block->isAddToCartEnabled();
                                         </span>
                                     </div>
                                 <?php endif; ?>
+
                                 <?php if ($wishlistEnabled) : ?>
                                     <?php $wishlistParams = $viewModel->getWishlistPostParams($product); ?>
                                     <?php if ($wishlistParams) : ?>
                                         <button
                                             type="button"
                                             class="absolute bottom-2 right-2 sm:bottom-4 sm:right-4 bg-white/90 backdrop-blur-sm p-2 sm:p-3 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-opacity hover:text-white"
-                                            style="--wishlist-accent: <?= $escaper->escapeHtmlAttr($accentColor) ?>;"
                                             data-post='<?= $escaper->escapeHtmlAttr($wishlistParams) ?>'
                                             aria-label="<?= $escaper->escapeHtmlAttr(__('Pridať do obľúbených')) ?>"
                                             x-data
@@ -105,22 +166,26 @@ $addToCartEnabled = $block->isAddToCartEnabled();
                                     <?php endif; ?>
                                 <?php endif; ?>
                             </div>
+
                             <div class="p-3 sm:p-5 flex flex-col flex-1">
                                 <h3 class="font-semibold text-sm sm:text-base mb-2 sm:mb-4 min-h-[2.5rem] line-clamp-2">
                                     <a href="<?= $escaper->escapeUrl($product->getProductUrl()) ?>" class="hover:underline">
                                         <?= $escaper->escapeHtml($product->getName()) ?>
                                     </a>
                                 </h3>
+
                                 <div class="flex items-center gap-1.5 sm:gap-2 mb-3 sm:mb-4">
                                     <span class="font-bold text-base sm:text-lg" style="color: <?= $escaper->escapeHtmlAttr($accentColor) ?>;">
                                         <?= $escaper->escapeHtml($viewModel->getFormattedPrice($product)) ?>
                                     </span>
+
                                     <?php if ($viewModel->hasDiscount($product)) : ?>
                                         <span class="text-gray-400 line-through text-xs sm:text-sm">
                                             <?= $escaper->escapeHtml($viewModel->getFormattedOriginalPrice($product)) ?>
                                         </span>
                                     <?php endif; ?>
                                 </div>
+
                                 <?php if ($addToCartEnabled) : ?>
                                     <?php $postParams = $viewModel->getAddToCartPostParams($product); ?>
                                     <form data-role="tocart-form" action="<?= $escaper->escapeUrl($postParams['action']) ?>" method="post" class="mt-auto">
@@ -133,7 +198,7 @@ $addToCartEnabled = $block->isAddToCartEnabled();
                                             class="w-full text-white font-bold py-3 sm:py-4 text-xs sm:text-sm rounded-lg transition-colors"
                                             style="background-color: <?= $escaper->escapeHtmlAttr($accentColor) ?>;"
                                         >
-                                            <?= $escaper->escapeHtml(__('Pridať do košíka')) ?>
+                                            <?= $escaper->escapeHtml(__('Add to cart')) ?>
                                         </button>
                                     </form>
                                 <?php endif; ?>
@@ -142,31 +207,170 @@ $addToCartEnabled = $block->isAddToCartEnabled();
                     </div>
                 <?php endforeach; ?>
             </div>
-        </div>
 
-        <?php if ($block->getViewAllUrl()) : ?>
-            <div class="text-center mt-12">
-                <a
-                    href="<?= $escaper->escapeUrl($block->getViewAllUrl()) ?>"
-                    class="inline-flex items-center justify-center border-2 px-8 py-4 font-semibold rounded-lg transition-colors"
-                    style="border-color: <?= $escaper->escapeHtmlAttr($accentColor) ?>; color: <?= $escaper->escapeHtmlAttr($accentColor) ?>;"
-                >
-                    <?= $escaper->escapeHtml($block->getViewAllLabel()) ?>
-                </a>
+            <!-- CUSTOM BAR (dizajn ako predtým) -->
+            <div
+                class="relative w-full mt-6 cursor-pointer select-none"
+                x-ref="bar"
+                @click="barClick($event)"
+            >
+                <div class="w-full bg-gray-200 rounded-full overflow-hidden h-2 md:h-3 relative">
+                    <div
+                      class="absolute h-2 md:h-3 rounded-full transition-colors cursor-grab active:cursor-grabbing bg-primary hover:bg-primary-darker"
+                      :style="`left:${thumbLeft}%; width:${thumbWidth}%;`"
+                      @pointerdown.prevent="startThumbDrag($event)"
+                    ></div>
+                </div>
             </div>
-        <?php endif; ?>
+        </div>
     </div>
 </section>
 
 <script>
-    document.addEventListener('alpine:init', () => {
-        Alpine.data('productSlider', () => ({
-            scrollPrev() {
-                this.$refs.slider.scrollBy({ left: -this.$refs.slider.clientWidth, behavior: 'smooth' });
-            },
-            scrollNext() {
-                this.$refs.slider.scrollBy({ left: this.$refs.slider.clientWidth, behavior: 'smooth' });
+document.addEventListener('alpine:init', () => {
+    // registruj len raz
+    if (Alpine.data.__bcProductSliderRegistered) return;
+    Alpine.data.__bcProductSliderRegistered = true;
+
+    Alpine.data('bcProductSlider', () => ({
+        thumbLeft: 0,
+        thumbWidth: 0,
+
+        isDragging: false,
+        dragStartX: 0,
+        dragStartScrollLeft: 0,
+        dragMoved: false,
+        dragThresholdPx: 6,
+
+        isThumbDragging: false,
+
+        init() {
+            this.$nextTick(() => {
+                this.updateThumb();
+                window.addEventListener('resize', () => this.updateThumb(), { passive: true });
+            });
+        },
+
+        scrollPrev() {
+            this.$refs.slider.scrollBy({ left: -this.$refs.slider.clientWidth, behavior: 'smooth' });
+        },
+        scrollNext() {
+            this.$refs.slider.scrollBy({ left: this.$refs.slider.clientWidth, behavior: 'smooth' });
+        },
+
+        // --- thumb výpočet podľa scrollu ---
+        updateThumb() {
+            const el = this.$refs.slider;
+            const maxScroll = el.scrollWidth - el.clientWidth;
+
+            if (maxScroll <= 0) {
+                this.thumbLeft = 0;
+                this.thumbWidth = 100;
+                return;
             }
-        }));
-    });
+
+            // šírka thumbu = podiel viditeľnej časti
+            this.thumbWidth = Math.max(12, (el.clientWidth / el.scrollWidth) * 100);
+
+            // left v % tak, aby thumb nedošiel mimo
+            const left = (el.scrollLeft / maxScroll) * (100 - this.thumbWidth);
+            this.thumbLeft = Math.min(Math.max(left, 0), 100 - this.thumbWidth);
+        },
+
+        // --- klik na bar presunie scroll ---
+        barClick(e) {
+            const barRect = this.$refs.bar.getBoundingClientRect();
+            const x = e.clientX - barRect.left;
+            const pct = x / barRect.width;
+
+            const el = this.$refs.slider;
+            const maxScroll = el.scrollWidth - el.clientWidth;
+            if (maxScroll <= 0) return;
+
+            el.scrollLeft = Math.max(0, Math.min(maxScroll, pct * maxScroll));
+            this.updateThumb();
+        },
+
+        // --- drag thumb ---
+        startThumbDrag(e) {
+            this.isThumbDragging = true;
+
+            const onMove = (ev) => {
+                if (!this.isThumbDragging) return;
+
+                const barRect = this.$refs.bar.getBoundingClientRect();
+                const x = ev.clientX - barRect.left;
+                const pct = x / barRect.width;
+
+                const el = this.$refs.slider;
+                const maxScroll = el.scrollWidth - el.clientWidth;
+                if (maxScroll <= 0) return;
+
+                el.scrollLeft = Math.max(0, Math.min(maxScroll, pct * maxScroll));
+                this.updateThumb();
+            };
+
+            const onUp = () => {
+                this.isThumbDragging = false;
+                window.removeEventListener('pointermove', onMove);
+                window.removeEventListener('pointerup', onUp);
+                window.removeEventListener('pointercancel', onUp);
+            };
+
+            window.addEventListener('pointermove', onMove, { passive: true });
+            window.addEventListener('pointerup', onUp, { passive: true });
+            window.addEventListener('pointercancel', onUp, { passive: true });
+        },
+
+        // --- drag-to-scroll (aj keď držíš na produkte) ---
+        startDrag(e) {
+            // iba primary button / primary pointer
+            if (e.button !== undefined && e.button !== 0) return;
+
+            // keď práve ťaháš thumb, neťahaj slider
+            if (this.isThumbDragging) return;
+
+            this.isDragging = true;
+            this.dragMoved = false;
+
+            this.dragStartX = e.clientX;
+            this.dragStartScrollLeft = this.$refs.slider.scrollLeft;
+
+            const onMove = (ev) => {
+                if (!this.isDragging) return;
+
+                const dx = ev.clientX - this.dragStartX;
+                if (Math.abs(dx) > this.dragThresholdPx) this.dragMoved = true;
+
+                this.$refs.slider.scrollLeft = this.dragStartScrollLeft - dx;
+                this.updateThumb();
+            };
+
+            const onUp = () => {
+                this.isDragging = false;
+
+                window.removeEventListener('pointermove', onMove);
+                window.removeEventListener('pointerup', onUp);
+                window.removeEventListener('pointercancel', onUp);
+
+                setTimeout(() => { this.dragMoved = false; }, 0);
+            };
+
+            window.addEventListener('pointermove', onMove, { passive: true });
+            window.addEventListener('pointerup', onUp, { passive: true });
+            window.addEventListener('pointercancel', onUp, { passive: true });
+
+            // zabráni highlightu / drag obrázkov
+            e.preventDefault();
+        },
+
+        // keď sa reálne ťahalo, zablokuj klik na linky
+        maybeBlockClick(e) {
+            if (this.dragMoved) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+        },
+    }));
+});
 </script>

@@ -50,29 +50,26 @@ class BestsellersSource implements ProductSourceInterface
 
     public function getItems(array $config): array
     {
-        $pageSize    = max(1, (int)($config['page_size'] ?? 24));
-        $periodDays  = (int)($config['period_days'] ?? 90);
+        $pageSize    = max(1, (int)($config['page_size'] ?? 8));
+        $periodDays  = (int)($config['period_days'] ?? 30);
         $onlyInStock = (bool)($config['only_in_stock'] ?? true);
         $onlyVisible = (bool)($config['only_visible'] ?? true);
 
-        $storeId = (int) $this->storeManager->getStore()->getId();
+        $storeId = (int)$this->storeManager->getStore()->getId();
 
-        // Buffer: načítaj viac bestseller ID, lebo časť odpadne po filtroch (visibility/stock/store)
-        $bufferSize = max($pageSize * 5, $pageSize);
+        // Buffer: vezmeme viac kandidátov, lebo časť odpadne na visibility/stock/store filtroch
+        $bufferSize = max($pageSize * 6, $pageSize);
 
-        // 1) Načítaj IDčka bestsellerov z reportu (zoradené podľa qty_ordered DESC)
-        $productIds = $this->getBestsellerProductIds($storeId, $periodDays, $bufferSize);
-
-        // Fallback: v niektorých obchodoch bývajú reporty v store_id=0 (All Store Views)
+        // Najprv skús podľa konkrétneho storeId, potom fallback na 0 (All Store Views)
+        $productIds = $this->getBestsellerProductIdsSummed($storeId, $periodDays, $bufferSize);
         if ($productIds === []) {
-            $productIds = $this->getBestsellerProductIds(0, $periodDays, $bufferSize);
+            $productIds = $this->getBestsellerProductIdsSummed(0, $periodDays, $bufferSize);
         }
 
         if ($productIds === []) {
             return [];
         }
 
-        // 2) Načítaj produkty podľa týchto ID + aplikuj filtre
         $collection = $this->productCollectionFactory->create();
         $collection->addIdFilter($productIds);
         $collection->addStoreFilter($storeId);
@@ -95,46 +92,65 @@ class BestsellersSource implements ProductSourceInterface
             $this->stockHelper->addInStockFilterToCollection($collection);
         }
 
-        // 3) Zachovaj poradie z reportu (aby to bolo reálne podľa qty_ordered)
+        // Zachovaj poradie z reportu (už je zoradené podľa SUM(qty_ordered) DESC)
         $collection->getSelect()->order(new Zend_Db_Expr(
             sprintf('FIELD(e.entity_id, %s)', implode(',', $productIds))
         ));
 
-        // 4) Finálny rez až na konci
+        // finálny rez až tu
         $collection->setPageSize($pageSize);
 
         return $collection->getItems();
     }
 
     /**
-     * Vráti zoradené product_id z bestseller reportu.
+     * Vráti product_id zoradené podľa SUM(qty_ordered) za zvolené obdobie.
+     * Stabilné riešenie: vlastný SELECT nad sales_bestsellers_aggregated_daily
+     * (keď používaš period "day").
      */
-    private function getBestsellerProductIds(int $storeId, int $periodDays, int $limit): array
+    private function getBestsellerProductIdsSummed(int $storeId, int $periodDays, int $limit): array
     {
         $bestsellers = $this->bestsellersCollectionFactory->create();
+        $conn = $bestsellers->getConnection();
 
-        // POZN.: nepoužívame setStoreIds() - nie je dostupné vo všetkých verziách
-        $bestsellers->addStoreFilter($storeId);
-        $bestsellers->setPageSize($limit);
+        $bsTable  = $bestsellers->getTable('sales_bestsellers_aggregated_daily');
+        $relTable = $bestsellers->getTable('catalog_product_relation');
 
-        // Ak je periodDays > 0, zúžime časové okno
+        $select = $conn->select()
+            ->from(['bs' => $bsTable], [])
+            ->joinLeft(
+                ['rel' => $relTable],
+                'rel.child_id = bs.product_id',
+                []
+            )
+            ->columns([
+                // ak je product simple s parentom, použij parent_id, inak product_id
+                'display_id' => new Zend_Db_Expr('COALESCE(rel.parent_id, bs.product_id)'),
+                'total_qty'  => new Zend_Db_Expr('SUM(bs.qty_ordered)')
+            ])
+            ->where('bs.store_id = ?', $storeId)
+            ->group(new Zend_Db_Expr('COALESCE(rel.parent_id, bs.product_id)'))
+            ->order('total_qty DESC')
+            ->limit($limit);
+
         if ($periodDays > 0) {
             $toDate = $this->timezone->date();
             $fromDate = (clone $toDate)->modify(sprintf('-%d days', $periodDays));
 
-            $bestsellers->setPeriod('day');
-            $bestsellers->setDateRange(
-                $fromDate->format('Y-m-d H:i:s'),
-                $toDate->format('Y-m-d H:i:s')
-            );
+            $select->where('bs.period >= ?', $fromDate->format('Y-m-d'))
+                   ->where('bs.period <= ?', $toDate->format('Y-m-d'));
         }
 
-        // Dôležité: zoradenie podľa predaja
-        $bestsellers->getSelect()->order('qty_ordered DESC');
+        $rows = $conn->fetchAll($select);
 
-        $ids = array_values(array_unique($bestsellers->getColumnValues('product_id')));
+        $ids = [];
+        foreach ($rows as $row) {
+            $id = (int)($row['display_id'] ?? 0);
+            if ($id > 0) {
+                $ids[] = $id;
+            }
+        }
 
-        // bezpečnosť: odstráň prípadné prázdne hodnoty
-        return array_values(array_filter($ids, static fn($v) => (int)$v > 0));
+        return $ids;
     }
 }

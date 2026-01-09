@@ -166,5 +166,7 @@ module.exports = hyvaModules.mergeTailwindConfig({
     '../../*/layout/*.xml',
     '../../*/page_layout/override/base/*.xml',
     '../../../../../../../vendor/hyva-themes/magento2-default-theme/**/*.phtml',
+    '../../../../../../../app/code/**/view/frontend/**/*.phtml',
+    '../../../../../../../app/code/**/view/frontend/**/*.xml',
   ],
 });
