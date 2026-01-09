@@ -408,6 +408,7 @@ return [
         'BigConnect_Core' => 1,
         'BigConnect_CustomOptionPlus' => 1,
         'BigConnect_FmePricecalcPatch' => 1,
+        'BigConnect_HyvaStarter' => 1,
         'OuterEdge_StructuredData' => 0,
         'BigConnect_ProductAccessory' => 0,
         'BigConnect_ProductConfigurator' => 1,

@@ -4,7 +4,6 @@
  */
 
 use Hyva\Theme\Model\ViewModelRegistry;
-use Hyva\Theme\ViewModel\HeroiconsOutline;
 use Hyva\Theme\ViewModel\HeroiconsSolid;
 use Hyva\Theme\ViewModel\Navigation;
 use Magento\Framework\View\Element\Template;
@@ -20,8 +19,9 @@ use BigConnect\HyvaStarter\ViewModel\HeaderLinks;
 /** @var ViewModelRegistry $viewModels */
 
 $viewModelNavigation = $viewModels->require(Navigation::class, $block);
-$heroiconsSolid = $viewModels->require(HeroiconsSolid::class);
-$headerLinks = $viewModels->require(HeaderLinks::class);
+$heroiconsSolid      = $viewModels->require(HeroiconsSolid::class);
+
+$headerLinks     = $viewModels->require(HeaderLinks::class);
 $headerLinkItems = $headerLinks->getItems();
 
 $uniqueId = '_' . uniqid();
@@ -35,8 +35,8 @@ $catRepo = $om->get(CategoryRepositoryInterface::class);
 /** @var StoreManagerInterface $storeManager */
 $storeManager = $om->get(StoreManagerInterface::class);
 
-$storeId   = (int) $storeManager->getStore()->getId();
-$mediaBaseFull = rtrim($storeManager->getStore()->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_MEDIA), '/');
+$storeId        = (int) $storeManager->getStore()->getId();
+$mediaBaseFull  = rtrim($storeManager->getStore()->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_MEDIA), '/');
 
 $__toUrl = static function ($val) use ($mediaBaseFull): ?string {
     if (empty($val)) return null;
@@ -127,7 +127,6 @@ $__isInspiration = static function (array $menuItem): bool {
         || str_contains($url, '/galeria')
         || str_contains($url, '/gallery');
 };
-
 ?>
 
 <div
@@ -140,9 +139,9 @@ $__isInspiration = static function (array $menuItem): bool {
                 <ul class="flex items-center gap-6 lg:gap-8">
                     <?php foreach ($menuItems as $index => $menuItem): ?>
                         <?php
-                        $cid0 = $__resolveCategoryId($menuItem);
-                        $iconUrl0 = $cid0 ? $__categoryIconUrl($cid0) : null;
-                        $hasChildren = !empty($menuItem['childData']);
+                        $cid0          = $__resolveCategoryId($menuItem);
+                        $iconUrl0      = $cid0 ? $__categoryIconUrl($cid0) : null;
+                        $hasChildren   = !empty($menuItem['childData']);
                         $isInspiration = $__isInspiration($menuItem);
                         ?>
 
@@ -160,11 +159,14 @@ $__isInspiration = static function (array $menuItem): bool {
                                     href="<?= $escaper->escapeUrl($menuItem['url']) ?>"
                                     title="<?= $escaper->escapeHtmlAttr($menuItem['name']) ?>"
                                     @focus="hoverPanelActiveId = 0"
-                                    <?php if ($isInspiration): ?>
-                                        class="inline-flex items-center gap-2 px-4 py-2 rounded-lg transition-all group relative overflow-hidden text-white font-semibold bg-inspiration hover:bg-inspiration-hover"
+                                    class="<?php if ($isInspiration): ?>
+                                        group inline-flex items-center gap-2 px-4 py-2 rounded-lg transition-all relative overflow-hidden
+                                        text-white font-semibold bg-inspiration hover:bg-inspiration-hover
+                                        whitespace-nowrap
                                     <?php else: ?>
-                                        class="inline-flex items-center gap-2 text-gray-700 hover:text-black transition-colors"
-                                    <?php endif; ?>
+                                        group inline-flex items-center gap-2 text-gray-700 hover:text-black transition-colors
+                                        whitespace-nowrap
+                                    <?php endif; ?>"
                                 >
                                     <?php if ($iconUrl0): ?>
                                         <img
@@ -177,12 +179,16 @@ $__isInspiration = static function (array $menuItem): bool {
                                         />
                                     <?php endif; ?>
 
-                                    <span class="<?= $isInspiration ? 'text-white' : 'font-medium text-sm lg:text-base' ?>">
+                                    <span class="<?php if ($isInspiration): ?>
+                                        text-white text-sm lg:text-base leading-none whitespace-nowrap
+                                    <?php else: ?>
+                                        font-medium text-sm lg:text-base leading-none whitespace-nowrap
+                                    <?php endif; ?>">
                                         <?= $escaper->escapeHtml($menuItem['name']) ?>
                                     </span>
 
                                     <?php if ($isInspiration): ?>
-                                        <span class="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity"></span>
+                                        <span class="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" aria-hidden="true"></span>
                                     <?php endif; ?>
                                 </a>
 
@@ -226,7 +232,7 @@ $__isInspiration = static function (array $menuItem): bool {
                                         <div class="grid grid-cols-2 gap-2">
                                             <?php foreach ($menuItem['childData'] as $subMenuItem): ?>
                                                 <?php
-                                                $cid = $__resolveCategoryId($subMenuItem);
+                                                $cid     = $__resolveCategoryId($subMenuItem);
                                                 $iconUrl = $cid ? $__categoryIconUrl($cid) : null;
                                                 ?>
                                                 <a
@@ -274,43 +280,54 @@ $__isInspiration = static function (array $menuItem): bool {
 
                         </li>
                     <?php endforeach; ?>
+
                     <?php foreach ($headerLinkItems as $item): ?>
                         <?php
-                        $variant = $item['variant'] === 'cta' ? 'cta' : 'link';
-                        $linkClass = $variant === 'cta'
-                            ? 'group flex items-center gap-2 px-4 py-2 rounded-lg transition-all relative overflow-hidden bg-inspiration hover:bg-inspiration-hover focus:outline-none focus-visible:ring-2 focus-visible:ring-white/70'
-                            : 'group flex items-center gap-2 px-2 py-1 rounded-md transition-colors text-white/80 hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-white/70';
-                        $iconClass = $variant === 'cta'
-                            ? 'w-4 h-4 lg:w-5 lg:h-5'
-                            : 'w-4 h-4 lg:w-5 lg:h-5 opacity-90 group-hover:opacity-100';
-                        $labelClass = $variant === 'cta'
-                            ? 'font-semibold text-sm lg:text-base text-white'
-                            : 'font-medium text-sm lg:text-base';
-                        $blinkClass = $item['icon_blink'] ? ' group-hover:animate-pulse' : '';
+                        $variant = (($item['variant'] ?? '') === 'cta') ? 'cta' : 'link';
+
+                        // Fix: drž všetko v jednom riadku
+                        if ($variant === 'cta') {
+                            $linkClass  = 'group inline-flex items-center gap-2 px-4 py-2 rounded-lg transition-all relative overflow-hidden bg-inspiration hover:bg-inspiration-hover focus:outline-none focus-visible:ring-2 focus-visible:ring-white/70 whitespace-nowrap';
+                            $labelClass = 'font-semibold text-sm lg:text-base text-white whitespace-nowrap leading-none relative z-10';
+                            $iconClass  = 'w-4 h-4 lg:w-5 lg:h-5 text-white shrink-0 relative z-10';
+                            $blinkClass = !empty($item['icon_blink']) ? ' animate-pulse' : '';
+                        } else {
+                            $linkClass  = 'group inline-flex items-center gap-2 px-2 py-1 rounded-md transition-colors text-gray-700 hover:text-black focus:outline-none focus-visible:ring-2 focus-visible:ring-black/20 whitespace-nowrap';
+                            $labelClass = 'font-medium text-sm lg:text-base whitespace-nowrap leading-none';
+                            $iconClass  = 'w-4 h-4 lg:w-5 lg:h-5 text-primary shrink-0';
+                            $blinkClass = !empty($item['icon_blink']) ? ' group-hover:animate-pulse' : '';
+                        }
+
+                        $iconAlt = trim((string)($item['icon_alt'] ?? '')) ?: (string)($item['label'] ?? '');
                         ?>
-                        <li>
+                        <li class="shrink-0">
                             <a
-                                href="<?= $escaper->escapeUrl($item['url']) ?>"
-                                aria-label="<?= $escaper->escapeHtmlAttr($item['label']) ?>"
+                                href="<?= $escaper->escapeUrl((string) $item['url']) ?>"
+                                aria-label="<?= $escaper->escapeHtmlAttr((string) $item['label']) ?>"
                                 class="<?= $escaper->escapeHtmlAttr($linkClass) ?>"
-                                <?php if ($item['target_blank']): ?>
+                                <?php if (!empty($item['target_blank'])): ?>
                                     target="_blank" rel="noopener noreferrer"
                                 <?php endif; ?>
                             >
                                 <?php if (!empty($item['icon_svg_url'])): ?>
                                     <img
-                                        src="<?= $escaper->escapeUrl($item['icon_svg_url']) ?>"
-                                        alt="<?= $escaper->escapeHtmlAttr($item['icon_alt']) ?>"
+                                        src="<?= $escaper->escapeUrl((string) $item['icon_svg_url']) ?>"
+                                        alt="<?= $escaper->escapeHtmlAttr($iconAlt) ?>"
                                         class="<?= $escaper->escapeHtmlAttr(trim($iconClass . $blinkClass)) ?>"
                                         loading="lazy"
                                         decoding="async"
                                     />
                                 <?php endif; ?>
+
                                 <span class="<?= $escaper->escapeHtmlAttr($labelClass) ?>">
-                                    <?= $escaper->escapeHtml($item['label']) ?>
+                                    <?= $escaper->escapeHtml((string) $item['label']) ?>
                                 </span>
+
                                 <?php if ($variant === 'cta'): ?>
-                                    <span class="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity" aria-hidden="true"></span>
+                                    <span
+                                        class="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"
+                                        aria-hidden="true"
+                                    ></span>
                                 <?php endif; ?>
                             </a>
                         </li>

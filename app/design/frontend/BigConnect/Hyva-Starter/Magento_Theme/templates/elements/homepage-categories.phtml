@@ -17,50 +17,69 @@ if (!$items) {
 }
 ?>
 
-<section class="py-20 bg-secondary-lighter">
-    <div class="max-w-7xl mx-auto px-4">
-        <div class="text-center mb-16">
-            <h2 class="text-3xl md:text-4xl font-bold text-text mb-4">
-                <?= $block->escapeHtml($categories->getTitle()) ?>
-            </h2>
-            <p class="text-xl text-muted max-w-2xl mx-auto">
-                <?= $block->escapeHtml($categories->getSubtitle()) ?>
-            </p>
-        </div>
+<!-- FULL-WIDTH breakout (aj keď parent je .columns / max-width) -->
+<div class="relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] w-screen">
+    <section class="py-14 md:py-20 bg-secondary-lighter">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6">
+            <div class="text-center mb-10 md:mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold text-text mb-3 md:mb-4">
+                    <?= $block->escapeHtml($categories->getTitle()) ?>
+                </h2>
+                <?php if (trim((string) $categories->getSubtitle())): ?>
+                    <p class="text-base md:text-xl text-muted max-w-2xl mx-auto">
+                        <?= $block->escapeHtml($categories->getSubtitle()) ?>
+                    </p>
+                <?php endif; ?>
+            </div>
 
-        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <?php foreach ($items as $item): ?>
-                <div class="group bg-white border border-border rounded-xl overflow-hidden hover:shadow-lg transition-all duration-300">
-                    <div class="bg-white h-56 overflow-hidden">
-                        <?php if (!empty($item['img'])): ?>
-                            <img
-                                src="<?= $block->escapeUrl($item['img']) ?>"
-                                alt="<?= $block->escapeHtmlAttr($item['name']) ?>"
-                                loading="lazy"
-                                decoding="async"
-                                class="w-full h-full object-contain p-8 group-hover:scale-105 transition-transform duration-300"
-                            />
-                        <?php endif; ?>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <?php foreach ($items as $item): ?>
+                    <div class="group bg-white border border-border rounded-xl overflow-hidden hover:shadow-lg transition-all duration-300
+                                flex flex-col h-full">
+                        <!-- Image -->
+                        <div class="bg-white h-56 overflow-hidden">
+                            <?php if (!empty($item['img'])): ?>
+                                <img
+                                    src="<?= $block->escapeUrl($item['img']) ?>"
+                                    alt="<?= $block->escapeHtmlAttr($item['name']) ?>"
+                                    loading="lazy"
+                                    decoding="async"
+                                    class="w-full h-full object-contain p-8 group-hover:scale-105 transition-transform duration-300"
+                                />
+                            <?php endif; ?>
+                        </div>
+
+                        <!-- Content -->
+                        <div class="p-6 flex flex-col flex-1">
+                            <h3 class="font-bold text-text mb-3 text-[18px] leading-tight">
+                                <?= $block->escapeHtml($item['name']) ?>
+                            </h3>
+
+                            <!-- ✅ Toto je kľúč: flex-1 tlačí CTA dole -->
+                            <div class="flex-1">
+                                <?php if (!empty($item['desc'])): ?>
+                                    <p class="text-sm text-muted leading-relaxed">
+                                        <?= $block->escapeHtml($item['desc']) ?>
+                                    </p>
+                                <?php endif; ?>
+                            </div>
+
+                            <!-- CTA vždy dole -->
+                            <div class="pt-6">
+                                <a
+                                    href="<?= $block->escapeUrl($item['url']) ?>"
+                                    class="w-full py-3 text-white rounded-lg font-medium transition-all
+                                           inline-flex items-center justify-center gap-2
+                                           bg-primary hover:bg-primary-darker"
+                                >
+                                    <?= $block->escapeHtml(__('To category')) ?>
+                                    <?= /* @noEscape */ $heroicons->arrowNarrowRightHtml('w-4 h-4') ?>
+                                </a>
+                            </div>
+                        </div>
                     </div>
-                    <div class="p-6">
-                        <h3 class="font-bold text-text mb-3 text-[18px] leading-tight">
-                            <?= $block->escapeHtml($item['name']) ?>
-                        </h3>
-                        <?php if (!empty($item['desc'])): ?>
-                            <p class="text-sm text-muted leading-relaxed mb-6">
-                                <?= $block->escapeHtml($item['desc']) ?>
-                            </p>
-                        <?php endif; ?>
-                        <a
-                            href="<?= $block->escapeUrl($item['url']) ?>"
-                            class="w-full py-3 text-white rounded-lg font-medium transition-all inline-flex items-center justify-center gap-2 bg-primary hover:bg-primary-darker"
-                        >
-                            <?= $block->escapeHtml(__('Do kategórie')) ?>
-                            <?= /* @noEscape */ $heroicons->arrowNarrowRightHtml('w-4 h-4') ?>
-                        </a>
-                    </div>
-                </div>
-            <?php endforeach; ?>
+                <?php endforeach; ?>
+            </div>
         </div>
-    </div>
-</section>
+    </section>
+</div>
