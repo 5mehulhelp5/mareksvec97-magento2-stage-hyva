@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace BigConnect\Inspiration\Ui\Component\Listing\Columns;
+namespace BigConnect\Inspiration\Ui\Component\Listing\Column;
 
 use Magento\Framework\UrlInterface;
 use Magento\Ui\Component\Listing\Columns\Column;

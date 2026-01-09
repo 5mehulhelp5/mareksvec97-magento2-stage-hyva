@@ -142,7 +142,7 @@
                 <label translate="true">Created At</label>
             </settings>
         </column>
-        <actionsColumn name="actions" class="BigConnect\Inspiration\Ui\Component\Listing\Columns\Actions">
+        <actionsColumn name="actions" class="BigConnect\Inspiration\Ui\Component\Listing\Column\Actions">
             <argument name="data" xsi:type="array">
                 <item name="action_list" xsi:type="array">
                     <item name="edit" xsi:type="array">

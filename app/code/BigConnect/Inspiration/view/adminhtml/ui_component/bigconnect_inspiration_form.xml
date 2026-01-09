@@ -44,6 +44,9 @@
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="source" xsi:type="string">data</item>
+                    <item name="uploaderConfig" xsi:type="array">
+                        <item name="url" xsi:type="url" path="bigconnect_inspiration/inspiration_image/upload"/>
+                    </item>
                 </item>
             </argument>
             <settings>
@@ -53,9 +56,6 @@
                 <validation>
                     <rule name="required-entry" xsi:type="boolean">true</rule>
                 </validation>
-                <uploaderConfig>
-                    <param xsi:type="string" name="url">bigconnect_inspiration/inspiration_image/upload</param>
-                </uploaderConfig>
             </settings>
         </field>
         <field name="product_id" sortOrder="20" formElement="input">
@@ -152,12 +152,12 @@
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="source" xsi:type="string">data</item>
+                    <item name="rows" xsi:type="number">5</item>
                 </item>
             </argument>
             <settings>
                 <label translate="true">Review</label>
                 <dataType>text</dataType>
-                <rows>5</rows>
             </settings>
         </field>
         <field name="status" sortOrder="80" formElement="select">

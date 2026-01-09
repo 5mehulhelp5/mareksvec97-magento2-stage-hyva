@@ -5,6 +5,7 @@ use BigConnect\Inspiration\Model\ImageUploader;
 use BigConnect\Inspiration\Model\InspirationFactory;
 use Magento\Backend\App\Action;
 use Magento\Framework\Exception\LocalizedException;
+use BigConnect\Inspiration\Model\Inspiration;
 
 class Save extends Action
 {
@@ -25,7 +26,8 @@ class Save extends Action
 
     public function execute()
     {
-        $data = $this->getRequest()->getParam('data');
+        $data = $this->getRequest()->getPostValue();
+        $data = $data['data'] ?? $data;
         if (!$data) {
             return $this->resultRedirectFactory->create()->setPath('*/*/');
         }
@@ -53,7 +55,7 @@ class Save extends Action
             $data['rating'] = isset($data['rating']) ? (int)$data['rating'] : 5;
             $data['store_id'] = isset($data['store_id']) ? (int)$data['store_id'] : 0;
             $data['product_id'] = isset($data['product_id']) ? (int)$data['product_id'] : 0;
-            $data['status'] = $data['status'] ?? \\BigConnect\\Inspiration\\Model\\Inspiration::STATUS_APPROVED;
+            $data['status'] = $data['status'] ?? Inspiration::STATUS_APPROVED;
 
             $model->addData($data);
             $model->save();

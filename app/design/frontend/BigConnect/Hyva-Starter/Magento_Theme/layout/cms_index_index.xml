@@ -28,25 +28,24 @@
                 name="about.section"
                 template="Magento_Theme::elements/about-section.phtml"
             />
-            <block class="BigConnect\ProductSlider\Block\Widget\ProductSlider"
-                   name="bigconnect.product.slider"
-                   template="BigConnect_ProductSlider::widget/product-slider.phtml">
+            <block class="BigConnect\ProductSlider\Block\ProductSlider"
+                       name="homepage.product.slider"
+                       template="BigConnect_ProductSlider::widget/product-slider.phtml">
+                    <arguments>
+                        <argument name="source_code" xsi:type="string">bestsellers</argument>
+                        <argument name="page_size" xsi:type="number">24</argument>
+                        <argument name="period_days" xsi:type="number">360</argument>
+                        <argument name="preset" xsi:type="string">item1</argument>
+                    </arguments>
+                </block>
+            <block class="BigConnect\Inspiration\Block\Gallery"
+                               name="bigconnect.inspiration.home"
+                               template="BigConnect_Inspiration::gallery.phtml">
                             <arguments>
-                                <argument name="source_code" xsi:type="string">bestsellers</argument>
-                                <argument name="title_badge" xsi:type="string">Najpredávanejšie produkty</argument>
-                                <argument name="title" xsi:type="string">Obľúbené u našich zákazníkov</argument>
-                                <argument name="subtitle" xsi:type="string">Produkty s najvyšším hodnotením a tisíckami spokojných zákazníkov</argument>
-                                <argument name="page_size" xsi:type="number">24</argument>
-                                <argument name="period_days" xsi:type="number">360</argument>
-                                <argument name="only_in_stock" xsi:type="boolean">false</argument>
-                                <argument name="only_visible" xsi:type="boolean">true</argument>
-                                <argument name="add_to_cart" xsi:type="boolean">true</argument>
-                                <argument name="show_wishlist" xsi:type="boolean">false</argument>
-                                <argument name="view_all_url" xsi:type="string"></argument>
-                                <argument name="view_all_label" xsi:type="string">Zobraziť všetky produkty</argument>
-                                <argument name="accent_color" xsi:type="string">#7e9b84</argument>
+                                <argument name="limit" xsi:type="number">12</argument>
+                                <argument name="context" xsi:type="string">homepage</argument>
                             </arguments>
-             </block>
+                        </block>
 
         </referenceContainer>
         <referenceBlock name="page.main.title" remove="true"/>
