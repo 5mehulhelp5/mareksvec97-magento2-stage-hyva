@@ -142,27 +142,29 @@
                 <label translate="true">Created At</label>
             </settings>
         </column>
-        <actionsColumn name="actions" class="Magento\Ui\Component\Listing\Columns\Actions">
-            <settings>
-                <indexField>entity_id</indexField>
-                <label translate="true">Actions</label>
-            </settings>
-            <action name="edit">
-                <settings>
-                    <url path="bigconnect_inspiration/inspiration/edit"/>
-                    <label translate="true">Edit</label>
-                </settings>
-            </action>
-            <action name="delete">
-                <settings>
-                    <url path="bigconnect_inspiration/inspiration/delete"/>
-                    <confirm>
-                        <title translate="true">Delete</title>
-                        <message translate="true">Are you sure you want to delete this record?</message>
-                    </confirm>
-                    <label translate="true">Delete</label>
-                </settings>
-            </action>
+        <actionsColumn name="actions" class="BigConnect\Inspiration\Ui\Component\Listing\Columns\Actions">
+            <argument name="data" xsi:type="array">
+                <item name="action_list" xsi:type="array">
+                    <item name="edit" xsi:type="array">
+                        <item name="label" xsi:type="string" translate="true">Edit</item>
+                        <item name="path" xsi:type="string">bigconnect_inspiration/inspiration/edit</item>
+                        <item name="params" xsi:type="array">
+                            <item name="entity_id" xsi:type="string">entity_id</item>
+                        </item>
+                    </item>
+                    <item name="delete" xsi:type="array">
+                        <item name="label" xsi:type="string" translate="true">Delete</item>
+                        <item name="path" xsi:type="string">bigconnect_inspiration/inspiration/delete</item>
+                        <item name="params" xsi:type="array">
+                            <item name="entity_id" xsi:type="string">entity_id</item>
+                        </item>
+                        <item name="confirm" xsi:type="array">
+                            <item name="title" xsi:type="string" translate="true">Delete</item>
+                            <item name="message" xsi:type="string" translate="true">Are you sure you want to delete this record?</item>
+                        </item>
+                    </item>
+                </item>
+            </argument>
         </actionsColumn>
     </columns>
 </listing>
