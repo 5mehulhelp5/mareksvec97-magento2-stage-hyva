@@ -81,10 +81,19 @@
             </settings>
         </column>
         <column name="image" class="BigConnect\Inspiration\Ui\Component\Listing\Column\Thumbnail">
-            <settings>
-                <filter>false</filter>
-                <label translate="true">Image</label>
-            </settings>
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="filter" xsi:type="boolean">false</item>
+                    <item name="label" xsi:type="string" translate="true">Image</item>
+
+                    <!-- kľúčové pre thumbnail rendering -->
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/thumbnail</item>
+                    <item name="bodyTmpl" xsi:type="string">ui/grid/cells/thumbnail</item>
+                    <item name="altField" xsi:type="string">customer_name</item>
+
+                    <item name="sortable" xsi:type="boolean">false</item>
+                </item>
+            </argument>
         </column>
         <column name="product_name" class="BigConnect\Inspiration\Ui\Component\Listing\Column\ProductName">
             <settings>

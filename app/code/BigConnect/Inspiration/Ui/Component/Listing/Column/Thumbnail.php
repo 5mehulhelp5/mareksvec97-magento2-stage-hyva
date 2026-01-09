@@ -28,22 +28,39 @@ class Thumbnail extends Column
 
     public function prepareDataSource(array $dataSource): array
     {
-        if (isset($dataSource['data']['items'])) {
-            $mediaBaseUrl = $this->storeManager->getStore()->getBaseUrl(UrlInterface::URL_TYPE_MEDIA);
+        if (!isset($dataSource['data']['items'])) {
+            return $dataSource;
+        }
 
-            foreach ($dataSource['data']['items'] as &$item) {
-                if (!empty($item['image'])) {
-                    $url = $mediaBaseUrl . ltrim($item['image'], '/');
+        $mediaBaseUrl = $this->storeManager->getStore()->getBaseUrl(UrlInterface::URL_TYPE_MEDIA);
 
-                    $item[$this->getData('name') . '_src'] = $url;
-                    $item[$this->getData('name') . '_alt'] = $item['customer_name'] ?? __('Inspiration');
-
-                    $item[$this->getData('name') . '_link'] = $this->backendUrl->getUrl(
-                        'bigconnect_inspiration/inspiration/edit',
-                        ['entity_id' => $item['entity_id']]
-                    );
-                }
+        foreach ($dataSource['data']['items'] as &$item) {
+            $image = $item['image'] ?? '';
+            if (!$image) {
+                continue;
             }
+
+            // normalizácia hodnoty z DB
+            $path = ltrim((string)$image, '/');
+
+            // ak je v DB len "luca-min.jpg", doplň prefix podľa ImageUploader basePath (inspirations)
+            if (strpos($path, '/') === false) {
+                $path = 'inspirations/' . $path;
+            }
+
+            // výsledná URL na obrázok v pub/media
+            $url = $mediaBaseUrl . $path;
+
+            $name = (string)$this->getData('name');
+
+            $item[$name . '_src']  = $url;
+            $item[$name . '_orig_src'] = $url; // niekedy pomáha pre thumbnail komponent
+            $item[$name . '_alt']  = $item['customer_name'] ?? (string)__('Inspiration');
+
+            $item[$name . '_link'] = $this->backendUrl->getUrl(
+                'bigconnect_inspiration/inspiration/edit',
+                ['entity_id' => $item['entity_id'] ?? null]
+            );
         }
 
         return $dataSource;

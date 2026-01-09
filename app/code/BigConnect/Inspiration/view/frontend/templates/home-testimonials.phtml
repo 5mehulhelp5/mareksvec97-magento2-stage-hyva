@@ -1,0 +1,164 @@
+<?php
+/** @var \BigConnect\Inspiration\Block\Gallery $block */
+$items = $block->getItems(); // očakávame array s image, rating, review/customer_name, country_code, atď.
+if (!$items) {
+    return;
+}
+?>
+
+<section class="py-20 bg-white">
+    <div class="max-w-7xl mx-auto px-4">
+
+        <!-- Header -->
+        <div class="text-center mb-16">
+            <div class="inline-flex items-center gap-2 mb-4 px-3 py-1.5 rounded-full border"
+                 style="background-color:#f0f4f1;color:#7e9b84;border-color:#7e9b84;">
+                <span class="text-sm">📷</span>
+                <span class="text-sm font-semibold">Fotky od zákazníkov</span>
+            </div>
+
+            <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+                Čo hovoria naši zákazníci?
+            </h2>
+            <p class="text-xl text-gray-600 max-w-2xl mx-auto">
+                Zákazníci z celého sveta nám dôverujú - Francúzsko • Nemecko • Chorvátsko • Česko • Rakúsko
+            </p>
+        </div>
+
+        <!-- Slider wrapper -->
+        <div class="relative">
+
+            <!-- arrows -->
+            <button type="button"
+                    class="hidden md:flex items-center justify-center absolute -left-2 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full border border-gray-200 bg-white shadow z-10"
+                    data-insp-prev>
+                ‹
+            </button>
+
+            <button type="button"
+                    class="hidden md:flex items-center justify-center absolute -right-2 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full border border-gray-200 bg-white shadow z-10"
+                    data-insp-next>
+                ›
+            </button>
+
+            <!-- "slider" (scroll-snap) -->
+            <div class="px-2 md:px-8">
+                <div class="flex gap-6 overflow-x-auto pb-4 snap-x snap-mandatory scroll-smooth"
+                     style="-webkit-overflow-scrolling: touch;"
+                     data-insp-track>
+                    <?php foreach ($items as $item): ?>
+                        <?php
+                        // image: počítame s tým, že v $item['image'] máš buď "inspirations/xxx.jpg" alebo "xxx.jpg"
+                        $image = (string)($item['image'] ?? '');
+                        $image = ltrim($image, '/');
+                        if ($image && strpos($image, '/') === false) {
+                            $image = 'inspirations/' . $image;
+                        }
+                        $imgUrl = $block->getBaseUrl() . 'media/' . $image; // jednoduché, funguje v Hyvä
+                        $rating = (int)($item['rating'] ?? 5);
+                        $rating = max(1, min(5, $rating));
+
+                        $text = (string)($item['review'] ?? $item['text'] ?? '');
+                        $author = (string)($item['customer_name'] ?? $item['author'] ?? 'Zákazník');
+                        $country = strtoupper((string)($item['country_code'] ?? ''));
+                        $location = (string)($item['location'] ?? $country);
+
+                        // flag – odporúčam mať SVG v module (viď bod 3)
+                        $flagUrl = $country ? $block->getViewFileUrl('BigConnect_Inspiration::images/flags/' . strtolower($country) . '.svg') : '';
+                        ?>
+
+                        <div class="snap-start shrink-0 w-[85%] sm:w-[60%] md:w-[38%] lg:w-[32%]">
+                            <div class="group bg-white rounded-xl overflow-hidden border border-gray-200 hover:shadow-xl transition-all duration-300 flex flex-col">
+
+                                <!-- Photo -->
+                                <div class="relative h-80 overflow-hidden bg-gray-100 order-1">
+                                    <img src="<?= $block->escapeUrl($imgUrl) ?>"
+                                         alt="<?= $block->escapeHtmlAttr('Stôl od ' . $author) ?>"
+                                         class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+
+                                    <div class="absolute top-4 right-4 bg-white rounded-full px-3 py-1.5 shadow-lg flex items-center gap-1.5">
+                                        <span class="text-green-600">✔</span>
+                                        <span class="text-xs font-semibold text-gray-700">Overené</span>
+                                    </div>
+                                </div>
+
+                                <!-- Content -->
+                                <div class="p-6 order-2">
+                                    <!-- Rating -->
+                                    <div class="flex gap-1 mb-4">
+                                        <?php for ($i=1; $i<=5; $i++): ?>
+                                            <span class="<?= $i <= $rating ? 'text-yellow-400' : 'text-gray-200' ?>">★</span>
+                                        <?php endfor; ?>
+                                    </div>
+
+                                    <!-- Text -->
+                                    <p class="text-gray-700 leading-relaxed mb-6 min-h-[120px]">
+                                        "<?= $block->escapeHtml($text) ?>"
+                                    </p>
+
+                                    <!-- Author -->
+                                    <div class="flex items-center justify-between pt-4 border-t border-gray-100">
+                                        <div>
+                                            <div class="font-semibold text-gray-900 flex items-center gap-2">
+                                                <?php if ($flagUrl): ?>
+                                                    <img src="<?= $block->escapeUrl($flagUrl) ?>"
+                                                         alt="<?= $block->escapeHtmlAttr($location) ?>"
+                                                         class="w-6 h-6 rounded-full object-cover" />
+                                                <?php endif; ?>
+                                                <?= $block->escapeHtml($author) ?>
+                                            </div>
+                                            <div class="text-sm text-gray-500"><?= $block->escapeHtml($location) ?></div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Trust message -->
+        <div class="mt-16 text-center">
+            <div class="inline-flex items-center gap-3 sm:gap-6 md:gap-8 px-4 py-4 sm:px-6 sm:py-5 md:px-8 md:py-6 rounded-xl mx-auto"
+                 style="background-color:#f0f4f1;">
+                <div>
+                    <div class="text-xl sm:text-2xl md:text-3xl font-bold mb-1" style="color:#7e9b84;">5000+</div>
+                    <div class="text-[10px] sm:text-xs md:text-sm text-gray-600 whitespace-nowrap">Spokojných zákazníkov</div>
+                </div>
+                <div class="w-px h-8 sm:h-10 md:h-12 bg-gray-300"></div>
+                <div>
+                    <div class="text-xl sm:text-2xl md:text-3xl font-bold mb-1" style="color:#7e9b84;">4.9/5</div>
+                    <div class="text-[10px] sm:text-xs md:text-sm text-gray-600 whitespace-nowrap">Priemerné hodnotenie</div>
+                </div>
+                <div class="w-px h-8 sm:h-10 md:h-12 bg-gray-300"></div>
+                <div>
+                    <div class="text-xl sm:text-2xl md:text-3xl font-bold mb-1" style="color:#7e9b84;">98%</div>
+                    <div class="text-[10px] sm:text-xs md:text-sm text-gray-600 whitespace-nowrap">Odporúčajú ďalej</div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<script>
+(function () {
+    const track = document.querySelector('[data-insp-track]');
+    if (!track) return;
+
+    const prev = document.querySelector('[data-insp-prev]');
+    const next = document.querySelector('[data-insp-next]');
+
+    const scrollByCard = (dir) => {
+        const card = track.querySelector('.snap-start');
+        const w = card ? (card.getBoundingClientRect().width + 24) : 400; // 24 = gap
+        track.scrollBy({ left: dir * w, behavior: 'smooth' });
+    };
+
+    prev && prev.addEventListener('click', () => scrollByCard(-1));
+    next && next.addEventListener('click', () => scrollByCard(1));
+})();
+</script>

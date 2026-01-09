@@ -1,85 +1,168 @@
 <?php
-/** @var \Magento\Framework\View\Element\Template $block */
-
-use BigConnect\HyvaStarter\ViewModel\HomepageCategories;
-use Hyva\Theme\ViewModel\HeroiconsOutline;
-
-$categories = $viewModels->require(HomepageCategories::class);
-$heroicons = $viewModels->require(HeroiconsOutline::class);
-
-if (!$categories->isEnabled()) {
-    return;
-}
-
-$items = $categories->getItems();
+/** @var \BigConnect\Inspiration\Block\Gallery $block */
+$items = $block->getGalleryItems();
 if (!$items) {
     return;
 }
 ?>
-
-<!-- FULL-WIDTH breakout (aj keď parent je .columns / max-width) -->
-<div class="relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] w-screen">
-    <section class="py-14 md:py-20 bg-secondary-lighter">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6">
-            <div class="text-center mb-10 md:mb-16">
-                <h2 class="text-3xl md:text-4xl font-bold text-text mb-3 md:mb-4">
-                    <?= $block->escapeHtml($categories->getTitle()) ?>
+<section class="py-16 bg-white" x-data="inspirationGallery(<?= /* @noEscape */ $block->getItemsJson() ?>)">
+    <?php if ($block->shouldShowHeader() || $block->getSectionTitle()): ?>
+        <div class="max-w-7xl mx-auto px-4 mb-12 text-center">
+            <?php if ($block->getSectionTitle()): ?>
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-900">
+                    <?= $block->escapeHtml($block->getSectionTitle()) ?>
                 </h2>
-                <?php if (trim((string) $categories->getSubtitle())): ?>
-                    <p class="text-base md:text-xl text-muted max-w-2xl mx-auto">
-                        <?= $block->escapeHtml($categories->getSubtitle()) ?>
-                    </p>
-                <?php endif; ?>
-            </div>
+            <?php endif; ?>
+        </div>
+    <?php endif; ?>
 
-            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <?php foreach ($items as $item): ?>
-                    <div class="group bg-white border border-border rounded-xl overflow-hidden hover:shadow-lg transition-all duration-300
-                                flex flex-col h-full">
-                        <!-- Image -->
-                        <div class="bg-white h-56 overflow-hidden">
-                            <?php if (!empty($item['img'])): ?>
-                                <img
-                                    src="<?= $block->escapeUrl($item['img']) ?>"
-                                    alt="<?= $block->escapeHtmlAttr($item['name']) ?>"
-                                    loading="lazy"
-                                    decoding="async"
-                                    class="w-full h-full object-contain p-8 group-hover:scale-105 transition-transform duration-300"
-                                />
-                            <?php endif; ?>
+    <div class="max-w-7xl mx-auto px-4">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <?php foreach ($items as $index => $item): ?>
+                <button type="button"
+                        class="group bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden text-left"
+                        x-on:click="open(<?= (int)$index ?>)">
+                    <div class="relative h-64 overflow-hidden bg-gray-100">
+                        <img src="<?= $block->escapeUrl($item['image_url']) ?>"
+                             alt="<?= $block->escapeHtmlAttr($item['product_name']) ?>"
+                             class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                        <?php if (!empty($item['country_flag'])): ?>
+                            <div class="absolute top-4 right-4 bg-white/90 rounded-full px-3 py-1.5 shadow-lg flex items-center gap-2">
+                                <img src="<?= $block->escapeUrl($item['country_flag']) ?>"
+                                     alt="<?= $block->escapeHtmlAttr($item['country_code']) ?>"
+                                     class="w-5 h-5 rounded-full object-cover" />
+                                <span class="text-xs font-semibold text-gray-700">
+                                    <?= $block->escapeHtml($item['country_code']) ?>
+                                </span>
+                            </div>
+                        <?php endif; ?>
+                    </div>
+                    <div class="p-6">
+                        <div class="flex items-center gap-1 mb-3">
+                            <?php for ($i = 1; $i <= 5; $i++): ?>
+                                <span class="<?= $i <= $item['rating'] ? 'text-yellow-400' : 'text-gray-200' ?>">
+                                    <svg class="w-5 h-5 fill-current" viewBox="0 0 20 20" aria-hidden="true">
+                                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.356 4.165a1 1 0 00.95.69h4.384c.969 0 1.371 1.24.588 1.81l-3.548 2.577a1 1 0 00-.364 1.118l1.356 4.165c.3.921-.755 1.688-1.538 1.118L10 15.347l-3.733 2.723c-.783.57-1.838-.197-1.538-1.118l1.356-4.165a1 1 0 00-.364-1.118L2.173 9.592c-.783-.57-.38-1.81.588-1.81h4.384a1 1 0 00.95-.69l1.356-4.165z" />
+                                    </svg>
+                                </span>
+                            <?php endfor; ?>
+                            <span class="text-sm text-gray-500 ml-2">
+                                <?= $block->escapeHtml($item['created_at']) ?>
+                            </span>
                         </div>
+                        <h3 class="text-lg font-semibold text-gray-900 mb-2 line-clamp-2">
+                            <?= $block->escapeHtml($item['product_name']) ?>
+                        </h3>
+                        <div class="text-sm text-gray-600 mb-3">
+                            <?= $block->escapeHtml($item['customer_name']) ?>
+                        </div>
+                        <p class="text-sm text-gray-600 italic line-clamp-3">
+                            "<?= $block->escapeHtml($item['review_excerpt']) ?>"
+                        </p>
+                    </div>
+                </button>
+            <?php endforeach; ?>
+        </div>
+    </div>
 
-                        <!-- Content -->
-                        <div class="p-6 flex flex-col flex-1">
-                            <h3 class="font-bold text-text mb-3 text-[18px] leading-tight">
-                                <?= $block->escapeHtml($item['name']) ?>
-                            </h3>
+    <div x-show="isOpen" x-cloak x-on:click="close()"
+         x-on:keydown.window.escape="close()"
+         x-on:keydown.window.arrow-right="next()"
+         x-on:keydown.window.arrow-left="prev()"
+         class="fixed inset-0 z-50 flex items-center justify-center bg-black/95 px-4 py-8">
+        <button type="button"
+                x-on:click="close()"
+                class="absolute top-6 right-6 bg-white/10 hover:bg-white/20 text-white p-3 rounded-full transition-colors">
+            <span class="sr-only"><?= $block->escapeHtml(__('Close')) ?></span>
+            &times;
+        </button>
+        <button type="button"
+                x-on:click.stop="prev()"
+                class="absolute left-6 bg-white/10 hover:bg-white/20 text-white p-3 rounded-full transition-colors">
+            <span class="sr-only"><?= $block->escapeHtml(__('Previous')) ?></span>
+            &lsaquo;
+        </button>
+        <button type="button"
+                x-on:click.stop="next()"
+                class="absolute right-6 bg-white/10 hover:bg-white/20 text-white p-3 rounded-full transition-colors">
+            <span class="sr-only"><?= $block->escapeHtml(__('Next')) ?></span>
+            &rsaquo;
+        </button>
 
-                            <!-- ✅ Toto je kľúč: flex-1 tlačí CTA dole -->
-                            <div class="flex-1">
-                                <?php if (!empty($item['desc'])): ?>
-                                    <p class="text-sm text-muted leading-relaxed">
-                                        <?= $block->escapeHtml($item['desc']) ?>
-                                    </p>
-                                <?php endif; ?>
-                            </div>
-
-                            <!-- CTA vždy dole -->
-                            <div class="pt-6">
-                                <a
-                                    href="<?= $block->escapeUrl($item['url']) ?>"
-                                    class="w-full py-3 text-white rounded-lg font-medium transition-all
-                                           inline-flex items-center justify-center gap-2
-                                           bg-primary hover:bg-primary-darker"
-                                >
-                                    <?= $block->escapeHtml(__('To category')) ?>
-                                    <?= /* @noEscape */ $heroicons->arrowNarrowRightHtml('w-4 h-4') ?>
-                                </a>
-                            </div>
+        <div class="max-w-5xl w-full bg-white rounded-2xl overflow-hidden shadow-2xl" x-on:click.stop="">
+            <div class="grid grid-cols-1 md:grid-cols-2">
+                <div class="relative bg-gray-100">
+                    <img class="w-full h-full object-cover"
+                         x-bind:src="active.image_url"
+                         x-bind:alt="active.product_name" />
+                    <template x-if="active.country_flag">
+                        <div class="absolute top-4 left-4 bg-white px-3 py-1.5 rounded-full flex items-center gap-2 shadow-lg">
+                            <img class="w-5 h-5 rounded-full object-cover" x-bind:src="active.country_flag" x-bind:alt="active.country_code" />
+                            <span class="text-xs font-semibold text-gray-700" x-text="active.country_code"></span>
+                        </div>
+                    </template>
+                </div>
+                <div class="p-6 md:p-8 flex flex-col gap-6 max-h-[80vh] overflow-y-auto">
+                    <div>
+                        <div class="flex items-center gap-1 mb-3">
+                            <template x-for="star in [1,2,3,4,5]" :key="star">
+                                <svg class="w-5 h-5" viewBox="0 0 20 20" :class="star <= active.rating ? 'fill-yellow-400 text-yellow-400' : 'fill-gray-200 text-gray-200'">
+                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.356 4.165a1 1 0 00.95.69h4.384c.969 0 1.371 1.24.588 1.81l-3.548 2.577a1 1 0 00-.364 1.118l1.356 4.165c.3.921-.755 1.688-1.538 1.118L10 15.347l-3.733 2.723c-.783.57-1.838-.197-1.538-1.118l1.356-4.165a1 1 0 00-.364-1.118L2.173 9.592c-.783-.57-.38-1.81.588-1.81h4.384a1 1 0 00.95-.69l1.356-4.165z" />
+                                </svg>
+                            </template>
+                        </div>
+                        <div class="text-sm text-gray-600 mb-4" x-text="active.customer_name"></div>
+                        <div class="bg-gray-50 rounded-xl p-5">
+                            <p class="text-gray-700 italic text-base" x-text="active.review"></p>
+                            <p class="text-xs text-gray-500 mt-3" x-text="active.created_at"></p>
                         </div>
                     </div>
-                <?php endforeach; ?>
+
+                    <div class="border border-gray-200 rounded-xl p-4 flex items-center gap-4">
+                        <img class="w-20 h-20 object-cover rounded-lg" x-bind:src="active.product_image" x-bind:alt="active.product_name" />
+                        <div class="flex-1 min-w-0">
+                            <div class="text-sm font-semibold text-gray-900 line-clamp-2" x-text="active.product_name"></div>
+                            <div class="text-lg text-emerald-700" x-text="active.product_price"></div>
+                        </div>
+                        <a class="bg-emerald-700 hover:bg-emerald-800 text-white px-4 py-2 rounded-full text-sm font-semibold"
+                           x-bind:href="active.product_url">
+                            <?= $block->escapeHtml(__('Prejsť na produkt')) ?>
+                        </a>
+                    </div>
+                </div>
             </div>
         </div>
-    </section>
-</div>
+    </div>
+</section>
+
+<script>
+    function inspirationGallery(items) {
+        return {
+            items: items || [],
+            isOpen: false,
+            activeIndex: 0,
+            get active() {
+                return this.items[this.activeIndex] || {};
+            },
+            open(index) {
+                this.activeIndex = index;
+                this.isOpen = true;
+            },
+            close() {
+                this.isOpen = false;
+            },
+            next() {
+                if (!this.items.length) {
+                    return;
+                }
+                this.activeIndex = (this.activeIndex + 1) % this.items.length;
+            },
+            prev() {
+                if (!this.items.length) {
+                    return;
+                }
+                this.activeIndex = (this.activeIndex - 1 + this.items.length) % this.items.length;
+            }
+        };
+    }
+</script>

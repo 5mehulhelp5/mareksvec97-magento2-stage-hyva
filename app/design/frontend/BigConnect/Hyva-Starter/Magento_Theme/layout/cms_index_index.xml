@@ -39,8 +39,8 @@
                     </arguments>
                 </block>
             <block class="BigConnect\Inspiration\Block\Gallery"
-                               name="bigconnect.inspiration.home"
-                               template="BigConnect_Inspiration::gallery.phtml">
+                               name="bigconnect.inspiration.homey"
+                               template="BigConnect_Inspiration::home-testimonials.phtml">
                             <arguments>
                                 <argument name="limit" xsi:type="number">12</argument>
                                 <argument name="context" xsi:type="string">homepage</argument>
