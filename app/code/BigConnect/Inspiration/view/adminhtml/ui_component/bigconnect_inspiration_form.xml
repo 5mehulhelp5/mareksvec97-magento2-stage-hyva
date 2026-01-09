@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <argument name="data" xsi:type="array">
+        <item name="js_config" xsi:type="array">
+            <item name="provider" xsi:type="string">bigconnect_inspiration_form.bigconnect_inspiration_form_data_source</item>
+        </item>
+        <item name="label" xsi:type="string" translate="true">Inspiration</item>
+        <item name="template" xsi:type="string">templates/form/collapsible</item>
+    </argument>
+    <settings>
+        <buttons>
+            <button name="back" class="BigConnect\Inspiration\Block\Adminhtml\Inspiration\Edit\BackButton"/>
+            <button name="delete" class="BigConnect\Inspiration\Block\Adminhtml\Inspiration\Edit\DeleteButton"/>
+            <button name="save" class="BigConnect\Inspiration\Block\Adminhtml\Inspiration\Edit\SaveButton"/>
+        </buttons>
+        <namespace>bigconnect_inspiration_form</namespace>
+        <dataScope>data</dataScope>
+        <deps>
+            <dep>bigconnect_inspiration_form.bigconnect_inspiration_form_data_source</dep>
+        </deps>
+    </settings>
+    <dataSource name="bigconnect_inspiration_form_data_source">
+        <argument name="data" xsi:type="array">
+            <item name="js_config" xsi:type="array">
+                <item name="component" xsi:type="string">Magento_Ui/js/form/provider</item>
+            </item>
+        </argument>
+        <settings>
+            <submitUrl path="bigconnect_inspiration/inspiration/save"/>
+        </settings>
+        <dataProvider class="BigConnect\Inspiration\Ui\DataProvider\FormDataProvider" name="bigconnect_inspiration_form_data_source">
+            <settings>
+                <primaryFieldName>entity_id</primaryFieldName>
+                <requestFieldName>entity_id</requestFieldName>
+            </settings>
+        </dataProvider>
+    </dataSource>
+    <fieldset name="general" sortOrder="10">
+        <settings>
+            <label translate="true">General</label>
+        </settings>
+        <field name="image" sortOrder="10" formElement="imageUploader">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">data</item>
+                </item>
+            </argument>
+            <settings>
+                <label translate="true">Image</label>
+                <componentType>imageUploader</componentType>
+                <dataType>string</dataType>
+                <validation>
+                    <rule name="required-entry" xsi:type="boolean">true</rule>
+                </validation>
+                <uploaderConfig>
+                    <param xsi:type="string" name="url">bigconnect_inspiration/inspiration_image/upload</param>
+                </uploaderConfig>
+            </settings>
+        </field>
+        <field name="product_id" sortOrder="20" formElement="input">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">data</item>
+                </item>
+            </argument>
+            <settings>
+                <label translate="true">Product ID</label>
+                <dataType>int</dataType>
+                <validation>
+                    <rule name="required-entry" xsi:type="boolean">true</rule>
+                    <rule name="validate-digits" xsi:type="boolean">true</rule>
+                </validation>
+            </settings>
+        </field>
+        <field name="customer_name" sortOrder="30" formElement="input">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">data</item>
+                </item>
+            </argument>
+            <settings>
+                <label translate="true">Customer Name</label>
+                <dataType>text</dataType>
+                <validation>
+                    <rule name="required-entry" xsi:type="boolean">true</rule>
+                </validation>
+            </settings>
+        </field>
+        <field name="location" sortOrder="40" formElement="input">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">data</item>
+                </item>
+            </argument>
+            <settings>
+                <label translate="true">Location</label>
+                <dataType>text</dataType>
+            </settings>
+        </field>
+        <field name="country_code" sortOrder="50" formElement="input">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">data</item>
+                </item>
+            </argument>
+            <settings>
+                <label translate="true">Country Code</label>
+                <dataType>text</dataType>
+            </settings>
+        </field>
+        <field name="rating" sortOrder="60" formElement="select">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">data</item>
+                </item>
+            </argument>
+            <settings>
+                <label translate="true">Rating</label>
+                <dataType>int</dataType>
+            </settings>
+            <formElements>
+                <select>
+                    <settings>
+                        <options>
+                            <option name="1" xsi:type="array">
+                                <item name="value" xsi:type="number">1</item>
+                                <item name="label" xsi:type="string">1</item>
+                            </option>
+                            <option name="2" xsi:type="array">
+                                <item name="value" xsi:type="number">2</item>
+                                <item name="label" xsi:type="string">2</item>
+                            </option>
+                            <option name="3" xsi:type="array">
+                                <item name="value" xsi:type="number">3</item>
+                                <item name="label" xsi:type="string">3</item>
+                            </option>
+                            <option name="4" xsi:type="array">
+                                <item name="value" xsi:type="number">4</item>
+                                <item name="label" xsi:type="string">4</item>
+                            </option>
+                            <option name="5" xsi:type="array">
+                                <item name="value" xsi:type="number">5</item>
+                                <item name="label" xsi:type="string">5</item>
+                            </option>
+                        </options>
+                    </settings>
+                </select>
+            </formElements>
+        </field>
+        <field name="review" sortOrder="70" formElement="textarea">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">data</item>
+                </item>
+            </argument>
+            <settings>
+                <label translate="true">Review</label>
+                <dataType>text</dataType>
+                <rows>5</rows>
+            </settings>
+        </field>
+        <field name="status" sortOrder="80" formElement="select">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">data</item>
+                </item>
+            </argument>
+            <settings>
+                <label translate="true">Status</label>
+                <dataType>text</dataType>
+            </settings>
+            <formElements>
+                <select>
+                    <settings>
+                        <options class="BigConnect\Inspiration\Model\Source\Status"/>
+                    </settings>
+                </select>
+            </formElements>
+        </field>
+        <field name="store_id" sortOrder="90" formElement="select">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">data</item>
+                    <item name="default" xsi:type="number">0</item>
+                </item>
+            </argument>
+            <settings>
+                <label translate="true">Store View</label>
+                <dataType>int</dataType>
+            </settings>
+            <formElements>
+                <select>
+                    <settings>
+                        <options class="Magento\Store\Model\System\Store"/>
+                    </settings>
+                </select>
+            </formElements>
+        </field>
+        <field name="position" sortOrder="100" formElement="input">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">data</item>
+                </item>
+            </argument>
+            <settings>
+                <label translate="true">Position</label>
+                <dataType>int</dataType>
+            </settings>
+        </field>
+    </fieldset>
+</form>
