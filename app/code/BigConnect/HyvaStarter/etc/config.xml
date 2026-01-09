@@ -35,6 +35,75 @@
                 <b4_icon></b4_icon>
                 <b4_icon_custom></b4_icon_custom>
             </store_benefits>
+            <homepage_categories>
+                <enabled>0</enabled>
+                <title>Vybrané kategórie</title>
+                <subtitle>Objavte našu ponuku…</subtitle>
+                <category_ids></category_ids>
+                <show_desc>1</show_desc>
+                <desc_maxlen>120</desc_maxlen>
+                <limit>6</limit>
+                <fallback_image></fallback_image>
+            </homepage_categories>
+            <about_section>
+                <enabled>0</enabled>
+                <title>O nás</title>
+                <text>Naša výroba je spojením tradície a inovácií, kde skúsení inžinieri a remeselníci pracujú ruka v ruke. Neustále sa posúvame vpred a s precíznosťou pretransformujeme kov do dokonalých výrobkov pod našou strechou.</text>
+                <feature1>Ručná práca slovenských remeselníkov</feature1>
+                <feature2>Precízne CNC spracovanie kovov</feature2>
+                <feature3>Individuálny prístup ku každej zákazke</feature3>
+                <stat1_number>15+</stat1_number>
+                <stat1_label>rokov skúseností</stat1_label>
+                <stat2_number>5000+</stat2_number>
+                <stat2_label>spokojných zákazníkov</stat2_label>
+                <stat3_number>100%</stat3_number>
+                <stat3_label>slovenská výroba</stat3_label>
+                <cta_label>Čítať viac</cta_label>
+                <cta_url></cta_url>
+                <image></image>
+                <badge_title>Kvalita garantovaná</badge_title>
+                <badge_text>Každý výrobok kontrolovaný</badge_text>
+            </about_section>
         </hyvastarter>
+        <bigconnect_hyvastarter>
+            <header_links>
+                <item1_enabled>0</item1_enabled>
+                <item1_label></item1_label>
+                <item1_url></item1_url>
+                <item1_variant>link</item1_variant>
+                <item1_icon_svg></item1_icon_svg>
+                <item1_icon_alt></item1_icon_alt>
+                <item1_icon_blink>0</item1_icon_blink>
+                <item1_sort_order></item1_sort_order>
+                <item1_target_blank>0</item1_target_blank>
+                <item2_enabled>0</item2_enabled>
+                <item2_label></item2_label>
+                <item2_url></item2_url>
+                <item2_variant>link</item2_variant>
+                <item2_icon_svg></item2_icon_svg>
+                <item2_icon_alt></item2_icon_alt>
+                <item2_icon_blink>0</item2_icon_blink>
+                <item2_sort_order></item2_sort_order>
+                <item2_target_blank>0</item2_target_blank>
+                <item3_enabled>0</item3_enabled>
+                <item3_label></item3_label>
+                <item3_url></item3_url>
+                <item3_variant>link</item3_variant>
+                <item3_icon_svg></item3_icon_svg>
+                <item3_icon_alt></item3_icon_alt>
+                <item3_icon_blink>0</item3_icon_blink>
+                <item3_sort_order></item3_sort_order>
+                <item3_target_blank>0</item3_target_blank>
+                <item4_enabled>0</item4_enabled>
+                <item4_label></item4_label>
+                <item4_url></item4_url>
+                <item4_variant>link</item4_variant>
+                <item4_icon_svg></item4_icon_svg>
+                <item4_icon_alt></item4_icon_alt>
+                <item4_icon_blink>0</item4_icon_blink>
+                <item4_sort_order></item4_sort_order>
+                <item4_target_blank>0</item4_target_blank>
+            </header_links>
+        </bigconnect_hyvastarter>
     </default>
 </config>

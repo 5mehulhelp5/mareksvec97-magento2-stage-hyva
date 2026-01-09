@@ -25,6 +25,10 @@
                 template="Magento_Theme::elements/homepage-categories.phtml"
             />
             <block
+                name="about.section"
+                template="Magento_Theme::elements/about-section.phtml"
+            />
+            <block
                 name="2d.cnc"
                 template="Magento_Theme::homepage/2d-cnc.phtml"
             />
