@@ -1,13 +1,15 @@
 <?xml version="1.0"?>
 <widgets xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Widget/etc/widget.xsd">
-    <widget id="bigconnect_product_slider" class="BigConnect\ProductSlider\Block\Widget\ProductSlider" is_enabled="true">
+    <widget id="bigconnect_product_slider" class="BigConnect\ProductSlider\Block\Widget\ProductSlider">
         <label translate="true">BigConnect: Product Slider</label>
         <description translate="true">Product slider with configurable sources (bestsellers, new, sale, etc.)</description>
         <parameters>
             <parameter name="source_code" xsi:type="select" required="true" visible="true">
                 <label translate="true">Source</label>
                 <options>
-                    <option name="bestsellers" value="bestsellers" translate="true">Bestsellers</option>
+                    <option name="bestsellers" value="bestsellers">
+                        <label translate="true">Bestsellers</label>
+                    </option>
                 </options>
             </parameter>
             <parameter name="title_badge" xsi:type="text" visible="true">
@@ -32,22 +34,50 @@
             </parameter>
             <parameter name="only_in_stock" xsi:type="select" visible="true">
                 <label translate="true">Only in stock</label>
-                <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                <options>
+                    <option name="1" value="1">
+                        <label translate="true">Yes</label>
+                    </option>
+                    <option name="0" value="0">
+                        <label translate="true">No</label>
+                    </option>
+                </options>
                 <value>1</value>
             </parameter>
             <parameter name="only_visible" xsi:type="select" visible="true">
                 <label translate="true">Only visible</label>
-                <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                <options>
+                    <option name="1" value="1">
+                        <label translate="true">Yes</label>
+                    </option>
+                    <option name="0" value="0">
+                        <label translate="true">No</label>
+                    </option>
+                </options>
                 <value>1</value>
             </parameter>
             <parameter name="add_to_cart" xsi:type="select" visible="true">
                 <label translate="true">Show Add to cart</label>
-                <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                <options>
+                    <option name="1" value="1">
+                        <label translate="true">Yes</label>
+                    </option>
+                    <option name="0" value="0">
+                        <label translate="true">No</label>
+                    </option>
+                </options>
                 <value>1</value>
             </parameter>
             <parameter name="show_wishlist" xsi:type="select" visible="true">
                 <label translate="true">Show Wishlist</label>
-                <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                <options>
+                    <option name="1" value="1">
+                        <label translate="true">Yes</label>
+                    </option>
+                    <option name="0" value="0">
+                        <label translate="true">No</label>
+                    </option>
+                </options>
                 <value>0</value>
             </parameter>
             <parameter name="view_all_url" xsi:type="text" visible="true">
