@@ -37,8 +37,8 @@
                                 <argument name="title" xsi:type="string">Obľúbené u našich zákazníkov</argument>
                                 <argument name="subtitle" xsi:type="string">Produkty s najvyšším hodnotením a tisíckami spokojných zákazníkov</argument>
                                 <argument name="page_size" xsi:type="number">8</argument>
-                                <argument name="period_days" xsi:type="number">30</argument>
-                                <argument name="only_in_stock" xsi:type="boolean">true</argument>
+                                <argument name="period_days" xsi:type="number">90</argument>
+                                <argument name="only_in_stock" xsi:type="boolean">false</argument>
                                 <argument name="only_visible" xsi:type="boolean">true</argument>
                                 <argument name="add_to_cart" xsi:type="boolean">true</argument>
                                 <argument name="show_wishlist" xsi:type="boolean">false</argument>

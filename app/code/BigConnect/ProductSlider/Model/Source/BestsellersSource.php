@@ -58,7 +58,9 @@ class BestsellersSource implements ProductSourceInterface
         $storeId = (int)$this->storeManager->getStore()->getId();
 
         $bestsellers = $this->bestsellersCollectionFactory->create();
-        $bestsellers->setStoreIds([$storeId]);
+        if (method_exists($bestsellers, 'setStoreId')) {
+            $bestsellers->setStoreId($storeId);
+        }
         $bestsellers->addStoreFilter($storeId);
         $bestsellers->setPageSize($pageSize);
 
