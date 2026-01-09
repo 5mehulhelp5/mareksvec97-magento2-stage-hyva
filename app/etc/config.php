@@ -412,6 +412,7 @@ return [
         'OuterEdge_StructuredData' => 0,
         'BigConnect_ProductAccessory' => 0,
         'BigConnect_ProductConfigurator' => 1,
+        'BigConnect_ProductSlider' => 1,
         'BigConnect_Tinymce' => 0,
         'Bss_DisableCompare' => 1,
         'Bss_Popup' => 1,

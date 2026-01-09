@@ -28,46 +28,26 @@
                 name="about.section"
                 template="Magento_Theme::elements/about-section.phtml"
             />
-            <block
-                name="2d.cnc"
-                template="Magento_Theme::homepage/2d-cnc.phtml"
-            />
-            <block
-                name="slider-2"
-                template="Magento_Catalog::product/slider/product-slider.phtml"
-                ifconfig="hyva_theme_general/demo_content/show_homepage_demo_content"
-                before="custom.production.form"
-            >
-                <arguments>
-                    <!-- <argument name="product_skus" xsi:type="string"/> -->
-                    <argument name="category_ids" xsi:type="string">72</argument>
-                    <!-- <argument name="additional_filters" xsi:type="array">
-                        <item name="color-filter" xsi:type="array">
-                            <item name="field" xsi:type="string">color</item>
-                            <item name="value" xsi:type="array">
-                                <item name="orange" xsi:type="string">56</item>
-                                <item name="red" xsi:type="string">58</item>
-                                <item name="yellow" xsi:type="string">60</item>
-                            </item>
-                            <item name="conditionType" xsi:type="string">in</item>
-                        </item>
-                    </argument> -->
-                    <argument name="title" xsi:type="string" translate="true">Popular Products</argument>
-                    <argument name="price_from" xsi:type="string">30</argument>
-                    <argument name="price_to" xsi:type="string">100</argument>
-                    <argument name="page_size" xsi:type="string">8</argument>
-                    <argument name="sort_attribute" xsi:type="string">price</argument>
-                    <argument name="sort_direction" xsi:type="string">DESC</argument>
-                    <!-- <argument name="hide_rating_summary" xsi:type="boolean">true</argument> -->
-                    <!-- <argument name="hide_details" xsi:type="boolean">true</argument> -->
-                </arguments>
-            </block>
-            <block
-                name="custom.production.form"
-                template="Magento_Theme::elements/custom-production-form.phtml"
-            />
-            
-            
+            <block class="BigConnect\ProductSlider\Block\Widget\ProductSlider"
+                   name="bigconnect.product.slider"
+                   template="BigConnect_ProductSlider::widget/product-slider.phtml">
+                            <arguments>
+                                <argument name="source_code" xsi:type="string">bestsellers</argument>
+                                <argument name="title_badge" xsi:type="string">Najpredávanejšie produkty</argument>
+                                <argument name="title" xsi:type="string">Obľúbené u našich zákazníkov</argument>
+                                <argument name="subtitle" xsi:type="string">Produkty s najvyšším hodnotením a tisíckami spokojných zákazníkov</argument>
+                                <argument name="page_size" xsi:type="number">8</argument>
+                                <argument name="period_days" xsi:type="number">30</argument>
+                                <argument name="only_in_stock" xsi:type="boolean">true</argument>
+                                <argument name="only_visible" xsi:type="boolean">true</argument>
+                                <argument name="add_to_cart" xsi:type="boolean">true</argument>
+                                <argument name="show_wishlist" xsi:type="boolean">false</argument>
+                                <argument name="view_all_url" xsi:type="string"></argument>
+                                <argument name="view_all_label" xsi:type="string">Zobraziť všetky produkty</argument>
+                                <argument name="accent_color" xsi:type="string">#7e9b84</argument>
+                            </arguments>
+             </block>
+
         </referenceContainer>
         <referenceBlock name="page.main.title" remove="true"/>
         <referenceBlock name="content-1" remove="true"/>
