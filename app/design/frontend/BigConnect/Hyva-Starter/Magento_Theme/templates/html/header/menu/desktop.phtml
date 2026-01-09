@@ -34,8 +34,8 @@ $catRepo = $om->get(CategoryRepositoryInterface::class);
 /** @var StoreManagerInterface $storeManager */
 $storeManager = $om->get(StoreManagerInterface::class);
 
-$storeId   = (int) $storeManager->getStore()->getId();
-$mediaBaseFull = rtrim($storeManager->getStore()->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_MEDIA), '/');
+$storeId        = (int) $storeManager->getStore()->getId();
+$mediaBaseFull  = rtrim($storeManager->getStore()->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_MEDIA), '/');
 
 $__toUrl = static function ($val) use ($mediaBaseFull): ?string {
     if (empty($val)) return null;
@@ -139,9 +139,9 @@ $__isInspiration = static function (array $menuItem): bool {
                 <ul class="flex items-center gap-6 lg:gap-8">
                     <?php foreach ($menuItems as $index => $menuItem): ?>
                         <?php
-                        $cid0 = $__resolveCategoryId($menuItem);
-                        $iconUrl0 = $cid0 ? $__categoryIconUrl($cid0) : null;
-                        $hasChildren = !empty($menuItem['childData']);
+                        $cid0          = $__resolveCategoryId($menuItem);
+                        $iconUrl0      = $cid0 ? $__categoryIconUrl($cid0) : null;
+                        $hasChildren   = !empty($menuItem['childData']);
                         $isInspiration = $__isInspiration($menuItem);
                         ?>
 
@@ -159,11 +159,14 @@ $__isInspiration = static function (array $menuItem): bool {
                                     href="<?= $escaper->escapeUrl($menuItem['url']) ?>"
                                     title="<?= $escaper->escapeHtmlAttr($menuItem['name']) ?>"
                                     @focus="hoverPanelActiveId = 0"
-                                    <?php if ($isInspiration): ?>
-                                        class="inline-flex items-center gap-2 px-4 py-2 rounded-lg transition-all group relative overflow-hidden text-white font-semibold bg-inspiration hover:bg-inspiration-hover"
+                                    class="<?php if ($isInspiration): ?>
+                                        group inline-flex items-center gap-2 px-4 py-2 rounded-lg transition-all relative overflow-hidden
+                                        text-white font-semibold bg-inspiration hover:bg-inspiration-hover
+                                        whitespace-nowrap
                                     <?php else: ?>
-                                        class="inline-flex items-center gap-2 text-gray-700 hover:text-black transition-colors"
-                                    <?php endif; ?>
+                                        group inline-flex items-center gap-2 text-gray-700 hover:text-black transition-colors
+                                        whitespace-nowrap
+                                    <?php endif; ?>"
                                 >
                                     <?php if ($iconUrl0): ?>
                                         <img
@@ -176,12 +179,16 @@ $__isInspiration = static function (array $menuItem): bool {
                                         />
                                     <?php endif; ?>
 
-                                    <span class="<?= $isInspiration ? 'text-white' : 'font-medium text-sm lg:text-base' ?>">
+                                    <span class="<?php if ($isInspiration): ?>
+                                        text-white text-sm lg:text-base leading-none whitespace-nowrap
+                                    <?php else: ?>
+                                        font-medium text-sm lg:text-base leading-none whitespace-nowrap
+                                    <?php endif; ?>">
                                         <?= $escaper->escapeHtml($menuItem['name']) ?>
                                     </span>
 
                                     <?php if ($isInspiration): ?>
-                                        <span class="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity"></span>
+                                        <span class="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" aria-hidden="true"></span>
                                     <?php endif; ?>
                                 </a>
 
@@ -225,7 +232,7 @@ $__isInspiration = static function (array $menuItem): bool {
                                         <div class="grid grid-cols-2 gap-2">
                                             <?php foreach ($menuItem['childData'] as $subMenuItem): ?>
                                                 <?php
-                                                $cid = $__resolveCategoryId($subMenuItem);
+                                                $cid     = $__resolveCategoryId($subMenuItem);
                                                 $iconUrl = $cid ? $__categoryIconUrl($cid) : null;
                                                 ?>
                                                 <a
