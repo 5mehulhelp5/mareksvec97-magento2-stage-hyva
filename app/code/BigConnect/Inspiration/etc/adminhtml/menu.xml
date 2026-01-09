@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+    <menu>
+        <add id="BigConnect_Inspiration::inspiration"
+             title="Inspirations"
+             module="BigConnect_Inspiration"
+             sortOrder="90"
+             parent="Magento_Backend::content"
+             action="bigconnect_inspiration/inspiration/index"
+             resource="BigConnect_Inspiration::inspiration"/>
+    </menu>
+</config>
