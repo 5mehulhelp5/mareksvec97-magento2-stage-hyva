@@ -1,8 +1,13 @@
 <?php
-/** @var \BigConnect\ProductSlider\Block\Widget\ProductSlider $block */
+/** @var \BigConnect\ProductSlider\Block\ProductSlider $block */
 /** @var \Magento\Framework\Escaper $escaper */
 
 $viewModel = $block->getViewModel();
+
+$preset = $block->getPreset();
+if ($preset === '' || !$block->isPresetEnabled()) {
+    return;
+}
 
 // Hyvä heroicons (safe)
 $heroicons = null;
@@ -34,6 +39,11 @@ if ($items === []) {
 
 $accentColor = $block->getAccentColor();
 $badgeText = $block->getTitleBadge();
+$title = $block->getTitle();
+$subtitle = $block->getSubtitle();
+$viewAllUrl = $block->getViewAllUrl();
+$viewAllLabel = $block->getViewAllLabel();
+$showViewAll = $viewAllUrl && $viewAllLabel;
 $wishlistEnabled = $block->isWishlistEnabled();
 $addToCartEnabled = $block->isAddToCartEnabled();
 ?>
@@ -57,28 +67,39 @@ $addToCartEnabled = $block->isAddToCartEnabled();
 
 <section class="py-20 bg-white">
     <div class="max-w-7xl mx-auto px-4">
-        <div class="text-center mb-12">
-            <?php if ($badgeText) : ?>
-                <div
-                    class="inline-block px-4 py-2 text-white rounded-full mb-4"
-                    style="background-color: <?= $escaper->escapeHtmlAttr($accentColor) ?>;"
-                >
-                    <?= $escaper->escapeHtml($badgeText) ?>
-                </div>
-            <?php endif; ?>
+        <?php if ($title) : ?>
+            <div class="text-center mb-12">
+                <?php if ($badgeText) : ?>
+                    <div
+                        class="inline-block px-4 py-2 text-white rounded-full mb-4"
+                        style="background-color: <?= $escaper->escapeHtmlAttr($accentColor) ?>;"
+                    >
+                        <?= $escaper->escapeHtml($badgeText) ?>
+                    </div>
+                <?php endif; ?>
 
-            <?php if ($block->getTitle()) : ?>
                 <h2 class="text-3xl md:text-4xl font-bold mb-4">
-                    <?= $escaper->escapeHtml($block->getTitle()) ?>
+                    <?= $escaper->escapeHtml($title) ?>
                 </h2>
-            <?php endif; ?>
 
-            <?php if ($block->getSubtitle()) : ?>
-                <p class="text-lg max-w-2xl mx-auto text-gray-600">
-                    <?= $escaper->escapeHtml($block->getSubtitle()) ?>
-                </p>
-            <?php endif; ?>
-        </div>
+                <?php if ($subtitle) : ?>
+                    <p class="text-lg max-w-2xl mx-auto text-gray-600">
+                        <?= $escaper->escapeHtml($subtitle) ?>
+                    </p>
+                <?php endif; ?>
+
+                <?php if ($showViewAll) : ?>
+                    <div class="mt-6">
+                        <a
+                            href="<?= $escaper->escapeUrl($viewAllUrl) ?>"
+                            class="inline-flex items-center gap-2 text-sm font-semibold text-primary hover:text-primary/80"
+                        >
+                            <?= $escaper->escapeHtml($viewAllLabel) ?>
+                        </a>
+                    </div>
+                <?php endif; ?>
+            </div>
+        <?php endif; ?>
 
         <div
             class="relative"

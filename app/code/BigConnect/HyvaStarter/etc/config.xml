@@ -64,6 +64,56 @@
                 <badge_title>Kvalita garantovaná</badge_title>
                 <badge_text>Každý výrobok kontrolovaný</badge_text>
             </about_section>
+            <product_slider>
+                <item1>
+                    <enabled>0</enabled>
+                    <title></title>
+                    <subtitle></subtitle>
+                    <view_all_label></view_all_label>
+                    <view_all_url></view_all_url>
+                    <accent_color>#7e9b84</accent_color>
+                </item1>
+                <item2>
+                    <enabled>0</enabled>
+                    <title></title>
+                    <subtitle></subtitle>
+                    <view_all_label></view_all_label>
+                    <view_all_url></view_all_url>
+                    <accent_color>#7e9b84</accent_color>
+                </item2>
+                <item3>
+                    <enabled>0</enabled>
+                    <title></title>
+                    <subtitle></subtitle>
+                    <view_all_label></view_all_label>
+                    <view_all_url></view_all_url>
+                    <accent_color>#7e9b84</accent_color>
+                </item3>
+                <item4>
+                    <enabled>0</enabled>
+                    <title></title>
+                    <subtitle></subtitle>
+                    <view_all_label></view_all_label>
+                    <view_all_url></view_all_url>
+                    <accent_color>#7e9b84</accent_color>
+                </item4>
+                <item5>
+                    <enabled>0</enabled>
+                    <title></title>
+                    <subtitle></subtitle>
+                    <view_all_label></view_all_label>
+                    <view_all_url></view_all_url>
+                    <accent_color>#7e9b84</accent_color>
+                </item5>
+                <item6>
+                    <enabled>0</enabled>
+                    <title></title>
+                    <subtitle></subtitle>
+                    <view_all_label></view_all_label>
+                    <view_all_url></view_all_url>
+                    <accent_color>#7e9b84</accent_color>
+                </item6>
+            </product_slider>
         </hyvastarter>
         <bigconnect_hyvastarter>
             <header_links>

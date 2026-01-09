@@ -12,17 +12,26 @@ Momentálne je implementovaný zdroj **Bestsellers** (podľa predajov za zvolen�
    bin/magento setup:upgrade
    ```
 
-## Použitie widgetu
+## Použitie cez layout XML
 
-1. V administrácii otvorte CMS stránku alebo blok.
-2. Vložte widget **BigConnect: Product Slider**.
-3. Nastavte požadované parametre (zdroj, titulky, počet produktov, obdobie atď.).
+Slider sa vkladá cez layout XML v téme. Príklad vloženia na homepage (`cms_index_index.xml`):
 
-Príklad vloženia do CMS obsahu:
-
-```text
-{{widget type="BigConnect\ProductSlider\Block\Widget\ProductSlider" source_code="bestsellers" page_size="8" period_days="30" only_in_stock="1" only_visible="1"}}
+```xml
+<referenceContainer name="content">
+    <block class="BigConnect\ProductSlider\Block\ProductSlider"
+           name="homepage.product.slider"
+           template="BigConnect_ProductSlider::widget/product-slider.phtml">
+        <arguments>
+            <argument name="source_code" xsi:type="string">bestsellers</argument>
+            <argument name="page_size" xsi:type="number">24</argument>
+            <argument name="period_days" xsi:type="number">360</argument>
+            <argument name="preset" xsi:type="string">item1</argument>
+        </arguments>
+    </block>
+</referenceContainer>
 ```
+
+Titulky, CTA a farby sa nastavujú v `Stores → Configuration → Hyva Starter Settings → Product Slider settings` podľa zvoleného presetu.
 
 ## Ako pridať nový source
 
@@ -37,10 +46,9 @@ Príklad vloženia do CMS obsahu:
        </arguments>
    </type>
    ```
-3. Pridajte nový option do `etc/widget.xml` v parametri `source_code`.
-4. Nie je potrebné meniť template — slider automaticky použije nový zdroj.
+3. Nie je potrebné meniť template — slider automaticky použije nový zdroj.
 
 ## Poznámky
 
-- Ak reporty bestsellerov neobsahujú dáta, widget nevykreslí nič.
+- Ak reporty bestsellerov neobsahujú dáta, slider nevykreslí nič.
 - Modul je pripravený na doplnenie zdrojov ako New, Sale, MostViewed, Attribute, SKU list, Rule, Category, atď.
