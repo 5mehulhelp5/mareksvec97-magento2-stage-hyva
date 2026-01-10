@@ -1,6 +1,6 @@
 <?php
 /** @var \BigConnect\Inspiration\Block\Gallery $block */
-$items = $block->getItems(); // očakávame array s image, rating, review/customer_name, country_code, atď.
+$items = $block->getGalleryItems(); // očakávame array s image, rating, review/customer_name, country_code, atď.
 if (!$items) {
     return;
 }
