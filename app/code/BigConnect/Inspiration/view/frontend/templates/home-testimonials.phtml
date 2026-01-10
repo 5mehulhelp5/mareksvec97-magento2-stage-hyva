@@ -48,13 +48,7 @@ if (!$items) {
                      data-insp-track>
                     <?php foreach ($items as $item): ?>
                         <?php
-                        // image: počítame s tým, že v $item['image'] máš buď "inspirations/xxx.jpg" alebo "xxx.jpg"
-                        $image = (string)($item['image'] ?? '');
-                        $image = ltrim($image, '/');
-                        if ($image && strpos($image, '/') === false) {
-                            $image = 'inspirations/' . $image;
-                        }
-                        $imgUrl = $block->getBaseUrl() . 'media/' . $image; // jednoduché, funguje v Hyvä
+                        $imgUrl = (string)($item['image_url'] ?? '');
                         $rating = (int)($item['rating'] ?? 5);
                         $rating = max(1, min(5, $rating));
 
@@ -63,8 +57,7 @@ if (!$items) {
                         $country = strtoupper((string)($item['country_code'] ?? ''));
                         $location = (string)($item['location'] ?? $country);
 
-                        // flag – odporúčam mať SVG v module (viď bod 3)
-                        $flagUrl = $country ? $block->getViewFileUrl('BigConnect_Inspiration::images/flags/' . strtolower($country) . '.svg') : '';
+                        $flagUrl = (string)($item['country_flag'] ?? '');
                         ?>
 
                         <div class="snap-start shrink-0 w-[85%] sm:w-[60%] md:w-[38%] lg:w-[32%]">
